@@ -185,7 +185,21 @@ Item {
         }
     }
 
-    // Jacket Temperature (TIC 163001) placed cleanly on left of bottom cone
+    // Jacket Temperature (TIC 163001) placed cleanly on left of bottom cone with leader line
+    Canvas {
+        anchors.fill: parent
+        visible: vesselRoot.showTags
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(35, 360);
+            ctx.lineTo(85, 340);
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+    }
+
     Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: -32

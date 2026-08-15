@@ -303,7 +303,7 @@ Rectangle {
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog
-            x: 370
+            x: 350
             y: 415
             speedRpm: scadaBridge.homogenizerSpeed
             isRunning: scadaBridge.isHomogenizerRunning
@@ -312,17 +312,28 @@ Rectangle {
             onSuctionLiquidsClicked: pidScreenRoot.componentTapped("K 143 001")
             onStatorValveClicked: pidScreenRoot.componentTapped("Z 163 001")
             onRecircValveClicked: pidScreenRoot.componentTapped("K 163 002")
-            onSuctionBottomClicked: pidScreenRoot.componentTapped("V 142 201")
+        }
+
+        // Bottom Right Suction Branch V 142 201 (Suction Bottom)
+        PidPipe { startX: 595; startY: 395; endX: 625; endY: 425; baseColor: "#52a5ec" }
+        PidValve {
+            x: 615
+            y: 412
+            tag: "V 142 201"
+            subLabel: "Suction Bottom"
+            showTags: pidScreenRoot.showTags
+            isOpen: scadaBridge.isValveOpen("V 142 201")
+            onClicked: pidScreenRoot.componentTapped(tag)
         }
 
         // ---------------------------------------------------------------------
         // (E) EXTERNAL HOMOGENIZATION RECIRCULATION LOOP (Bottom -> Top Dome)
         // ---------------------------------------------------------------------
-        PidPipe { startX: 620; startY: 470; endX: 790; endY: 470; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
-        PidPipe { startX: 790; startY: 470; endX: 790; endY: 140; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
+        PidPipe { startX: 690; startY: 460; endX: 790; endY: 460; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidPipe { startX: 790; startY: 460; endX: 790; endY: 140; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
         PidPipe { startX: 790; startY: 140; endX: 642; endY: 140; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
 
-        PidValve { x: 777; y: 456; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
+        PidValve { x: 777; y: 446; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
         PidValve { x: 715; y: 126; tag: "K 165 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
 
         // Sensor Indicator GOS 172 601 on Vertical Riser
