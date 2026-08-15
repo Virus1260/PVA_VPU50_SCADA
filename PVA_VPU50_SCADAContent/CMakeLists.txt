@@ -15,6 +15,7 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "components/modals/ConfirmationModal.qml"
         "components/modals/NumericKeypadModal.qml"
         "components/modals/PlantModeModal.qml"
+        "components/modals/LoginModal.qml"
         "components/modals/Screen_1_Control/AgitatorModeModal.qml"
         "components/modals/Screen_1_Control/ExternalLineModeModal.qml"
         "components/modals/Screen_1_Control/FillingModeModal.qml"

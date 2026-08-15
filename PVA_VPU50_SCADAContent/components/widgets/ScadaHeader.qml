@@ -11,8 +11,8 @@ Rectangle {
     property string systemTag: "B1"
     property string plantModeText: "(A)"
     property string alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
-    property string operatorName: "Administrator"
-    property string operatorRole: "21 CFR / GAMP 5"
+    property string operatorName: "Line Operator"
+    property string operatorRole: "Operator (Level 1)"
     property string timeString: "17:25:00"
     property string dateString: "15/08/2026"
     property bool isAlarmActive: false
@@ -20,6 +20,7 @@ Rectangle {
     property alias ackButton: ackBtn
 
     signal plantModeRequested()
+    signal userLoginRequested()
 
     Timer {
         interval: 1000
@@ -166,34 +167,53 @@ Rectangle {
             font.pixelSize: 15
         }
 
-        // User Identity & Role
-        RowLayout {
-            spacing: 8
-            Item {
-                width: 26
-                height: 26
-                Image {
-                    anchors.fill: parent
-                    source: "../../assets/icons/header/user.svg"
-                    fillMode: Image.PreserveAspectFit
-                    mipmap: true
-                    smooth: true
+        // User Identity & Role (Clickable to Login / Switch User)
+        Rectangle {
+            Layout.preferredHeight: 38
+            Layout.preferredWidth: userRow.implicitWidth + 16
+            radius: 6
+            color: userMouse.pressed ? "#07203a" : (userMouse.containsMouse ? "#164d80" : "#0d365e")
+            border.color: userMouse.containsMouse ? "#00d2ff" : "#1d5b94"
+            border.width: 1
+
+            RowLayout {
+                id: userRow
+                anchors.centerIn: parent
+                spacing: 8
+                Item {
+                    width: 24
+                    height: 24
+                    Image {
+                        anchors.fill: parent
+                        source: "../../assets/icons/header/user.svg"
+                        fillMode: Image.PreserveAspectFit
+                        mipmap: true
+                        smooth: true
+                    }
+                }
+
+                ColumnLayout {
+                    spacing: 1
+                    Text {
+                        text: headerRoot.operatorName
+                        color: "#ffffff"
+                        font.bold: true
+                        font.pixelSize: 13
+                    }
+                    Text {
+                        text: headerRoot.operatorRole
+                        color: "#8cb5dc"
+                        font.pixelSize: 9
+                    }
                 }
             }
 
-            ColumnLayout {
-                spacing: 1
-                Text {
-                    text: headerRoot.operatorName
-                    color: "#ffffff"
-                    font.bold: true
-                    font.pixelSize: 14
-                }
-                Text {
-                    text: headerRoot.operatorRole
-                    color: "#8cb5dc"
-                    font.pixelSize: 10
-                }
+            MouseArea {
+                id: userMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: headerRoot.userLoginRequested()
             }
         }
 

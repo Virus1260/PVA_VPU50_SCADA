@@ -6,6 +6,12 @@ Item {
     width: 1280
     height: 720
 
+    // --- 21 CFR Part 11 User Authentication State ---
+    property string activeUserId: "operator"
+    property string activeUserName: "Line Operator"
+    property string activeUserRole: "Operator (Level 1)"
+    property int activeUserLevel: 1
+
     // --- Industrial Process State Variables ---
     property bool isAutoMode: true
     property string currentRecipeName: "UNIMIX_BATCH_01"
@@ -522,15 +528,72 @@ Item {
                     ui.plantModal.visible = true;
                 }
             });
+
+            ui.header.userLoginRequested.connect(function() {
+                if (ui.loginModal) {
+                    ui.loginModal.currentUserId = rootWindow.activeUserId;
+                    ui.loginModal.currentUserName = rootWindow.activeUserName;
+                    ui.loginModal.currentUserRole = rootWindow.activeUserRole;
+                    ui.loginModal.currentUserLevel = rootWindow.activeUserLevel;
+                    ui.loginModal.targetUserId = rootWindow.activeUserId === "operator" ? "admin" : "operator";
+                    ui.loginModal.enteredPin = "";
+                    ui.loginModal.errorMessage = "";
+                    ui.loginModal.visible = true;
+                }
+            });
         }
 
         // -------------------------------------------------------------
-        // 8. SIDEBAR SCREEN NAVIGATION HANDLER
+        // 7B. LOGIN & ROLE-BASED ACCESS CONTROL (RBAC) WIRING
+        // -------------------------------------------------------------
+        if (ui.loginModal) {
+            ui.loginModal.loginSuccess.connect(function(uId, uName, uRole, uLevel) {
+                rootWindow.activeUserId = uId;
+                rootWindow.activeUserName = uName;
+                rootWindow.activeUserRole = uRole;
+                rootWindow.activeUserLevel = uLevel;
+                if (ui.header) {
+                    ui.header.operatorName = uName;
+                    ui.header.operatorRole = uRole;
+                    ui.header.alarmMessage = "USER AUTHENTICATED: [" + uName + "] ACCESS GRANTED (" + uRole + ")";
+                }
+            });
+
+            ui.loginModal.userLoggedOut.connect(function() {
+                rootWindow.activeUserId = "operator";
+                rootWindow.activeUserName = "Line Operator";
+                rootWindow.activeUserRole = "Operator (Level 1)";
+                rootWindow.activeUserLevel = 1;
+                if (ui.header) {
+                    ui.header.operatorName = "Line Operator";
+                    ui.header.operatorRole = "Operator (Level 1)";
+                    ui.header.alarmMessage = "USER LOGGED OUT - REVERTED TO LINE OPERATOR (LEVEL 1)";
+                }
+            });
+
+            ui.loginModal.closed.connect(function() {
+                ui.loginModal.visible = false;
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 8. SIDEBAR SCREEN NAVIGATION HANDLER WITH RBAC ENFORCEMENT
         // -------------------------------------------------------------
         if (ui.sidebar) {
             ui.sidebar.activeIndexChanged.connect(function() {
                 var idx = ui.sidebar.activeIndex;
-                if (idx >= 0 && idx < rootWindow.screenTitles.length) {
+                if (idx === 7 && rootWindow.activeUserLevel < 4) {
+                    // Screen 7: Diagnostics & Hardware Overrides requires Maintenance (Level 4+) or Admin (Level 5)
+                    if (ui.header) ui.header.alarmMessage = "ACCESS RESTRICTED: Maintenance / Diagnostics requires Level 4+ authorization.";
+                    if (ui.loginModal) {
+                        ui.loginModal.targetUserId = "engineer";
+                        ui.loginModal.errorMessage = "Please login with Maintenance (Level 4) or Admin (Level 5) credentials.";
+                        ui.loginModal.visible = true;
+                    }
+                } else if (idx === 5 && rootWindow.activeUserLevel < 3) {
+                    // Screen 5: 21 CFR Part 11 Electronic Batch Record Review
+                    if (ui.header) ui.header.alarmMessage = "VIEWING 21 CFR BATCH RECORD (Sign-off requires QA Officer Level 3+)";
+                } else if (idx >= 0 && idx < rootWindow.screenTitles.length) {
                     ui.header.alarmMessage = rootWindow.screenTitles[idx];
                 }
             });

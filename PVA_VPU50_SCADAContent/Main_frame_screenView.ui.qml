@@ -47,6 +47,7 @@ Rectangle {
     property alias heatingModal: heatModeOverlay
     property alias plantModal: plantModeOverlay
     property alias confirmModal: confirmDialogOverlay
+    property alias loginModal: loginOverlay
 
     // 1. TOP PROCESS HEADER BAR (Anchored directly to top, 86px height matching process cards)
     ScadaHeader {
@@ -194,6 +195,14 @@ Rectangle {
     // 9. Standard Confirm / Override Dialog Overlay (Global)
     ConfirmationModal {
         id: confirmDialogOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+    }
+
+    // 10. 21 CFR Part 11 User Authentication & Access Control Modal (Global)
+    LoginModal {
+        id: loginOverlay
         anchors.fill: parent
         visible: false
         z: 100
