@@ -265,6 +265,7 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (E) TOP CIP CLEANING HIGH ARCH HEADER & 3 SPRAY BALLS (z: 8, z: 9)
         // ---------------------------------------------------------------------
+        // High Arch Top Horizontal Pipe Header (Passing well above motor & speed labels)
         PidPipe { z: 8; startX: 240; startY: 15; endX: 605; endY: 15; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 240; startY: 15; endX: 240; endY: 125; baseColor: "#52a5ec" }
 
@@ -357,7 +358,7 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER (Mounted Snugly at Bottom Apex) (z: 6)
+        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER (Exact EKATO Structure) (z: 6)
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog
@@ -374,11 +375,11 @@ Rectangle {
         }
 
         // Bottom Right Suction Branch V 142 201 (Suction Bottom)
-        PidPipe { z: 6; startX: 595; startY: 435; endX: 625; endY: 465; baseColor: "#52a5ec" }
+        PidPipe { z: 6; startX: 590; startY: 438; endX: 600; endY: 462; baseColor: "#52a5ec" }
         PidValve {
             z: 7
-            x: 615
-            y: 452
+            x: 588
+            y: 450
             tag: "V 142 201"
             subLabel: "Suction Bottom"
             showTags: pidScreenRoot.showTags
@@ -389,17 +390,36 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (G) EXTERNAL HOMOGENIZATION RECIRCULATION LOOP (z: 6)
         // ---------------------------------------------------------------------
-        PidPipe { z: 6; startX: 650; startY: 532; endX: 790; endY: 532; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
-        PidPipe { z: 6; startX: 790; startY: 532; endX: 790; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
-        PidPipe { z: 6; startX: 790; startY: 205; endX: 660; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidPipe { z: 6; startX: 680; startY: 532; endX: 810; endY: 532; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidPipe { z: 6; startX: 810; startY: 532; endX: 810; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
+        PidPipe { z: 6; startX: 810; startY: 205; endX: 660; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
 
-        PidValve { z: 7; x: 755; y: 518; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { z: 7; x: 725; y: 191; tag: "K 165 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
+        // Corner Valve K 165 002
+        PidValve {
+            z: 7
+            x: 800
+            y: 520
+            tag: "K 165 002"
+            showTags: pidScreenRoot.showTags
+            isOpen: scadaBridge.isHomogenizerRunning
+            onClicked: pidScreenRoot.componentTapped(tag)
+        }
+
+        // Return Valve K 165 003
+        PidValve {
+            z: 7
+            x: 725
+            y: 191
+            tag: "K 165 003"
+            showTags: pidScreenRoot.showTags
+            isOpen: scadaBridge.isHomogenizerRunning
+            onClicked: pidScreenRoot.componentTapped(tag)
+        }
 
         // Sensor Indicator GOS 172 601 on Vertical Riser
         Rectangle {
             z: 8
-            x: 798
+            x: 818
             y: 500
             width: 8
             height: 8
