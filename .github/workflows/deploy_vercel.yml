@@ -18,8 +18,9 @@ jobs:
         with:
           version: 3.1.56
 
-      - name: Install Qt 6 Host & WebAssembly
+      - name: Install System Dependencies & Qt
         run: |
+          sudo apt-get update && sudo apt-get install -y libegl1 libgl1-mesa-dev libglvnd0 libxkbcommon-x11-0
           pip install aqtinstall ninja cmake
           # Install Linux Desktop Host Tools
           python3 -m aqt install-qt linux desktop 6.8.2 linux_gcc_64 -m qtquicktimeline qtshadertools --base https://download.qt.io -O $HOME/Qt || python3 -m aqt install-qt linux desktop 6.8.2 linux_gcc_64 --base https://download.qt.io -O $HOME/Qt

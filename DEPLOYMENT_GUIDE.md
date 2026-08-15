@@ -150,6 +150,15 @@
 - **Solution**:
   Name the root executable project `project(PVA_VPU50_SCADAApp LANGUAGES CXX)` in root `CMakeLists.txt`.
 
+### Issue 10: Missing Linux OpenGL / EGL Runtime for Shader Baker (`libEGL.so.1`)
+- **Symptom**: `/home/runner/Qt/6.8.2/gcc_64/bin/qsb: error while loading shared libraries: libEGL.so.1: cannot open shared object file: No such file or directory`.
+- **Root Cause**: The Qt Shader Baker (`qsb`) on Linux requires native EGL and OpenGL runtime libraries to compile `.frag` and `.vert` shader files to `.qsb`.
+- **Solution**:
+  Install OpenGL and EGL libraries on the Linux runner before invoking Qt tools:
+  ```bash
+  sudo apt-get update && sudo apt-get install -y libegl1 libgl1-mesa-dev libglvnd0 libxkbcommon-x11-0
+  ```
+
 ---
 
 ## 3. Complete, Production-Ready GitHub Actions Workflow
