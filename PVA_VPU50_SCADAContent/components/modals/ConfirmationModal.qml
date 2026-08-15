@@ -434,7 +434,28 @@ Rectangle {
             }
         };
 
-        var p = presets[presetKey] || presets["discharge_product"];
+        // Normalize aliases:
+        var normKey = String(presetKey || "").toLowerCase();
+        if (normKey.indexOf("ext_") === 0) normKey = normKey.substring(4);
+        if (normKey === "discharge_circulation" || normKey === "discharge circulation" || normKey === "discharge circulation pipe") {
+            normKey = "discharge_circulation_pipe";
+        } else if (normKey === "discharge_product" || normKey === "discharge product") {
+            normKey = "discharge_product";
+        } else if (normKey === "cip_rinse" || normKey === "cip rinse") {
+            normKey = "cip_rinse";
+        } else if (normKey === "cip_discharge" || normKey === "cip discharge") {
+            normKey = "cip_discharge";
+        } else if (normKey === "cip_drying" || normKey === "cip drying") {
+            normKey = "cip_drying";
+        } else if (normKey === "suction_liquids" || normKey === "suction liquids") {
+            normKey = "suction_liquids";
+        } else if (normKey === "suction_solids" || normKey === "suction solids") {
+            normKey = "suction_solids";
+        } else if (normKey === "suction_bottom" || normKey === "suction bottom") {
+            normKey = "suction_bottom";
+        }
+
+        var p = presets[normKey] || presets["discharge_circulation_pipe"];
         title = "Confirm Valve Configuration for " + p.name;
         instruction = p.instruction;
 
@@ -451,22 +472,32 @@ Rectangle {
         ];
 
         var list = [];
+        var allOk = true;
         for (var i = 0; i < baseValves.length; i++) {
             var v = baseValves[i];
             var exp = p.expected[v.tag] || "CLOSED";
             var isSol = v.isSolenoid;
+            var isConfirmed = false;
+            if (isSol) {
+                isConfirmed = true;
+            } else {
+                // If the manual valve is expected OPEN, operator MUST confirm it:
+                isConfirmed = (exp === "CLOSED");
+                if (!isConfirmed) allOk = false;
+            }
+
             list.push({
                 tag: v.tag,
                 name: v.name,
                 isSolenoid: isSol,
                 expectedStatus: exp,
                 previousStatus: isSol ? "CLOSED" : "-",
-                currentStatus: isSol ? exp : "-",
-                confirmed: isSol ? true : false
+                currentStatus: isSol ? exp : (exp === "OPEN" ? "VERIFY OPEN" : "CLOSED"),
+                confirmed: isConfirmed
             });
         }
         valveList = list;
-        allConfirmed = false;
+        allConfirmed = allOk;
         visible = true;
     }
 }
