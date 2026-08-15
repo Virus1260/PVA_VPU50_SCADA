@@ -11,6 +11,7 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
     VERSION 1.0
     FILES 
         "vercel.json"
+        ".vercel/project.json"
         ".vscode/settings.json"
         "dist/config/motor_specs.json"
         "dist/config/plc_commands.json"

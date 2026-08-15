@@ -150,21 +150,19 @@
 - **Solution**:
   Name the root executable project `project(PVA_VPU50_SCADAApp LANGUAGES CXX)` in root `CMakeLists.txt`.
 
-### Issue 12: Vercel Cloud Build Attempt (`bash scripts/vercel_build.sh exited with 127`)
-- **Symptom**: `Running build in Washington, D.C., USA... Error: Command "bash scripts/vercel_build.sh" exited with 127`.
-- **Root Cause**: An old `"buildCommand": "bash scripts/vercel_build.sh"` was present in `vercel.json`. When deploying the prebuilt `dist/` directory, Vercel detected the build command and attempted to re-run the non-existent build script on Vercel servers.
+### Issue 13: QML Type Shadowing (`.ui.qml` vs `.qml` with identical base name)
+- **Symptom**: WebAssembly application renders the static visual mockup, but live clock is frozen, RPM does not ramp up when pressing Play, and modal dialogs do not open on click.
+- **Root Cause**: In Qt Quick / QML modules, when `Main_frame_screen.ui.qml` and `Main_frame_screen.qml` share the same base name, the declarative `.ui.qml` file shadows the logic `.qml` file. `App.qml` instantiates the mockup UI directly, skipping the `Component.onCompleted`, `Timer`, and modal signal connections in the logic wrapper.
 - **Solution**:
-  Set `"buildCommand": null`, `"installCommand": null`, `"framework": null` in `vercel.json` so Vercel immediately recognizes the upload as pre-compiled static WebAssembly assets:
-  ```json
-  {
-    "version": 2,
-    "buildCommand": null,
-    "installCommand": null,
-    "framework": null,
-    "cleanUrls": true,
-    ...
-  }
-  ```
+  1. Rename the declarative UI file to `Main_frame_screenView.ui.qml`.
+  2. In `Main_frame_screen.qml`, directly instantiate `Main_frame_screenView { id: ui }` with static compilation bindings.
+  3. Update `CMakeLists.txt`, `PVA_VPU50_SCADA.qrc`, and `PVA_VPU50_SCADA.qmlproject`.
+
+### Issue 14: Client-Side Digital Clock in WebAssembly
+- **Symptom**: Header digital clock is frozen at initial design-time string (`"17:25:00"`).
+- **Root Cause**: `ScadaHeader.qml` relied on external timer updates rather than running an autonomous internal clock.
+- **Solution**:
+  Embed an autonomous, self-starting `Timer` inside `ScadaHeader.qml` to query `new Date()` every 1000ms.
 
 ---
 

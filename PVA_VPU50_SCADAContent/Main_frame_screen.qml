@@ -1,4 +1,3 @@
-pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 
@@ -11,13 +10,13 @@ Item {
     property bool isAutoMode: true
     property string currentRecipeName: "UNIMIX_BATCH_01"
 
-    property double r1TargetSpeed: 100.0
+    property double r1TargetSpeed: 25.0
     property double r1ActualSpeed: 0.0
     property double r1Power: 0.0
     property double r1Current: 0.0
     property int r1RuntimeSeconds: 0
 
-    property double r2TargetSpeed: 1800.0
+    property double r2TargetSpeed: 600.0
     property double r2ActualSpeed: 0.0
     property double r2Power: 0.0
     property double r2Current: 0.0
@@ -28,7 +27,7 @@ Item {
     property double vacuumPressure: -209.8
     property double vacuumStartPressure: -400.0
     property double vacuumEndPressure: -450.0
-    property int r4RuntimeSeconds: 330
+    property int r4RuntimeSeconds: 0
 
     property double suctionAngleOpen: 100.0
     property double suctionAngleClose: 100.0
@@ -39,7 +38,7 @@ Item {
     property double productTemp: 40.1
     property double targetTemp: 89.0
     property double jacketDeltaT: 23.2
-    property double tempDeviation: 1.0
+    property double tempDeviation: 48.9
     property double tempGradient: 12.1
     property int r6RuntimeSeconds: 0
 
@@ -69,615 +68,597 @@ Item {
         return String(hrs).padStart(2, '0') + ":" + String(mins).padStart(2, '0') + ":" + String(secs).padStart(2, '0');
     }
 
-    // --- UI Loader for Safe Instantiation & Clean Separation ---
-    Loader {
-        id: uiLoader
+    // --- Direct UI Presentation Component ---
+    Main_frame_screenView {
+        id: ui
         anchors.fill: parent
-        source: "Main_frame_screen.ui.qml"
+    }
 
-        onLoaded: {
-            var ui = uiLoader.item;
-            if (!ui) return;
-            var ctrl = ui.controlView;
+    // --- Component Setup & Static Wiring ---
+    Component.onCompleted: {
+        var ctrl = ui.controlView;
+        if (!ctrl) return;
 
-            // --- SAFETY INTERLOCK HELPER ---
-            function checkProcessRunning(equipmentName, isRunning) {
-                if (isRunning) {
-                    if (ui.header) {
-                        ui.header.alarmMessage = "SAFETY INTERLOCK: Stop " + equipmentName + " before modifying mode or setpoint parameters.";
-                        ui.header.isAlarmActive = true;
-                    }
-                    return true;
+        // --- SAFETY INTERLOCK HELPER ---
+        function checkProcessRunning(equipmentName, isRunning) {
+            if (isRunning) {
+                if (ui.header) {
+                    ui.header.alarmMessage = "SAFETY INTERLOCK: Stop " + equipmentName + " before modifying mode or setpoint parameters.";
+                    ui.header.isAlarmActive = true;
                 }
-                return false;
+                return true;
             }
+            return false;
+        }
 
-            // -------------------------------------------------------------
-            // 1. ROW 1: AGITATOR SPEED & INTERACTIVE CONTROLS
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row1MinusBtn) {
-                ctrl.row1MinusBtn.clicked.connect(function() {
-                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                    rootWindow.r1TargetSpeed = Math.max(25.0, rootWindow.r1TargetSpeed - 5.0);
-                    ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
-                });
-            }
+        // -------------------------------------------------------------
+        // 1. ROW 1: AGITATOR SPEED & INTERACTIVE CONTROLS
+        // -------------------------------------------------------------
+        if (ctrl.row1MinusBtn) {
+            ctrl.row1MinusBtn.clicked.connect(function() {
+                if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
+                rootWindow.r1TargetSpeed = Math.max(25.0, rootWindow.r1TargetSpeed - 5.0);
+                ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
+            });
+        }
 
-            if (ctrl && ctrl.row1PlusBtn) {
-                ctrl.row1PlusBtn.clicked.connect(function() {
-                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                    rootWindow.r1TargetSpeed = Math.min(120.0, rootWindow.r1TargetSpeed + 5.0);
-                    ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
-                });
-            }
+        if (ctrl.row1PlusBtn) {
+            ctrl.row1PlusBtn.clicked.connect(function() {
+                if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
+                rootWindow.r1TargetSpeed = Math.min(120.0, rootWindow.r1TargetSpeed + 5.0);
+                ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
+            });
+        }
 
-            if (ctrl && ctrl.row1SpeedControl) {
-                ctrl.row1SpeedControl.targetValChangedByUser.connect(function(newVal) {
-                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                    rootWindow.r1TargetSpeed = newVal;
-                });
+        if (ctrl.row1SpeedControl) {
+            ctrl.row1SpeedControl.targetValChangedByUser.connect(function(newVal) {
+                if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
+                rootWindow.r1TargetSpeed = newVal;
+            });
 
-                ctrl.row1SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
-                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = title;
-                        ui.keypadModal.targetTag = tag;
-                        ui.keypadModal.minVal = min;
-                        ui.keypadModal.maxVal = max;
-                        ui.keypadModal.unit = unit;
-                        ui.keypadModal.currentInput = current.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+            ctrl.row1SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
+                if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = title;
+                    ui.keypadModal.targetTag = tag;
+                    ui.keypadModal.minVal = min;
+                    ui.keypadModal.maxVal = max;
+                    ui.keypadModal.unit = unit;
+                    ui.keypadModal.currentInput = current.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row1Media) {
-                ctrl.row1Media.playClicked.connect(function() {
-                    rootWindow.r1Power = 3.8;
-                    rootWindow.r1Current = 11.5;
-                    if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = true;
-                    if (ctrl.row1PowerCard) {
-                        ctrl.row1PowerCard.powerVal = rootWindow.r1Power.toFixed(1);
-                        ctrl.row1PowerCard.currentVal = rootWindow.r1Current.toFixed(1);
-                    }
-                });
+        if (ctrl.row1Media) {
+            ctrl.row1Media.playClicked.connect(function() {
+                rootWindow.r1Power = 3.8;
+                rootWindow.r1Current = 11.5;
+                if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = true;
+                if (ctrl.row1PowerCard) {
+                    ctrl.row1PowerCard.powerVal = rootWindow.r1Power.toFixed(1);
+                    ctrl.row1PowerCard.currentVal = rootWindow.r1Current.toFixed(1);
+                }
+            });
 
-                ctrl.row1Media.stopClicked.connect(function() {
-                    rootWindow.r1Power = 0.0;
-                    rootWindow.r1Current = 0.0;
-                    rootWindow.r1RuntimeSeconds = 0;
-                    if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = false;
-                    if (ctrl.row1Runtime) ctrl.row1Runtime.timeText = "00:00:00";
-                    if (ctrl.row1PowerCard) {
-                        ctrl.row1PowerCard.powerVal = "0.0";
-                        ctrl.row1PowerCard.currentVal = "0.0";
-                    }
-                });
-            }
+            ctrl.row1Media.stopClicked.connect(function() {
+                rootWindow.r1Power = 0.0;
+                rootWindow.r1Current = 0.0;
+                rootWindow.r1RuntimeSeconds = 0;
+                if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = false;
+                if (ctrl.row1Runtime) ctrl.row1Runtime.timeText = "00:00:00";
+                if (ctrl.row1PowerCard) {
+                    ctrl.row1PowerCard.powerVal = "0.0";
+                    ctrl.row1PowerCard.currentVal = "0.0";
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row1ModeSelector) {
-                ctrl.row1ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                    if (ui.agitatorModal) ui.agitatorModal.visible = true;
-                });
-            }
+        if (ctrl.row1ModeSelector) {
+            ctrl.row1ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
+                if (ui.agitatorModal) ui.agitatorModal.visible = true;
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 2. ROW 2: HOMOGENIZER SPEED & INTERACTIVE CONTROLS
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row2MinusBtn) {
-                ctrl.row2MinusBtn.clicked.connect(function() {
-                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                    rootWindow.r2TargetSpeed = Math.max(600.0, rootWindow.r2TargetSpeed - 100.0);
-                    ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
-                });
-            }
+        // -------------------------------------------------------------
+        // 2. ROW 2: HOMOGENIZER SPEED & INTERACTIVE CONTROLS
+        // -------------------------------------------------------------
+        if (ctrl.row2MinusBtn) {
+            ctrl.row2MinusBtn.clicked.connect(function() {
+                if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
+                rootWindow.r2TargetSpeed = Math.max(600.0, rootWindow.r2TargetSpeed - 100.0);
+                ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
+            });
+        }
 
-            if (ctrl && ctrl.row2PlusBtn) {
-                ctrl.row2PlusBtn.clicked.connect(function() {
-                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                    rootWindow.r2TargetSpeed = Math.min(4800.0, rootWindow.r2TargetSpeed + 100.0);
-                    ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
-                });
-            }
+        if (ctrl.row2PlusBtn) {
+            ctrl.row2PlusBtn.clicked.connect(function() {
+                if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
+                rootWindow.r2TargetSpeed = Math.min(4800.0, rootWindow.r2TargetSpeed + 100.0);
+                ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
+            });
+        }
 
-            if (ctrl && ctrl.row2SpeedControl) {
-                ctrl.row2SpeedControl.targetValChangedByUser.connect(function(newVal) {
-                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                    rootWindow.r2TargetSpeed = newVal;
-                });
+        if (ctrl.row2SpeedControl) {
+            ctrl.row2SpeedControl.targetValChangedByUser.connect(function(newVal) {
+                if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
+                rootWindow.r2TargetSpeed = newVal;
+            });
 
-                ctrl.row2SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
-                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = title;
-                        ui.keypadModal.targetTag = tag;
-                        ui.keypadModal.minVal = min;
-                        ui.keypadModal.maxVal = max;
-                        ui.keypadModal.unit = unit;
-                        ui.keypadModal.currentInput = current.toFixed(0);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+            ctrl.row2SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
+                if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = title;
+                    ui.keypadModal.targetTag = tag;
+                    ui.keypadModal.minVal = min;
+                    ui.keypadModal.maxVal = max;
+                    ui.keypadModal.unit = unit;
+                    ui.keypadModal.currentInput = current.toFixed(0);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row2Media) {
-                ctrl.row2Media.playClicked.connect(function() {
-                    rootWindow.r2Power = 8.5;
-                    rootWindow.r2Current = 24.2;
-                    if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = true;
-                    if (ctrl.row2PowerCard) {
-                        ctrl.row2PowerCard.powerVal = rootWindow.r2Power.toFixed(1);
-                        ctrl.row2PowerCard.currentVal = rootWindow.r2Current.toFixed(1);
-                    }
-                });
+        if (ctrl.row2Media) {
+            ctrl.row2Media.playClicked.connect(function() {
+                rootWindow.r2Power = 8.5;
+                rootWindow.r2Current = 24.2;
+                if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = true;
+                if (ctrl.row2PowerCard) {
+                    ctrl.row2PowerCard.powerVal = rootWindow.r2Power.toFixed(1);
+                    ctrl.row2PowerCard.currentVal = rootWindow.r2Current.toFixed(1);
+                }
+            });
 
-                ctrl.row2Media.stopClicked.connect(function() {
-                    rootWindow.r2Power = 0.0;
-                    rootWindow.r2Current = 0.0;
-                    rootWindow.r2RuntimeSeconds = 0;
-                    if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = false;
-                    if (ctrl.row2Runtime) ctrl.row2Runtime.timeText = "00:00:00";
-                    if (ctrl.row2PowerCard) {
-                        ctrl.row2PowerCard.powerVal = "0.0";
-                        ctrl.row2PowerCard.currentVal = "0.0";
-                    }
-                });
-            }
+            ctrl.row2Media.stopClicked.connect(function() {
+                rootWindow.r2Power = 0.0;
+                rootWindow.r2Current = 0.0;
+                rootWindow.r2RuntimeSeconds = 0;
+                if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = false;
+                if (ctrl.row2Runtime) ctrl.row2Runtime.timeText = "00:00:00";
+                if (ctrl.row2PowerCard) {
+                    ctrl.row2PowerCard.powerVal = "0.0";
+                    ctrl.row2PowerCard.currentVal = "0.0";
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row2ModeSelector) {
-                ctrl.row2ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                    if (ui.homoModal) ui.homoModal.visible = true;
-                });
-            }
+        if (ctrl.row2ModeSelector) {
+            ctrl.row2ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
+                if (ui.homoModal) ui.homoModal.visible = true;
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 3. ROW 3: CIRCULATION CONTROLS (ExternalLineModeModal)
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row3Media) {
-                ctrl.row3Media.stopClicked.connect(function() {
-                    rootWindow.r3RuntimeSeconds = 0;
-                    if (ctrl.row3Runtime) ctrl.row3Runtime.timeText = "00:00:00";
-                });
-            }
+        // -------------------------------------------------------------
+        // 3. ROW 3: CIRCULATION CONTROLS (ExternalLineModeModal)
+        // -------------------------------------------------------------
+        if (ctrl.row3Media) {
+            ctrl.row3Media.stopClicked.connect(function() {
+                rootWindow.r3RuntimeSeconds = 0;
+                if (ctrl.row3Runtime) ctrl.row3Runtime.timeText = "00:00:00";
+            });
+        }
 
-            if (ctrl && ctrl.row3ModeSelector) {
-                ctrl.row3ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("External Line", ctrl.row3Media && ctrl.row3Media.isPlaying)) return;
-                    if (ui.extLineModal) ui.extLineModal.visible = true;
-                });
-            }
+        if (ctrl.row3ModeSelector) {
+            ctrl.row3ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("External Line", ctrl.row3Media && ctrl.row3Media.isPlaying)) return;
+                if (ui.extLineModal) ui.extLineModal.visible = true;
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 4. ROW 4: VACUUM CONTROLS & SETPOINTS
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row4Media) {
-                ctrl.row4Media.playClicked.connect(function() {
-                    if (ctrl.row4SpeedControl) ctrl.row4SpeedControl.isLocked = true;
-                });
-                ctrl.row4Media.stopClicked.connect(function() {
-                    rootWindow.r4RuntimeSeconds = 0;
-                    if (ctrl.row4SpeedControl) ctrl.row4SpeedControl.isLocked = false;
-                    if (ctrl.row4Runtime) ctrl.row4Runtime.timeText = "00:00:00";
-                });
-            }
+        // -------------------------------------------------------------
+        // 4. ROW 4: VACUUM CONTROLS & SETPOINTS
+        // -------------------------------------------------------------
+        if (ctrl.row4Media) {
+            ctrl.row4Media.stopClicked.connect(function() {
+                rootWindow.r4RuntimeSeconds = 0;
+                if (ctrl.row4Runtime) ctrl.row4Runtime.timeText = "00:00:00";
+            });
+        }
 
-            if (ctrl && ctrl.row4ModeSelector) {
-                ctrl.row4ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
-                    if (ui.vacuumModal) ui.vacuumModal.visible = true;
-                });
-            }
+        if (ctrl.row4ModeSelector) {
+            ctrl.row4ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
+                if (ui.vacuumModal) ui.vacuumModal.visible = true;
+            });
+        }
 
-            if (ctrl && ctrl.row4StartCard) {
-                ctrl.row4StartCard.clicked.connect(function() {
-                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Start Pressure";
-                        ui.keypadModal.targetTag = "1P1001_START";
-                        ui.keypadModal.minVal = -1000.0;
-                        ui.keypadModal.maxVal = 0.0;
-                        ui.keypadModal.unit = "mbar";
-                        ui.keypadModal.currentInput = rootWindow.vacuumStartPressure.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row4StartCard) {
+            ctrl.row4StartCard.clicked.connect(function() {
+                if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Start Pressure";
+                    ui.keypadModal.targetTag = "1P1001_START";
+                    ui.keypadModal.minVal = -1000.0;
+                    ui.keypadModal.maxVal = 0.0;
+                    ui.keypadModal.unit = "mbar";
+                    ui.keypadModal.currentInput = rootWindow.vacuumStartPressure.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row4EndCard) {
-                ctrl.row4EndCard.clicked.connect(function() {
-                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "End Pressure";
-                        ui.keypadModal.targetTag = "1P1001_END";
-                        ui.keypadModal.minVal = -1000.0;
-                        ui.keypadModal.maxVal = 0.0;
-                        ui.keypadModal.unit = "mbar";
-                        ui.keypadModal.currentInput = rootWindow.vacuumEndPressure.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row4EndCard) {
+            ctrl.row4EndCard.clicked.connect(function() {
+                if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "End Pressure";
+                    ui.keypadModal.targetTag = "1P1001_END";
+                    ui.keypadModal.minVal = -1000.0;
+                    ui.keypadModal.maxVal = 0.0;
+                    ui.keypadModal.unit = "mbar";
+                    ui.keypadModal.currentInput = rootWindow.vacuumEndPressure.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 5. ROW 5: SUCTION LIQUIDS CONTROLS & SETPOINTS
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row5Media) {
-                ctrl.row5Media.stopClicked.connect(function() {
-                    rootWindow.r5RuntimeSeconds = 0;
-                    if (ctrl.row5Runtime) ctrl.row5Runtime.timeText = "00:00:00";
-                });
-            }
+        // -------------------------------------------------------------
+        // 5. ROW 5: SUCTION LIQUIDS CONTROLS & SETPOINTS
+        // -------------------------------------------------------------
+        if (ctrl.row5Media) {
+            ctrl.row5Media.stopClicked.connect(function() {
+                rootWindow.r5RuntimeSeconds = 0;
+                if (ctrl.row5Runtime) ctrl.row5Runtime.timeText = "00:00:00";
+            });
+        }
 
-            if (ctrl && ctrl.row5ModeSelector) {
-                ctrl.row5ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
-                    if (ui.fillingModal) ui.fillingModal.visible = true;
-                });
-            }
+        if (ctrl.row5ModeSelector) {
+            ctrl.row5ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
+                if (ui.fillingModal) ui.fillingModal.visible = true;
+            });
+        }
 
-            if (ctrl && ctrl.row5AngleOpenCard) {
-                ctrl.row5AngleOpenCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Angle Open";
-                        ui.keypadModal.targetTag = "1V1001_AO";
-                        ui.keypadModal.minVal = 0.0;
-                        ui.keypadModal.maxVal = 100.0;
-                        ui.keypadModal.unit = "%";
-                        ui.keypadModal.currentInput = rootWindow.suctionAngleOpen.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row5AngleOpenCard) {
+            ctrl.row5AngleOpenCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Angle Open";
+                    ui.keypadModal.targetTag = "1V1001_AO";
+                    ui.keypadModal.minVal = 0.0;
+                    ui.keypadModal.maxVal = 100.0;
+                    ui.keypadModal.unit = "%";
+                    ui.keypadModal.currentInput = rootWindow.suctionAngleOpen.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row5AngleCloseCard) {
-                ctrl.row5AngleCloseCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Angle Closed";
-                        ui.keypadModal.targetTag = "1V1001_AC";
-                        ui.keypadModal.minVal = 0.0;
-                        ui.keypadModal.maxVal = 100.0;
-                        ui.keypadModal.unit = "%";
-                        ui.keypadModal.currentInput = rootWindow.suctionAngleClose.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row5AngleCloseCard) {
+            ctrl.row5AngleCloseCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Angle Closed";
+                    ui.keypadModal.targetTag = "1V1001_AC";
+                    ui.keypadModal.minVal = 0.0;
+                    ui.keypadModal.maxVal = 100.0;
+                    ui.keypadModal.unit = "%";
+                    ui.keypadModal.currentInput = rootWindow.suctionAngleClose.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row5TimeOpenCard) {
-                ctrl.row5TimeOpenCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Time Open";
-                        ui.keypadModal.targetTag = "1V1001_TO";
-                        ui.keypadModal.minVal = 0.0;
-                        ui.keypadModal.maxVal = 999.0;
-                        ui.keypadModal.unit = "s";
-                        ui.keypadModal.currentInput = rootWindow.suctionTimeOpen.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row5TimeOpenCard) {
+            ctrl.row5TimeOpenCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Time Open";
+                    ui.keypadModal.targetTag = "1V1001_TO";
+                    ui.keypadModal.minVal = 0.0;
+                    ui.keypadModal.maxVal = 999.0;
+                    ui.keypadModal.unit = "s";
+                    ui.keypadModal.currentInput = rootWindow.suctionTimeOpen.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row5TimeCloseCard) {
-                ctrl.row5TimeCloseCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Time Closed";
-                        ui.keypadModal.targetTag = "1V1001_TC";
-                        ui.keypadModal.minVal = 0.0;
-                        ui.keypadModal.maxVal = 999.0;
-                        ui.keypadModal.unit = "s";
-                        ui.keypadModal.currentInput = rootWindow.suctionTimeClose.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row5TimeCloseCard) {
+            ctrl.row5TimeCloseCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Time Closed";
+                    ui.keypadModal.targetTag = "1V1001_TC";
+                    ui.keypadModal.minVal = 0.0;
+                    ui.keypadModal.maxVal = 999.0;
+                    ui.keypadModal.unit = "s";
+                    ui.keypadModal.currentInput = rootWindow.suctionTimeClose.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 6. ROW 6: HEATING CONTROLS & SETPOINTS
-            // -------------------------------------------------------------
-            if (ctrl && ctrl.row6Media) {
-                ctrl.row6Media.playClicked.connect(function() {
-                    console.log("Heating Loop Activated.");
-                });
-                ctrl.row6Media.stopClicked.connect(function() {
-                    rootWindow.r6RuntimeSeconds = 0;
-                    if (ctrl.row6Runtime) ctrl.row6Runtime.timeText = "00:00:00";
-                });
-            }
+        // -------------------------------------------------------------
+        // 6. ROW 6: HEATING CONTROLS & SETPOINTS
+        // -------------------------------------------------------------
+        if (ctrl.row6Media) {
+            ctrl.row6Media.stopClicked.connect(function() {
+                rootWindow.r6RuntimeSeconds = 0;
+                if (ctrl.row6Runtime) ctrl.row6Runtime.timeText = "00:00:00";
+            });
+        }
 
-            if (ctrl && ctrl.row6ModeSelector) {
-                ctrl.row6ModeSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.heatingModal) {
-                        ui.heatingModal.targetSelector = "mode";
-                        ui.heatingModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6ModeSelector) {
+            ctrl.row6ModeSelector.clicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.heatingModal) {
+                    ui.heatingModal.targetSelector = "mode";
+                    ui.heatingModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row6RegSelector) {
-                ctrl.row6RegSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.heatingModal) {
-                        ui.heatingModal.targetSelector = "regulation";
-                        ui.heatingModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6RegSelector) {
+            ctrl.row6RegSelector.clicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.heatingModal) {
+                    ui.heatingModal.targetSelector = "regulation";
+                    ui.heatingModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row6TempSrcSelector) {
-                ctrl.row6TempSrcSelector.clicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.heatingModal) {
-                        ui.heatingModal.targetSelector = "temp_src";
-                        ui.heatingModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6TempSrcSelector) {
+            ctrl.row6TempSrcSelector.clicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.heatingModal) {
+                    ui.heatingModal.targetSelector = "temp_src";
+                    ui.heatingModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row6DeltaTCard) {
-                ctrl.row6DeltaTCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Delta T Jacket";
-                        ui.keypadModal.targetTag = "1T1001_DT";
-                        ui.keypadModal.minVal = 0.0;
-                        ui.keypadModal.maxVal = 50.0;
-                        ui.keypadModal.unit = "°C";
-                        ui.keypadModal.currentInput = rootWindow.jacketDeltaT.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6DeltaTCard) {
+            ctrl.row6DeltaTCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Delta T Jacket";
+                    ui.keypadModal.targetTag = "1T1001_DT";
+                    ui.keypadModal.minVal = 0.0;
+                    ui.keypadModal.maxVal = 50.0;
+                    ui.keypadModal.unit = "°C";
+                    ui.keypadModal.currentInput = rootWindow.jacketDeltaT.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row6TempCard) {
-                ctrl.row6TempCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Temperature Setpoint";
-                        ui.keypadModal.targetTag = "1T1001_TEMP";
-                        ui.keypadModal.minVal = 20.0;
-                        ui.keypadModal.maxVal = 130.0;
-                        ui.keypadModal.unit = "°C";
-                        ui.keypadModal.currentInput = rootWindow.targetTemp.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6TempCard) {
+            ctrl.row6TempCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Temperature Setpoint";
+                    ui.keypadModal.targetTag = "1T1001_TEMP";
+                    ui.keypadModal.minVal = 20.0;
+                    ui.keypadModal.maxVal = 130.0;
+                    ui.keypadModal.unit = "°C";
+                    ui.keypadModal.currentInput = rootWindow.targetTemp.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            if (ctrl && ctrl.row6DevCard) {
-                ctrl.row6DevCard.setpointClicked.connect(function() {
-                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
-                    if (ui.keypadModal) {
-                        ui.keypadModal.title = "Temperature Deviation";
-                        ui.keypadModal.targetTag = "1T1001_DEV";
-                        ui.keypadModal.minVal = 0.1;
-                        ui.keypadModal.maxVal = 10.0;
-                        ui.keypadModal.unit = "°C";
-                        ui.keypadModal.currentInput = rootWindow.tempDeviation.toFixed(1);
-                        ui.keypadModal.visible = true;
-                    }
-                });
-            }
+        if (ctrl.row6DevCard) {
+            ctrl.row6DevCard.setpointClicked.connect(function() {
+                if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
+                if (ui.keypadModal) {
+                    ui.keypadModal.title = "Temperature Deviation";
+                    ui.keypadModal.targetTag = "1T1001_DEV";
+                    ui.keypadModal.minVal = 0.1;
+                    ui.keypadModal.maxVal = 10.0;
+                    ui.keypadModal.unit = "°C";
+                    ui.keypadModal.currentInput = rootWindow.tempDeviation.toFixed(1);
+                    ui.keypadModal.visible = true;
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 7. HEADER ACKNOWLEDGE & PLANTMODE OPEN BUTTONS
-            // -------------------------------------------------------------
-            if (ui.ackButton) {
-                ui.ackButton.clicked.connect(function() {
-                    rootWindow.alarmIndex = (rootWindow.alarmIndex + 1) % rootWindow.alarmList.length;
-                    ui.header.alarmMessage = rootWindow.alarmList[rootWindow.alarmIndex];
-                    ui.header.isAlarmActive = false;
-                });
-            }
+        // -------------------------------------------------------------
+        // 7. HEADER ACKNOWLEDGE & PLANTMODE OPEN BUTTONS
+        // -------------------------------------------------------------
+        if (ui.ackButton) {
+            ui.ackButton.clicked.connect(function() {
+                rootWindow.alarmIndex = (rootWindow.alarmIndex + 1) % rootWindow.alarmList.length;
+                ui.header.alarmMessage = rootWindow.alarmList[rootWindow.alarmIndex];
+                ui.header.isAlarmActive = false;
+            });
+        }
 
-            if (ui.header) {
-                ui.header.plantModeRequested.connect(function() {
-                    if (ui.plantModal) {
-                        ui.plantModal.isAuto = rootWindow.isAutoMode;
-                        ui.plantModal.visible = true;
-                    }
-                });
-            }
+        if (ui.header) {
+            ui.header.plantModeRequested.connect(function() {
+                if (ui.plantModal) {
+                    ui.plantModal.isAuto = rootWindow.isAutoMode;
+                    ui.plantModal.visible = true;
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 8. SIDEBAR SCREEN NAVIGATION HANDLER
-            // -------------------------------------------------------------
-            if (ui.sidebar) {
-                ui.sidebar.activeIndexChanged.connect(function() {
-                    var idx = ui.sidebar.activeIndex;
-                    if (idx >= 0 && idx < rootWindow.screenTitles.length) {
-                        ui.header.alarmMessage = rootWindow.screenTitles[idx];
-                    }
-                });
-            }
+        // -------------------------------------------------------------
+        // 8. SIDEBAR SCREEN NAVIGATION HANDLER
+        // -------------------------------------------------------------
+        if (ui.sidebar) {
+            ui.sidebar.activeIndexChanged.connect(function() {
+                var idx = ui.sidebar.activeIndex;
+                if (idx >= 0 && idx < rootWindow.screenTitles.length) {
+                    ui.header.alarmMessage = rootWindow.screenTitles[idx];
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 9. P&ID COMPONENT TAPPING HANDLER
-            // -------------------------------------------------------------
-            if (ui.pidScreen) {
-                ui.pidScreen.componentTapped.connect(function(tagName) {
-                    console.log("P&ID Equipment Tapped: " + tagName);
-                    if (ui.confirmModal) {
-                        ui.confirmModal.title = "Confirm Device Action: " + tagName;
-                        ui.confirmModal.tag = tagName;
-                        ui.confirmModal.instruction = "Please verify safety interlocks before toggling position of " + tagName + ".";
-                        ui.confirmModal.visible = true;
-                    }
-                });
-            }
+        // -------------------------------------------------------------
+        // 9. P&ID COMPONENT TAPPING HANDLER
+        // -------------------------------------------------------------
+        if (ui.pidScreen) {
+            ui.pidScreen.componentTapped.connect(function(tagName) {
+                if (ui.confirmModal) {
+                    ui.confirmModal.title = "Confirm Device Action: " + tagName;
+                    ui.confirmModal.tag = tagName;
+                    ui.confirmModal.instruction = "Please verify safety interlocks before toggling position of " + tagName + ".";
+                    ui.confirmModal.visible = true;
+                }
+            });
+        }
 
-            // -------------------------------------------------------------
-            // 10. MODAL SETPOINT ACCEPTANCE HANDLER (Universal Dispatcher)
-            // -------------------------------------------------------------
-            if (ui.keypadModal) {
-                ui.keypadModal.accepted.connect(function(val) {
-                    var tag = ui.keypadModal.targetTag;
-                    if (tag.indexOf("1M1501") !== -1 && ctrl && ctrl.row1SpeedControl) {
-                        rootWindow.r1TargetSpeed = val;
-                        ctrl.row1SpeedControl.targetVal = val;
-                    } else if (tag.indexOf("1M2003") !== -1 && ctrl && ctrl.row2SpeedControl) {
-                        rootWindow.r2TargetSpeed = val;
-                        ctrl.row2SpeedControl.targetVal = val;
-                    } else if (tag.indexOf("1P1001_START") !== -1 && ctrl && ctrl.row4StartCard) {
-                        rootWindow.vacuumStartPressure = val;
-                        ctrl.row4StartCard.primaryValue = val.toFixed(1);
-                    } else if (tag.indexOf("1P1001_END") !== -1 && ctrl && ctrl.row4EndCard) {
-                        rootWindow.vacuumEndPressure = val;
-                        ctrl.row4EndCard.primaryValue = val.toFixed(1);
-                    } else if (tag.indexOf("1V1001_AO") !== -1 && ctrl && ctrl.row5AngleOpenCard) {
-                        rootWindow.suctionAngleOpen = val;
-                        ctrl.row5AngleOpenCard.secondaryValue = val.toFixed(1) + "%";
-                    } else if (tag.indexOf("1V1001_AC") !== -1 && ctrl && ctrl.row5AngleCloseCard) {
-                        rootWindow.suctionAngleClose = val;
-                        ctrl.row5AngleCloseCard.secondaryValue = val.toFixed(1) + "%";
-                    } else if (tag.indexOf("1V1001_TO") !== -1 && ctrl && ctrl.row5TimeOpenCard) {
-                        rootWindow.suctionTimeOpen = val;
-                        ctrl.row5TimeOpenCard.secondaryValue = val.toFixed(1) + " s";
-                    } else if (tag.indexOf("1V1001_TC") !== -1 && ctrl && ctrl.row5TimeCloseCard) {
-                        rootWindow.suctionTimeClose = val;
-                        ctrl.row5TimeCloseCard.secondaryValue = val.toFixed(1) + " s";
-                    } else if (tag.indexOf("1T1001_DT") !== -1 && ctrl && ctrl.row6DeltaTCard) {
-                        rootWindow.jacketDeltaT = val;
-                        ctrl.row6DeltaTCard.secondaryValue = val.toFixed(1) + " °C";
-                    } else if (tag.indexOf("1T1001_TEMP") !== -1 && ctrl && ctrl.row6TempCard) {
-                        rootWindow.targetTemp = val;
-                        ctrl.row6TempCard.secondaryValue = val.toFixed(1) + " °C";
-                    } else if (tag.indexOf("1T1001_DEV") !== -1 && ctrl && ctrl.row6DevCard) {
-                        rootWindow.tempDeviation = val;
-                        ctrl.row6DevCard.secondaryValue = val.toFixed(1) + " °C";
-                    }
-                    ui.keypadModal.visible = false;
-                });
+        // -------------------------------------------------------------
+        // 10. MODAL SETPOINT ACCEPTANCE HANDLER (Universal Dispatcher)
+        // -------------------------------------------------------------
+        if (ui.keypadModal) {
+            ui.keypadModal.accepted.connect(function(val) {
+                var tag = ui.keypadModal.targetTag;
+                if (tag.indexOf("1M1501") !== -1 && ctrl.row1SpeedControl) {
+                    rootWindow.r1TargetSpeed = val;
+                    ctrl.row1SpeedControl.targetVal = val;
+                } else if (tag.indexOf("1M2003") !== -1 && ctrl.row2SpeedControl) {
+                    rootWindow.r2TargetSpeed = val;
+                    ctrl.row2SpeedControl.targetVal = val;
+                } else if (tag.indexOf("1P1001_START") !== -1 && ctrl.row4StartCard) {
+                    rootWindow.vacuumStartPressure = val;
+                    ctrl.row4StartCard.primaryValue = val.toFixed(1);
+                } else if (tag.indexOf("1P1001_END") !== -1 && ctrl.row4EndCard) {
+                    rootWindow.vacuumEndPressure = val;
+                    ctrl.row4EndCard.primaryValue = val.toFixed(1);
+                } else if (tag.indexOf("1V1001_AO") !== -1 && ctrl.row5AngleOpenCard) {
+                    rootWindow.suctionAngleOpen = val;
+                    ctrl.row5AngleOpenCard.secondaryValue = val.toFixed(1) + "%";
+                } else if (tag.indexOf("1V1001_AC") !== -1 && ctrl.row5AngleCloseCard) {
+                    rootWindow.suctionAngleClose = val;
+                    ctrl.row5AngleCloseCard.secondaryValue = val.toFixed(1) + "%";
+                } else if (tag.indexOf("1V1001_TO") !== -1 && ctrl.row5TimeOpenCard) {
+                    rootWindow.suctionTimeOpen = val;
+                    ctrl.row5TimeOpenCard.secondaryValue = val.toFixed(1) + " s";
+                } else if (tag.indexOf("1V1001_TC") !== -1 && ctrl.row5TimeCloseCard) {
+                    rootWindow.suctionTimeClose = val;
+                    ctrl.row5TimeCloseCard.secondaryValue = val.toFixed(1) + " s";
+                } else if (tag.indexOf("1T1001_DT") !== -1 && ctrl.row6DeltaTCard) {
+                    rootWindow.jacketDeltaT = val;
+                    ctrl.row6DeltaTCard.secondaryValue = val.toFixed(1) + " °C";
+                } else if (tag.indexOf("1T1001_TEMP") !== -1 && ctrl.row6TempCard) {
+                    rootWindow.targetTemp = val;
+                    ctrl.row6TempCard.secondaryValue = val.toFixed(1) + " °C";
+                } else if (tag.indexOf("1T1001_DEV") !== -1 && ctrl.row6DevCard) {
+                    rootWindow.tempDeviation = val;
+                    ctrl.row6DevCard.secondaryValue = val.toFixed(1) + " °C";
+                }
+                ui.keypadModal.visible = false;
+            });
 
-                ui.keypadModal.closed.connect(function() { ui.keypadModal.visible = false; });
-            }
+            ui.keypadModal.closed.connect(function() { ui.keypadModal.visible = false; });
+        }
 
-            // -------------------------------------------------------------
-            // 11. PLANTMODE MODAL WIRING
-            // -------------------------------------------------------------
-            if (ui.plantModal) {
-                ui.plantModal.autoToggled.connect(function(isAuto) {
-                    rootWindow.isAutoMode = isAuto;
-                    if (ui.header) {
-                        ui.header.plantModeText = isAuto ? "(A)" : "(M)";
-                        ui.header.alarmMessage = isAuto ? "AUTOMATIC PRODUCTION MODE - RECIPE [" + rootWindow.currentRecipeName + "] ACTIVE" : "MANUAL OVERRIDE MODE - OPERATOR SETPOINTS ENABLED";
-                    }
-                });
+        // -------------------------------------------------------------
+        // 11. PLANTMODE MODAL WIRING
+        // -------------------------------------------------------------
+        if (ui.plantModal) {
+            ui.plantModal.autoToggled.connect(function(isAuto) {
+                rootWindow.isAutoMode = isAuto;
+                if (ui.header) {
+                    ui.header.plantModeText = isAuto ? "(A)" : "(M)";
+                    ui.header.alarmMessage = isAuto ? "AUTOMATIC PRODUCTION MODE - RECIPE [" + rootWindow.currentRecipeName + "] ACTIVE" : "MANUAL OVERRIDE MODE - OPERATOR SETPOINTS ENABLED";
+                }
+            });
 
-                ui.plantModal.modeSelected.connect(function(mode) {
-                    if (mode === "RECIPE" && ui.sidebar) {
-                        ui.sidebar.activeIndex = 4; // Switch to Recipes Screen
-                    } else if (mode === "CIP" && ui.header) {
-                        ui.header.alarmMessage = "CIP MODE - CLEANING IN PLACE SEQUENCE ACTIVE";
-                    } else if (mode === "PRODUCTION" && ui.header) {
-                        ui.header.alarmMessage = "PRODUCTION MODE - VESSEL READY";
-                    }
-                });
+            ui.plantModal.modeSelected.connect(function(mode) {
+                if (mode === "RECIPE" && ui.sidebar) {
+                    ui.sidebar.activeIndex = 4; // Switch to Recipes Screen
+                } else if (mode === "CIP" && ui.header) {
+                    ui.header.alarmMessage = "CIP MODE - CLEANING IN PLACE SEQUENCE ACTIVE";
+                } else if (mode === "PRODUCTION" && ui.header) {
+                    ui.header.alarmMessage = "PRODUCTION MODE - VESSEL READY";
+                }
+            });
 
-                ui.plantModal.closed.connect(function() { ui.plantModal.visible = false; });
-            }
+            ui.plantModal.closed.connect(function() { ui.plantModal.visible = false; });
+        }
 
-            // -------------------------------------------------------------
-            // 12. DYNAMIC MODE MODALS
-            // -------------------------------------------------------------
-            // Agitator Modal
-            if (ui.agitatorModal) {
-                ui.agitatorModal.modeSelected.connect(function(modeKey) {
-                    if (ctrl && ctrl.row1ModeSelector) ctrl.row1ModeSelector.iconName = modeKey;
-                });
-                ui.agitatorModal.closed.connect(function() { ui.agitatorModal.visible = false; });
-            }
+        // -------------------------------------------------------------
+        // 12. DYNAMIC MODE MODALS
+        // -------------------------------------------------------------
+        // Agitator Modal
+        if (ui.agitatorModal) {
+            ui.agitatorModal.modeSelected.connect(function(modeKey) {
+                if (ctrl.row1ModeSelector) ctrl.row1ModeSelector.iconName = modeKey;
+            });
+            ui.agitatorModal.closed.connect(function() { ui.agitatorModal.visible = false; });
+        }
 
-            // Homogenizer Modal
-            if (ui.homoModal) {
-                ui.homoModal.modeSelected.connect(function(modeKey) {
-                    if (ctrl && ctrl.row2ModeSelector) ctrl.row2ModeSelector.iconName = modeKey;
-                });
-                ui.homoModal.closed.connect(function() { ui.homoModal.visible = false; });
-            }
+        // Homogenizer Modal
+        if (ui.homoModal) {
+            ui.homoModal.modeSelected.connect(function(modeKey) {
+                if (ctrl.row2ModeSelector) ctrl.row2ModeSelector.iconName = modeKey;
+            });
+            ui.homoModal.closed.connect(function() { ui.homoModal.visible = false; });
+        }
 
-            // External Line Modal (Row 3)
-            if (ui.extLineModal) {
-                ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
-                    ui.extLineModal.visible = false;
-                    // Open Valve Confirmation Modal for mandatory butterfly valve verification
-                    if (ui.confirmModal) {
-                        ui.confirmModal.loadPreset(modeKey);
-                    }
-                });
-                ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
-            }
+        // External Line Modal (Row 3)
+        if (ui.extLineModal) {
+            ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
+                ui.extLineModal.visible = false;
+                if (ui.confirmModal) ui.confirmModal.loadPreset(modeKey);
+            });
+            ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
+        }
 
-            // Vacuum Modal (Row 4)
-            if (ui.vacuumModal) {
-                ui.vacuumModal.modeApplied.connect(function(modeKey, modeTitle, preset) {
-                    if (ctrl && ctrl.row4ModeSelector) {
-                        ctrl.row4ModeSelector.iconName = modeKey;
-                        ctrl.row4ModeSelector.modeText = modeTitle;
-                    }
-                    if (ctrl && ctrl.row4StartCard) ctrl.row4StartCard.primaryValue = preset.toFixed(1);
-                });
-                ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
-            }
+        // Vacuum Modal (Row 4)
+        if (ui.vacuumModal) {
+            ui.vacuumModal.modeApplied.connect(function(modeKey, modeTitle, preset) {
+                if (ctrl.row4ModeSelector) {
+                    ctrl.row4ModeSelector.iconName = modeKey;
+                    ctrl.row4ModeSelector.modeText = modeTitle;
+                }
+                if (ctrl.row4StartCard) ctrl.row4StartCard.primaryValue = preset.toFixed(1);
+            });
+            ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
+        }
 
-            // Filling / Suction Modal (Row 5)
-            if (ui.fillingModal) {
-                ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
-                    ui.fillingModal.visible = false;
-                    // Open Valve Confirmation Modal for suction charging ports
-                    if (ui.confirmModal) {
-                        ui.confirmModal.loadPreset(modeKey);
-                    }
-                });
-                ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
-            }
+        // Filling / Suction Modal (Row 5)
+        if (ui.fillingModal) {
+            ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
+                ui.fillingModal.visible = false;
+                if (ui.confirmModal) ui.confirmModal.loadPreset(modeKey);
+            });
+            ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
+        }
 
-            // Valve Status Matrix & Safety Interlock Modal
-            if (ui.confirmModal) {
-                ui.confirmModal.confirmed.connect(function(opKey) {
-                    if (ctrl && ctrl.row3ModeSelector && (opKey.indexOf("discharge") >= 0 || opKey.indexOf("cip") >= 0 || opKey.indexOf("recirculation") >= 0)) {
-                        ctrl.row3ModeSelector.iconName = opKey;
-                    }
-                    if (ctrl && ctrl.row5ModeSelector && opKey.indexOf("suction") >= 0) {
-                        ctrl.row5ModeSelector.iconName = opKey;
-                    }
-                    if (ui.header) {
-                        ui.header.alarmMessage = "VALVE POSITIONING CONFIRMED: [" + opKey.toUpperCase() + "] SEQUENCE RUNNING";
-                    }
-                });
-                ui.confirmModal.aborted.connect(function() {
-                    if (ui.header) {
-                        ui.header.alarmMessage = "PROCESS SEQUENCE ABORTED BY OPERATOR";
-                    }
-                });
-                ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
-            }
+        // Valve Status Matrix & Safety Interlock Modal
+        if (ui.confirmModal) {
+            ui.confirmModal.confirmed.connect(function(opKey) {
+                if (ctrl.row3ModeSelector && (opKey.indexOf("discharge") >= 0 || opKey.indexOf("cip") >= 0 || opKey.indexOf("recirculation") >= 0)) {
+                    ctrl.row3ModeSelector.iconName = opKey;
+                }
+                if (ctrl.row5ModeSelector && opKey.indexOf("suction") >= 0) {
+                    ctrl.row5ModeSelector.iconName = opKey;
+                }
+                if (ui.header) {
+                    ui.header.alarmMessage = "VALVE POSITIONING CONFIRMED: [" + opKey.toUpperCase() + "] SEQUENCE RUNNING";
+                }
+            });
+            ui.confirmModal.aborted.connect(function() {
+                if (ui.header) {
+                    ui.header.alarmMessage = "PROCESS SEQUENCE ABORTED BY OPERATOR";
+                }
+            });
+            ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
+        }
 
-            // Heating Modal (Row 6)
-            if (ui.heatingModal) {
-                ui.heatingModal.optionSelected.connect(function(selector, val, iconKey) {
-                    if (!ctrl) return;
-                    if (selector === "mode" && ctrl.row6ModeSelector) {
-                        ctrl.row6ModeSelector.iconName = iconKey;
-                        ctrl.row6ModeSelector.modeText = val;
-                    } else if (selector === "regulation" && ctrl.row6RegSelector) {
-                        ctrl.row6RegSelector.iconName = iconKey;
-                        ctrl.row6RegSelector.modeText = val;
-                    } else if (selector === "temp_src" && ctrl.row6TempSrcSelector) {
-                        ctrl.row6TempSrcSelector.iconName = iconKey;
-                        ctrl.row6TempSrcSelector.modeText = val;
-                    }
-                });
-                ui.heatingModal.closed.connect(function() { ui.heatingModal.visible = false; });
-            }
-
-            if (ui.confirmModal) ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
+        // Heating Modal (Row 6)
+        if (ui.heatingModal) {
+            ui.heatingModal.optionSelected.connect(function(selector, val, iconKey) {
+                if (selector === "mode" && ctrl.row6ModeSelector) {
+                    ctrl.row6ModeSelector.iconName = iconKey;
+                    ctrl.row6ModeSelector.modeText = val;
+                } else if (selector === "regulation" && ctrl.row6RegSelector) {
+                    ctrl.row6RegSelector.iconName = iconKey;
+                    ctrl.row6RegSelector.modeText = val;
+                } else if (selector === "temp_src" && ctrl.row6TempSrcSelector) {
+                    ctrl.row6TempSrcSelector.iconName = iconKey;
+                    ctrl.row6TempSrcSelector.modeText = val;
+                }
+            });
+            ui.heatingModal.closed.connect(function() { ui.heatingModal.visible = false; });
         }
     }
 
@@ -688,9 +669,6 @@ Item {
         running: true
         repeat: true
         onTriggered: {
-            if (uiLoader.status !== Loader.Ready) return;
-            var ui = uiLoader.item;
-            if (!ui) return;
             var ctrl = ui.controlView;
             if (!ctrl) return;
 
@@ -744,32 +722,14 @@ Item {
         }
     }
 
-    // --- Clock & 1-Second Independent Runtime Timers ---
+    // --- 1-Second Independent Runtime Timers ---
     Timer {
         id: clockTimer
         interval: 1000
         running: true
         repeat: true
         onTriggered: {
-            if (uiLoader.status !== Loader.Ready) return;
-            var ui = uiLoader.item;
-            if (!ui) return;
             var ctrl = ui.controlView;
-
-            // Update Header Clock
-            if (ui.header) {
-                var now = new Date();
-                var hours = String(now.getHours()).padStart(2, '0');
-                var minutes = String(now.getMinutes()).padStart(2, '0');
-                var seconds = String(now.getSeconds()).padStart(2, '0');
-                ui.header.timeString = hours + ":" + minutes + ":" + seconds;
-
-                var day = String(now.getDate()).padStart(2, '0');
-                var month = String(now.getMonth() + 1).padStart(2, '0');
-                var year = now.getFullYear();
-                ui.header.dateString = day + "/" + month + "/" + year;
-            }
-
             if (!ctrl) return;
 
             // 1. Agitator Runtime

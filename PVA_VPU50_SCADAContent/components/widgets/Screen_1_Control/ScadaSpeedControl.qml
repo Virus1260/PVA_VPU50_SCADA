@@ -110,7 +110,12 @@ Rectangle {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: parent.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                onClicked: decBtn.clicked()
+                onClicked: {
+                    var step = speedRoot.decimals === 0 ? 100.0 : 5.0;
+                    speedRoot.targetVal = Math.max(speedRoot.minVal, speedRoot.targetVal - step);
+                    speedRoot.targetValChangedByUser(speedRoot.targetVal);
+                    decBtn.clicked();
+                }
             }
         }
 
@@ -305,7 +310,12 @@ Rectangle {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: parent.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-                onClicked: incBtn.clicked()
+                onClicked: {
+                    var step = speedRoot.decimals === 0 ? 100.0 : 5.0;
+                    speedRoot.targetVal = Math.min(speedRoot.maxVal, speedRoot.targetVal + step);
+                    speedRoot.targetValChangedByUser(speedRoot.targetVal);
+                    incBtn.clicked();
+                }
             }
         }
 

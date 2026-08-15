@@ -2,7 +2,7 @@ import QmlProject
 
 Project {
     mainFile: "PVA_VPU50_SCADAContent/App.qml"
-    mainUiFile: "PVA_VPU50_SCADAContent/Main_frame_screen.ui.qml"
+    mainUiFile: "PVA_VPU50_SCADAContent/Main_frame_screenView.ui.qml"
 
     /* Include .qml, .js, and image files from current directory and subdirectories */
     QmlFiles {

@@ -11,7 +11,7 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
     QML_FILES
         "App.qml"
         "Main_frame_screen.qml"
-        "Main_frame_screen.ui.qml"
+        "Main_frame_screenView.ui.qml"
         "components/modals/ConfirmationModal.qml"
         "components/modals/NumericKeypadModal.qml"
         "components/modals/PlantModeModal.qml"

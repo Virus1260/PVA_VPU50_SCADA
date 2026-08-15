@@ -21,6 +21,24 @@ Rectangle {
 
     signal plantModeRequested()
 
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            var now = new Date();
+            var hrs = String(now.getHours()).padStart(2, '0');
+            var mins = String(now.getMinutes()).padStart(2, '0');
+            var secs = String(now.getSeconds()).padStart(2, '0');
+            headerRoot.timeString = hrs + ":" + mins + ":" + secs;
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var year = now.getFullYear();
+            headerRoot.dateString = day + "/" + month + "/" + year;
+        }
+    }
+
     // =========================================================================
     // 1. LEFT CLUSTER: Machine Badges & Vessel Capsule (Anchored Left)
     // =========================================================================
