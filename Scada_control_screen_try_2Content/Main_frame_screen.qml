@@ -566,9 +566,10 @@ Item {
             // External Line Modal (Row 3)
             if (ui.extLineModal) {
                 ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
-                    if (ctrl && ctrl.row3ModeSelector) {
-                        ctrl.row3ModeSelector.iconName = modeKey;
-                        ctrl.row3ModeSelector.modeText = modeTitle;
+                    ui.extLineModal.visible = false;
+                    // Open Valve Confirmation Modal for mandatory butterfly valve verification
+                    if (ui.confirmModal) {
+                        ui.confirmModal.loadPreset(modeKey);
                     }
                 });
                 ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
@@ -586,15 +587,37 @@ Item {
                 ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
             }
 
-            // Filling Modal (Row 5)
+            // Filling / Suction Modal (Row 5)
             if (ui.fillingModal) {
                 ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
-                    if (ctrl && ctrl.row5ModeSelector) {
-                        ctrl.row5ModeSelector.iconName = modeKey;
-                        ctrl.row5ModeSelector.modeText = modeTitle;
+                    ui.fillingModal.visible = false;
+                    // Open Valve Confirmation Modal for suction charging ports
+                    if (ui.confirmModal) {
+                        ui.confirmModal.loadPreset(modeKey);
                     }
                 });
                 ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
+            }
+
+            // Valve Status Matrix & Safety Interlock Modal
+            if (ui.confirmModal) {
+                ui.confirmModal.confirmed.connect(function(opKey) {
+                    if (ctrl && ctrl.row3ModeSelector && (opKey.indexOf("discharge") >= 0 || opKey.indexOf("cip") >= 0 || opKey.indexOf("recirculation") >= 0)) {
+                        ctrl.row3ModeSelector.iconName = opKey;
+                    }
+                    if (ctrl && ctrl.row5ModeSelector && opKey.indexOf("suction") >= 0) {
+                        ctrl.row5ModeSelector.iconName = opKey;
+                    }
+                    if (ui.header) {
+                        ui.header.alarmMessage = "VALVE POSITIONING CONFIRMED: [" + opKey.toUpperCase() + "] SEQUENCE RUNNING";
+                    }
+                });
+                ui.confirmModal.aborted.connect(function() {
+                    if (ui.header) {
+                        ui.header.alarmMessage = "PROCESS SEQUENCE ABORTED BY OPERATOR";
+                    }
+                });
+                ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
             }
 
             // Heating Modal (Row 6)

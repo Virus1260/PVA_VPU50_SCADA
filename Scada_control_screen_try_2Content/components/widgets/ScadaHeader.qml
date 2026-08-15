@@ -5,6 +5,7 @@ Rectangle {
     id: headerRoot
     height: 86
     color: "#08213b"
+    clip: true
 
     property string vesselName: "VPU 50"
     property string systemTag: "B1"
@@ -22,22 +23,27 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 16
+        anchors.leftMargin: 10
+        anchors.rightMargin: 12
         anchors.topMargin: 8
         anchors.bottomMargin: 8
-        spacing: 12
+        spacing: 8
 
-        // 1. Machine Identifier Badges & Pill (Clickable -> Opens Plantmode Modal)
+        // =====================================================================
+        // 1. LEFT CLUSTER: Machine Identifier Badges & Pill (Fixed 256px)
+        // =====================================================================
         RowLayout {
-            spacing: 8
-            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: 256
+            Layout.minimumWidth: 256
+            Layout.maximumWidth: 256
+            Layout.fillHeight: true
+            spacing: 6
 
-            // B1 Badge (38px circle)
+            // B1 Badge (36px circle)
             Rectangle {
-                Layout.preferredWidth: 38
-                Layout.preferredHeight: 38
-                radius: 19
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                radius: 18
                 color: "#0c345a"
                 border.color: "#1d5b94"
                 border.width: 1.5
@@ -47,15 +53,15 @@ Rectangle {
                     text: headerRoot.systemTag
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 13
+                    font.pixelSize: 12
                 }
             }
 
-            // Auto (A) / Manual (M) Badge (38px circle - Clickable)
+            // Auto (A) / Manual (M) Badge (36px circle - Clickable)
             Rectangle {
-                Layout.preferredWidth: 38
-                Layout.preferredHeight: 38
-                radius: 19
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                radius: 18
                 color: headerRoot.plantModeText === "(A)" ? "#0c345a" : "#4a3512"
                 border.color: headerRoot.plantModeText === "(A)" ? "#1d5b94" : "#f5d033"
                 border.width: 1.5
@@ -65,7 +71,7 @@ Rectangle {
                     text: headerRoot.plantModeText
                     color: headerRoot.plantModeText === "(A)" ? "#ffffff" : "#f5d033"
                     font.bold: true
-                    font.pixelSize: 13
+                    font.pixelSize: 12
                 }
 
                 MouseArea {
@@ -75,43 +81,45 @@ Rectangle {
                 }
             }
 
-            // Status Green Dot
+            // Status Green Dot (10px)
             Rectangle {
-                Layout.preferredWidth: 12
-                Layout.preferredHeight: 12
-                radius: 6
+                Layout.preferredWidth: 10
+                Layout.preferredHeight: 10
+                radius: 5
                 color: "#78dc20"
                 border.color: "#ffffff"
                 border.width: 1
             }
 
-            // VPU 50 Machine Pill (48px height, rounded capsule - Clickable)
+            // VPU 50 Machine Pill (46px height, rounded capsule - Clickable)
             Rectangle {
                 id: vesselPill
-                Layout.preferredWidth: 150
-                Layout.preferredHeight: 48
-                radius: 24
+                Layout.preferredWidth: 148
+                Layout.minimumWidth: 148
+                Layout.maximumWidth: 148
+                Layout.preferredHeight: 46
+                radius: 23
                 color: pillMouse.pressed ? "#07203a" : (pillMouse.containsMouse ? "#164d80" : "#0d365e")
                 border.color: pillMouse.containsMouse ? "#3892e6" : "#1d5b94"
                 border.width: 1.5
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 16
-                    anchors.rightMargin: 14
-                    spacing: 8
+                    anchors.leftMargin: 14
+                    anchors.rightMargin: 12
+                    spacing: 6
 
                     Text {
                         text: headerRoot.vesselName
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 14
+                        font.pixelSize: 13
                         Layout.fillWidth: true
                     }
 
                     Item {
-                        Layout.preferredWidth: 22
-                        Layout.preferredHeight: 22
+                        Layout.preferredWidth: 20
+                        Layout.preferredHeight: 20
                         Image {
                             anchors.fill: parent
                             source: "../../assets/icons/header/lightbulb.svg"
@@ -132,24 +140,30 @@ Rectangle {
             }
         }
 
-        // 2. Alarm / Annunciator Box (50px height, spacious)
+        // =====================================================================
+        // 2. CENTER CLUSTER: Alarm / Annunciator Box (Dynamic Fill Width)
+        // =====================================================================
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 50
+            Layout.minimumWidth: 180
+            Layout.maximumWidth: 620
+            Layout.preferredHeight: 48
+            Layout.alignment: Qt.AlignVCenter
             color: headerRoot.isAlarmActive ? "#4a1212" : "#092a4a"
             border.color: headerRoot.isAlarmActive ? "#ff4444" : "#1b5b94"
             border.width: 1.5
             radius: 6
+            clip: true
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 14
+                anchors.leftMargin: 10
                 anchors.rightMargin: 6
-                spacing: 10
+                spacing: 8
 
                 Item {
-                    Layout.preferredWidth: 24
-                    Layout.preferredHeight: 24
+                    Layout.preferredWidth: 22
+                    Layout.preferredHeight: 22
                     Image {
                         anchors.fill: parent
                         source: "../../assets/icons/header/alarm_bell.svg"
@@ -163,16 +177,19 @@ Rectangle {
                     text: headerRoot.alarmMessage
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 13
+                    font.pixelSize: 12
                     Layout.fillWidth: true
                     elide: Text.ElideRight
+                    clip: true
                 }
 
-                // Ack Button (Lime Green, 40px height)
+                // Ack Button (Lime Green, 62px width, 36px height)
                 Rectangle {
                     id: ackBtn
-                    Layout.preferredWidth: 76
-                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 62
+                    Layout.minimumWidth: 62
+                    Layout.maximumWidth: 62
+                    Layout.preferredHeight: 36
                     radius: 4
                     color: headerRoot.isAlarmActive ? "#ff4444" : "#78dc20"
 
@@ -183,7 +200,7 @@ Rectangle {
                         text: "Ack"
                         color: headerRoot.isAlarmActive ? "#ffffff" : "#000000"
                         font.bold: true
-                        font.pixelSize: 13
+                        font.pixelSize: 12
                     }
 
                     MouseArea {
@@ -195,21 +212,29 @@ Rectangle {
             }
         }
 
-        // 3. User Language & Credentials
+        // =====================================================================
+        // 3. RIGHT CLUSTER: User Credentials, Clock & PVA Systems Brand
+        // =====================================================================
+        // User Credentials (Language & Name)
         RowLayout {
-            spacing: 10
+            Layout.preferredWidth: 125
+            Layout.minimumWidth: 90
+            Layout.maximumWidth: 135
+            Layout.fillHeight: true
             Layout.alignment: Qt.AlignVCenter
+            spacing: 6
+            clip: true
 
             Text {
                 text: "EN"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 13
+                font.pixelSize: 12
             }
 
             Item {
-                Layout.preferredWidth: 24
-                Layout.preferredHeight: 24
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: 20
                 Image {
                     anchors.fill: parent
                     source: "../../assets/icons/header/user.svg"
@@ -223,40 +248,48 @@ Rectangle {
                 text: headerRoot.operatorName
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 12
+                font.pixelSize: 11
+                Layout.fillWidth: true
+                elide: Text.ElideRight
             }
         }
 
-        // 4. Live Clock & Date
+        // Live Clock & Date
         ColumnLayout {
-            spacing: 2
+            Layout.preferredWidth: 68
+            Layout.minimumWidth: 55
+            Layout.maximumWidth: 75
             Layout.alignment: Qt.AlignVCenter
+            spacing: 1
 
             Text {
                 text: headerRoot.timeString
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 13
+                font.pixelSize: 12
                 Layout.alignment: Qt.AlignHCenter
             }
             Text {
                 text: headerRoot.dateString
                 color: "#8cb5dc"
-                font.pixelSize: 10
+                font.pixelSize: 9
                 Layout.alignment: Qt.AlignHCenter
             }
         }
 
-        // 5. PVA Systems Brand Identity (OEM)
+        // PVA Systems Brand Identity (OEM)
         Rectangle {
-            Layout.preferredWidth: 100
-            Layout.preferredHeight: 42
+            Layout.preferredWidth: 80
+            Layout.minimumWidth: 70
+            Layout.maximumWidth: 85
+            Layout.preferredHeight: 38
+            Layout.alignment: Qt.AlignVCenter
             color: "transparent"
 
             PvaLogo {
                 anchors.centerIn: parent
-                width: 95
-                height: 36
+                width: 76
+                height: 28
             }
         }
     }
