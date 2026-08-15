@@ -48,12 +48,18 @@ jobs:
           $HOME/Qt/6.8.2/wasm_singlethread/bin/qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja -DQT_HOST_PATH=$HOME/Qt/6.8.2/gcc_64
           cmake --build build_wasm --parallel $(nproc)
           mkdir -p dist
-          cp -r build_wasm/App/* dist/ 2>/dev/null || true
-          cp -r build_wasm/* dist/ 2>/dev/null || true
+          # Copy only web deployment assets (*.html, *.js, *.wasm, *.svg, *.png, *.json, *.ico)
+          find build_wasm -maxdepth 2 -type f \( -name "*.html" -o -name "*.js" -o -name "*.wasm" -o -name "*.svg" -o -name "*.png" -o -name "*.json" -o -name "*.ico" \) -exec cp {} dist/ \;
           if [ -f "dist/PVA_VPU50_SCADAApp.html" ]; then
             cp dist/PVA_VPU50_SCADAApp.html dist/index.html
+          elif [ -f "dist/App.html" ]; then
+            cp dist/App.html dist/index.html
+          elif [ -f "dist/PVA_VPU50_SCADA.html" ]; then
+            cp dist/PVA_VPU50_SCADA.html dist/index.html
           fi
           cp vercel.json dist/ 2>/dev/null || true
+          echo "Contents of dist for Vercel deployment:"
+          ls -lh dist/
 
       - name: Deploy to Vercel
         run: |
