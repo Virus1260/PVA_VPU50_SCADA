@@ -500,7 +500,9 @@ Item {
                         progressValue: 0.46
                         progressColor: "#00d2ff"
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -511,7 +513,9 @@ Item {
                         unit: "mbar"
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -522,13 +526,17 @@ Item {
                         unit: "mbar"
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
                     Item {
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.fillHeight: true
                     }
                 }
@@ -644,7 +652,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -656,7 +666,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -668,7 +680,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -680,7 +694,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
                 }
@@ -810,7 +826,9 @@ Item {
                         progressValue: 0.35
                         progressColor: "#00d2ff"
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -822,7 +840,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -834,7 +854,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -846,7 +868,9 @@ Item {
                         unit: ""
                         cardHeight: 68
                         Layout.fillWidth: true
-                        Layout.preferredWidth: 1
+                        Layout.preferredWidth: 168
+                        Layout.minimumWidth: 120
+                        Layout.maximumWidth: 185
                         Layout.alignment: Qt.AlignVCenter
                     }
                 }
