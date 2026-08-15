@@ -20,7 +20,7 @@ pip install aqtinstall cmake ninja
 
 # 2. Install Qt 6.8 WebAssembly Toolchain
 echo "[2/5] Fetching Qt 6.8.0 WebAssembly toolchain..."
-python3 -m aqt install-qt linux desktop 6.8.0 wasm_singlethread -O /tmp/qt
+python3 -m aqt install-qt linux desktop 6.8.0 wasm_singlethread --base https://download.qt.io -O /tmp/qt
 
 # 3. Setup matching Emscripten SDK (3.1.56)
 echo "[3/5] Configuring Emscripten SDK..."
