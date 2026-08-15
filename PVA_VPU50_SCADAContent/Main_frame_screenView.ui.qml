@@ -58,7 +58,7 @@ Rectangle {
         height: 86
         z: 10
         vesselName: "VPU 50"
-        systemTag: "B1"
+        activeBatchId: "B1"
         alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     }
 
