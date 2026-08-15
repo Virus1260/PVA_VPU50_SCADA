@@ -122,7 +122,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -148,36 +148,42 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Process Cards (Power & Current)
-                    RowLayout {
-                        spacing: 6
-                        Layout.alignment: Qt.AlignVCenter
-                        ScadaCard { id: r1Power; title: "Power"; primaryValue: "0.0"; unit: "kW"; preferredCardWidth: 78; cardHeight: 76 }
-                        ScadaCard { id: r1Current; title: "Current"; primaryValue: "0.0"; unit: "A"; preferredCardWidth: 78; cardHeight: 76 }
+                    // Centered Middle Parameters Container
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            // Process Cards (Power & Current)
+                            RowLayout {
+                                spacing: 6
+                                ScadaCard { id: r1Power; title: "Power"; primaryValue: "0.0"; unit: "kW"; preferredCardWidth: 78; cardHeight: 76 }
+                                ScadaCard { id: r1Current; title: "Current"; primaryValue: "0.0"; unit: "A"; preferredCardWidth: 78; cardHeight: 76 }
+                            }
+
+                            // Speed Controller Slider
+                            ScadaSpeedControl {
+                                id: r1Speed
+                                minVal: 25.0
+                                maxVal: 120.0
+                                currentVal: 0.0
+                                targetVal: 25.0
+                                unit: "rpm"
+                                decimals: 1
+                                controlHeight: 76
+                                isLocked: r1Media.isPlaying
+                                parameterTitle: "Agitator Speed"
+                                parameterTag: "1M1501"
+                                Layout.preferredWidth: 430
+                                Layout.maximumWidth: 480
+                            }
+                        }
                     }
 
-                    // Authentic Compact Speed Slider Track (Locked while running)
-                    ScadaSpeedControl {
-                        id: r1Speed
-                        minVal: 25.0
-                        maxVal: 120.0
-                        currentVal: 0.0
-                        targetVal: 25.0
-                        unit: "rpm"
-                        decimals: 1
-                        controlHeight: 76
-                        isLocked: r1Media.isPlaying
-                        parameterTitle: "Agitator Speed"
-                        parameterTag: "1M1501"
-                        Layout.preferredWidth: 430
-                        Layout.maximumWidth: 480
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    // Spacer
-                    Item { Layout.fillWidth: true }
-
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r1Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r1Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
@@ -202,7 +208,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -228,36 +234,42 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Process Cards (Power & Current)
-                    RowLayout {
-                        spacing: 6
-                        Layout.alignment: Qt.AlignVCenter
-                        ScadaCard { id: r2Power; title: "Power"; primaryValue: "0.0"; unit: "kW"; preferredCardWidth: 78; cardHeight: 76 }
-                        ScadaCard { id: r2Current; title: "Current"; primaryValue: "0.0"; unit: "A"; preferredCardWidth: 78; cardHeight: 76 }
+                    // Centered Middle Parameters Container
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 8
+
+                            // Process Cards (Power & Current)
+                            RowLayout {
+                                spacing: 6
+                                ScadaCard { id: r2Power; title: "Power"; primaryValue: "0.0"; unit: "kW"; preferredCardWidth: 78; cardHeight: 76 }
+                                ScadaCard { id: r2Current; title: "Current"; primaryValue: "0.0"; unit: "A"; preferredCardWidth: 78; cardHeight: 76 }
+                            }
+
+                            // Speed Controller Slider
+                            ScadaSpeedControl {
+                                id: r2Speed
+                                minVal: 600
+                                maxVal: 4800
+                                currentVal: 0
+                                targetVal: 600
+                                unit: "rpm"
+                                decimals: 0
+                                controlHeight: 76
+                                isLocked: r2Media.isPlaying
+                                parameterTitle: "Homogenizer Speed"
+                                parameterTag: "1M2003"
+                                Layout.preferredWidth: 430
+                                Layout.maximumWidth: 480
+                            }
+                        }
                     }
 
-                    // Authentic Compact Speed Slider Track (Locked while running)
-                    ScadaSpeedControl {
-                        id: r2Speed
-                        minVal: 600
-                        maxVal: 4800
-                        currentVal: 0
-                        targetVal: 600
-                        unit: "rpm"
-                        decimals: 0
-                        controlHeight: 76
-                        isLocked: r2Media.isPlaying
-                        parameterTitle: "Homogenizer Speed"
-                        parameterTag: "1M2003"
-                        Layout.preferredWidth: 430
-                        Layout.maximumWidth: 480
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    // Spacer
-                    Item { Layout.fillWidth: true }
-
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r2Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r2Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
@@ -282,7 +294,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -303,10 +315,10 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Spacer matching authentic EKATO EPOS layout
-                    Item { Layout.fillWidth: true }
+                    // Middle Spacer
+                    Item { Layout.fillWidth: true; Layout.fillHeight: true }
 
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r3Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r3Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
@@ -331,7 +343,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -352,28 +364,32 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Process Cards
-                    RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignVCenter
-                        ScadaCard {
-                            id: r4Pressure
-                            title: "Pressure"
-                            primaryValue: "-209.8"
-                            unit: "mbar"
-                            preferredCardWidth: 125
-                            cardHeight: 76
-                            showProgressBar: true
-                            progressValue: 0.46
-                            progressColor: "#00d2ff"
+                    // Centered Middle Parameters Container
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 10
+
+                            ScadaCard {
+                                id: r4Pressure
+                                title: "Pressure"
+                                primaryValue: "-209.8"
+                                unit: "mbar"
+                                preferredCardWidth: 130
+                                cardHeight: 76
+                                showProgressBar: true
+                                progressValue: 0.46
+                                progressColor: "#00d2ff"
+                            }
+                            ScadaCard { id: r4Start; title: "Start pressure"; primaryValue: "-400.0"; unit: "mbar"; preferredCardWidth: 130; cardHeight: 76 }
+                            ScadaCard { id: r4End; title: "End pressure"; primaryValue: "-450.0"; unit: "mbar"; preferredCardWidth: 130; cardHeight: 76 }
                         }
-                        ScadaCard { id: r4Start; title: "Start pressure"; primaryValue: "-400.0"; unit: "mbar"; preferredCardWidth: 125; cardHeight: 76 }
-                        ScadaCard { id: r4End; title: "End pressure"; primaryValue: "-450.0"; unit: "mbar"; preferredCardWidth: 125; cardHeight: 76 }
                     }
 
-                    Item { Layout.fillWidth: true }
-
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r4Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r4Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
@@ -398,7 +414,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -419,19 +435,23 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Process Cards
-                    RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignVCenter
-                        ScadaCard { id: r5AngleOpen; title: "Angle open"; primaryValue: "0.0"; secondaryValue: "/ 100.0"; unit: "%"; preferredCardWidth: 115; cardHeight: 76 }
-                        ScadaCard { id: r5AngleClose; title: "Angle closed"; primaryValue: "0.0"; secondaryValue: "/ 100.0"; unit: "%"; preferredCardWidth: 115; cardHeight: 76 }
-                        ScadaCard { id: r5TimeOpen; title: "Time open"; primaryValue: "0"; secondaryValue: "/ 0.0"; unit: "s"; preferredCardWidth: 98; cardHeight: 76 }
-                        ScadaCard { id: r5TimeClose; title: "Time closed"; primaryValue: "0"; secondaryValue: "/ 0.0"; unit: "s"; preferredCardWidth: 98; cardHeight: 76 }
+                    // Centered Middle Parameters Container
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 10
+
+                            ScadaCard { id: r5AngleOpen; title: "Angle open"; primaryValue: "0.0"; secondaryValue: "/ 100.0"; unit: "%"; preferredCardWidth: 125; cardHeight: 76 }
+                            ScadaCard { id: r5AngleClose; title: "Angle closed"; primaryValue: "0.0"; secondaryValue: "/ 100.0"; unit: "%"; preferredCardWidth: 125; cardHeight: 76 }
+                            ScadaCard { id: r5TimeOpen; title: "Time open"; primaryValue: "0"; secondaryValue: "/ 0.0"; unit: "s"; preferredCardWidth: 105; cardHeight: 76 }
+                            ScadaCard { id: r5TimeClose; title: "Time closed"; primaryValue: "0"; secondaryValue: "/ 0.0"; unit: "s"; preferredCardWidth: 105; cardHeight: 76 }
+                        }
                     }
 
-                    Item { Layout.fillWidth: true }
-
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r5Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r5Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
@@ -456,7 +476,7 @@ Item {
                     anchors.rightMargin: 8
                     spacing: 8
 
-                    // Equipment Tile 1 (Turns green when running!)
+                    // Left Equipment Tile 1 (Turns green when running!)
                     Rectangle {
                         Layout.preferredWidth: 76
                         Layout.preferredHeight: 76
@@ -476,19 +496,23 @@ Item {
                         ScadaModeSelector { label: "Temp. Indic."; modeText: "Baffle"; preferredWidth: 82; selectorHeight: 76 }
                     }
 
-                    // Process Cards
-                    RowLayout {
-                        spacing: 8
-                        Layout.alignment: Qt.AlignVCenter
-                        ScadaCard { id: r6Gradient; title: "Gradient"; primaryValue: "12.1"; unit: "°C/h"; preferredCardWidth: 108; cardHeight: 76; showProgressBar: true; progressValue: 0.35; progressColor: "#00d2ff" }
-                        ScadaCard { id: r6DeltaT; title: "Delta T Jacket"; primaryValue: "23.2"; secondaryValue: "/ 0.0"; unit: "°C"; preferredCardWidth: 115; cardHeight: 76 }
-                        ScadaCard { id: r6Temp; title: "Temperature"; primaryValue: "40.1"; secondaryValue: "/ 89.0"; unit: "°C"; preferredCardWidth: 120; cardHeight: 76 }
-                        ScadaCard { id: r6Dev; title: "Deviation"; primaryValue: "48.9"; secondaryValue: "/ 1.0"; unit: "°C"; preferredCardWidth: 105; cardHeight: 76 }
+                    // Centered Middle Parameters Container
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 10
+
+                            ScadaCard { id: r6Gradient; title: "Gradient"; primaryValue: "12.1"; unit: "°C/h"; preferredCardWidth: 115; cardHeight: 76; showProgressBar: true; progressValue: 0.35; progressColor: "#00d2ff" }
+                            ScadaCard { id: r6DeltaT; title: "Delta T Jacket"; primaryValue: "23.2"; secondaryValue: "/ 0.0"; unit: "°C"; preferredCardWidth: 125; cardHeight: 76 }
+                            ScadaCard { id: r6Temp; title: "Temperature"; primaryValue: "40.1"; secondaryValue: "/ 89.0"; unit: "°C"; preferredCardWidth: 130; cardHeight: 76 }
+                            ScadaCard { id: r6Dev; title: "Deviation"; primaryValue: "48.9"; secondaryValue: "/ 1.0"; unit: "°C"; preferredCardWidth: 115; cardHeight: 76 }
+                        }
                     }
 
-                    Item { Layout.fillWidth: true }
-
-                    // Media Controls & Runtime
+                    // Right Media Controls & Runtime
                     ScadaMediaControls { id: r6Media; Layout.alignment: Qt.AlignVCenter }
                     ScadaRuntimeWidget { id: r6Runtime; preferredWidth: 76; widgetHeight: 76; Layout.alignment: Qt.AlignVCenter }
                 }
