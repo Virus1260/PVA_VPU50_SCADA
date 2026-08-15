@@ -213,8 +213,8 @@ Item {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
             ctx.beginPath();
-            ctx.moveTo(35, 345);
-            ctx.lineTo(75, 335);
+            ctx.moveTo(15, 335);
+            ctx.lineTo(65, 328);
             ctx.strokeStyle = "#38bdf8";
             ctx.lineWidth = 1.5;
             ctx.stroke();
@@ -223,9 +223,9 @@ Item {
 
     Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: -32
+        anchors.leftMargin: -65
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 85
+        anchors.bottomMargin: 95
         width: 74
         height: 24
         radius: 3

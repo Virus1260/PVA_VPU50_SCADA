@@ -24,17 +24,25 @@ Rectangle {
     property real rawPanY: 0
     property bool showTags: true
 
-    // Dynamic Centering Calculation
+    // Generous Padding Margins for Zoomed In Panning & Sliding
+    readonly property real marginPadX: 200
+    readonly property real marginPadY: 160
+
     readonly property real actualContentWidth: worldWidth * zoomScale
     readonly property real actualContentHeight: worldHeight * zoomScale
 
-    readonly property real displayX: actualContentWidth < width
-                                      ? (width - actualContentWidth) / 2
-                                      : Math.max(width - actualContentWidth, Math.min(0, rawPanX))
+    readonly property real minAllowedPanX: width - actualContentWidth - marginPadX
+    readonly property real maxAllowedPanX: marginPadX
+    readonly property real minAllowedPanY: height - actualContentHeight - marginPadY
+    readonly property real maxAllowedPanY: marginPadY
 
-    readonly property real displayY: actualContentHeight < height
+    readonly property real displayX: actualContentWidth <= width
+                                      ? (width - actualContentWidth) / 2
+                                      : Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
+
+    readonly property real displayY: actualContentHeight <= height
                                       ? (height - actualContentHeight) / 2
-                                      : Math.max(height - actualContentHeight, Math.min(0, rawPanY))
+                                      : Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
 
     signal componentTapped(string tagName)
 
@@ -61,12 +69,8 @@ Rectangle {
         }
 
         onPanRequested: function(tx, ty) {
-            if (pidScreenRoot.actualContentWidth > pidScreenRoot.width) {
-                pidScreenRoot.rawPanX = Math.max(pidScreenRoot.width - pidScreenRoot.actualContentWidth, Math.min(0, tx));
-            }
-            if (pidScreenRoot.actualContentHeight > pidScreenRoot.height) {
-                pidScreenRoot.rawPanY = Math.max(pidScreenRoot.height - pidScreenRoot.actualContentHeight, Math.min(0, ty));
-            }
+            pidScreenRoot.rawPanX = Math.max(pidScreenRoot.minAllowedPanX, Math.min(pidScreenRoot.maxAllowedPanX, tx));
+            pidScreenRoot.rawPanY = Math.max(pidScreenRoot.minAllowedPanY, Math.min(pidScreenRoot.maxAllowedPanY, ty));
         }
     }
 
@@ -125,8 +129,8 @@ Rectangle {
                     lastX = mouse.x;
                     lastY = mouse.y;
 
-                    pidScreenRoot.rawPanX += dx;
-                    pidScreenRoot.rawPanY += dy;
+                    pidScreenRoot.rawPanX = Math.max(pidScreenRoot.minAllowedPanX, Math.min(pidScreenRoot.maxAllowedPanX, pidScreenRoot.rawPanX + dx));
+                    pidScreenRoot.rawPanY = Math.max(pidScreenRoot.minAllowedPanY, Math.min(pidScreenRoot.maxAllowedPanY, pidScreenRoot.rawPanY + dy));
                 }
             }
 
