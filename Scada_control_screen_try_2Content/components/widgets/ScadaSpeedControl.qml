@@ -3,10 +3,8 @@ import QtQuick.Layouts
 
 Rectangle {
     id: speedRoot
-    implicitWidth: 444
-    implicitHeight: 64
-    width: 444
-    height: 64
+    implicitHeight: 74
+    height: 74
 
     // Process & Range Properties
     property real minVal: 25.0
@@ -15,7 +13,7 @@ Rectangle {
     property real targetVal: 25.0
     property string unit: "rpm"
     property int decimals: 1
-    property real controlHeight: 64
+    property real controlHeight: 74
 
     property string parameterTitle: "Speed Setpoint"
     property string parameterTag: "1M1501"
@@ -28,12 +26,13 @@ Rectangle {
     signal setpointRequested(string title, string tag, double current, double min, double max, string unit)
     signal targetValChangedByUser(double newVal)
 
-    Layout.preferredWidth: 444
-    Layout.minimumWidth: 444
-    Layout.maximumWidth: 444
-    Layout.preferredHeight: 64
-    Layout.minimumHeight: 64
-    Layout.maximumHeight: 64
+    Layout.fillWidth: true
+    Layout.preferredWidth: 560
+    Layout.minimumWidth: 460
+    Layout.maximumWidth: 800
+    Layout.preferredHeight: 74
+    Layout.minimumHeight: 74
+    Layout.maximumHeight: 74
 
     color: "#082646"
     border.color: "#184d7e"
@@ -42,27 +41,27 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 6
-        anchors.rightMargin: 6
-        anchors.topMargin: 4
-        anchors.bottomMargin: 4
-        spacing: 6
+        anchors.leftMargin: 8
+        anchors.rightMargin: 8
+        anchors.topMargin: 8
+        anchors.bottomMargin: 8
+        spacing: 8
 
         // =====================================================================
-        // 1. SET MIN COMPARTMENT (Image 1 Authentic)
+        // 1. SET MIN COMPARTMENT
         // =====================================================================
         ColumnLayout {
-            Layout.preferredWidth: 50
-            Layout.minimumWidth: 50
-            Layout.maximumWidth: 50
+            Layout.preferredWidth: 56
+            Layout.minimumWidth: 56
+            Layout.maximumWidth: 56
             Layout.fillHeight: true
-            spacing: 1
+            spacing: 2
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "SET MIN"
                 color: "#8cb5dc"
-                font.pixelSize: 9
+                font.pixelSize: 10
                 Layout.alignment: Qt.AlignHCenter
             }
             Item { Layout.fillHeight: true }
@@ -70,25 +69,25 @@ Rectangle {
                 text: speedRoot.minVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 15
+                font.pixelSize: 16
                 Layout.alignment: Qt.AlignHCenter
             }
             Item { Layout.fillHeight: true }
         }
 
         // =====================================================================
-        // 2. PERFECT SQUARE MINUS BUTTON (Image 1 Authentic: 44px x 44px)
+        // 2. PERFECT SQUARE MINUS BUTTON (52px x 52px)
         // =====================================================================
         Rectangle {
             id: decBtn
-            Layout.preferredWidth: 44
-            Layout.minimumWidth: 44
-            Layout.maximumWidth: 44
-            Layout.preferredHeight: 44
-            Layout.minimumHeight: 44
-            Layout.maximumHeight: 44
+            Layout.preferredWidth: 52
+            Layout.minimumWidth: 52
+            Layout.maximumWidth: 52
+            Layout.preferredHeight: 52
+            Layout.minimumHeight: 52
+            Layout.maximumHeight: 52
             Layout.alignment: Qt.AlignVCenter
-            radius: 3
+            radius: 4
             color: decMouse.pressed ? "#07203a" : (decMouse.containsMouse ? "#154d80" : "#0d365e")
             border.color: decMouse.containsMouse ? "#3892e6" : "#1a5286"
             border.width: 1
@@ -102,7 +101,7 @@ Rectangle {
                 text: "−"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 22
+                font.pixelSize: 26
             }
 
             MouseArea {
@@ -115,12 +114,12 @@ Rectangle {
         }
 
         // =====================================================================
-        // 3. CENTER SLIDER RAIL & READOUTS (Image 1 Authentic)
+        // 3. CENTER SLIDER RAIL & READOUTS
         // =====================================================================
         Rectangle {
             id: sliderChannel
             Layout.fillWidth: true
-            Layout.preferredHeight: 52
+            Layout.fillHeight: true
             color: "transparent"
             clip: false
 
@@ -136,12 +135,12 @@ Rectangle {
                     text: speedRoot.currentVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 13
+                    font.pixelSize: 14
                 }
                 Text {
                     text: speedRoot.unit
                     color: "#8cb5dc"
-                    font.pixelSize: 10
+                    font.pixelSize: 11
                 }
             }
 
@@ -151,12 +150,12 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.topMargin: 18
-                height: 10
+                anchors.topMargin: 20
+                height: 12
                 color: "#09243e"
                 border.color: "#154673"
                 border.width: 1
-                radius: 2
+                radius: 3
 
                 // Actual Speed Fill
                 Rectangle {
@@ -169,13 +168,13 @@ Rectangle {
                     radius: 2
                 }
 
-                // White Setpoint Needle Marker (Image 1 Authentic)
+                // White Setpoint Needle Marker
                 Rectangle {
                     id: setpointNeedle
                     x: Math.max(0, Math.min(trackRail.width - 5, (trackRail.width - 5) * ((speedRoot.targetVal - speedRoot.minVal) / Math.max(1.0, (speedRoot.maxVal - speedRoot.minVal)))))
                     anchors.verticalCenter: parent.verticalCenter
                     width: 5
-                    height: 24
+                    height: 28
                     color: "#ffffff"
                     border.color: "#00d2ff"
                     border.width: 1
@@ -187,8 +186,8 @@ Rectangle {
                 MouseArea {
                     id: trackMouse
                     anchors.fill: parent
-                    anchors.topMargin: -10
-                    anchors.bottomMargin: -10
+                    anchors.topMargin: -12
+                    anchors.bottomMargin: -12
                     enabled: speedRoot.enabled && !speedRoot.isLocked
                     cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
 
@@ -207,14 +206,14 @@ Rectangle {
                 }
             }
 
-            // Target Setpoint Digital Button (Centered below rail in large bold text - Image 1)
+            // Target Setpoint Digital Button (Centered below rail in large bold text)
             Rectangle {
                 id: setpointClickArea
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
-                width: 140
-                height: 18
+                width: 160
+                height: 20
                 color: "transparent"
 
                 RowLayout {
@@ -224,19 +223,19 @@ Rectangle {
                     Text {
                         text: speedRoot.isLocked ? "🔒" : ""
                         color: "#8cb5dc"
-                        font.pixelSize: 10
+                        font.pixelSize: 11
                         visible: speedRoot.isLocked
                     }
                     Text {
                         text: speedRoot.targetVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 15
+                        font.pixelSize: 16
                     }
                     Text {
                         text: speedRoot.unit
                         color: "#8cb5dc"
-                        font.pixelSize: 11
+                        font.pixelSize: 12
                     }
                 }
 
@@ -260,18 +259,18 @@ Rectangle {
         }
 
         // =====================================================================
-        // 4. PERFECT SQUARE PLUS BUTTON (Image 1 Authentic: 44px x 44px)
+        // 4. PERFECT SQUARE PLUS BUTTON (52px x 52px)
         // =====================================================================
         Rectangle {
             id: incBtn
-            Layout.preferredWidth: 44
-            Layout.minimumWidth: 44
-            Layout.maximumWidth: 44
-            Layout.preferredHeight: 44
-            Layout.minimumHeight: 44
-            Layout.maximumHeight: 44
+            Layout.preferredWidth: 52
+            Layout.minimumWidth: 52
+            Layout.maximumWidth: 52
+            Layout.preferredHeight: 52
+            Layout.minimumHeight: 52
+            Layout.maximumHeight: 52
             Layout.alignment: Qt.AlignVCenter
-            radius: 3
+            radius: 4
             color: incMouse.pressed ? "#07203a" : (incMouse.containsMouse ? "#154d80" : "#0d365e")
             border.color: incMouse.containsMouse ? "#3892e6" : "#1a5286"
             border.width: 1
@@ -285,7 +284,7 @@ Rectangle {
                 text: "+"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 22
+                font.pixelSize: 26
             }
 
             MouseArea {
@@ -298,20 +297,20 @@ Rectangle {
         }
 
         // =====================================================================
-        // 5. SET MAX COMPARTMENT (Image 1 Authentic)
+        // 5. SET MAX COMPARTMENT
         // =====================================================================
         ColumnLayout {
-            Layout.preferredWidth: 50
-            Layout.minimumWidth: 50
-            Layout.maximumWidth: 50
+            Layout.preferredWidth: 56
+            Layout.minimumWidth: 56
+            Layout.maximumWidth: 56
             Layout.fillHeight: true
-            spacing: 1
+            spacing: 2
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "SET MAX"
                 color: "#8cb5dc"
-                font.pixelSize: 9
+                font.pixelSize: 10
                 Layout.alignment: Qt.AlignHCenter
             }
             Item { Layout.fillHeight: true }
@@ -319,7 +318,7 @@ Rectangle {
                 text: speedRoot.maxVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 15
+                font.pixelSize: 16
                 Layout.alignment: Qt.AlignHCenter
             }
             Item { Layout.fillHeight: true }

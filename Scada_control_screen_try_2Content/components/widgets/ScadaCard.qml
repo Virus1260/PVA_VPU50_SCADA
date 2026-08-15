@@ -11,12 +11,15 @@ Rectangle {
     property real progressValue: 0.0
     property color progressColor: "#00d2ff"
 
-    property real preferredCardWidth: 140
-    property real cardHeight: 64
+    property real preferredCardWidth: 180
+    property real minCardWidth: 145
+    property real maxCardWidth: 260
+    property real cardHeight: 74
 
+    Layout.fillWidth: true
     Layout.preferredWidth: preferredCardWidth
-    Layout.minimumWidth: preferredCardWidth
-    Layout.maximumWidth: preferredCardWidth
+    Layout.minimumWidth: minCardWidth
+    Layout.maximumWidth: maxCardWidth
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight
@@ -28,14 +31,17 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 6
-        spacing: 2
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 8
+        anchors.bottomMargin: 8
+        spacing: 3
 
         // Title at Top Center
         Text {
             text: cardRoot.title
             color: "#8cb5dc"
-            font.pixelSize: 10
+            font.pixelSize: 11
             font.bold: false
             elide: Text.ElideRight
             Layout.fillWidth: true
@@ -44,22 +50,22 @@ Rectangle {
 
         Item { Layout.fillHeight: true }
 
-        // Centered Primary & Secondary Values & Unit
+        // Centered Primary & Secondary Values & Unit with comfortable spacing
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: 3
+            spacing: 4
 
             Text {
                 text: cardRoot.primaryValue
                 color: "#ffffff"
-                font.pixelSize: 15
+                font.pixelSize: 16
                 font.bold: true
             }
 
             Text {
                 text: cardRoot.secondaryValue !== "" ? cardRoot.secondaryValue : ""
                 color: "#8cb5dc"
-                font.pixelSize: 12
+                font.pixelSize: 13
                 font.bold: true
                 visible: cardRoot.secondaryValue !== ""
             }
@@ -77,7 +83,7 @@ Rectangle {
         // Optional Cyan Progress Bar
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 3
+            Layout.preferredHeight: 4
             color: "#0d365e"
             radius: 2
             visible: cardRoot.showProgressBar

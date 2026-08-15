@@ -4,10 +4,12 @@ import QtQuick.Layouts
 Rectangle {
     id: runtimeRoot
     property string timeText: "00:00:00"
-    property real preferredWidth: 76
-    property real widgetHeight: 68
+    property real preferredWidth: 80
+    property real widgetHeight: 74
 
     Layout.preferredWidth: preferredWidth
+    Layout.minimumWidth: preferredWidth
+    Layout.maximumWidth: preferredWidth
     Layout.preferredHeight: widgetHeight
     Layout.minimumHeight: widgetHeight
     Layout.maximumHeight: widgetHeight
@@ -19,13 +21,13 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 4
+        anchors.margins: 6
         spacing: 2
 
         Text {
             text: "Runtime"
             color: "#8cb5dc"
-            font.pixelSize: 10
+            font.pixelSize: 11
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -48,7 +50,7 @@ Rectangle {
             text: runtimeRoot.timeText
             color: "#ffffff"
             font.bold: true
-            font.pixelSize: 11
+            font.pixelSize: 12
             Layout.alignment: Qt.AlignHCenter
         }
 
