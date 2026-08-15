@@ -1,0 +1,64 @@
+# =========================================================================
+# EKATO EPOS SCADA - Qt Quick / QML / CMake .gitignore
+# =========================================================================
+
+# Build output directories
+build/
+build-*/
+cmake-build-*/
+bin/
+lib/
+out/
+
+# CMake temporary files and caches
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+CMakeCache.txt
+
+# Qt Creator & Qt Design Studio user configuration files
+*.autosave
+*.user
+*.user.*
+*.qmlc
+*.jsc
+.qtc_clangd/
+*.stash
+
+# IDE & Editor caches
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.suo
+*.user
+*.useros_guid
+*.sln.docstates
+
+# Compiled binaries and libraries
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+
+# OS Generated Files
+Thumbs.db
+[Dd]esktop.ini
+.DS_Store
+
+# Temporary & backup files
+*.tmp
+*.bak
+*.orig
+*~

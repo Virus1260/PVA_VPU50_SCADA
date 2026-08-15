@@ -1,0 +1,124 @@
+import QmlProject
+
+Project {
+    mainFile: "Scada_control_screen_try_2Content/App.qml"
+    mainUiFile: "Scada_control_screen_try_2Content/Main_frame_screen.ui.qml"
+
+    /* Include .qml, .js, and image files from current directory and subdirectories */
+    QmlFiles {
+        directory: "Scada_control_screen_try_2"
+    }
+
+    QmlFiles {
+        directory: "Scada_control_screen_try_2Content"
+    }
+
+    QmlFiles {
+        directory: "Scada_control_screen_try_2Content/screens"
+    }
+
+    QmlFiles {
+        directory: "Scada_control_screen_try_2Content/components/widgets"
+    }
+
+    QmlFiles {
+        directory: "Scada_control_screen_try_2Content/components/modals"
+    }
+
+    QmlFiles {
+        directory: "Generated"
+    }
+
+    JavaScriptFiles {
+        directory: "Scada_control_screen_try_2"
+    }
+
+    JavaScriptFiles {
+        directory: "Scada_control_screen_try_2Content"
+    }
+
+    ImageFiles {
+        directory: "Scada_control_screen_try_2Content"
+    }
+
+    ImageFiles {
+        directory: "Generated"
+    }
+
+    Files {
+        filter: "*.conf"
+        files: ["qtquickcontrols2.conf"]
+    }
+
+    Files {
+        filter: "qmldir"
+        directory: "."
+    }
+
+    FontFiles {
+        filter: "*.ttf;*.otf"
+    }
+
+    Files {
+        filter: "*.wav;*.mp3"
+    }
+
+    Files {
+        filter: "*.mp4"
+    }
+
+    Files {
+        filter: "*.glsl;*.glslv;*.glslf;*.vsh;*.fsh;*.vert;*.frag"
+    }
+
+    Files {
+        filter: "*.qsb"
+    }
+
+    Files {
+        filter: "*.json"
+    }
+
+    Files {
+        filter: "*.mesh"
+        directory: "Generated"
+    }
+
+    Files {
+        filter: "*.qad"
+        directory: "Generated"
+    }
+
+    /* Baked lightmaps */
+    Files {
+        filter: "*.bin;*.exr;*.mesh"
+        directory: "Scada_control_screen_try_2Content"
+    }
+
+    Environment {
+        QT_QUICK_CONTROLS_CONF: "qtquickcontrols2.conf"
+        QML_COMPAT_RESOLVE_URLS_ON_ASSIGNMENT: "1"
+        QT_LOGGING_RULES: "qt.qml.connections=false"
+        QT_ENABLE_HIGHDPI_SCALING: "0"
+    }
+
+    qt6Project: true
+
+    /* List of plugin directories passed to QML runtime */
+    importPaths: [ ".", "Scada_control_screen_try_2Content" ]
+
+    /* Required for deployment */
+    targetDirectory: "/opt/Scada_control_screen_try_2"
+
+    enableCMakeGeneration: true
+    standaloneApp: true
+
+    qdsVersion: "4.8"
+    quickVersion: "6.8"
+
+    widgetApp: true
+
+    multilanguageSupport: true
+    supportedLanguages: ["en"]
+    primaryLanguage: "en"
+}

@@ -1,0 +1,434 @@
+{
+  "world_bounds": {
+    "min_x": -74054.48811094768,
+    "min_y": -40218.93771560638,
+    "max_x": 268938.7660581866,
+    "max_y": 150798.9680760742
+  },
+  "viewport": {
+    "width": 1190.0,
+    "height": 740.0
+  },
+  "entities": [
+    {
+      "category": "INSERT",
+      "name": "VPU-50_V2",
+      "x": -74054.48811094768,
+      "y": -25880.0848801502,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 0.0,
+      "slint_y": 684.5
+    },
+    {
+      "category": "INSERT",
+      "name": "VPU-50_Vessel_dish",
+      "x": -54084.93757586872,
+      "y": -22721.65825767904,
+      "rotation": 0,
+      "layer": "DIMENSION",
+      "slint_x": 69.3,
+      "slint_y": 672.2
+    },
+    {
+      "category": "INSERT",
+      "name": "VPU-50_V2_Vessel",
+      "x": -74054.48811094768,
+      "y": -25880.0848801502,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 0.0,
+      "slint_y": 684.5
+    },
+    {
+      "category": "INSERT",
+      "name": "VPU-50_V2",
+      "x": 31944.49186064822,
+      "y": -1758.884660340915,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 367.8,
+      "slint_y": 591.0
+    },
+    {
+      "category": "INSERT",
+      "name": "VPU-50_Vessel_dish",
+      "x": 39932.31207467981,
+      "y": -495.5140113524503,
+      "rotation": 0,
+      "layer": "DIMENSION",
+      "slint_x": 395.5,
+      "slint_y": 586.1
+    },
+    {
+      "category": "INSERT",
+      "name": "VPU-50_V2_Vessel",
+      "x": 31944.49186064822,
+      "y": -1758.884660340915,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 367.8,
+      "slint_y": 591.0
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 30706.80012833968,
+      "y": -8249.480310203417,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 363.5,
+      "slint_y": 616.2
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 16493.86676443564,
+      "y": 150143.3846184991,
+      "rotation": 270.0,
+      "layer": "0",
+      "slint_x": 314.2,
+      "slint_y": 2.5
+    },
+    {
+      "category": "INSERT",
+      "name": "Spray Bolls",
+      "x": 52588.05496596137,
+      "y": 5882.90808153828,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 439.4,
+      "slint_y": 561.4
+    },
+    {
+      "category": "INSERT",
+      "name": "Spray Bolls",
+      "x": 54432.6722414289,
+      "y": 6104.656834557045,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 445.8,
+      "slint_y": 560.5
+    },
+    {
+      "category": "INSERT",
+      "name": "Spray Bolls",
+      "x": 82223.86265556508,
+      "y": -40218.93771560638,
+      "rotation": 45.0,
+      "layer": "OUTLINE",
+      "slint_x": 542.2,
+      "slint_y": 740.0
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": 0.0,
+      "y": -262.5669669173658,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 256.9,
+      "slint_y": 585.2
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": 4.36557e-11,
+      "y": -1128.126913379659,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 256.9,
+      "slint_y": 588.6
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": 2114.147135169988,
+      "y": -918.1504244924909,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 264.3,
+      "slint_y": 587.7
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 13597.26730909067,
+      "y": 150798.9680760742,
+      "rotation": 270.0,
+      "layer": "0",
+      "slint_x": 304.1,
+      "slint_y": 0.0
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 13597.26730909072,
+      "y": 149933.4081296119,
+      "rotation": 270.0,
+      "layer": "0",
+      "slint_x": 304.1,
+      "slint_y": 3.4
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 268056.4858776171,
+      "y": 113872.6264318188,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1186.9,
+      "slint_y": 143.1
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 20486.89883837591,
+      "y": 150143.384618499,
+      "rotation": 270.0,
+      "layer": "0",
+      "slint_x": 328.0,
+      "slint_y": 2.5
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 268938.7660581866,
+      "y": 119591.4302527331,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1190.0,
+      "slint_y": 120.9
+    },
+    {
+      "category": "INSERT",
+      "name": "Seal_pot",
+      "x": 0.0,
+      "y": 89.20381241135146,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 256.9,
+      "slint_y": 583.8
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 284.3027009020007,
+      "y": 143811.3191983611,
+      "rotation": 269.9999999999999,
+      "layer": "0",
+      "slint_x": 257.9,
+      "slint_y": 27.1
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 249502.9405767649,
+      "y": 107232.8476176142,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1122.6,
+      "slint_y": 168.8
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 250832.6966589143,
+      "y": 107232.8476176143,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1127.2,
+      "slint_y": 168.8
+    },
+    {
+      "category": "INSERT",
+      "name": "Electric_Heater",
+      "x": 37196.34358472605,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 386.0,
+      "slint_y": 609.7
+    },
+    {
+      "category": "INSERT",
+      "name": "Centrifugal_Pump",
+      "x": 37190.22208087609,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 386.0,
+      "slint_y": 609.7
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 17004.0831212791,
+      "y": -13927.99145841132,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 315.9,
+      "slint_y": 638.1
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 30706.80012833971,
+      "y": 920.3723374513302,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 363.5,
+      "slint_y": 580.6
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 18828.28630778191,
+      "y": 172.149672360827,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 322.3,
+      "slint_y": 583.5
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": -2334.152592207669,
+      "y": 4112.732708630865,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 248.8,
+      "slint_y": 568.3
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": -2334.152592207669,
+      "y": 1787.616196356001,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 248.8,
+      "slint_y": 577.3
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": -12412.66641294236,
+      "y": 5113.669045858827,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 213.9,
+      "slint_y": 564.4
+    },
+    {
+      "category": "INSERT",
+      "name": "Pipe Joint",
+      "x": -12412.66641294236,
+      "y": 4180.80669239456,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 213.9,
+      "slint_y": 568.0
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 39167.33733836775,
+      "y": -9528.952823956455,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 392.8,
+      "slint_y": 621.1
+    },
+    {
+      "category": "INSERT",
+      "name": "pressure_senser",
+      "x": 27447.51985525367,
+      "y": -4402.798951755164,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 352.2,
+      "slint_y": 601.2
+    },
+    {
+      "category": "INSERT",
+      "name": "pressure_senser",
+      "x": 12041.90675574343,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 298.7,
+      "slint_y": 609.7
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 9886.273794556926,
+      "y": 143811.3191983611,
+      "rotation": 269.9999999999999,
+      "layer": "0",
+      "slint_x": 291.2,
+      "slint_y": 27.1
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 259104.9116704198,
+      "y": 107232.8476176142,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1155.9,
+      "slint_y": 168.8
+    },
+    {
+      "category": "INSERT",
+      "name": "NC_Valve",
+      "x": 260434.6677525693,
+      "y": 107232.8476176143,
+      "rotation": 180.0,
+      "layer": "0",
+      "slint_x": 1160.5,
+      "slint_y": 168.8
+    },
+    {
+      "category": "INSERT",
+      "name": "Electric_Heater",
+      "x": 46798.31467838098,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 419.3,
+      "slint_y": 609.7
+    },
+    {
+      "category": "INSERT",
+      "name": "Centrifugal_Pump",
+      "x": 46792.19317453101,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 419.3,
+      "slint_y": 609.7
+    },
+    {
+      "category": "INSERT",
+      "name": "Motor",
+      "x": 26606.05421493403,
+      "y": -13927.99145841132,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 349.2,
+      "slint_y": 638.1
+    },
+    {
+      "category": "INSERT",
+      "name": "pressure_senser",
+      "x": 21643.87784939836,
+      "y": -6572.53262707559,
+      "rotation": 0,
+      "layer": "OUTLINE",
+      "slint_x": 332.0,
+      "slint_y": 609.7
+    }
+  ]
+}
