@@ -11,16 +11,19 @@ if [ -d "dist" ] && [ -f "dist/index.html" ]; then
     exit 0
 fi
 
-# 1. Install lightweight Qt installer (aqtinstall)
-echo "Setting up Python aqtinstall..."
-pip install aqtinstall
+# 1. Setup isolated Python environment for build tools
+echo "[1/5] Setting up build environment..."
+python3 -m venv /tmp/venv
+source /tmp/venv/bin/activate
+pip install --upgrade pip
+pip install aqtinstall cmake ninja
 
 # 2. Install Qt 6.8 WebAssembly Toolchain
-echo "Fetching Qt 6.8.0 WebAssembly..."
+echo "[2/5] Fetching Qt 6.8.0 WebAssembly toolchain..."
 python3 -m aqt install-qt linux desktop 6.8.0 wasm_singlethread -O /tmp/qt
 
 # 3. Setup matching Emscripten SDK (3.1.56)
-echo "Configuring Emscripten SDK..."
+echo "[3/5] Configuring Emscripten SDK..."
 if [ ! -d "/tmp/emsdk" ]; then
     git clone --depth 1 https://github.com/emscripten-core/emsdk.git /tmp/emsdk
 fi
@@ -28,15 +31,26 @@ fi
 /tmp/emsdk/emsdk activate 3.1.56
 source /tmp/emsdk/emsdk_env.sh
 
-# 4. Configure & Compile QML SCADA Project with CMake
-echo "Compiling PVA Systems VPU 50 SCADA to WebAssembly (.wasm)..."
+# 4. Configure & Compile QML SCADA Project with CMake & Ninja
+echo "[4/5] Compiling PVA Systems VPU 50 SCADA to WebAssembly (.wasm)..."
 export PATH="/tmp/qt/6.8.0/wasm_singlethread/bin:$PATH"
-qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release
+
+if command -v qt-cmake >/dev/null 2>&1; then
+    qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja
+else
+    /tmp/qt/6.8.0/wasm_singlethread/bin/qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja
+fi
+
 cmake --build build_wasm --parallel $(nproc)
 
 # 5. Export static site to dist/
+echo "[5/5] Packaging static WebAssembly deployment in dist/..."
 mkdir -p dist
-cp -r build_wasm/App/* dist/ 2>/dev/null || cp -r build_wasm/* dist/ 2>/dev/null
+if [ -d "build_wasm/App" ]; then
+    cp -r build_wasm/App/* dist/
+else
+    cp -r build_wasm/* dist/
+fi
 cp vercel.json dist/ 2>/dev/null || true
 
 echo "======================================================================"
