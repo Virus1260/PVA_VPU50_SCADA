@@ -1,36 +1,36 @@
 import QmlProject
 
 Project {
-    mainFile: "Scada_control_screen_try_2Content/App.qml"
-    mainUiFile: "Scada_control_screen_try_2Content/Main_frame_screen.ui.qml"
+    mainFile: "PVA_VPU50_SCADAContent/App.qml"
+    mainUiFile: "PVA_VPU50_SCADAContent/Main_frame_screen.ui.qml"
 
     /* Include .qml, .js, and image files from current directory and subdirectories */
     QmlFiles {
-        directory: "Scada_control_screen_try_2"
+        directory: "PVA_VPU50_SCADA"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content"
+        directory: "PVA_VPU50_SCADAContent"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content/screens"
+        directory: "PVA_VPU50_SCADAContent/screens"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content/components/widgets"
+        directory: "PVA_VPU50_SCADAContent/components/widgets"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content/components/widgets/Screen_1_Control"
+        directory: "PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content/components/modals"
+        directory: "PVA_VPU50_SCADAContent/components/modals"
     }
 
     QmlFiles {
-        directory: "Scada_control_screen_try_2Content/components/modals/Screen_1_Control"
+        directory: "PVA_VPU50_SCADAContent/components/modals/Screen_1_Control"
     }
 
     QmlFiles {
@@ -38,15 +38,15 @@ Project {
     }
 
     JavaScriptFiles {
-        directory: "Scada_control_screen_try_2"
+        directory: "PVA_VPU50_SCADA"
     }
 
     JavaScriptFiles {
-        directory: "Scada_control_screen_try_2Content"
+        directory: "PVA_VPU50_SCADAContent"
     }
 
     ImageFiles {
-        directory: "Scada_control_screen_try_2Content"
+        directory: "PVA_VPU50_SCADAContent"
     }
 
     ImageFiles {
@@ -100,7 +100,7 @@ Project {
     /* Baked lightmaps */
     Files {
         filter: "*.bin;*.exr;*.mesh"
-        directory: "Scada_control_screen_try_2Content"
+        directory: "PVA_VPU50_SCADAContent"
     }
 
     Environment {
@@ -115,16 +115,16 @@ Project {
     /* List of plugin directories passed to QML runtime */
     importPaths: [
         ".",
-        "Scada_control_screen_try_2Content",
-        "Scada_control_screen_try_2Content/components/widgets",
-        "Scada_control_screen_try_2Content/components/widgets/Screen_1_Control",
-        "Scada_control_screen_try_2Content/components/modals",
-        "Scada_control_screen_try_2Content/components/modals/Screen_1_Control",
-        "Scada_control_screen_try_2Content/screens"
+        "PVA_VPU50_SCADAContent",
+        "PVA_VPU50_SCADAContent/components/widgets",
+        "PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control",
+        "PVA_VPU50_SCADAContent/components/modals",
+        "PVA_VPU50_SCADAContent/components/modals/Screen_1_Control",
+        "PVA_VPU50_SCADAContent/screens"
     ]
 
     /* Required for deployment */
-    targetDirectory: "/opt/Scada_control_screen_try_2"
+    targetDirectory: "/opt/PVA_VPU50_SCADA"
 
     enableCMakeGeneration: true
     standaloneApp: true

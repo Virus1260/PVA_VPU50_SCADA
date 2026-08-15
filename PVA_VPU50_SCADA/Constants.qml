@@ -22,6 +22,6 @@ QtObject {
 
 
     property StudioApplication application: StudioApplication {
-        fontPath: Qt.resolvedUrl("../Scada_control_screen_try_2Content/" + relativeFontDirectory)
+        fontPath: Qt.resolvedUrl("../PVA_VPU50_SCADAContent/" + relativeFontDirectory)
     }
 }

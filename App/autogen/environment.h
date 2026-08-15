@@ -8,10 +8,10 @@
 #include <QGuiApplication>
 #include "qqmlextensionplugin.h"
 
-Q_IMPORT_QML_PLUGIN(Scada_control_screen_try_2Plugin)
-Q_IMPORT_QML_PLUGIN(Scada_control_screen_try_2ContentPlugin)
+Q_IMPORT_QML_PLUGIN(PVA_VPU50_SCADAPlugin)
+Q_IMPORT_QML_PLUGIN(PVA_VPU50_SCADAContentPlugin)
 
-const char mainQmlFile[] = "qrc:/qt/qml/Scada_control_screen_try_2Content/App.qml";
+const char mainQmlFile[] = "qrc:/qt/qml/PVA_VPU50_SCADAContent/App.qml";
 
 #ifdef BUILD_QDS_COMPONENTS
 

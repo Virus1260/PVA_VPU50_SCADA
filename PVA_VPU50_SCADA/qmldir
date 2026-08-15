@@ -1,4 +1,4 @@
-module Scada_control_screen_try_2
+module PVA_VPU50_SCADA
 singleton Constants 1.0 Constants.qml
 EventListSimulator 1.0 EventListSimulator.qml
 EventListModel 1.0 EventListModel.qml

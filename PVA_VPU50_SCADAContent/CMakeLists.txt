@@ -3,9 +3,9 @@
 
 
 
-qt_add_library(Scada_control_screen_try_2Content STATIC)
-qt6_add_qml_module(Scada_control_screen_try_2Content
-    URI "Scada_control_screen_try_2Content"
+qt_add_library(PVA_VPU50_SCADAContent STATIC)
+qt6_add_qml_module(PVA_VPU50_SCADAContent
+    URI "PVA_VPU50_SCADAContent"
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES

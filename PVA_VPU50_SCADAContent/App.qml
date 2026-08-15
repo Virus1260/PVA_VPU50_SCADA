@@ -1,5 +1,5 @@
 import QtQuick
-import Scada_control_screen_try_2
+import PVA_VPU50_SCADA
 
 Window {
     id: appWindow

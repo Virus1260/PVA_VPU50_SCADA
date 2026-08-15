@@ -6,7 +6,7 @@ It is supposed to be strictly declarative and only uses a subset of QML.
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Scada_control_screen_try_2
+import PVA_VPU50_SCADA
 import "screens"
 import "components/widgets"
 import "components/widgets/Screen_1_Control"

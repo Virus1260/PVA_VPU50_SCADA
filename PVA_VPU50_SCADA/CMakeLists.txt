@@ -8,9 +8,9 @@ set_source_files_properties(Constants.qml
 
 
 
-qt_add_library(Scada_control_screen_try_2 STATIC)
-qt6_add_qml_module(Scada_control_screen_try_2
-    URI "Scada_control_screen_try_2"
+qt_add_library(PVA_VPU50_SCADA STATIC)
+qt6_add_qml_module(PVA_VPU50_SCADA
+    URI "PVA_VPU50_SCADA"
     VERSION 1.0
     RESOURCE_PREFIX "/qt/qml"
     QML_FILES
