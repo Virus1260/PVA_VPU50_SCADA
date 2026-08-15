@@ -4,117 +4,196 @@ import QtQuick.Layouts
 Item {
     id: agitatorRoot
     width: 280
-    height: 400
+    height: 480
 
     property string motorTag: "M 162 001"
     property string speedTag: "SCR 162001"
-    property real speedRpm: 49.0
+    property real speedRpm: 10.0
     property bool isRunning: true
     property bool showTags: true
 
-    // 1. TOP DRIVE MOTOR & SENSORS
+    property real rotationAngle: 0.0
+
+    // Smooth Dynamic Rotation Animation Linked to SCADA State
+    NumberAnimation {
+        id: rotAnim
+        target: agitatorRoot
+        property: "rotationAngle"
+        from: 0
+        to: 360
+        duration: Math.max(400, Math.min(10000, (60.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
+        loops: Animation.Infinite
+        running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
+    }
+
+    onIsRunningChanged: {
+        if (!isRunning) {
+            rotAnim.stop();
+            rotationAngle = 0;
+        } else {
+            rotAnim.restart();
+        }
+    }
+
+    // 1. TOP DRIVE MOTOR & SENSORS (Pixel-perfect EKATO Layout)
     ColumnLayout {
         anchors.top: parent.top
+        anchors.topMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 1
 
         Text {
             visible: agitatorRoot.showTags
-            text: agitatorRoot.speedTag + " " + agitatorRoot.speedRpm.toFixed(1) + "rpm"
+            text: agitatorRoot.speedTag
+            color: "#8cb5dc"
+            font.bold: true
+            font.pixelSize: 8
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        Text {
+            visible: agitatorRoot.showTags
+            text: agitatorRoot.speedRpm.toFixed(1) + "rpm"
             color: "#ffffff"
             font.bold: true
             font.pixelSize: 8
             Layout.alignment: Qt.AlignHCenter
         }
 
-        RowLayout {
+        Text {
+            visible: agitatorRoot.showTags
+            text: agitatorRoot.motorTag
+            color: "#8cb5dc"
+            font.bold: true
+            font.pixelSize: 8
             Layout.alignment: Qt.AlignHCenter
-            spacing: 6
+        }
 
-            // Motor Symbol 'M' with Authentic EKATO Green Ring
-            Rectangle {
-                width: 22
-                height: 22
-                radius: 11
-                color: agitatorRoot.isRunning ? "#4ade80" : "#0d2847"
-                border.color: agitatorRoot.isRunning ? "#22c55e" : "#3b82f6"
-                border.width: 1.5
+        Item { Layout.preferredHeight: 2 }
 
-                Text {
-                    anchors.centerIn: parent
-                    text: "M"
-                    color: agitatorRoot.isRunning ? "#052e16" : "#ffffff"
-                    font.bold: true
-                    font.pixelSize: 11
-                }
-            }
+        // Motor Symbol 'M' with Vibrant EKATO Green Ring
+        Rectangle {
+            Layout.alignment: Qt.AlignHCenter
+            width: 24
+            height: 24
+            radius: 12
+            color: agitatorRoot.isRunning ? "#4ade80" : "#0d2847"
+            border.color: agitatorRoot.isRunning ? "#22c55e" : "#3b82f6"
+            border.width: 1.6
 
-            // GZ 161501 Sensor Dot
-            Rectangle {
-                visible: agitatorRoot.showTags
-                width: 6
-                height: 6
-                radius: 3
-                color: "#eab308"
+            Text {
+                anchors.centerIn: parent
+                text: "M"
+                color: agitatorRoot.isRunning ? "#052e16" : "#ffffff"
+                font.bold: true
+                font.pixelSize: 12
             }
         }
     }
 
-    // 2. CENTRAL ROTATING SHAFT
+    // 2. PROXIMITY SENSOR GZ 161501 ON DOME WITH VERTICAL LABEL
+    Item {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: 24
+        anchors.top: parent.top
+        anchors.topMargin: 46
+        width: 16
+        height: 40
+        visible: agitatorRoot.showTags
+
+        Text {
+            anchors.bottom: sensorDot.top
+            anchors.bottomMargin: 2
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "GZ 161501"
+            color: "#8cb5dc"
+            font.pixelSize: 7
+            font.bold: true
+            rotation: -90
+            transformOrigin: Item.BottomRight
+        }
+
+        Rectangle {
+            id: sensorDot
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 8
+            height: 8
+            radius: 4
+            color: "#4ade80"
+            border.color: "#22c55e"
+            border.width: 1
+        }
+    }
+
+    // 3. CENTRAL ROTATING SHAFT (Extended down through vessel)
     Rectangle {
         id: shaft
         anchors.top: parent.top
-        anchors.topMargin: 46
+        anchors.topMargin: 63
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 4
-        height: 275
+        width: 10
+        height: 330
         color: "#ffffff"
     }
 
-    // 3. AUTHENTIC EKATO PARAVISC DOUBLE X-BRACE IMPELLER
-    Canvas {
-        id: bladeCanvas
+    // 4. AUTHENTIC THICK EKATO PARAVISC DOUBLE X-BRACE IMPELLER (Positioned well below spray balls)
+    Item {
+        id: impellerContainer
         anchors.top: shaft.top
-        anchors.topMargin: 65
+        anchors.topMargin: 152
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 260
-        height: 260
+        width: 250
+        height: 180
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+        // 3D Perspective Rotation Transform
+        transform: Rotation {
+            origin.x: 125
+            origin.y: 90
+            axis { x: 0; y: 1; z: 0 }
+            angle: agitatorRoot.rotationAngle
+        }
 
-            var cx = width / 2;
-            var hw = 95;
-            var topY = 10;
-            var botY = 205;
+        Canvas {
+            id: bladeCanvas
+            anchors.fill: parent
 
-            ctx.beginPath();
-            // Outer Paravisc Boundary (following vessel wall with bottom central arch)
-            ctx.moveTo(cx - hw, topY);
-            ctx.lineTo(cx - hw, botY - 32);
-            ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 22, botY - 8);
-            // Center Arch Cutout above neck
-            ctx.quadraticCurveTo(cx, botY - 26, cx + 22, botY - 8);
-            ctx.quadraticCurveTo(cx + hw * 0.5, botY + 2, cx + hw, botY - 32);
-            ctx.lineTo(cx + hw, topY);
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.clearRect(0, 0, width, height);
 
-            // Double Diagonal X-Braces
-            ctx.moveTo(cx - hw, topY);
-            ctx.lineTo(cx + hw, botY - 32);
+                var cx = width / 2;
+                var hw = 84;
+                var topY = 6;
+                var botY = 172;
 
-            ctx.moveTo(cx + hw, topY);
-            ctx.lineTo(cx - hw, botY - 32);
+                ctx.beginPath();
+                // Outer Paravisc Boundary (with bottom central arch)
+                ctx.moveTo(cx - hw, topY);
+                ctx.lineTo(cx - hw, botY - 24);
+                ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 20, botY - 6);
+                // Center Arch Cutout above neck
+                ctx.quadraticCurveTo(cx, botY - 20, cx + 20, botY - 6);
+                ctx.quadraticCurveTo(cx + hw * 0.5, botY + 2, cx + hw, botY - 24);
+                ctx.lineTo(cx + hw, topY);
 
-            // Top cross link
-            ctx.moveTo(cx - hw, topY);
-            ctx.lineTo(cx + hw, topY);
+                // Double Diagonal X-Braces
+                ctx.moveTo(cx - hw, topY);
+                ctx.lineTo(cx + hw, botY - 24);
 
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 4.0;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            ctx.stroke();
+                ctx.moveTo(cx + hw, topY);
+                ctx.lineTo(cx - hw, botY - 24);
+
+                // Top cross link
+                ctx.moveTo(cx - hw, topY);
+                ctx.lineTo(cx + hw, topY);
+
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 10.0;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+                ctx.stroke();
+            }
         }
     }
 }

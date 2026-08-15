@@ -14,7 +14,6 @@ Item {
 
     signal suctionSolidsClicked()
     signal suctionLiquidsClicked()
-    signal statorValveClicked()
     signal recircValveClicked()
 
     // 1. DISCHARGE NECK & STEPPED COLLAR CANVAS (With Smooth Metallic Shading)
@@ -89,12 +88,12 @@ Item {
         }
     }
 
-    // 2. STATOR CHAMBER Z 163 001 (Electric Neon Green with Two Glowing Dots)
+    // 2. STATOR CHAMBER Z 163 001 (Clean Neon Lime Green Box with Glowing Dots)
     Rectangle {
         id: statorBox
-        x: 180 - 24
+        x: 180 - 23
         y: 18
-        width: 48
+        width: 46
         height: 20
         radius: 2
         color: homogRoot.isRunning ? "#63fa1e" : "#0d2847"
@@ -105,72 +104,25 @@ Item {
             anchors.centerIn: parent
             spacing: 8
             Rectangle {
-                width: 8
-                height: 8
-                radius: 4
+                width: 7
+                height: 7
+                radius: 3.5
                 color: homogRoot.isRunning ? "#ffffff" : "#4a90d9"
             }
             Rectangle {
-                width: 8
-                height: 8
-                radius: 4
+                width: 7
+                height: 7
+                radius: 3.5
                 color: homogRoot.isRunning ? "#ffffff" : "#4a90d9"
             }
         }
-    }
 
-    // 3. STATOR VALVE & TAG (Directly Attached to Right of Stator Box)
-    Item {
-        x: 180 + 24
-        y: 18
-        width: 32
-        height: 20
-
-        Canvas {
-            anchors.fill: parent
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-                var fill = homogRoot.isRunning ? "#63fa1e" : "#0a284a";
-                var stroke = homogRoot.isRunning ? "#ffffff" : "#cbd5e1";
-
-                ctx.beginPath();
-                // Left triangle
-                ctx.moveTo(0, 2);
-                ctx.lineTo(0, 18);
-                ctx.lineTo(14, 10);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-
-                // Right triangle
-                ctx.beginPath();
-                ctx.moveTo(28, 2);
-                ctx.lineTo(28, 18);
-                ctx.lineTo(14, 10);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            onClicked: homogRoot.statorValveClicked()
-        }
-
+        // Tag: Z 163 001
         Text {
             visible: homogRoot.showTags
-            anchors.left: parent.left
-            anchors.bottom: parent.top
-            anchors.bottomMargin: 2
+            anchors.left: parent.right
+            anchors.leftMargin: 6
+            anchors.verticalCenter: parent.verticalCenter
             text: "Z 163 001"
             color: "#8cb5dc"
             font.pixelSize: 8
@@ -178,7 +130,7 @@ Item {
         }
     }
 
-    // 4. LEFT SUCTION PORTS (Solids & Liquids Valves with Diagonal Stem Arrows)
+    // 3. LEFT SUCTION PORTS (Solids & Liquids Valves with Diagonal Stem Arrows)
     // (A) Upper Solids Port
     Item {
         x: 75
@@ -360,7 +312,7 @@ Item {
         }
     }
 
-    // 5. RECIRCULATION PIPE & VALVE K 163 002 (Right Lower Neck)
+    // 4. RECIRCULATION PIPE & VALVE K 163 002 (Right Lower Neck)
     Item {
         x: 180 + 23
         y: 45
@@ -432,7 +384,7 @@ Item {
         }
     }
 
-    // 6. BOTTOM DRIVE MOTOR M 163 001 & SPEED READOUT
+    // 5. BOTTOM DRIVE MOTOR M 163 001 & SPEED READOUT
     Item {
         x: 180 - 14
         y: 112
