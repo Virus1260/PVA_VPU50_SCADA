@@ -4,6 +4,9 @@ import QtQuick.Controls
 
 Rectangle {
     id: toolbarRoot
+    implicitWidth: 900
+    width: 900
+    implicitHeight: 52
     height: 52
     color: "#08213b"
     border.color: "#184d7e"

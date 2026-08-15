@@ -4,9 +4,11 @@ import QtQuick.Layouts
 
 Rectangle {
     id: stepConfirmRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#cc000000"
-    visible: false
     z: 999
 
     property string stepName: "Add Phase B"

@@ -49,7 +49,6 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "components/widgets/Screen_2_PID/PidMotor.qml"
         "components/widgets/Screen_2_PID/PidHeatingEffect.qml"
         "components/widgets/Screen_2_PID/PidLevelGauge.qml"
-        "components/widgets/Screen_2_PID/PidHopper.qml"
         "components/widgets/Screen_5_Recipes/FormulationView.qml"
         "components/widgets/Screen_5_Recipes/RecipeIngredientsTable.qml"
         "components/widgets/Screen_5_Recipes/RecipeMatrixView.qml"
@@ -67,8 +66,6 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "screens/Screen_6_Audit.qml"
         "screens/Screen_7_Playback.qml"
         "screens/Screen_8_Diagnostics.qml"
-        "screens/Screen_2_P_IDView.ui.qml"
-        "screens/Screen_2_P_IDView.ui.qml"
     RESOURCES
         "assets/pid_schema.svg"
         "assets/pid_schema_tags.json"

@@ -5,9 +5,11 @@ import "../../config"
 
 Rectangle {
     id: loginModalRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#bb000000"
-    visible: false
     z: 999
 
     ScadaConfig { id: scadaConfig }
@@ -41,8 +43,8 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(540, Math.min(parent.width * 0.52, 680))
-        height: Math.max(460, Math.min(parent.height * 0.76, 560))
+        width: 580
+        height: 480
         color: "#08213b"
         border.color: "#184d7e"
         border.width: 2

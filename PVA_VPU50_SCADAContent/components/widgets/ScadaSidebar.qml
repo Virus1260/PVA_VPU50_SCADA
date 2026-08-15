@@ -3,7 +3,10 @@ import QtQuick.Layouts
 
 Rectangle {
     id: sidebarRoot
+    implicitWidth: 88
     width: 88
+    implicitHeight: 600
+    height: 600
     color: "#08213b"
 
     property int activeIndex: 0

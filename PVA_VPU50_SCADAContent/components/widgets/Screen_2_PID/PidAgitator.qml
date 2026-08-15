@@ -13,10 +13,9 @@ Item {
     property bool showTags: true
     property string rotationMode: "agitator_cw" // "agitator_cw", "agitator_ccw", "agitator_reversing"
 
-    property real currentFrame: 0.0
+    property int currentFrame: 0
     readonly property int totalFrames: 36
     property bool isIntervalForward: true
-    readonly property int activeFrameIndex: ((Math.floor(currentFrame) % totalFrames) + totalFrames) % totalFrames
 
     function isForwardDirection() {
         if (rotationMode === "agitator_ccw") return false;
@@ -32,42 +31,33 @@ Item {
         repeat: true
         onTriggered: {
             agitatorRoot.isIntervalForward = !agitatorRoot.isIntervalForward;
-            updateAnimation();
         }
     }
 
     onRotationModeChanged: {
         isIntervalForward = true;
-        updateAnimation();
     }
 
-    onIsRunningChanged: updateAnimation()
-    onSpeedRpmChanged: updateAnimation()
-
-    function updateAnimation() {
-        if (!isRunning || speedRpm <= 0) {
-            frameAnim.stop();
-            currentFrame = 0.0;
-            return;
+    onIsRunningChanged: {
+        if (!isRunning) {
+            currentFrame = 0;
+            isIntervalForward = true;
         }
-        var forward = isForwardDirection();
-        frameAnim.stop();
-        frameAnim.from = forward ? 0.0 : agitatorRoot.totalFrames;
-        frameAnim.to = forward ? agitatorRoot.totalFrames : 0.0;
-        frameAnim.duration = Math.max(100, Math.min(3000, (30.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000));
-        frameAnim.restart();
     }
 
-    // Dynamic Multi-Frame SVG Rotation Animation (Speed Proportional to Control Screen Target RPM)
-    NumberAnimation {
-        id: frameAnim
-        target: agitatorRoot
-        property: "currentFrame"
-        from: 0.0
-        to: agitatorRoot.totalFrames
-        duration: Math.max(100, Math.min(3000, (30.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
-        loops: Animation.Infinite
+    // Smooth Continuous Frame Stepper (Speed Proportional to RPM, Zero Jitter / Startup Reset)
+    Timer {
+        id: stepTimer
+        interval: Math.max(16, Math.round(60000.0 / Math.max(1.0, agitatorRoot.speedRpm * agitatorRoot.totalFrames)))
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
+        repeat: true
+        onTriggered: {
+            if (agitatorRoot.isForwardDirection()) {
+                agitatorRoot.currentFrame = (agitatorRoot.currentFrame + 1) % agitatorRoot.totalFrames;
+            } else {
+                agitatorRoot.currentFrame = (agitatorRoot.currentFrame - 1 + agitatorRoot.totalFrames) % agitatorRoot.totalFrames;
+            }
+        }
     }
 
     // 1. TOP DRIVE MOTOR (Standard Reusable SCADA Motor)
@@ -120,15 +110,14 @@ Item {
         }
     }
 
-    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange - Anchored to bottom of Motor circle)
+    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange)
     Rectangle {
+        id: driveShaft
         z: 1
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: topMotor.bottom
-        anchors.topMargin: -4
-        anchors.bottom: impellerContainer.top
-        anchors.bottomMargin: -6
+        x: (parent.width - width) / 2
+        y: 66
         width: 14
+        height: 58
         radius: 2
         gradient: Gradient {
             orientation: Gradient.Horizontal
@@ -163,7 +152,7 @@ Item {
                 asynchronous: false
                 cache: true
                 visible: true
-                opacity: agitatorRoot.activeFrameIndex === index ? 1.0 : 0.0
+                opacity: agitatorRoot.currentFrame === index ? 1.0 : 0.0
             }
         }
     }

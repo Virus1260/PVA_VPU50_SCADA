@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: valveRoot
@@ -14,71 +15,62 @@ Item {
 
     signal clicked()
 
-    Canvas {
-        id: valveCanvas
+    // Declarative Valve Symbol (Two Opposing Triangles - 100% Visible in Qt Design Studio 2D Canvas)
+    Shape {
+        id: valveShape
         anchors.fill: parent
+        preferredRendererType: Shape.CurveRenderer
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+        // 1. Horizontal Valve (Left Triangle & Right Triangle)
+        ShapePath {
+            strokeWidth: 1.2
+            strokeColor: valveRoot.isOpen ? "#4ade80" : "#ffffff"
+            fillColor: valveRoot.isOpen ? "#22c55e" : "#0a284a"
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.MiterJoin
 
-            var cx = width / 2;
-            var cy = height / 2;
-            var fill = valveRoot.isOpen ? "#22c55e" : "#0a284a";
-            var stroke = valveRoot.isOpen ? "#4ade80" : "#ffffff";
+            startX: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 - 6.5)
+            startY: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 - 5.5)
 
-            if (valveRoot.isVertical) {
-                // Top Triangle
-                ctx.beginPath();
-                ctx.moveTo(cx - 5.5, cy - 6.5);
-                ctx.lineTo(cx + 5.5, cy - 6.5);
-                ctx.lineTo(cx, cy);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-
-                // Bottom Triangle
-                ctx.beginPath();
-                ctx.moveTo(cx - 5.5, cy + 6.5);
-                ctx.lineTo(cx + 5.5, cy + 6.5);
-                ctx.lineTo(cx, cy);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.stroke();
-            } else {
-                // Left Triangle
-                ctx.beginPath();
-                ctx.moveTo(cx - 6.5, cy - 5.5);
-                ctx.lineTo(cx - 6.5, cy + 5.5);
-                ctx.lineTo(cx, cy);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-
-                // Right Triangle
-                ctx.beginPath();
-                ctx.moveTo(cx + 6.5, cy - 5.5);
-                ctx.lineTo(cx + 6.5, cy + 5.5);
-                ctx.lineTo(cx, cy);
-                ctx.closePath();
-                ctx.fillStyle = fill;
-                ctx.fill();
-                ctx.stroke();
+            // Triangle 1
+            PathLine {
+                x: valveRoot.isVertical ? (valveRoot.width / 2 + 5.5) : (valveRoot.width / 2 - 6.5)
+                y: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 + 5.5)
+            }
+            PathLine {
+                x: valveRoot.width / 2
+                y: valveRoot.height / 2
+            }
+            PathLine {
+                x: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 - 6.5)
+                y: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 - 5.5)
             }
         }
-    }
 
-    Connections {
-        target: valveRoot
-        function onIsOpenChanged() { valveCanvas.requestPaint(); }
-        function onIsVerticalChanged() { valveCanvas.requestPaint(); }
+        // Triangle 2
+        ShapePath {
+            strokeWidth: 1.2
+            strokeColor: valveRoot.isOpen ? "#4ade80" : "#ffffff"
+            fillColor: valveRoot.isOpen ? "#22c55e" : "#0a284a"
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.MiterJoin
+
+            startX: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 + 6.5)
+            startY: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 - 5.5)
+
+            PathLine {
+                x: valveRoot.isVertical ? (valveRoot.width / 2 + 5.5) : (valveRoot.width / 2 + 6.5)
+                y: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 + 5.5)
+            }
+            PathLine {
+                x: valveRoot.width / 2
+                y: valveRoot.height / 2
+            }
+            PathLine {
+                x: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 + 6.5)
+                y: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 - 5.5)
+            }
+        }
     }
 
     // Tag Label

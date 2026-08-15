@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: hopperRoot
@@ -8,22 +9,23 @@ Item {
     property color fillColor: "#8ec4f0"
     property color strokeColor: "#1b4c7c"
 
-    Canvas {
+    Shape {
         anchors.fill: parent
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-            ctx.beginPath();
-            ctx.moveTo(2, 2);
-            ctx.lineTo(22, 2);
-            ctx.lineTo(15, 20);
-            ctx.lineTo(9, 20);
-            ctx.closePath();
-            ctx.fillStyle = hopperRoot.fillColor;
-            ctx.fill();
-            ctx.strokeStyle = hopperRoot.strokeColor;
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
+        preferredRendererType: Shape.CurveRenderer
+
+        ShapePath {
+            strokeWidth: 1.2
+            strokeColor: hopperRoot.strokeColor
+            fillColor: hopperRoot.fillColor
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.MiterJoin
+
+            startX: 2
+            startY: 2
+            PathLine { x: 22; y: 2 }
+            PathLine { x: 15; y: 20 }
+            PathLine { x: 9; y: 20 }
+            PathLine { x: 2; y: 2 }
         }
     }
 }

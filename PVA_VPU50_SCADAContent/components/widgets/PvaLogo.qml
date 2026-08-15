@@ -16,8 +16,6 @@ Item {
         width: 101.5
         height: 35
         scale: pvaLogoRoot.scaleRatio
-        layer.enabled: true
-        layer.smooth: true
 
         // -------------------------------------------------------------
         // 'P' in PVA Crimson Red (#F32B47)

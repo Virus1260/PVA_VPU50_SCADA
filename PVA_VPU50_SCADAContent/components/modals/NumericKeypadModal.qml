@@ -4,7 +4,10 @@ import QtQuick.Layouts
 
 Rectangle {
     id: keypadRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#95000000"
 
     property string title: "Parameter Setpoint"
@@ -27,8 +30,8 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(320, Math.min(parent.width * 0.35, 390))
-        height: Math.max(440, Math.min(parent.height * 0.74, 520))
+        width: 360
+        height: 480
         color: "#0b2e52"
         border.color: "#1d5b94"
         border.width: 2
@@ -296,6 +299,8 @@ Rectangle {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
+        implicitWidth: 64
+        implicitHeight: 52
         radius: 4
 
         color: isOk ? "#8ee62c" : (btnMouse.pressed ? "#d0e2f2" : "#ffffff")

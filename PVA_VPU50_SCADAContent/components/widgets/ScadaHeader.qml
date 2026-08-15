@@ -3,6 +3,9 @@ import QtQuick.Layouts
 
 Rectangle {
     id: headerRoot
+    implicitWidth: 1024
+    width: 1024
+    implicitHeight: 86
     height: 86
     color: "#08213b"
     clip: true

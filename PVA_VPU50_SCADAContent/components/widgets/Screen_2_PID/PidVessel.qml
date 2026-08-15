@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 Item {
     id: vesselRoot
@@ -16,93 +17,69 @@ Item {
     property bool isCooling: false
     property bool showTags: true
 
-    Canvas {
-        id: vesselCanvas
+    // 1. CONCENTRIC THERMAL JACKET (Wrapping lower shell & bottom dish snugly)
+    Shape {
+        id: jacketShape
         anchors.fill: parent
+        preferredRendererType: Shape.CurveRenderer
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+        ShapePath {
+            strokeWidth: 1.6
+            strokeColor: "#1b4c7c"
+            fillColor: vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "#5b95c9")
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.RoundJoin
 
-            var cx = 180;
-            var r = 130; // Outer shell radius (D0 = 260px)
-            var leftX = cx - r;   // 50
-            var rightX = cx + r;  // 310
-            var domeTop = 28;     // Peak of top torispherical dome
-            var seamY = 65;       // Straight flange tangent line
-            var bodyBottom = 310; // Lower tangent line
-            var dishBottom = 348; // Bottom torispherical dish apex
-            var neckW = 46;       // Bottom discharge neck width
-
-            // -----------------------------------------------------------------
-            // 1. CONCENTRIC THERMAL JACKET (Wrapping lower shell & bottom dish snugly)
-            // -----------------------------------------------------------------
-            var jLeft = leftX - 12;   // 38
-            var jRight = rightX + 12; // 322
-            var jTop = 120;
-
-            ctx.beginPath();
-            ctx.moveTo(jLeft, jTop);
-            ctx.lineTo(jLeft, bodyBottom);
-            // Outer concentric torispherical curve
-            ctx.bezierCurveTo(jLeft, bodyBottom + 26, cx - 55, dishBottom + 12, cx - neckW / 2 - 4, dishBottom + 12);
-            ctx.lineTo(cx + neckW / 2 + 4, dishBottom + 12);
-            ctx.bezierCurveTo(cx + 55, dishBottom + 12, jRight, bodyBottom + 26, jRight, bodyBottom);
-            ctx.lineTo(jRight, jTop);
-            // Inner contour (flush against vessel outer shell)
-            ctx.lineTo(rightX, jTop);
-            ctx.lineTo(rightX, bodyBottom);
-            ctx.bezierCurveTo(rightX, bodyBottom + 24, cx + 55, dishBottom, cx + neckW / 2, dishBottom);
-            ctx.lineTo(cx - neckW / 2, dishBottom);
-            ctx.bezierCurveTo(cx - 55, dishBottom, leftX, bodyBottom + 24, leftX, bodyBottom);
-            ctx.lineTo(leftX, jTop);
-            ctx.closePath();
-
-            ctx.fillStyle = vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "#5b95c9");
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-
-            // -----------------------------------------------------------------
-            // 2. MAIN SOLID SKY-BLUE VESSEL BODY (DIN 28011 Torispherical Profile)
-            // -----------------------------------------------------------------
-            ctx.beginPath();
-            // (A) Top Torispherical Dome
-            ctx.moveTo(leftX, seamY);
-            ctx.bezierCurveTo(leftX, seamY - 24, cx - 75, domeTop, cx, domeTop);
-            ctx.bezierCurveTo(cx + 75, domeTop, rightX, seamY - 24, rightX, seamY);
-
-            // (B) Cylindrical Shell Walls
-            ctx.lineTo(rightX, bodyBottom);
-
-            // (C) Bottom Torispherical Dish to Bottom Neck
-            ctx.bezierCurveTo(rightX, bodyBottom + 24, cx + 55, dishBottom, cx + neckW / 2, dishBottom);
-            ctx.lineTo(cx - neckW / 2, dishBottom);
-            ctx.bezierCurveTo(cx - 55, dishBottom, leftX, bodyBottom + 24, leftX, bodyBottom);
-            ctx.closePath();
-
-            // Solid sky-blue fill
-            ctx.fillStyle = "#79b2e2";
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 2.2;
-            ctx.stroke();
-
-            // Top Seam Line
-            ctx.beginPath();
-            ctx.moveTo(leftX, seamY);
-            ctx.lineTo(rightX, seamY);
-            ctx.strokeStyle = "rgba(27, 76, 124, 0.45)";
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
+            startX: 38; startY: 120
+            PathLine { x: 38; y: 310 }
+            PathCubic { control1X: 38; control1Y: 336; control2X: 125; control2Y: 360; x: 157; y: 360 }
+            PathLine { x: 203; y: 360 }
+            PathCubic { control1X: 235; control1Y: 360; control2X: 322; control2Y: 336; x: 322; y: 310 }
+            PathLine { x: 322; y: 120 }
+            PathLine { x: 310; y: 120 }
+            PathLine { x: 310; y: 310 }
+            PathCubic { control1X: 310; control1Y: 334; control2X: 235; control2Y: 348; x: 203; y: 348 }
+            PathLine { x: 157; y: 348 }
+            PathCubic { control1X: 125; control1Y: 348; control2X: 50; control2Y: 334; x: 50; y: 310 }
+            PathLine { x: 50; y: 120 }
+            PathLine { x: 38; y: 120 }
         }
     }
 
-    Connections {
-        target: vesselRoot
-        function onIsHeatingChanged() { vesselCanvas.requestPaint(); }
-        function onIsCoolingChanged() { vesselCanvas.requestPaint(); }
+    // 2. MAIN SOLID SKY-BLUE VESSEL BODY (DIN 28011 Torispherical Profile)
+    Shape {
+        id: vesselBodyShape
+        anchors.fill: parent
+        preferredRendererType: Shape.CurveRenderer
+
+        ShapePath {
+            strokeWidth: 2.2
+            strokeColor: "#1b4c7c"
+            fillColor: "#79b2e2"
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.RoundJoin
+
+            startX: 50; startY: 65
+            // (A) Top Torispherical Dome
+            PathCubic { control1X: 50; control1Y: 41; control2X: 105; control2Y: 28; x: 180; y: 28 }
+            PathCubic { control1X: 255; control1Y: 28; control2X: 310; control2Y: 41; x: 310; y: 65 }
+            // (B) Cylindrical Shell Walls
+            PathLine { x: 310; y: 310 }
+            // (C) Bottom Torispherical Dish to Bottom Neck
+            PathCubic { control1X: 310; control1Y: 334; control2X: 235; control2Y: 348; x: 203; y: 348 }
+            PathLine { x: 157; y: 348 }
+            PathCubic { control1X: 125; control1Y: 348; control2X: 50; control2Y: 334; x: 50; y: 310 }
+            PathLine { x: 50; y: 65 }
+        }
+
+        // Top Seam Line
+        ShapePath {
+            strokeWidth: 1.2
+            strokeColor: "#1b4c7c"
+            fillColor: "transparent"
+            startX: 50; startY: 65
+            PathLine { x: 310; y: 65 }
+        }
     }
 
     // -------------------------------------------------------------------------

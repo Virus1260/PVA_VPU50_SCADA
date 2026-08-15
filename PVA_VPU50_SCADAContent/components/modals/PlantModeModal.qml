@@ -4,7 +4,10 @@ import QtQuick.Layouts
 
 Rectangle {
     id: modalRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#95000000"
 
     property bool isAuto: true

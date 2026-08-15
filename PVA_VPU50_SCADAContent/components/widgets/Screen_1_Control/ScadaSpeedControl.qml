@@ -4,6 +4,8 @@ import ".."
 
 Rectangle {
     id: speedRoot
+    implicitWidth: 320
+    width: 320
     implicitHeight: 68
     height: 68
 

@@ -37,84 +37,63 @@ Item {
         y: homogRoot.vibY
     }
 
-    // 2. MAIN METALLIC SHAFT COLUMN & COPPER POWER FEEDERS
-    Canvas {
-        id: homogCanvas
-        anchors.fill: parent
-
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-
-            var cx = width / 2; // 230
-
-            // (A) Upper Flared Transition from Vessel Bottom Dish
-            var gradTop = ctx.createLinearGradient(cx - 24, 0, cx + 24, 0);
-            gradTop.addColorStop(0.0, "#60a5fa");
-            gradTop.addColorStop(0.5, "#dbeafe");
-            gradTop.addColorStop(1.0, "#60a5fa");
-
-            ctx.beginPath();
-            ctx.moveTo(cx - 24, 0);
-            ctx.bezierCurveTo(cx - 24, 10, cx - 22, 16, cx - 22, 25);
-            ctx.lineTo(cx + 22, 25);
-            ctx.bezierCurveTo(cx + 22, 16, cx + 24, 10, cx + 24, 0);
-            ctx.closePath();
-            ctx.fillStyle = gradTop;
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-
-            // (B) Main Cylindrical Column (Width: 44, from Y = 25 to Y = 110)
-            var gradMid = ctx.createLinearGradient(cx - 22, 0, cx + 22, 0);
-            gradMid.addColorStop(0.0, "#60a5fa");
-            gradMid.addColorStop(0.5, "#dbeafe");
-            gradMid.addColorStop(1.0, "#60a5fa");
-
-            ctx.beginPath();
-            ctx.rect(cx - 22, 25, 44, 85);
-            ctx.fillStyle = gradMid;
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-
-            // (C) Lower Step-Down Collar (Width: 28, from Y = 110 to Y = 142)
-            var gradCollar = ctx.createLinearGradient(cx - 14, 0, cx + 14, 0);
-            gradCollar.addColorStop(0.0, "#60a5fa");
-            gradCollar.addColorStop(0.5, "#dbeafe");
-            gradCollar.addColorStop(1.0, "#60a5fa");
-
-            ctx.beginPath();
-            ctx.rect(cx - 14, 110, 28, 32);
-            ctx.fillStyle = gradCollar;
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-
-            // (D) Dual Copper Power Cables
-            ctx.beginPath();
-            ctx.moveTo(cx - 50, 155);
-            ctx.lineTo(cx - 50, 120);
-            ctx.lineTo(cx - 14, 120);
-
-            ctx.moveTo(cx - 58, 155);
-            ctx.lineTo(cx - 58, 128);
-            ctx.lineTo(cx - 14, 128);
-
-            ctx.strokeStyle = "#d97706";
-            ctx.lineWidth = 2.2;
-            ctx.lineCap = "round";
-            ctx.stroke();
+    // 2. MAIN METALLIC SHAFT COLUMN & COPPER POWER FEEDERS (Declarative for 100% Qt Design Studio Visibility)
+    Rectangle {
+        id: flaredNeck
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        width: 48
+        height: 25
+        radius: 2
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: "#60a5fa" }
+            GradientStop { position: 0.5; color: "#dbeafe" }
+            GradientStop { position: 1.0; color: "#60a5fa" }
         }
+        border.color: "#1b4c7c"
+        border.width: 1.6
     }
 
-    Connections {
-        target: homogRoot
-        function onIsRunningChanged() { homogCanvas.requestPaint(); }
+    Rectangle {
+        id: mainColumn
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        width: 44
+        height: 85
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: "#60a5fa" }
+            GradientStop { position: 0.5; color: "#dbeafe" }
+            GradientStop { position: 1.0; color: "#60a5fa" }
+        }
+        border.color: "#1b4c7c"
+        border.width: 1.6
     }
+
+    Rectangle {
+        id: lowerCollar
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 110
+        width: 28
+        height: 32
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: "#60a5fa" }
+            GradientStop { position: 0.5; color: "#dbeafe" }
+            GradientStop { position: 1.0; color: "#60a5fa" }
+        }
+        border.color: "#1b4c7c"
+        border.width: 1.6
+    }
+
+    // Dual Copper Power Feeder Lines
+    Rectangle { x: (homogRoot.width / 2) - 50; y: 120; width: 36; height: 2.2; color: "#d97706" }
+    Rectangle { x: (homogRoot.width / 2) - 50; y: 120; width: 2.2; height: 35; color: "#d97706" }
+    Rectangle { x: (homogRoot.width / 2) - 58; y: 128; width: 44; height: 2.2; color: "#d97706" }
+    Rectangle { x: (homogRoot.width / 2) - 58; y: 128; width: 2.2; height: 27; color: "#d97706" }
 
     // 3. STATOR CHAMBER (Z 163 001) - Horizontal Band with Direct Right Valve
     Rectangle {

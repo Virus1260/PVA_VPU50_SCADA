@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: heatEffectRoot
@@ -20,47 +21,45 @@ Item {
         NumberAnimation { to: 0.45; duration: 900; easing.type: Easing.InOutQuad }
     }
 
-    // 2. Outer Thermal Jacket Radiant Glow Perimeter
-    Canvas {
-        id: jacketGlowCanvas
+    // 2. Outer Thermal Jacket Radiant Glow Perimeter (Declarative Shape - 100% Qt Design Studio Visibility)
+    Shape {
+        id: jacketGlowShape
         anchors.fill: parent
         visible: heatEffectRoot.isHeating || heatEffectRoot.isCooling
         opacity: heatEffectRoot.heatPulse
+        preferredRendererType: Shape.CurveRenderer
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+        // Outer glow
+        ShapePath {
+            strokeWidth: 14.0
+            strokeColor: heatEffectRoot.isHeating ? "#73f97316" : "#7306b6d4"
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.RoundJoin
 
-            var cx = width / 2;
-            var w = width;
-            var h = height;
-
-            ctx.beginPath();
-            // Start at jacket upper left
-            ctx.moveTo(14, 138);
-            ctx.lineTo(14, 348);
-            // Torispherical bottom dish jacket curve
-            ctx.bezierCurveTo(14, 400, cx - 110, 428, cx - 22, 432);
-            ctx.lineTo(cx + 22, 432);
-            ctx.bezierCurveTo(cx + 110, 428, w - 14, 400, w - 14, 348);
-            ctx.lineTo(w - 14, 138);
-
-            ctx.lineWidth = 14.0;
-            ctx.strokeStyle = heatEffectRoot.isHeating ? "rgba(249, 115, 22, 0.45)" : "rgba(6, 182, 212, 0.45)";
-            ctx.lineCap = "round";
-            ctx.stroke();
-
-            // Inner intense core heat line
-            ctx.lineWidth = 5.0;
-            ctx.strokeStyle = heatEffectRoot.isHeating ? "#fb923c" : "#38bdf8";
-            ctx.stroke();
+            startX: 14; startY: 138
+            PathLine { x: 14; y: 348 }
+            PathCubic { control1X: 14; control1Y: 400; control2X: 70; control2Y: 432; x: 158; y: 432 }
+            PathLine { x: 202; y: 432 }
+            PathCubic { control1X: 290; control1Y: 432; control2X: 346; control2Y: 400; x: 346; y: 348 }
+            PathLine { x: 346; y: 138 }
         }
-    }
 
-    Connections {
-        target: heatEffectRoot
-        function onIsHeatingChanged() { jacketGlowCanvas.requestPaint(); }
-        function onIsCoolingChanged() { jacketGlowCanvas.requestPaint(); }
+        // Inner core line
+        ShapePath {
+            strokeWidth: 5.0
+            strokeColor: heatEffectRoot.isHeating ? "#fb923c" : "#38bdf8"
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            joinStyle: ShapePath.RoundJoin
+
+            startX: 14; startY: 138
+            PathLine { x: 14; y: 348 }
+            PathCubic { control1X: 14; control1Y: 400; control2X: 70; control2Y: 432; x: 158; y: 432 }
+            PathLine { x: 202; y: 432 }
+            PathCubic { control1X: 290; control1Y: 432; control2X: 346; control2Y: 400; x: 346; y: 348 }
+            PathLine { x: 346; y: 138 }
+        }
     }
 
     // 3. Rising Thermal Convection Micro-Bubbles inside Liquid

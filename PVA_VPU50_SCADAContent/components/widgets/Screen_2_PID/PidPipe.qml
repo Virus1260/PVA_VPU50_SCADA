@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: pipeRoot
@@ -17,57 +18,59 @@ Item {
 
     x: Math.min(startX, endX) - pipeWidth - 3
     y: Math.min(startY, endY) - pipeWidth - 3
-    width: Math.abs(endX - startX) + (pipeWidth + 3) * 2
-    height: Math.abs(endY - startY) + (pipeWidth + 3) * 2
+    width: Math.max(1, Math.abs(endX - startX)) + (pipeWidth + 3) * 2
+    height: Math.max(1, Math.abs(endY - startY)) + (pipeWidth + 3) * 2
 
-    Canvas {
-        id: pipeCanvas
+    property real localX1: startX - x
+    property real localY1: startY - y
+    property real localX2: endX - x
+    property real localY2: endY - y
+
+    // 1. BASE STATIC PIPE PATH (Native Declarative Shape - 100% Visible in Qt Design Studio 2D Canvas)
+    Shape {
+        id: basePipeShape
         anchors.fill: parent
+        preferredRendererType: Shape.CurveRenderer
 
-        property real offset: 0
+        ShapePath {
+            strokeWidth: pipeRoot.isActive ? (pipeRoot.pipeWidth + 1.2) : pipeRoot.pipeWidth
+            strokeColor: pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 2.0) : pipeRoot.baseColor
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            startX: pipeRoot.localX1
+            startY: pipeRoot.localY1
+            PathLine { x: pipeRoot.localX2; y: pipeRoot.localY2 }
+        }
+    }
 
-        NumberAnimation on offset {
-            from: 0
-            to: pipeRoot.reverseFlow ? -24 : 24
+    // 2. LIVE ACTIVE ANIMATED FLOW STREAM (Dashed Particle Overlay)
+    Shape {
+        id: activeFlowShape
+        anchors.fill: parent
+        visible: pipeRoot.isActive
+        preferredRendererType: Shape.CurveRenderer
+
+        property real flowOffset: 0.0
+
+        NumberAnimation on flowOffset {
+            from: 0.0
+            to: pipeRoot.reverseFlow ? -24.0 : 24.0
             duration: pipeRoot.flowSpeed
             loops: Animation.Infinite
             running: pipeRoot.isActive
         }
 
-        onOffsetChanged: requestPaint()
-
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-
-            var lx1 = pipeRoot.startX - pipeRoot.x;
-            var ly1 = pipeRoot.startY - pipeRoot.y;
-            var lx2 = pipeRoot.endX - pipeRoot.x;
-            var ly2 = pipeRoot.endY - pipeRoot.y;
-
-            // (A) Static Outer Pipe Wall
-            ctx.beginPath();
-            ctx.moveTo(lx1, ly1);
-            ctx.lineTo(lx2, ly2);
-            ctx.lineWidth = pipeRoot.isActive ? (pipeRoot.pipeWidth + 1.2) : pipeRoot.pipeWidth;
-            ctx.strokeStyle = pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 2.0) : pipeRoot.baseColor;
-            ctx.lineCap = "round";
-            ctx.stroke();
-
-            // (B) Live Animated Core Fluid Stream with Directional Particles
-            if (pipeRoot.isActive) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(lx1, ly1);
-                ctx.lineTo(lx2, ly2);
-                ctx.lineWidth = pipeRoot.pipeWidth;
-                ctx.strokeStyle = pipeRoot.flowColor;
-                ctx.setLineDash([8, 6]);
-                ctx.lineDashOffset = -offset;
-                ctx.lineCap = "round";
-                ctx.stroke();
-                ctx.restore();
-            }
+        ShapePath {
+            strokeWidth: pipeRoot.pipeWidth
+            strokeColor: pipeRoot.flowColor
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            strokeStyle: ShapePath.DashLine
+            dashPattern: [4, 3]
+            dashOffset: activeFlowShape.flowOffset
+            startX: pipeRoot.localX1
+            startY: pipeRoot.localY1
+            PathLine { x: pipeRoot.localX2; y: pipeRoot.localY2 }
         }
     }
 }

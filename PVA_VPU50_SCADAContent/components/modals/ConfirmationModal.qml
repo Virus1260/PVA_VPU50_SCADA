@@ -5,9 +5,11 @@ import "../../config"
 
 Rectangle {
     id: confirmRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#bb000000"
-    visible: false
     z: 999
 
     ScadaConfig { id: scadaConfig }
@@ -30,8 +32,8 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(680, Math.min(parent.width * 0.75, 840))
-        height: Math.max(500, Math.min(parent.height * 0.85, 620))
+        width: 720
+        height: 520
         color: "#08213b"
         border.color: "#184d7e"
         border.width: 2

@@ -126,7 +126,7 @@ Item {
         };
 
         if (map.hasOwnProperty(name)) {
-            return map[name];
+            return Qt.resolvedUrl(map[name]);
         }
         return "";
     }
@@ -136,7 +136,7 @@ Item {
         anchors.fill: parent
         anchors.margins: 1
         visible: source.toString() !== ""
-        source: rootIcon.resolveSource(rootIcon.iconName)
+        source: rootIcon.resolveSource(rootIcon.iconName !== "" ? rootIcon.iconName : "status_stack")
         fillMode: Image.PreserveAspectFit
         mipmap: true
         smooth: true

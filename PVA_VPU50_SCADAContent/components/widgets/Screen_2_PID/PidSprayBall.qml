@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: sprayRoot
@@ -7,82 +8,76 @@ Item {
 
     property string tag: "X 165 501"
     property bool isSpraying: false
-    property real sprayAngle: 0.0 // 0 = straight down, 40 = angled right
+    property real sprayAngle: 0.0 // 0 = straight down, -35 = angled right
     property bool showTags: true
 
-    Canvas {
-        id: sprayCanvas
-        anchors.fill: parent
+    Item {
+        id: rotatedHead
+        x: (parent.width - width) / 2
+        y: 6
+        width: 24
+        height: 32
+        transformOrigin: Item.Top
+        rotation: sprayRoot.sprayAngle
 
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-
-            var cx = width / 2;
-
-            ctx.save();
-            ctx.translate(cx, 6);
-            ctx.rotate(sprayRoot.sprayAngle * Math.PI / 180);
-
-            // 1. Pipe Stem
-            ctx.beginPath();
-            ctx.moveTo(0, -6);
-            ctx.lineTo(0, 4);
-            ctx.strokeStyle = "#52a5ec";
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-
-            // 2. Collar Coupling Ring (Dark bracket)
-            ctx.beginPath();
-            ctx.rect(-4, 4, 8, 4);
-            ctx.fillStyle = "#1e293b";
-            ctx.fill();
-            ctx.strokeStyle = "#38bdf8";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // 3. Bell-Shaped Slotted Spray Head (Exact EKATO silhouette)
-            ctx.beginPath();
-            ctx.moveTo(-6.5, 9);
-            ctx.lineTo(6.5, 9);
-            ctx.lineTo(8, 16);
-            ctx.arc(0, 16, 8, 0, Math.PI, false);
-            ctx.lineTo(-8, 16);
-            ctx.closePath();
-
-            ctx.fillStyle = sprayRoot.isSpraying ? "#4ade80" : "#ffffff";
-            ctx.fill();
-            ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.6;
-            ctx.stroke();
-
-            // 3 Vertical discharge slit grooves
-            ctx.beginPath();
-            ctx.moveTo(-3.5, 13);
-            ctx.lineTo(-3.5, 21);
-            ctx.moveTo(0, 12);
-            ctx.lineTo(0, 22);
-            ctx.moveTo(3.5, 13);
-            ctx.lineTo(3.5, 21);
-            ctx.strokeStyle = sprayRoot.isSpraying ? "#15803d" : "#94a3b8";
-            ctx.lineWidth = 1.3;
-            ctx.lineCap = "round";
-            ctx.stroke();
-
-            ctx.restore();
+        // 1. Pipe Stem
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: -6
+            width: 3
+            height: 10
+            color: "#52a5ec"
         }
-    }
 
-    Connections {
-        target: sprayRoot
-        function onIsSprayingChanged() { sprayCanvas.requestPaint(); }
+        // 2. Collar Coupling Ring
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 4
+            width: 8
+            height: 4
+            color: "#1e293b"
+            border.color: "#38bdf8"
+            border.width: 1
+            radius: 1
+        }
+
+        // 3. Bell-Shaped Slotted Spray Head
+        Rectangle {
+            id: headBody
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 8
+            width: 16
+            height: 16
+            radius: 8
+            color: sprayRoot.isSpraying ? "#4ade80" : "#ffffff"
+            border.color: "#1b4c7c"
+            border.width: 1.5
+
+            // Vertical discharge slit grooves
+            Row {
+                anchors.centerIn: parent
+                spacing: 3
+                Repeater {
+                    model: 3
+                    Rectangle {
+                        width: 1.2
+                        height: 9
+                        radius: 0.6
+                        color: sprayRoot.isSpraying ? "#15803d" : "#94a3b8"
+                    }
+                }
+            }
+        }
     }
 
     // Tag text below the head (e.g. X 165 501)
     Text {
         visible: sprayRoot.showTags
-        anchors.top: sprayCanvas.bottom
-        anchors.topMargin: -12
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 2
         anchors.horizontalCenter: parent.horizontalCenter
         text: sprayRoot.tag
         color: "#8cb5dc"

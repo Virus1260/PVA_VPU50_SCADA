@@ -4,9 +4,11 @@ import "../../widgets"
 
 Rectangle {
     id: extModalRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#bb000000"
-    visible: false
     z: 999
 
     property string selectedMode: "Discharge Circulation"

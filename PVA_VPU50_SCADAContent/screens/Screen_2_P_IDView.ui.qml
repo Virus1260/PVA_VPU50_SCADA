@@ -75,7 +75,8 @@ Rectangle {
             y: 41
             anchors.horizontalCenter: mainVessel.horizontalCenter
             anchors.top: mainVessel.top
-            anchors.topMargin: -70
+            anchors.topMargin: -69
+            anchors.horizontalCenterOffset: 0
             z: 3
             showTags: pidViewRoot.showTags
         }

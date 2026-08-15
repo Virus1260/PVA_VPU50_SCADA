@@ -4,9 +4,11 @@ import QtQuick.Layouts
 
 Rectangle {
     id: deleteModalRoot
-    anchors.fill: parent
+    implicitWidth: 1024
+    implicitHeight: 600
+    width: 1024
+    height: 600
     color: "#bb000000"
-    visible: false
     z: 999
 
     property string message: "Are you sure you want to delete this recipe? This action cannot be undone."
