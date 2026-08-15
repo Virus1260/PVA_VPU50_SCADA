@@ -13,7 +13,7 @@ Item {
     property bool showTags: true
 
     property int currentFrame: 0
-    readonly property int totalFrames: 18
+    readonly property int totalFrames: 36
 
     // Dynamic Multi-Frame SVG Rotation Animation (Speed Proportional to Control Screen Target RPM)
     NumberAnimation {

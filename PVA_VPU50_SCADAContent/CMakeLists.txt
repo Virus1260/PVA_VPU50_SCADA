@@ -154,6 +154,9 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "assets/agitator_sequence/agitator_frame_02.svg"
         "assets/agitator_sequence/agitator_frame_16.svg"
         "assets/agitator_sequence/agitator_frame_11.svg"
+        "assets/agitator_sequence/agitator_frame_20.svg"
+        "assets/agitator_sequence/agitator_frame_19.svg"
+        "assets/agitator_sequence/agitator_frame_18.svg"
 )
 
 

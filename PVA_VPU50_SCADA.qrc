@@ -26,6 +26,9 @@
         <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_15.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_16.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_17.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_18.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_19.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_20.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_sequence.json</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_check.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_warning.svg</file>
@@ -150,6 +153,9 @@
         <file>qtquickcontrols2.conf</file>
         <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/agitator_sequence.json</file>
         <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/rotation_comparison_report.json</file>
+        <file>scratch/02_extract_mp4_agitator_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/03_extract_screen_recording_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/04_extract_no_reflection_agitator_frames/output_frames/agitator_sequence.json</file>
         <file>vercel.json</file>
     </qresource>
 </RCC>

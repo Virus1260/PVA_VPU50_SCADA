@@ -1,58 +1,38 @@
-# 01 - Agitator GIF Frame Extraction & SVG Vectorization Pipeline
+# 01 - Agitator GIF Frame Extraction & Vectorization Pipeline
 
-This automated tool extracts individual animation frames from an agitator animation GIF (`My Video-1.gif`), processes each frame to make the background transparent, and converts/vectorizes each frame into high-fidelity SVG and high-resolution PNG assets for industrial SCADA HMI animation.
+This tool was the initial iteration created to extract animation frames from the source GIF (`My Video-1.gif`), filter hold/duplicate frames across 360°, and convert them into SVG assets.
 
 ---
 
-## Prerequisites & Environment Setup
+## Technical Context & Method
 
-Use the project's shared virtual environment located in `scratch/.venv`:
+- **Input Media**: `C:\Users\Shekhar\Videos\My Video-1.gif` (28 raw frames, 646x770 resolution)
+- **Mathematical Frame Comparison**: Computed Root Mean Square (RMS) difference matrices across consecutive frames to detect 18 distinct rotational keyframes (removing 10 hold/pause frames).
+- **Segmentation Method**: Classical luminance and color-distance thresholding with Pillow and OpenCV.
+- **Vector Engine**: Rust-based `vtracer` converting transparent PNGs into SVGs.
+
+---
+
+## Classical Thresholding Limitations Discovered
+
+1. **Specular Highlight Blind Spot**:
+   - The GIF had an off-white background (`#FFFFFF` / `#F8F8F8`).
+   - When the metallic agitator blades rotated, specular reflection highlights on the arms and shaft reached brightness levels near `#FFFFFF`.
+   - Classical luminance thresholding (`luminance > 220`) could not distinguish white background from bright chrome highlights, causing light-reflecting metallic arms to become partially transparent.
+2. **Quantization Noise in 8-Bit Palettes**:
+   - GIF format's 256-color palette caused micro-dithering along the blade edges, creating minor contour jitter when vectorized.
+
+---
+
+## Execution Guide
 
 ```powershell
-# 1. Activate the virtual environment
+# 1. Activate the shared scratch virtual environment
 ..\.venv\Scripts\Activate.ps1
 
-# 2. Install required dependencies
-pip install -r requirements.txt
-```
+# 2. Run the extraction and vectorization pipeline
+python extract_frames_to_svg.py --export-scada
 
----
-
-## How to Run
-
-Run the Python extraction script:
-
-```powershell
-# Run with default GIF path (C:\Users\Shekhar\Videos\My Video-1.gif)
-python extract_frames_to_svg.py
-
-# Or specify a custom GIF path and output directory:
-python extract_frames_to_svg.py --gif-path "C:\Users\Shekhar\Videos\My Video-1.gif" --export-scada
-```
-
----
-
-## Features
-
-1. **Alpha Background Separation**:
-   - Removes solid/off-white background colors (`#FFFFFF` and yellowish compression artifacts) while retaining the full metallic detail and shading of the agitator impeller blades and shaft.
-2. **Dual-Format Asset Generation**:
-   - **SVG (`.svg`)**: Crisp, infinitely scalable vector curves generated via Rust-based `vtracer` engine.
-   - **PNG (`.png`)**: Pixel-perfect transparent raster frames.
-3. **Automated SCADA Deployment**:
-   - Copies generated assets directly into `PVA_VPU50_SCADAContent/assets/agitator_sequence/`.
-   - Generates a frame sequence manifest `agitator_sequence.json`.
-
----
-
-## File Structure
-
-```
-01_extract_agitator_gif_frames_to_svg/
-├── README.md                  # Documentation and execution guide
-├── requirements.txt           # Python dependencies
-├── extract_frames_to_svg.py   # Main extraction and vectorization script
-└── output_frames/             # Generated frame outputs
-    ├── png/                   # Transparent PNG frames (00..27)
-    └── svg/                   # Vectorized SVG frames (00..27)
+# 3. Validate rotational distinctness
+python compare_frames.py
 ```
