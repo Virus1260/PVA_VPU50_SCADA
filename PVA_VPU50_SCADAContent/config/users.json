@@ -1,0 +1,47 @@
+{
+  "system": "PVA Systems VPU-50 Industrial SCADA",
+  "compliance": "FDA 21 CFR Part 11 & GAMP 5",
+  "default_user_id": "operator",
+  "users": [
+    {
+      "id": "operator",
+      "name": "Line Operator",
+      "role": "Operator (Level 1)",
+      "level": 1,
+      "pin": "1234",
+      "description": "Standard production line operation, alarm acknowledgement, process start/stop."
+    },
+    {
+      "id": "supervisor",
+      "name": "Production Supervisor",
+      "role": "Supervisor (Level 2)",
+      "level": 2,
+      "pin": "2345",
+      "description": "Recipe parameter adjustment, batch phase verification, alarm limit overrides."
+    },
+    {
+      "id": "qa_officer",
+      "name": "Florian Rismondo",
+      "role": "QA Officer (21 CFR Part 11)",
+      "level": 3,
+      "pin": "3456",
+      "description": "Electronic Batch Record sign-off, audit trail verification, batch release."
+    },
+    {
+      "id": "engineer",
+      "name": "Service Engineer",
+      "role": "Maintenance (Level 4)",
+      "level": 4,
+      "pin": "4567",
+      "description": "Hardware I/O diagnostics, motor VFD calibration, forced valve overrides."
+    },
+    {
+      "id": "admin",
+      "name": "System Administrator",
+      "role": "Administrator (Level 5)",
+      "level": 5,
+      "pin": "9999",
+      "description": "Full unrestricted system access, user management, security audit log export."
+    }
+  ]
+}

@@ -16,6 +16,7 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "components/modals/NumericKeypadModal.qml"
         "components/modals/PlantModeModal.qml"
         "components/modals/LoginModal.qml"
+        "components/modals/LoginModal.qml"
         "components/modals/Screen_1_Control/AgitatorModeModal.qml"
         "components/modals/Screen_1_Control/ExternalLineModeModal.qml"
         "components/modals/Screen_1_Control/FillingModeModal.qml"
@@ -42,6 +43,11 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "screens/Screen_7_Playback.qml"
         "screens/Screen_8_Diagnostics.qml"
     RESOURCES
+        "config/motor_specs.json"
+        "config/plc_commands.json"
+        "config/row_visibility.json"
+        "config/users.json"
+        "config/valves.json"
         "assets/ekato_endsfoil.svg"
         "assets/ekato_paravisc.svg"
         "assets/ekato_paravisc_00.svg"
@@ -183,6 +189,11 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "assets/icons/nav/status_stack.svg"
         "assets/icons/nav/tools_maintenance.svg"
         "assets/icons/nav/trends_chart.svg"
+        "config/motor_specs.json"
+        "config/valves.json"
+        "config/users.json"
+        "config/row_visibility.json"
+        "config/plc_commands.json"
 )
 
 
