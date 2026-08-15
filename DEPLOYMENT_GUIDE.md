@@ -144,6 +144,12 @@
      ```
   2. Request `-m qtquicktimeline qtshadertools` during CI installation.
 
+### Issue 9: CMake Target Name Collision (`add_library cannot create target`)
+- **Symptom**: `add_library cannot create target "PVA_VPU50_SCADA" because another target with the same name already exists. The existing target is an executable created in source directory.`
+- **Root Cause**: The root project was named `project(PVA_VPU50_SCADA)` which created an executable target named `PVA_VPU50_SCADA`. When the subdirectory `PVA_VPU50_SCADA` tried to create its static QML library module target, CMake failed due to duplicate target names.
+- **Solution**:
+  Name the root executable project `project(PVA_VPU50_SCADAApp LANGUAGES CXX)` in root `CMakeLists.txt`.
+
 ---
 
 ## 3. Complete, Production-Ready GitHub Actions Workflow

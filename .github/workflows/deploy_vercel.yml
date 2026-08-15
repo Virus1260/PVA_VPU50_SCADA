@@ -42,7 +42,11 @@ jobs:
           $HOME/Qt/6.8.2/wasm_singlethread/bin/qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja -DQT_HOST_PATH=$HOME/Qt/6.8.2/gcc_64
           cmake --build build_wasm --parallel $(nproc)
           mkdir -p dist
-          cp -r build_wasm/App/* dist/ 2>/dev/null || cp -r build_wasm/* dist/ 2>/dev/null
+          cp -r build_wasm/App/* dist/ 2>/dev/null || true
+          cp -r build_wasm/* dist/ 2>/dev/null || true
+          if [ -f "dist/PVA_VPU50_SCADAApp.html" ]; then
+            cp dist/PVA_VPU50_SCADAApp.html dist/index.html
+          fi
           cp vercel.json dist/ 2>/dev/null || true
 
       - name: Deploy to Vercel

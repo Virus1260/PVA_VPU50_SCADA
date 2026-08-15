@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.21.1)
 option(LINK_INSIGHT "Link Qt Insight Tracker library" ON)
 option(BUILD_QDS_COMPONENTS "Build design studio components" ON)
 
-project(PVA_VPU50_SCADA LANGUAGES CXX)
+project(PVA_VPU50_SCADAApp LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
