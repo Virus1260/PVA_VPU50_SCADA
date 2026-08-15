@@ -3,132 +3,130 @@ import QtQuick.Layouts
 
 Item {
     id: lifterRoot
-    width: 190
-    height: 420
+    width: 170
+    height: 440
 
     property bool isLidRaised: false
     property bool showTags: true
 
-    // 1. TOP HORIZONTAL LIFT BRACKET
+    // 1. TOP HORIZONTAL LIFTING ARM (Extending from Lid Right Shoulder)
     Rectangle {
         anchors.top: parent.top
-        anchors.topMargin: 15
+        anchors.topMargin: 20
         anchors.left: parent.left
-        anchors.right: guideRod.horizontalCenter
-        height: 5
+        anchors.right: screwColumn.horizontalCenter
+        height: 6
         color: "#64748b"
         radius: 2
     }
 
-    // 2. VERTICAL GUIDE ROD
+    // 2. VERTICAL ELECTRIC PRECISION SCREW COLUMN
     Rectangle {
-        id: guideRod
-        anchors.right: parent.right
-        anchors.rightMargin: 70
+        id: screwColumn
+        anchors.left: parent.left
+        anchors.leftMargin: 80
         anchors.top: parent.top
-        anchors.topMargin: 15
-        anchors.bottom: hydraulicBase.top
-        width: 3.5
+        anchors.topMargin: 10
+        anchors.bottom: electricGearBox.top
+        width: 5
         color: "#cbd5e1"
+
+        // Screw Thread Hatchings
+        Canvas {
+            anchors.fill: parent
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.clearRect(0, 0, width, height);
+                ctx.strokeStyle = "#94a3b8";
+                ctx.lineWidth = 1;
+                for (var y = 0; y < height; y += 8) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y + 3);
+                    ctx.stroke();
+                }
+            }
+        }
     }
 
-    // 3. TOP PROXIMITY SENSORS
+    // 3. TOP POSITION & INTERLOCK SENSORS (Spaced cleanly without overlapping)
     ColumnLayout {
-        anchors.left: guideRod.right
-        anchors.leftMargin: 8
+        anchors.left: screwColumn.right
+        anchors.leftMargin: 10
         anchors.top: parent.top
-        anchors.topMargin: 2
-        spacing: 3
+        anchors.topMargin: 4
+        spacing: 4
         visible: lifterRoot.showTags
 
         RowLayout {
-            spacing: 4
-            Rectangle { width: 7; height: 7; radius: 3.5; color: lifterRoot.isLidRaised ? "#22c55e" : "#475569" }
-            Text { text: "GOSH 164 003"; color: "#8cb5dc"; font.pixelSize: 7 }
+            spacing: 5
+            Rectangle { width: 8; height: 8; radius: 4; color: lifterRoot.isLidRaised ? "#22c55e" : "#64748b" }
+            Text { text: "GOSH 164 003"; color: "#8cb5dc"; font.pixelSize: 8 }
         }
         RowLayout {
-            spacing: 4
-            Rectangle { width: 7; height: 7; radius: 3.5; color: !lifterRoot.isLidRaised ? "#22c55e" : "#475569" }
-            Text { text: "GOSL 164 002"; color: "#8cb5dc"; font.pixelSize: 7 }
+            spacing: 5
+            Rectangle { width: 8; height: 8; radius: 4; color: !lifterRoot.isLidRaised ? "#22c55e" : "#64748b" }
+            Text { text: "GOSL 164 002"; color: "#8cb5dc"; font.pixelSize: 8 }
         }
         RowLayout {
-            spacing: 4
-            Rectangle { width: 7; height: 7; radius: 3.5; color: "#eab308" }
-            Text { text: "GZ 164 001"; color: "#8cb5dc"; font.pixelSize: 7 }
+            spacing: 5
+            Rectangle { width: 8; height: 8; radius: 4; color: "#eab308" }
+            Text { text: "GZ 164 001"; color: "#8cb5dc"; font.pixelSize: 8 }
         }
     }
 
-    // 4. BOTTOM HYDRAULIC BASE BRACKET
+    // 4. BOTTOM ELECTRIC SCREW-JACK GEARBOX BASE
     Rectangle {
-        id: hydraulicBase
-        anchors.right: guideRod.right
-        anchors.rightMargin: -10
+        id: electricGearBox
+        anchors.left: screwColumn.left
+        anchors.leftMargin: -12
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 60
-        width: 28
-        height: 16
-        radius: 2
-        color: "#c28b53"
-        border.color: "#d97706"
-        border.width: 1
-    }
-
-    // 5. SWIVELLING DEVICE MINI VESSEL
-    Rectangle {
-        id: swivelVessel
-        anchors.top: hydraulicBase.bottom
-        anchors.topMargin: 12
-        anchors.left: hydraulicBase.left
-        anchors.leftMargin: 16
-        width: 34
-        height: 20
-        radius: 2
-        color: "#c28b53"
-        border.color: "#d97706"
-        border.width: 1
+        width: 30
+        height: 24
+        radius: 3
+        color: "#1e3a5f"
+        border.color: "#3b82f6"
+        border.width: 1.2
 
         Text {
             anchors.centerIn: parent
-            text: "Z 164 001"
-            color: "#ffffff"
+            text: "GEAR"
+            color: "#93c5fd"
             font.bold: true
             font.pixelSize: 6
         }
     }
 
-    // Swivel Text & Sensors
-    ColumnLayout {
-        anchors.top: swivelVessel.bottom
-        anchors.topMargin: 2
-        anchors.horizontalCenter: swivelVessel.horizontalCenter
-        spacing: 1
-        visible: lifterRoot.showTags
-
-        Text { text: "Swivelling\ndevice"; color: "#94a3b8"; font.pixelSize: 7; horizontalAlignment: Text.AlignHCenter }
-
-        RowLayout {
-            spacing: 3
-            Rectangle { width: 5; height: 5; radius: 2.5; color: "#22c55e" }
-            Text { text: "GOSL 164 004"; color: "#8cb5dc"; font.pixelSize: 6 }
-        }
-    }
-
-    // Swivel Drive Motor M 164 001
+    // 5. ELECTRIC DRIVE MOTOR M 164 001 (Electric Actuator)
     RowLayout {
-        anchors.left: swivelVessel.right
-        anchors.leftMargin: 6
-        anchors.verticalCenter: swivelVessel.verticalCenter
-        spacing: 4
+        anchors.left: electricGearBox.right
+        anchors.leftMargin: 8
+        anchors.verticalCenter: electricGearBox.verticalCenter
+        spacing: 6
 
         Rectangle {
-            width: 16
-            height: 16
-            radius: 8
+            width: 22
+            height: 22
+            radius: 11
             color: "#0d2847"
             border.color: "#3b82f6"
-            border.width: 1
-            Text { anchors.centerIn: parent; text: "M"; color: "#ffffff"; font.pixelSize: 8; font.bold: true }
+            border.width: 1.5
+
+            Text {
+                anchors.centerIn: parent
+                text: "M"
+                color: "#ffffff"
+                font.bold: true
+                font.pixelSize: 10
+            }
         }
-        Text { visible: lifterRoot.showTags; text: "M 164 001"; color: "#8cb5dc"; font.pixelSize: 7 }
+
+        ColumnLayout {
+            spacing: 0
+            visible: lifterRoot.showTags
+            Text { text: "M 164 001"; color: "#ffffff"; font.bold: true; font.pixelSize: 8 }
+            Text { text: "Lid Motor"; color: "#8cb5dc"; font.pixelSize: 7 }
+        }
     }
 }

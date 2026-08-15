@@ -134,7 +134,6 @@ Rectangle {
                 isDragging = false;
             }
 
-            // Mouse Wheel Relative Zooming at Current Cursor Location
             onWheel: function(wheel) {
                 var factor = wheel.angleDelta.y > 0 ? 1.12 : 0.88;
                 var oldZoom = pidScreenRoot.zoomScale;
@@ -169,11 +168,9 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (A) LEFT-SIDE UTILITY MANIFOLD GRID (Steam, Water, Gas, Venting)
         // ---------------------------------------------------------------------
-        // Vertical Headers
         PidPipe { startX: 60; startY: 250; endX: 60; endY: 580; baseColor: "#1b538c" }
         PidPipe { startX: 130; startY: 250; endX: 130; endY: 580; baseColor: "#1b538c" }
 
-        // Manifold Valves
         PidValve { x: 47; y: 260; tag: "K 168 201"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 201"); onClicked: pidScreenRoot.componentTapped(tag) }
         PidValve { x: 117; y: 260; tag: "K 168 202"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 202"); onClicked: pidScreenRoot.componentTapped(tag) }
         PidValve { x: 47; y: 320; tag: "K 168 204"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 204"); onClicked: pidScreenRoot.componentTapped(tag) }
@@ -183,64 +180,81 @@ Rectangle {
         PidValve { x: 47; y: 460; tag: "K 168 207"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 207"); onClicked: pidScreenRoot.componentTapped(tag) }
 
         // Thermal Jacket Feed Pipes
-        PidPipe { startX: 130; startY: 334; endX: 410; endY: 334; baseColor: "#1b538c"; isActive: scadaBridge.isHeating || scadaBridge.isCooling; flowColor: scadaBridge.isHeating ? "#f97316" : "#06b6d4" }
-        PidPipe { startX: 130; startY: 474; endX: 340; endY: 474; baseColor: "#1b538c" }
-        PidPipe { startX: 340; startY: 474; endX: 340; endY: 420; baseColor: "#1b538c" }
-        PidPipe { startX: 340; startY: 420; endX: 410; endY: 420; baseColor: "#1b538c" }
-        PidValve { x: 327; y: 460; tag: "K 172 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 172 002"); onClicked: pidScreenRoot.componentTapped(tag) }
+        PidPipe { startX: 130; startY: 334; endX: 395; endY: 334; baseColor: "#1b538c"; isActive: scadaBridge.isHeating || scadaBridge.isCooling; flowColor: scadaBridge.isHeating ? "#f97316" : "#06b6d4" }
+        PidPipe { startX: 130; startY: 474; endX: 330; endY: 474; baseColor: "#1b538c" }
+        PidPipe { startX: 330; startY: 474; endX: 330; endY: 420; baseColor: "#1b538c" }
+        PidPipe { startX: 330; startY: 420; endX: 395; endY: 420; baseColor: "#1b538c" }
+        PidValve { x: 317; y: 460; tag: "K 172 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 172 002"); onClicked: pidScreenRoot.componentTapped(tag) }
 
         // ---------------------------------------------------------------------
         // (B) GAS INLET & TOP DOME FEED LINES
         // ---------------------------------------------------------------------
-        PidPipe { startX: 20; startY: 170; endX: 330; endY: 170; baseColor: "#1b538c" }
-        PidPipe { startX: 330; startY: 170; endX: 330; endY: 125; baseColor: "#1b538c" }
-        PidPipe { startX: 330; startY: 125; endX: 460; endY: 125; baseColor: "#1b538c" }
-        Text { visible: pidScreenRoot.showTags; x: 25; y: 154; text: "gas inlet"; color: "#8cb5dc"; font.pixelSize: 8 }
-        PidValve { x: 317; y: 156; tag: "K 166 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 166 002"); onClicked: pidScreenRoot.componentTapped(tag) }
+        PidPipe { startX: 20; startY: 180; endX: 300; endY: 180; baseColor: "#1b538c" }
+        PidPipe { startX: 300; startY: 180; endX: 300; endY: 125; baseColor: "#1b538c" }
+        PidPipe { startX: 300; startY: 125; endX: 430; endY: 125; baseColor: "#1b538c" }
+        Text { visible: pidScreenRoot.showTags; x: 25; y: 164; text: "gas inlet"; color: "#8cb5dc"; font.pixelSize: 8 }
+        PidValve { x: 287; y: 166; tag: "K 166 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 166 002"); onClicked: pidScreenRoot.componentTapped(tag) }
 
-        // Top CIP Spray Cleaning Line
-        PidPipe { startX: 340; startY: 60; endX: 620; endY: 60; baseColor: "#1b538c" }
-        PidPipe { startX: 370; startY: 60; endX: 370; endY: 115; baseColor: "#1b538c" }
-        PidPipe { startX: 430; startY: 60; endX: 430; endY: 115; baseColor: "#1b538c" }
-        PidPipe { startX: 570; startY: 60; endX: 570; endY: 115; baseColor: "#1b538c" }
-        PidPipe { startX: 620; startY: 60; endX: 620; endY: 115; baseColor: "#1b538c" }
+        // Vacuum Transmitter Pill PIC 161001 (Spaced cleanly outside dome)
+        Rectangle {
+            x: 230
+            y: 95
+            width: 76
+            height: 26
+            radius: 3
+            color: "#0b2e54"
+            border.color: "#1d609e"
+            border.width: 1
+            visible: pidScreenRoot.showTags
 
-        PidValve { x: 357; y: 46; tag: "K 161 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 161 002"); onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { x: 417; y: 46; tag: "K 161 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 161 003"); onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { x: 557; y: 85; tag: "K 141 001"; isVertical: true; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 141 001"); onClicked: pidScreenRoot.componentTapped(tag) }
+            ColumnLayout {
+                anchors.centerIn: parent
+                spacing: 0
+                Text { text: "PIC 161001"; color: "#8cb5dc"; font.pixelSize: 7; Layout.alignment: Qt.AlignHCenter }
+                Text { text: scadaBridge.vacuumPressure.toFixed(0) + "mbar"; color: "#93c5fd"; font.bold: true; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
+            }
+        }
+
+        // Top CIP Spray Cleaning Header Line
+        PidPipe { startX: 330; startY: 40; endX: 610; endY: 40; baseColor: "#1b538c" }
+        PidPipe { startX: 360; startY: 40; endX: 360; endY: 95; baseColor: "#1b538c" }
+        PidPipe { startX: 430; startY: 40; endX: 430; endY: 95; baseColor: "#1b538c" }
+        PidPipe { startX: 490; startY: 40; endX: 490; endY: 95; baseColor: "#1b538c" }
+        PidPipe { startX: 600; startY: 40; endX: 600; endY: 95; baseColor: "#1b538c" }
+
+        PidValve { x: 347; y: 26; tag: "K 161 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 161 002"); onClicked: pidScreenRoot.componentTapped(tag) }
+        PidValve { x: 417; y: 26; tag: "K 161 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 161 003"); onClicked: pidScreenRoot.componentTapped(tag) }
+
+        // Vacuum Extraction Valve
+        PidValve { x: 477; y: 55; tag: "K 171 001"; isVertical: true; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isVacuumActive; onClicked: pidScreenRoot.componentTapped(tag) }
 
         // Top Solids Charging Hopper / Funnel
         Canvas {
-            x: 557; y: 55; width: 26; height: 26
+            x: 638; y: 15; width: 26; height: 26
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.beginPath();
-                ctx.moveTo(3, 3);
-                ctx.lineTo(23, 3);
-                ctx.lineTo(15, 20);
-                ctx.lineTo(11, 20);
+                ctx.moveTo(2, 2);
+                ctx.lineTo(24, 2);
+                ctx.lineTo(16, 22);
+                ctx.lineTo(10, 22);
                 ctx.closePath();
                 ctx.fillStyle = "#8ec4f0";
                 ctx.fill();
                 ctx.strokeStyle = "#1b4c7c";
+                ctx.lineWidth = 1.2;
                 ctx.stroke();
             }
         }
-
-        // Vacuum Extraction Valve
-        PidValve { x: 417; y: 80; tag: "K 171 001"; isVertical: true; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isVacuumActive; onClicked: pidScreenRoot.componentTapped(tag) }
-
-        // Spray Ball Heads inside Top Dome
-        PidSprayBall { x: 445; y: 118; tag: "X 161 001"; isSpraying: false }
-        PidSprayBall { x: 515; y: 118; tag: "X 161 002"; isSpraying: false }
-        PidSprayBall { x: 550; y: 118; tag: "X 161 003"; isSpraying: scadaBridge.isHomogenizerRunning }
+        PidPipe { startX: 651; startY: 38; endX: 651; endY: 100; baseColor: "#1b538c" }
+        PidValve { x: 638; y: 55; tag: "K 141 001"; isVertical: true; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 141 001"); onClicked: pidScreenRoot.componentTapped(tag) }
 
         // ---------------------------------------------------------------------
         // (C) HERO PROCESS VESSEL (UNIMIX 50 / B1)
         // ---------------------------------------------------------------------
         PidVessel {
             id: mainVessel
-            x: 390
+            x: 370
             y: 70
             vesselName: "Unimix 50"
             levelPercent: scadaBridge.vesselLevelPercent
@@ -257,37 +271,64 @@ Rectangle {
         PidAgitator {
             anchors.horizontalCenter: mainVessel.horizontalCenter
             anchors.top: mainVessel.top
-            anchors.topMargin: -12
+            anchors.topMargin: -32
             speedRpm: scadaBridge.agitatorSpeed
             isRunning: scadaBridge.isAgitatorRunning
             showTags: pidScreenRoot.showTags
         }
 
-        // Bottom High-Shear Homogenizer Rotor/Stator Chamber
-        PidHomogenizer {
-            anchors.horizontalCenter: mainVessel.horizontalCenter
-            anchors.top: mainVessel.bottom
-            anchors.topMargin: -32
-            speedRpm: scadaBridge.homogenizerSpeed
-            isRunning: scadaBridge.isHomogenizerRunning
-            showTags: pidScreenRoot.showTags
+        // 3 Authentic Hanging Spray Balls in Top Dome
+        PidSprayBall {
+            x: 440
+            y: 145
+            tag: "X 161 001"
+            isSpraying: false
+        }
+        PidSprayBall {
+            x: 588
+            y: 145
+            tag: "X 161 002"
+            isSpraying: false
+        }
+        PidSprayBall {
+            x: 630
+            y: 158
+            tag: "X 161 003"
+            sprayAngle: 30
+            isSpraying: scadaBridge.isHomogenizerRunning
         }
 
         // ---------------------------------------------------------------------
-        // (D) EXTERNAL HOMOGENIZATION RECIRCULATION LOOP (Bottom -> Top Dome)
+        // (D) BOTTOM HIGH-SHEAR HOMOGENIZER ROTOR/STATOR CHAMBER
         // ---------------------------------------------------------------------
-        PidPipe { startX: 570; startY: 435; endX: 680; endY: 435; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
-        PidPipe { startX: 680; startY: 435; endX: 680; endY: 135; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
-        PidPipe { startX: 680; startY: 135; endX: 580; endY: 135; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidHomogenizer {
+            id: bottomHomog
+            x: 370
+            y: 415
+            speedRpm: scadaBridge.homogenizerSpeed
+            isRunning: scadaBridge.isHomogenizerRunning
+            showTags: pidScreenRoot.showTags
+            onSuctionSolidsClicked: pidScreenRoot.componentTapped("K 143 002")
+            onSuctionLiquidsClicked: pidScreenRoot.componentTapped("K 143 001")
+            onStatorValveClicked: pidScreenRoot.componentTapped("Z 163 001")
+            onRecircValveClicked: pidScreenRoot.componentTapped("K 163 002")
+            onSuctionBottomClicked: pidScreenRoot.componentTapped("V 142 201")
+        }
 
-        PidValve { x: 545; y: 421; tag: "K 163 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { x: 615; y: 421; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { x: 620; y: 121; tag: "K 165 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
+        // ---------------------------------------------------------------------
+        // (E) EXTERNAL HOMOGENIZATION RECIRCULATION LOOP (Bottom -> Top Dome)
+        // ---------------------------------------------------------------------
+        PidPipe { startX: 620; startY: 470; endX: 790; endY: 470; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidPipe { startX: 790; startY: 470; endX: 790; endY: 140; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
+        PidPipe { startX: 790; startY: 140; endX: 642; endY: 140; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+
+        PidValve { x: 777; y: 456; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
+        PidValve { x: 715; y: 126; tag: "K 165 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
 
         // Sensor Indicator GOS 172 601 on Vertical Riser
         Rectangle {
-            x: 688
-            y: 410
+            x: 798
+            y: 430
             width: 8
             height: 8
             radius: 4
@@ -296,32 +337,11 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // (E) SUCTION INLETS (Solids, Liquids, Foot Switch & Bottom Drain)
-        // ---------------------------------------------------------------------
-        PidPipe { startX: 420; startY: 415; endX: 530; endY: 415; baseColor: "#1b538c" }
-        PidPipe { startX: 420; startY: 445; endX: 530; endY: 445; baseColor: "#1b538c" }
-
-        PidValve { x: 440; y: 401; tag: "K 143 002"; subLabel: "Solids"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 143 002"); onClicked: pidScreenRoot.componentTapped(tag) }
-        PidValve { x: 440; y: 431; tag: "K 143 001"; subLabel: "Liquids"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 143 001"); onClicked: pidScreenRoot.componentTapped(tag) }
-
-        RowLayout {
-            x: 395
-            y: 460
-            spacing: 4
-            visible: pidScreenRoot.showTags
-            Rectangle { width: 8; height: 8; radius: 4; color: "#ffffff" }
-            Text { text: "foot switch"; color: "#cbd5e1"; font.pixelSize: 7 }
-        }
-
-        PidPipe { startX: 580; startY: 390; endX: 620; endY: 390; baseColor: "#1b538c" }
-        PidValve { x: 590; y: 376; tag: "V 142 201"; subLabel: "Suction Bottom"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("V 142 201"); onClicked: pidScreenRoot.componentTapped(tag) }
-
-        // ---------------------------------------------------------------------
-        // (F) HYDRAULIC LID LIFTER & SWIVELLING DEVICE
+        // (F) ELECTRIC MOTOR DRIVEN LID LIFTER SCREW MECHANISM
         // ---------------------------------------------------------------------
         PidLidLifter {
             x: 690
-            y: 100
+            y: 70
             showTags: pidScreenRoot.showTags
         }
 

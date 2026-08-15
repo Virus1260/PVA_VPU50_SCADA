@@ -4,11 +4,11 @@ import QtQuick.Layouts
 Item {
     id: agitatorRoot
     width: 280
-    height: 380
+    height: 400
 
     property string motorTag: "M 162 001"
     property string speedTag: "SCR 162001"
-    property real speedRpm: 10.0
+    property real speedRpm: 49.0
     property bool isRunning: true
     property bool showTags: true
 
@@ -49,12 +49,12 @@ Item {
                 }
             }
 
-            // GZ 161501 Sensor
+            // GZ 161501 Sensor Dot
             Rectangle {
                 visible: agitatorRoot.showTags
-                width: 7
-                height: 7
-                radius: 3.5
+                width: 6
+                height: 6
+                radius: 3
                 color: "#eab308"
             }
         }
@@ -67,7 +67,7 @@ Item {
         anchors.topMargin: 46
         anchors.horizontalCenter: parent.horizontalCenter
         width: 4
-        height: 220
+        height: 275
         color: "#ffffff"
     }
 
@@ -78,7 +78,7 @@ Item {
         anchors.topMargin: 65
         anchors.horizontalCenter: parent.horizontalCenter
         width: 260
-        height: 250
+        height: 260
 
         onPaint: {
             var ctx = getContext("2d");
@@ -90,12 +90,12 @@ Item {
             var botY = 205;
 
             ctx.beginPath();
-            // Outer Paravisc Boundary (with bottom central arch)
+            // Outer Paravisc Boundary (following vessel wall with bottom central arch)
             ctx.moveTo(cx - hw, topY);
             ctx.lineTo(cx - hw, botY - 32);
-            ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 22, botY - 10);
-            // Center Arch Cutout
-            ctx.quadraticCurveTo(cx, botY - 30, cx + 22, botY - 10);
+            ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 22, botY - 8);
+            // Center Arch Cutout above neck
+            ctx.quadraticCurveTo(cx, botY - 26, cx + 22, botY - 8);
             ctx.quadraticCurveTo(cx + hw * 0.5, botY + 2, cx + hw, botY - 32);
             ctx.lineTo(cx + hw, topY);
 
