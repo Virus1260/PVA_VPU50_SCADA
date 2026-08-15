@@ -4,7 +4,7 @@ import QtQuick.Layouts
 Item {
     id: homogRoot
     width: 460
-    height: 200
+    height: 205
 
     property string motorTag: "M 163 001"
     property string speedTag: "SCR 163001"
@@ -117,10 +117,39 @@ Item {
     }
 
     // 3. STATOR CHAMBER (Z 163 001) - Horizontal Band with Direct Right Valve
+    Rectangle {
+        id: statorBand
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        width: 44
+        height: 22
+        radius: 2
+        color: homogRoot.isRunning ? "#4ade80" : "#0e3054"
+        border.color: homogRoot.isRunning ? "#22c55e" : "#1d609e"
+        border.width: 1.5
+
+        // Dual Glowing Indicator Rectangles
+        Row {
+            anchors.centerIn: parent
+            spacing: 8
+            Repeater {
+                model: 2
+                Rectangle {
+                    width: 7
+                    height: 9
+                    radius: 2
+                    color: homogRoot.isRunning ? "#ffffff" : "#cbd5e1"
+                }
+            }
+        }
+    }
 
     // Right Stator Direct Valve Symbol (Z 163 001)
     Canvas {
         id: statorValveCanvas
+        anchors.left: statorBand.right
+        anchors.verticalCenter: statorBand.verticalCenter
         width: 22
         height: 18
 
@@ -190,20 +219,20 @@ Item {
         onClicked: homogRoot.recircValveClicked()
     }
 
-    // 6. BOTTOM DRIVE MOTOR (M 163 001) - Standard Reusable SCADA Motor
+    // 6. BOTTOM DRIVE MOTOR (M 163 001) - Centered Directly Below Homogenizer Column
     Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 142
-        width: 140
-        height: 50
+        width: 180
+        height: 55
 
-        // Circular Motor Symbol 'M'
+        // Circular Motor Symbol 'M' (Centered Directly on Shaft Center)
         Rectangle {
             id: motorCircle
-            anchors.left: parent.left
-            anchors.leftMargin: 20
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 2
             width: 24
             height: 24
             radius: 12
@@ -248,11 +277,11 @@ Item {
             }
         }
 
-        // Motor Tag Below Motor
+        // Motor Tag Below Motor Circle
         Text {
             visible: homogRoot.showTags
             anchors.top: motorCircle.bottom
-            anchors.topMargin: 2
+            anchors.topMargin: 3
             anchors.horizontalCenter: motorCircle.horizontalCenter
             text: homogRoot.motorTag
             color: "#8cb5dc"

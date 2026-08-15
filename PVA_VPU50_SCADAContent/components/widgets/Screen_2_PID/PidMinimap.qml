@@ -3,17 +3,18 @@ import QtQuick.Layouts
 
 Item {
     id: minimapRoot
-    width: 220
-    height: 80
+    width: 280
+    height: 120
 
-    property real contentWidth: 1100
-    property real contentHeight: 650
+    property real contentWidth: 1060
+    property real contentHeight: 630
     property real viewX: 0
     property real viewY: 0
-    property real viewWidth: 1100
-    property real viewHeight: 650
+    property real viewWidth: 1060
+    property real viewHeight: 630
     property real zoomScale: 1.0
     property bool isLegendActive: true
+    property Item targetSourceItem: null
 
     signal panRequested(real targetX, real targetY)
     signal legendToggled()
@@ -23,21 +24,34 @@ Item {
         anchors.fill: parent
         spacing: 8
 
-        // 1. MINIMAP PREVIEW CANVAS & DRAGGABLE SELECTION BOX
+        // 1. LIVE MIRROR MINIMAP PREVIEW BOX (Hardware Accelerated Live Feed)
         Rectangle {
             id: mapBox
-            Layout.preferredWidth: 115
+            Layout.preferredWidth: 165
             Layout.fillHeight: true
             color: "#07203b"
-            border.color: "#1b4e82"
-            border.width: 1
-            radius: 4
+            border.color: "#1d4ed8"
+            border.width: 1.5
+            radius: 5
             clip: true
 
-            // Schematic Thumbnail
+            // Live Hardware-Accelerated Exact Mirror of Main P&ID World
+            ShaderEffectSource {
+                id: liveMirror
+                anchors.fill: parent
+                sourceItem: minimapRoot.targetSourceItem
+                live: true
+                hideSource: false
+                smooth: true
+                visible: minimapRoot.targetSourceItem !== null
+            }
+
+            // Fallback Vector Rendering if ShaderEffectSource is not available
             Canvas {
                 id: thumbCanvas
                 anchors.fill: parent
+                visible: minimapRoot.targetSourceItem === null
+
                 onPaint: {
                     var ctx = getContext("2d");
                     ctx.clearRect(0, 0, width, height);
@@ -45,115 +59,116 @@ Item {
                     var sx = width / minimapRoot.contentWidth;
                     var sy = height / minimapRoot.contentHeight;
 
-                    // Mini Left Manifold
+                    // Utility Lines
                     ctx.strokeStyle = "#1b538c";
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 1.2;
                     ctx.beginPath();
-                    ctx.moveTo(70 * sx, 180 * sy);
-                    ctx.lineTo(70 * sx, 580 * sy);
-                    ctx.moveTo(140 * sx, 180 * sy);
-                    ctx.lineTo(140 * sx, 580 * sy);
+                    ctx.moveTo(60 * sx, 250 * sy);
+                    ctx.lineTo(60 * sx, 580 * sy);
+                    ctx.moveTo(130 * sx, 250 * sy);
+                    ctx.lineTo(130 * sx, 580 * sy);
                     ctx.stroke();
 
-                    // Mini Vessel
-                    var vx = 560 * sx;
-                    var vy = 280 * sy;
-                    ctx.fillStyle = "#76b0e0";
+                    // Vessel
+                    var cx = 530 * sx;
+                    var vy = 110 * sy;
+                    var vw = 360 * sx;
+                    var vh = 348 * sy;
+                    ctx.fillStyle = "#79b2e2";
                     ctx.strokeStyle = "#1b4c7c";
                     ctx.beginPath();
-                    ctx.rect(vx - 16, vy - 24, 32, 48);
+                    ctx.rect(cx - vw / 2, vy, vw, vh);
                     ctx.fill();
                     ctx.stroke();
 
-                    // Mini Recirculation Line
-                    ctx.strokeStyle = "#22c55e";
+                    // Agitator
+                    ctx.strokeStyle = "#ffffff";
+                    ctx.lineWidth = 1.5;
                     ctx.beginPath();
-                    ctx.moveTo(vx, vy + 24);
-                    ctx.lineTo(vx + 24, vy + 24);
-                    ctx.lineTo(vx + 24, vy - 24);
-                    ctx.lineTo(vx + 6, vy - 24);
+                    ctx.moveTo(cx, vy - 10 * sy);
+                    ctx.lineTo(cx, vy + vh - 20 * sy);
                     ctx.stroke();
                 }
             }
 
-            // Interactive Yellow Viewport Frame
+            // Interactive Golden Viewport Frame (Accurately Tracks Zoom & Pan)
             Rectangle {
                 id: selectionFrame
                 x: Math.max(0, Math.min(mapBox.width - width, ((-minimapRoot.viewX) / (minimapRoot.contentWidth * minimapRoot.zoomScale)) * mapBox.width))
                 y: Math.max(0, Math.min(mapBox.height - height, ((-minimapRoot.viewY) / (minimapRoot.contentHeight * minimapRoot.zoomScale)) * mapBox.height))
-                width: Math.max(14, Math.min(mapBox.width, (minimapRoot.viewWidth / (minimapRoot.contentWidth * minimapRoot.zoomScale)) * mapBox.width))
-                height: Math.max(14, Math.min(mapBox.height, (minimapRoot.viewHeight / (minimapRoot.contentHeight * minimapRoot.zoomScale)) * mapBox.height))
-                color: "#20f59e0b"
+                width: Math.max(16, Math.min(mapBox.width, (minimapRoot.viewWidth / (minimapRoot.contentWidth * minimapRoot.zoomScale)) * mapBox.width))
+                height: Math.max(16, Math.min(mapBox.height, (minimapRoot.viewHeight / (minimapRoot.contentHeight * minimapRoot.zoomScale)) * mapBox.height))
+                color: "#30f59e0b"
                 border.color: "#f59e0b"
-                border.width: 1.5
+                border.width: 1.8
                 radius: 2
             }
 
-            // Click / Drag to Pan on Minimap
+            // Interactive Click & Drag to Pan
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.SizeAllCursor
-                onPositionChanged: function(mouse) {
+
+                function updatePan(mouse) {
                     var normX = mouse.x / mapBox.width;
                     var normY = mouse.y / mapBox.height;
                     var targetX = -(normX * minimapRoot.contentWidth * minimapRoot.zoomScale - minimapRoot.viewWidth / 2);
                     var targetY = -(normY * minimapRoot.contentHeight * minimapRoot.zoomScale - minimapRoot.viewHeight / 2);
                     minimapRoot.panRequested(targetX, targetY);
                 }
-                onClicked: function(mouse) {
-                    var normX = mouse.x / mapBox.width;
-                    var normY = mouse.y / mapBox.height;
-                    var targetX = -(normX * minimapRoot.contentWidth * minimapRoot.zoomScale - minimapRoot.viewWidth / 2);
-                    var targetY = -(normY * minimapRoot.contentHeight * minimapRoot.zoomScale - minimapRoot.viewHeight / 2);
-                    minimapRoot.panRequested(targetX, targetY);
+
+                onPressed: function(mouse) { updatePan(mouse); }
+                onPositionChanged: function(mouse) {
+                    if (mouse.buttons & Qt.LeftButton) updatePan(mouse);
                 }
             }
         }
 
-        // 2. MODE ACTION BUTTONS: Legend & Manual Mode
+        // 2. MODE ACTION BUTTONS: Legend Toggle & Manual Mode
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 4
+            spacing: 6
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: 3
-                color: minimapRoot.isLegendActive ? "#15803d" : "#0c345c"
-                border.color: minimapRoot.isLegendActive ? "#4ade80" : "#1d5e9c"
-                border.width: 1
+                Layout.preferredHeight: 38
+                radius: 4
+                color: minimapRoot.isLegendActive ? "#15803d" : "#0d2847"
+                border.color: minimapRoot.isLegendActive ? "#22c55e" : "#3b82f6"
+                border.width: 1.4
+
                 Text {
                     anchors.centerIn: parent
-                    text: "Legend"
+                    text: minimapRoot.isLegendActive ? "Legend [ON]" : "Legend [OFF]"
                     color: "#ffffff"
-                    font.pixelSize: 10
                     font.bold: true
+                    font.pixelSize: 10
                 }
+
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        minimapRoot.isLegendActive = !minimapRoot.isLegendActive;
-                        minimapRoot.legendToggled();
-                    }
+                    onClicked: minimapRoot.legendToggled()
                 }
             }
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                radius: 3
-                color: "#0c345c"
-                border.color: "#1d5e9c"
-                border.width: 1
+                Layout.preferredHeight: 38
+                radius: 4
+                color: "#0d2847"
+                border.color: "#3b82f6"
+                border.width: 1.4
+
                 Text {
                     anchors.centerIn: parent
                     text: "Manual Mode"
-                    color: "#ffffff"
-                    font.pixelSize: 10
+                    color: "#93c5fd"
                     font.bold: true
+                    font.pixelSize: 10
                 }
+
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor

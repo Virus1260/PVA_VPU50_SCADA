@@ -868,6 +868,20 @@ Item {
             scadaMiddleware.isHeating = (ctrl.row6Media && ctrl.row6Media.isPlaying);
             scadaMiddleware.vesselTemp = rootWindow.productTemp;
             scadaMiddleware.targetTemp = rootWindow.targetTemp;
+
+            // Direct Real-time Sync to P&ID Screen Bridge
+            if (ui.pidScreen && ui.pidScreen.scadaBridge) {
+                ui.pidScreen.scadaBridge.isAgitatorRunning = scadaMiddleware.isAgitatorRunning;
+                ui.pidScreen.scadaBridge.agitatorSpeed = scadaMiddleware.agitatorSpeed;
+                ui.pidScreen.scadaBridge.isHomogenizerRunning = scadaMiddleware.isHomogenizerRunning;
+                ui.pidScreen.scadaBridge.homogenizerSpeed = scadaMiddleware.homogenizerSpeed;
+                ui.pidScreen.scadaBridge.isCirculationRunning = scadaMiddleware.isCirculationRunning;
+                ui.pidScreen.scadaBridge.isVacuumActive = scadaMiddleware.isVacuumActive;
+                ui.pidScreen.scadaBridge.vacuumPressure = scadaMiddleware.vacuumPressure;
+                ui.pidScreen.scadaBridge.isHeating = scadaMiddleware.isHeating;
+                ui.pidScreen.scadaBridge.vesselTemp = scadaMiddleware.vesselTemp;
+                ui.pidScreen.scadaBridge.targetTemp = scadaMiddleware.targetTemp;
+            }
         }
     }
 

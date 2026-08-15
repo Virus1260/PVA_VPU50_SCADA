@@ -65,3 +65,11 @@ Thumbs.db
 *.bak
 *.orig
 *~
+
+# Python Virtual Environments
+.venv/
+venv/
+scratch/.venv/
+__pycache__/
+*.pyc
+

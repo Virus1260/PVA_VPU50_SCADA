@@ -11,6 +11,7 @@ Rectangle {
 
     ScadaConfig { id: scadaConfig }
     ScadaStateMiddleware { id: scadaBridge }
+    property alias scadaBridge: scadaBridge
 
     // Base Coordinate Canvas Dimensions
     readonly property real worldWidth: 1060
@@ -47,14 +48,14 @@ Rectangle {
     signal componentTapped(string tagName)
 
     // =========================================================================
-    // 1. TOP-LEFT OVERVIEW NAVIGATOR & INTERACTIVE MINIMAP
+    // 1. TOP-LEFT OVERVIEW NAVIGATOR & LIVE INTERACTIVE MINIMAP
     // =========================================================================
     PidMinimap {
         id: pidMinimap
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 14
-        z: 30
+        z: 100
         contentWidth: pidScreenRoot.worldWidth
         contentHeight: pidScreenRoot.worldHeight
         viewX: pidScreenRoot.displayX
@@ -63,6 +64,7 @@ Rectangle {
         viewHeight: pidScreenRoot.height
         zoomScale: pidScreenRoot.zoomScale
         isLegendActive: pidScreenRoot.showTags
+        targetSourceItem: worldContainer
 
         onLegendToggled: {
             pidScreenRoot.showTags = !pidScreenRoot.showTags;
@@ -72,19 +74,6 @@ Rectangle {
             pidScreenRoot.rawPanX = Math.max(pidScreenRoot.minAllowedPanX, Math.min(pidScreenRoot.maxAllowedPanX, tx));
             pidScreenRoot.rawPanY = Math.max(pidScreenRoot.minAllowedPanY, Math.min(pidScreenRoot.maxAllowedPanY, ty));
         }
-    }
-
-    // Top Right EKATO Watermark Brand
-    Text {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 16
-        text: "EKATO"
-        color: "#ffffff"
-        font.bold: true
-        font.pixelSize: 22
-        font.letterSpacing: 2
-        z: 30
     }
 
     // =========================================================================
@@ -158,7 +147,7 @@ Rectangle {
     }
 
     // =========================================================================
-    // 3. ZOOMABLE & PANNABLE WORLD CONTAINER (Authentic EKATO Schematic)
+    // 3. ZOOMABLE & PANNABLE WORLD CONTAINER
     // =========================================================================
     Item {
         id: worldContainer
@@ -188,6 +177,16 @@ Rectangle {
             showTags: pidScreenRoot.showTags
         }
 
+        // Modular Thermal Jacket Radiant Glow & Convection Micro-Bubbles (z: 2)
+        PidHeatingEffect {
+            x: mainVessel.x
+            y: mainVessel.y
+            z: 2
+            isHeating: scadaBridge.isHeating
+            isCooling: scadaBridge.isCooling
+            levelPercent: scadaBridge.vesselLevelPercent
+        }
+
         // ---------------------------------------------------------------------
         // (B) ROTATING AGITATOR & PARAVISC IMPELLER (z: 3)
         // ---------------------------------------------------------------------
@@ -202,8 +201,14 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // (C) LEFT-SIDE UTILITY MANIFOLD GRID (Steam, Water, Gas, Venting) (z: 5)
+        // (C) LEFT-SIDE UTILITY MANIFOLD GRID (HW IN, HW OUT, CW IN, CW OUT) (z: 5)
         // ---------------------------------------------------------------------
+        // Manifold Utility Labels
+        Text { z: 9; visible: pidScreenRoot.showTags; x: 16; y: 256; text: "CW IN"; color: scadaBridge.isCooling ? "#06b6d4" : "#8cb5dc"; font.pixelSize: 8; font.bold: true }
+        Text { z: 9; visible: pidScreenRoot.showTags; x: 16; y: 316; text: "CW OUT"; color: scadaBridge.isCooling ? "#38bdf8" : "#8cb5dc"; font.pixelSize: 8; font.bold: true }
+        Text { z: 9; visible: pidScreenRoot.showTags; x: 16; y: 370; text: "HW IN"; color: scadaBridge.isHeating ? "#f97316" : "#8cb5dc"; font.pixelSize: 8; font.bold: true }
+        Text { z: 9; visible: pidScreenRoot.showTags; x: 16; y: 510; text: "HW OUT"; color: scadaBridge.isHeating ? "#ea580c" : "#8cb5dc"; font.pixelSize: 8; font.bold: true }
+
         PidPipe { z: 5; startX: 60; startY: 250; endX: 60; endY: 580; baseColor: "#1b538c" }
         PidPipe { z: 5; startX: 130; startY: 250; endX: 130; endY: 580; baseColor: "#1b538c" }
 
@@ -215,12 +220,15 @@ Rectangle {
         PidValve { z: 6; x: 117; y: 380; tag: "K 168 205"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 205"); onClicked: pidScreenRoot.componentTapped(tag) }
         PidValve { z: 6; x: 47; y: 460; tag: "K 168 207"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 168 207"); onClicked: pidScreenRoot.componentTapped(tag) }
 
-        // Thermal Jacket Feed Pipes
+        // Live Thermal Jacket Feed Pipes (Hot Water IN / Cold Water IN)
+        PidPipe { z: 5; startX: 20; startY: 374; endX: 130; endY: 374; baseColor: "#1b538c"; isActive: scadaBridge.isHeating; flowColor: "#f97316" }
         PidPipe { z: 5; startX: 130; startY: 374; endX: 385; endY: 374; baseColor: "#1b538c"; isActive: scadaBridge.isHeating || scadaBridge.isCooling; flowColor: scadaBridge.isHeating ? "#f97316" : "#06b6d4" }
-        PidPipe { z: 5; startX: 130; startY: 514; endX: 330; endY: 514; baseColor: "#1b538c" }
-        PidPipe { z: 5; startX: 330; startY: 514; endX: 330; endY: 460; baseColor: "#1b538c" }
-        PidPipe { z: 5; startX: 330; startY: 460; endX: 385; endY: 460; baseColor: "#1b538c" }
-        PidValve { z: 6; x: 317; y: 500; tag: "K 172 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isValveOpen("K 172 002"); onClicked: pidScreenRoot.componentTapped(tag) }
+
+        // Live Thermal Jacket Return Pipes (Hot Water OUT / Cold Water OUT)
+        PidPipe { z: 5; startX: 385; startY: 460; endX: 330; endY: 460; baseColor: "#1b538c"; isActive: scadaBridge.isHeating; flowColor: "#ea580c"; reverseFlow: true }
+        PidPipe { z: 5; startX: 330; startY: 460; endX: 330; endY: 514; baseColor: "#1b538c"; isActive: scadaBridge.isHeating; flowColor: "#ea580c"; reverseFlow: true }
+        PidPipe { z: 5; startX: 330; startY: 514; endX: 20; endY: 514; baseColor: "#1b538c"; isActive: scadaBridge.isHeating; flowColor: "#ea580c"; reverseFlow: true }
+        PidValve { z: 6; x: 317; y: 500; tag: "K 172 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHeating || scadaBridge.isValveOpen("K 172 002"); onClicked: pidScreenRoot.componentTapped(tag) }
 
         // ---------------------------------------------------------------------
         // (D) GAS INLET & TOP DOME FEED LINES (z: 8)
@@ -269,7 +277,6 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (E) TOP CIP CLEANING HIGH ARCH HEADER & 3 SPRAY BALLS (z: 8, z: 9)
         // ---------------------------------------------------------------------
-        // High Arch Top Horizontal Pipe Header (Passing well above motor & speed labels)
         PidPipe { z: 8; startX: 240; startY: 15; endX: 605; endY: 15; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 240; startY: 15; endX: 240; endY: 125; baseColor: "#52a5ec" }
 
@@ -279,7 +286,7 @@ Rectangle {
         // Spray Ball 2 Vertical Drop Pipe (Middle-Right)
         PidPipe { z: 8; startX: 575; startY: 15; endX: 575; endY: 190; baseColor: "#52a5ec" }
 
-        // Spray Ball 3 Dogleg Drop Pipe (Far-Right Angled - Exact Tangent Coupling)
+        // Spray Ball 3 Dogleg Drop Pipe (Far-Right Angled)
         PidPipe { z: 8; startX: 605; startY: 15; endX: 605; endY: 145; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 605; startY: 145; endX: 642; endY: 185; baseColor: "#52a5ec" }
 
@@ -362,7 +369,7 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER (Exact EKATO Structure) (z: 6)
+        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER (Exact Structure) (z: 6)
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog

@@ -13,6 +13,8 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
         "vercel.json"
         ".vercel/project.json"
         ".vscode/settings.json"
+        "scratch/01_extract_agitator_gif_frames_to_svg/output_frames/agitator_sequence.json"
+        "scratch/01_extract_agitator_gif_frames_to_svg/output_frames/rotation_comparison_report.json"
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

@@ -3,21 +3,22 @@ import QtQuick
 Item {
     id: pipeRoot
 
+    property string section: ""
     property real startX: 0
     property real startY: 0
     property real endX: 100
     property real endY: 0
     property real pipeWidth: 2.5
-    property color baseColor: "#2164a6"
+    property color baseColor: "#1b538c"
     property color flowColor: "#38ef7d"
     property bool isActive: false
     property bool reverseFlow: false
-    property real flowSpeed: 1000
+    property real flowSpeed: 800
 
-    x: Math.min(startX, endX) - pipeWidth - 2
-    y: Math.min(startY, endY) - pipeWidth - 2
-    width: Math.abs(endX - startX) + (pipeWidth + 2) * 2
-    height: Math.abs(endY - startY) + (pipeWidth + 2) * 2
+    x: Math.min(startX, endX) - pipeWidth - 3
+    y: Math.min(startY, endY) - pipeWidth - 3
+    width: Math.abs(endX - startX) + (pipeWidth + 3) * 2
+    height: Math.abs(endY - startY) + (pipeWidth + 3) * 2
 
     Canvas {
         id: pipeCanvas
@@ -27,7 +28,7 @@ Item {
 
         NumberAnimation on offset {
             from: 0
-            to: pipeRoot.reverseFlow ? -20 : 20
+            to: pipeRoot.reverseFlow ? -24 : 24
             duration: pipeRoot.flowSpeed
             loops: Animation.Infinite
             running: pipeRoot.isActive
@@ -44,24 +45,24 @@ Item {
             var lx2 = pipeRoot.endX - pipeRoot.x;
             var ly2 = pipeRoot.endY - pipeRoot.y;
 
-            // Base pipe
+            // (A) Static Outer Pipe Wall
             ctx.beginPath();
             ctx.moveTo(lx1, ly1);
             ctx.lineTo(lx2, ly2);
-            ctx.lineWidth = pipeRoot.isActive ? 3.0 : pipeRoot.pipeWidth;
-            ctx.strokeStyle = pipeRoot.isActive ? "#14532d" : pipeRoot.baseColor;
+            ctx.lineWidth = pipeRoot.isActive ? (pipeRoot.pipeWidth + 1.2) : pipeRoot.pipeWidth;
+            ctx.strokeStyle = pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 2.0) : pipeRoot.baseColor;
             ctx.lineCap = "round";
             ctx.stroke();
 
-            // Active animated fluid dashes
+            // (B) Live Animated Core Fluid Stream with Directional Particles
             if (pipeRoot.isActive) {
                 ctx.save();
                 ctx.beginPath();
                 ctx.moveTo(lx1, ly1);
                 ctx.lineTo(lx2, ly2);
-                ctx.lineWidth = 3.0;
+                ctx.lineWidth = pipeRoot.pipeWidth;
                 ctx.strokeStyle = pipeRoot.flowColor;
-                ctx.setLineDash([6, 6]);
+                ctx.setLineDash([8, 6]);
                 ctx.lineDashOffset = -offset;
                 ctx.lineCap = "round";
                 ctx.stroke();

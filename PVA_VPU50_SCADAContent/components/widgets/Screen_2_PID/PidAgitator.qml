@@ -12,30 +12,36 @@ Item {
     property bool isRunning: false
     property bool showTags: true
 
-    property real rotationAngle: 0.0
+    property int currentFrame: 0
 
-    // Smooth Dynamic Rotation Animation - ONLY runs when actually active in SCADA
+    // Smooth Dynamic Multi-Frame SVG Rotation Animation (18 Distinct 3D SVG Frames across 360°)
     NumberAnimation {
-        id: rotAnim
+        id: frameAnim
         target: agitatorRoot
-        property: "rotationAngle"
+        property: "currentFrame"
         from: 0
-        to: 360
-        duration: Math.max(400, Math.min(10000, (60.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
+        to: 17
+        duration: Math.max(350, Math.min(10000, (60.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
         loops: Animation.Infinite
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
     }
 
     onIsRunningChanged: {
         if (!isRunning) {
-            rotAnim.stop();
-            rotationAngle = 0;
+            frameAnim.stop();
+            currentFrame = 0;
         } else {
-            rotAnim.restart();
+            frameAnim.restart();
         }
     }
 
-    // 1. TOP DRIVE MOTOR (Reusable Standard SCADA Motor)
+    function getFrameSource(idx) {
+        var n = Math.floor(idx) % 18;
+        var pad = (n < 10 ? "0" + n : "" + n);
+        return Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + pad + ".svg");
+    }
+
+    // 1. TOP DRIVE MOTOR (Standard Reusable SCADA Motor)
     PidMotor {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
@@ -82,74 +88,23 @@ Item {
         }
     }
 
-    // 3. CENTRAL ROTATING SHAFT (Extended down through vessel)
-    Rectangle {
-        id: shaft
-        anchors.top: parent.top
-        anchors.topMargin: 63
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: 10
-        height: 330
-        color: "#ffffff"
-    }
-
-    // 4. AUTHENTIC THICK EKATO PARAVISC DOUBLE X-BRACE IMPELLER (Positioned well below spray balls)
+    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Driven by 28-Frame Vector SVG Sequence)
     Item {
         id: impellerContainer
-        anchors.top: shaft.top
-        anchors.topMargin: 152
+        anchors.top: parent.top
+        anchors.topMargin: 65
         anchors.horizontalCenter: parent.horizontalCenter
         width: 250
-        height: 180
+        height: 320
 
-        // 3D Perspective Rotation Transform
-        transform: Rotation {
-            origin.x: 125
-            origin.y: 90
-            axis { x: 0; y: 1; z: 0 }
-            angle: agitatorRoot.rotationAngle
-        }
-
-        Canvas {
-            id: bladeCanvas
+        Image {
+            id: agitatorSvgImage
             anchors.fill: parent
-
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-
-                var cx = width / 2;
-                var hw = 84;
-                var topY = 6;
-                var botY = 172;
-
-                ctx.beginPath();
-                // Outer Paravisc Boundary (with bottom central arch)
-                ctx.moveTo(cx - hw, topY);
-                ctx.lineTo(cx - hw, botY - 24);
-                ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 20, botY - 6);
-                // Center Arch Cutout above neck
-                ctx.quadraticCurveTo(cx, botY - 20, cx + 20, botY - 6);
-                ctx.quadraticCurveTo(cx + hw * 0.5, botY + 2, cx + hw, botY - 24);
-                ctx.lineTo(cx + hw, topY);
-
-                // Double Diagonal X-Braces
-                ctx.moveTo(cx - hw, topY);
-                ctx.lineTo(cx + hw, botY - 24);
-
-                ctx.moveTo(cx + hw, topY);
-                ctx.lineTo(cx - hw, botY - 24);
-
-                // Top cross link
-                ctx.moveTo(cx - hw, topY);
-                ctx.lineTo(cx + hw, topY);
-
-                ctx.strokeStyle = "#ffffff";
-                ctx.lineWidth = 10.0;
-                ctx.lineCap = "round";
-                ctx.lineJoin = "round";
-                ctx.stroke();
-            }
+            source: agitatorRoot.getFrameSource(agitatorRoot.currentFrame)
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: true
+            asynchronous: true
         }
     }
 }
