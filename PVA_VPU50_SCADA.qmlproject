@@ -26,11 +26,19 @@ Project {
     }
 
     QmlFiles {
+        directory: "PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes"
+    }
+
+    QmlFiles {
         directory: "PVA_VPU50_SCADAContent/components/modals"
     }
 
     QmlFiles {
         directory: "PVA_VPU50_SCADAContent/components/modals/Screen_1_Control"
+    }
+
+    QmlFiles {
+        directory: "PVA_VPU50_SCADAContent/components/modals/Screen_5_Recipes"
     }
 
     QmlFiles {

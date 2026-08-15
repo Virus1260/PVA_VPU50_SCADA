@@ -1,19 +1,20 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "../components/widgets/Screen_5_Recipes"
+import "../components/modals/Screen_5_Recipes"
 
 Rectangle {
-    id: recipesRoot
+    id: recipesScreenRoot
     color: "#081d33"
 
-    // Active View Mode: "matrix" or "formulation"
-    property string activeTab: "matrix"
+    // --- State Management ---
+    property string activeTab: "matrix" // "matrix" or "formulation"
     property int activeRecipeIndex: 0
-    property int currentExecutingStep: 3 // 0-indexed, Step 4 active
     property bool isExecuting: false
     property var expandedSteps: ({})
 
-    // --- Master Recipe Database (Single Source of Truth) ---
+    // --- Master Recipe Database (Central In-Memory State) ---
     property var recipeDatabase: [
         {
             name: "Body Lotion Formulation",
@@ -113,670 +114,178 @@ Rectangle {
         }
     ]
 
-    readonly property var activeRecipe: recipeDatabase[activeRecipeIndex]
+    readonly property var currentRecipe: recipeDatabase[activeRecipeIndex] || recipeDatabase[0]
 
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 14
         spacing: 10
 
-        // =====================================================================
-        // 1. TOP DUAL-TAB NAVIGATION & COMMAND TOOLBAR (Matching Reference UI)
-        // =====================================================================
-        RowLayout {
+        // 1. TOP PROCESS TOOLBAR
+        RecipeToolbar {
             Layout.fillWidth: true
-            spacing: 12
+            activeTab: recipesScreenRoot.activeTab
+            recipes: recipesScreenRoot.recipeDatabase
+            selectedIndex: recipesScreenRoot.activeRecipeIndex
+            isExecuting: recipesScreenRoot.isExecuting
 
-            // Dual Tab Switcher: [ Formulation ] | [ Recipe Matrix ]
-            Rectangle {
-                Layout.preferredHeight: 38
-                Layout.preferredWidth: 260
-                color: "#06182c"
-                border.color: "#184d7e"
-                border.width: 1
-                radius: 6
-
-                RowLayout {
-                    anchors.fill: parent
-                    spacing: 0
-
-                    // Tab: Formulation
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        radius: 5
-                        color: recipesRoot.activeTab === "formulation" ? "#164e85" : "transparent"
-                        border.color: recipesRoot.activeTab === "formulation" ? "#00d2ff" : "transparent"
-                        border.width: 1
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Formulation"
-                            color: recipesRoot.activeTab === "formulation" ? "#ffffff" : "#94a3b8"
-                            font.bold: recipesRoot.activeTab === "formulation"
-                            font.pixelSize: 13
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: recipesRoot.activeTab = "formulation"
-                        }
-                    }
-
-                    // Tab: Recipe Matrix
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        radius: 5
-                        color: recipesRoot.activeTab === "matrix" ? "#164e85" : "transparent"
-                        border.color: recipesRoot.activeTab === "matrix" ? "#00d2ff" : "transparent"
-                        border.width: 1
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Recipe Matrix"
-                            color: recipesRoot.activeTab === "matrix" ? "#ffffff" : "#94a3b8"
-                            font.bold: recipesRoot.activeTab === "matrix"
-                            font.pixelSize: 13
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: recipesRoot.activeTab = "matrix"
-                        }
-                    }
-                }
+            onTabChanged: function(newTab) {
+                recipesScreenRoot.activeTab = newTab;
             }
-
-            // Recipe Selector Dropdown
-            RowLayout {
-                spacing: 8
-                Text {
-                    text: "Recipe:"
-                    color: "#cbd5e1"
-                    font.bold: true
-                    font.pixelSize: 13
-                }
-
-                Rectangle {
-                    Layout.preferredWidth: 260
-                    Layout.preferredHeight: 36
-                    color: "#091a2a"
-                    border.color: "#1a4070"
-                    border.width: 1
-                    radius: 5
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.leftMargin: 10
-                        anchors.rightMargin: 8
-
-                        Text {
-                            text: recipesRoot.activeRecipe.name + " (" + recipesRoot.activeRecipe.steps.length + " steps)"
-                            color: "#ffffff"
-                            font.bold: true
-                            font.pixelSize: 12
-                            Layout.fillWidth: true
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            text: "▼"
-                            color: "#6b8fbb"
-                            font.pixelSize: 10
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            recipesRoot.activeRecipeIndex = (recipesRoot.activeRecipeIndex + 1) % recipesRoot.recipeDatabase.length;
-                        }
-                    }
-                }
+            onRecipeSelected: function(index) {
+                recipesScreenRoot.activeRecipeIndex = index;
             }
-
-            Item { Layout.fillWidth: true }
-
-            // Action Buttons: + New, Delete, + Step, ▶ Execute
-            RowLayout {
-                spacing: 8
-
-                // + New Recipe Button
-                Rectangle {
-                    Layout.preferredWidth: 64
-                    Layout.preferredHeight: 34
-                    color: "#1e40af"
-                    border.color: "#3b82f6"
-                    border.width: 1
-                    radius: 4
-                    Text { anchors.centerIn: parent; text: "+ New"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
-                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: newRecipeDialog.visible = true }
-                }
-
-                // Delete Recipe Button
-                Rectangle {
-                    Layout.preferredWidth: 64
-                    Layout.preferredHeight: 34
-                    color: "#7f1d1d"
-                    border.color: "#ef4444"
-                    border.width: 1
-                    radius: 4
-                    Text { anchors.centerIn: parent; text: "Delete"; color: "#fca5a5"; font.bold: true; font.pixelSize: 12 }
-                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor }
-                }
-
-                // + Step Button
-                Rectangle {
-                    Layout.preferredWidth: 68
-                    Layout.preferredHeight: 34
-                    color: "#14532d"
-                    border.color: "#22c55e"
-                    border.width: 1
-                    radius: 4
-                    Text { anchors.centerIn: parent; text: "+ Step"; color: "#86efac"; font.bold: true; font.pixelSize: 12 }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            var cur = recipesRoot.activeRecipe;
-                            var newId = cur.steps.length + 1;
-                            cur.steps.push({
-                                id: newId,
-                                name: "Step " + newId,
-                                desc: "New process step",
-                                opsCount: 1,
-                                isManual: false,
-                                status: "WAITING",
-                                confirmMsg: "",
-                                ops: [{ dev: "Agitator", act: "ON", delay: 0, dur: 120, val: "40 RPM", cond: "Timer 2 min" }]
-                            });
-                            recipesRoot.recipeDatabaseChanged();
-                        }
-                    }
-                }
-
-                // ▶ Execute Button
-                Rectangle {
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: 34
-                    color: recipesRoot.isExecuting ? "#15803d" : "#16a34a"
-                    border.color: "#4ade80"
-                    border.width: 1.5
-                    radius: 4
-                    Text {
-                        anchors.centerIn: parent
-                        text: recipesRoot.isExecuting ? "❚❚ Pause" : "▶ Execute"
-                        color: "#ffffff"
-                        font.bold: true
-                        font.pixelSize: 13
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: recipesRoot.isExecuting = !recipesRoot.isExecuting
+            onNewRecipeRequested: {
+                newRecipeModal.visible = true;
+            }
+            onDeleteRecipeRequested: {
+                deleteConfirmModal.message = "Delete recipe '" + recipesScreenRoot.currentRecipe.name + "'? This action cannot be undone.";
+                deleteConfirmModal.visible = true;
+            }
+            onAddStepRequested: {
+                var cur = recipesScreenRoot.currentRecipe;
+                var newId = cur.steps.length + 1;
+                cur.steps.push({
+                    id: newId,
+                    name: "Step " + newId,
+                    desc: "New process step",
+                    opsCount: 1,
+                    isManual: false,
+                    status: "WAITING",
+                    confirmMsg: "",
+                    ops: [{ dev: "Agitator", act: "ON", delay: 0, dur: 120, val: "40 RPM", cond: "Timer 2 min" }]
+                });
+                recipesScreenRoot.recipeDatabaseChanged();
+            }
+            onExecuteToggleRequested: {
+                recipesScreenRoot.isExecuting = !recipesScreenRoot.isExecuting;
+                if (recipesScreenRoot.isExecuting) {
+                    var activeStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "ACTIVE"; });
+                    if (activeStep && activeStep.isManual) {
+                        stepConfirmDialog.stepName = activeStep.name;
+                        stepConfirmDialog.confirmMessage = activeStep.confirmMsg || "Manual operator check required for this step.";
+                        stepConfirmDialog.visible = true;
                     }
                 }
             }
         }
 
-        // =====================================================================
-        // 2. VIEW CONTENT: (A) RECIPE MATRIX VIEW
-        // =====================================================================
-        ColumnLayout {
-            visible: recipesRoot.activeTab === "matrix"
+        // 2. RECIPE MATRIX VIEW
+        RecipeMatrixView {
+            visible: recipesScreenRoot.activeTab === "matrix"
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 4
+            steps: recipesScreenRoot.currentRecipe.steps || []
+            expandedMap: recipesScreenRoot.expandedSteps
 
-            // Matrix Table Header (#, Name, Description, Ops, ⚠️, Status, Actions)
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 34
-                color: "#071525"
-                border.color: "#122d52"
-                border.width: 1
-                radius: 4
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Text { text: "#"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 40 }
-                    Text { text: "Name"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 180 }
-                    Text { text: "Description"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
-                    Text { text: "Ops"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 50 }
-                    Text { text: "⚠️"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 40 }
-                    Text { text: "Status"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 60 }
-                    Text { text: "Actions"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 120 }
+            onStepToggled: function(stepId) {
+                var map = Object.assign({}, recipesScreenRoot.expandedSteps);
+                map[stepId] = !map[stepId];
+                recipesScreenRoot.expandedSteps = map;
+            }
+            onStepMovedUp: function(index) {
+                if (index > 0) {
+                    var steps = recipesScreenRoot.currentRecipe.steps;
+                    var temp = steps[index];
+                    steps[index] = steps[index - 1];
+                    steps[index - 1] = temp;
+                    recipesScreenRoot.recipeDatabaseChanged();
                 }
             }
-
-            // Scrollable Step Rows
-            ListView {
-                id: matrixStepList
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                model: recipesRoot.activeRecipe.steps
-                spacing: 3
-                clip: true
-
-                delegate: Rectangle {
-                    id: stepDelegate
-                    width: matrixStepList.width
-                    height: isStepExpanded ? (modelData.ops.length > 0 ? 80 + modelData.ops.length * 32 : 80) : 42
-                    color: modelData.status === "ACTIVE" ? "#0f3a64" : (index % 2 === 0 ? "#092440" : "#071b30")
-                    border.color: modelData.status === "ACTIVE" ? "#00d2ff" : "#122d52"
-                    border.width: modelData.status === "ACTIVE" ? 1.5 : 1
-                    radius: 4
-                    clip: true
-
-                    property bool isStepExpanded: !!recipesRoot.expandedSteps[modelData.id]
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 6
-                        spacing: 6
-
-                        // Main Step Row Bar
-                        RowLayout {
-                            Layout.fillWidth: true
-                            spacing: 8
-
-                            // Step Number Badge
-                            Rectangle {
-                                Layout.preferredWidth: 32
-                                Layout.preferredHeight: 28
-                                radius: 14
-                                color: modelData.status === "ACTIVE" ? "#1e40af" : "#0f2d4d"
-                                border.color: modelData.status === "ACTIVE" ? "#00d2ff" : "#1d5b94"
-                                border.width: 1
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: modelData.id
-                                    color: "#ffffff"
-                                    font.bold: true
-                                    font.pixelSize: 12
-                                }
-                            }
-
-                            // Step Name
-                            Text {
-                                text: modelData.name
-                                color: "#ffffff"
-                                font.bold: true
-                                font.pixelSize: 13
-                                Layout.preferredWidth: 170
-                                elide: Text.ElideRight
-                            }
-
-                            // Step Description
-                            Text {
-                                text: modelData.desc
-                                color: "#94a3b8"
-                                font.pixelSize: 12
-                                Layout.fillWidth: true
-                                elide: Text.ElideRight
-                            }
-
-                            // Ops Count Pill
-                            Rectangle {
-                                Layout.preferredWidth: 36
-                                Layout.preferredHeight: 24
-                                radius: 12
-                                color: "#0d2847"
-                                border.color: "#1e40af"
-                                border.width: 1
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: modelData.ops.length
-                                    color: "#38bdf8"
-                                    font.bold: true
-                                    font.pixelSize: 11
-                                }
-                            }
-
-                            // Warning / Manual Interlock Icon
-                            Text {
-                                text: modelData.isManual ? "⚠️" : "○"
-                                color: modelData.isManual ? "#f59e0b" : "#475569"
-                                font.pixelSize: 13
-                                horizontalAlignment: Text.AlignHCenter
-                                Layout.preferredWidth: 40
-                            }
-
-                            // Status Indicator
-                            Rectangle {
-                                Layout.preferredWidth: 14
-                                Layout.preferredHeight: 14
-                                radius: 7
-                                color: modelData.status === "DONE" ? "#22c55e" : (modelData.status === "ACTIVE" ? "#38bdf8" : "#334155")
-                                border.color: "#ffffff"
-                                border.width: 1
-                            }
-
-                            // Actions: Expand ▼, Move ↑, Move ↓, Delete ✕
-                            RowLayout {
-                                Layout.preferredWidth: 120
-                                spacing: 4
-
-                                // Expand / Collapse Button
-                                Rectangle {
-                                    width: 26
-                                    height: 26
-                                    radius: 3
-                                    color: "#0d2847"
-                                    border.color: "#1e40af"
-                                    border.width: 1
-                                    Text { anchors.centerIn: parent; text: stepDelegate.isStepExpanded ? "▲" : "▼"; color: "#38bdf8"; font.pixelSize: 10 }
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: {
-                                            var map = Object.assign({}, recipesRoot.expandedSteps);
-                                            map[modelData.id] = !map[modelData.id];
-                                            recipesRoot.expandedSteps = map;
-                                        }
-                                    }
-                                }
-
-                                // Move Up Button
-                                Rectangle {
-                                    width: 26
-                                    height: 26
-                                    radius: 3
-                                    color: "#0d2847"
-                                    border.color: "#1e40af"
-                                    border.width: 1
-                                    Text { anchors.centerIn: parent; text: "↑"; color: "#94a3b8"; font.bold: true; font.pixelSize: 12 }
-                                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor }
-                                }
-
-                                // Move Down Button
-                                Rectangle {
-                                    width: 26
-                                    height: 26
-                                    radius: 3
-                                    color: "#0d2847"
-                                    border.color: "#1e40af"
-                                    border.width: 1
-                                    Text { anchors.centerIn: parent; text: "↓"; color: "#94a3b8"; font.bold: true; font.pixelSize: 12 }
-                                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor }
-                                }
-
-                                // Delete Step Button
-                                Rectangle {
-                                    width: 26
-                                    height: 26
-                                    radius: 3
-                                    color: "#450a0a"
-                                    border.color: "#ef4444"
-                                    border.width: 1
-                                    Text { anchors.centerIn: parent; text: "✕"; color: "#f87171"; font.bold: true; font.pixelSize: 11 }
-                                    MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor }
-                                }
-                            }
-                        }
-
-                        // Sub-Operations Detailed Table (When Step is Expanded)
-                        ColumnLayout {
-                            visible: stepDelegate.isStepExpanded
-                            Layout.fillWidth: true
-                            spacing: 4
-
-                            Repeater {
-                                model: modelData.ops
-                                delegate: Rectangle {
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: 28
-                                    color: "#06182c"
-                                    border.color: "#1e40af"
-                                    border.width: 1
-                                    radius: 3
-
-                                    RowLayout {
-                                        anchors.fill: parent
-                                        anchors.leftMargin: 16
-                                        anchors.rightMargin: 10
-                                        spacing: 12
-
-                                        Text { text: "⚙ " + modelData.dev; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 110 }
-                                        Text { text: "Action: " + modelData.act; color: "#ffffff"; font.pixelSize: 11; Layout.preferredWidth: 80 }
-                                        Text { text: "Delay: " + modelData.delay + "s"; color: "#94a3b8"; font.pixelSize: 11; Layout.preferredWidth: 70 }
-                                        Text { text: "Dur: " + modelData.dur + "s"; color: "#94a3b8"; font.pixelSize: 11; Layout.preferredWidth: 70 }
-                                        Text { text: "Setpoint: " + modelData.val; color: "#4ade80"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 100 }
-                                        Text { text: "Condition: " + modelData.cond; color: "#fbbf24"; font.pixelSize: 11; Layout.fillWidth: true }
-                                    }
-                                }
-                            }
-                        }
-                    }
+            onStepMovedDown: function(index) {
+                var steps = recipesScreenRoot.currentRecipe.steps;
+                if (index < steps.length - 1) {
+                    var temp = steps[index];
+                    steps[index] = steps[index + 1];
+                    steps[index + 1] = temp;
+                    recipesScreenRoot.recipeDatabaseChanged();
+                }
+            }
+            onStepDeleted: function(index) {
+                recipesScreenRoot.currentRecipe.steps.splice(index, 1);
+                recipesScreenRoot.recipeDatabaseChanged();
+            }
+            onAddOperationRequested: function(stepIndex) {
+                var targetStep = recipesScreenRoot.currentRecipe.steps[stepIndex];
+                if (targetStep) {
+                    if (!targetStep.ops) targetStep.ops = [];
+                    targetStep.ops.push({
+                        dev: "Agitator",
+                        act: "ON",
+                        delay: 0,
+                        dur: 180,
+                        val: "45 RPM",
+                        cond: "Timer 3 min"
+                    });
+                    targetStep.opsCount = targetStep.ops.length;
+                    recipesScreenRoot.recipeDatabaseChanged();
+                }
+            }
+            onRemoveOperationRequested: function(stepIndex, opIndex) {
+                var targetStep = recipesScreenRoot.currentRecipe.steps[stepIndex];
+                if (targetStep && targetStep.ops) {
+                    targetStep.ops.splice(opIndex, 1);
+                    targetStep.opsCount = targetStep.ops.length;
+                    recipesScreenRoot.recipeDatabaseChanged();
                 }
             }
         }
 
-        // =====================================================================
-        // 3. VIEW CONTENT: (B) FORMULATION EXECUTION VIEW (Matching Reference UI)
-        // =====================================================================
-        ColumnLayout {
-            visible: recipesRoot.activeTab === "formulation"
+        // 3. FORMULATION VIEW
+        FormulationView {
+            visible: recipesScreenRoot.activeTab === "formulation"
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 10
+            recipe: recipesScreenRoot.currentRecipe
+            isExecuting: recipesScreenRoot.isExecuting
+        }
+    }
 
-            // Top Status & Process Readouts Card
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                color: "#0d2d4d"
-                border.color: "#1a4070"
-                border.width: 1.5
-                radius: 6
+    // --- Modals Layer ---
+    NewRecipeModal {
+        id: newRecipeModal
+        onRecipeCreated: function(name, prod, size) {
+            recipesScreenRoot.recipeDatabase.push({
+                name: name,
+                totalSteps: 1,
+                createdAt: new Date().toISOString(),
+                ingredients: [{ sr: 1, name: "Base Liquid", phase: "A", qty: "100 kg" }],
+                steps: [{
+                    id: 1,
+                    name: "Initial Charge",
+                    desc: "Charge initial ingredients",
+                    opsCount: 1,
+                    isManual: false,
+                    status: "WAITING",
+                    confirmMsg: "",
+                    ops: [{ dev: "Fill Valve", act: "ON", delay: 0, dur: 120, val: "50%", cond: "Timer 2 min" }]
+                }]
+            });
+            recipesScreenRoot.activeRecipeIndex = recipesScreenRoot.recipeDatabase.length - 1;
+            recipesScreenRoot.recipeDatabaseChanged();
+        }
+    }
 
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 16
-                    anchors.rightMargin: 16
-                    spacing: 16
-
-                    ColumnLayout {
-                        spacing: 2
-                        Text { text: "ACTIVE PRODUCT FORMULATION"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11 }
-                        Text { text: recipesRoot.activeRecipe.name; color: "#ffffff"; font.bold: true; font.pixelSize: 15 }
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 86
-                        Layout.preferredHeight: 26
-                        radius: 4
-                        color: recipesRoot.isExecuting ? "#14532d" : "#1e3a8a"
-                        border.color: recipesRoot.isExecuting ? "#22c55e" : "#3b82f6"
-                        border.width: 1
-                        Text {
-                            anchors.centerIn: parent
-                            text: recipesRoot.isExecuting ? "RUNNING" : "STANDBY"
-                            color: "#ffffff"
-                            font.bold: true
-                            font.pixelSize: 11
-                        }
-                    }
-
-                    Item { Layout.fillWidth: true }
-
-                    // Process Readouts: Vessel Temp, Level %, Batch Timer
-                    RowLayout {
-                        spacing: 20
-
-                        ColumnLayout {
-                            spacing: 1
-                            Text { text: "Vessel Temp"; color: "#94a3b8"; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
-                            Text { text: "79.8 °C"; color: "#22c55e"; font.bold: true; font.pixelSize: 16; Layout.alignment: Qt.AlignHCenter }
-                        }
-
-                        ColumnLayout {
-                            spacing: 1
-                            Text { text: "Level %"; color: "#94a3b8"; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
-                            Text { text: "64.2 %"; color: "#38bdf8"; font.bold: true; font.pixelSize: 16; Layout.alignment: Qt.AlignHCenter }
-                        }
-
-                        ColumnLayout {
-                            spacing: 1
-                            Text { text: "Batch Time"; color: "#94a3b8"; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
-                            Text { text: "00:14:32"; color: "#fbbf24"; font.bold: true; font.pixelSize: 16; Layout.alignment: Qt.AlignHCenter }
-                        }
-                    }
-                }
+    DeleteConfirmModal {
+        id: deleteConfirmModal
+        onConfirmed: {
+            if (recipesScreenRoot.recipeDatabase.length > 1) {
+                recipesScreenRoot.recipeDatabase.splice(recipesScreenRoot.activeRecipeIndex, 1);
+                recipesScreenRoot.activeRecipeIndex = Math.max(0, recipesScreenRoot.activeRecipeIndex - 1);
+                recipesScreenRoot.recipeDatabaseChanged();
             }
+        }
+    }
 
-            // Two-Column Grid: Left (Step Progression) | Right (Ingredients Table)
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                spacing: 12
-
-                // Left: Step Execution Stream (7 Columns width equivalent)
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: 600
-                    color: "#06182c"
-                    border.color: "#184d7e"
-                    border.width: 1
-                    radius: 6
-                    clip: true
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 8
-
-                        Text {
-                            text: "RECIPE SEQUENCE PROGRESSION"
-                            color: "#38bdf8"
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
-
-                        ListView {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            model: recipesRoot.activeRecipe.steps
-                            spacing: 4
-                            clip: true
-
-                            delegate: Rectangle {
-                                width: parent.width
-                                height: 42
-                                radius: 5
-                                color: modelData.status === "ACTIVE" ? "#0f3a64" : (modelData.status === "DONE" ? "#06231a" : "#092440")
-                                border.color: modelData.status === "ACTIVE" ? "#00d2ff" : (modelData.status === "DONE" ? "#22c55e" : "#164673")
-                                border.width: modelData.status === "ACTIVE" ? 2 : 1
-
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 10
-                                    anchors.rightMargin: 10
-                                    spacing: 10
-
-                                    Text { text: "Step " + modelData.id; color: "#38bdf8"; font.bold: true; font.pixelSize: 12; Layout.preferredWidth: 50 }
-                                    Text { text: modelData.name; color: "#ffffff"; font.bold: true; font.pixelSize: 12; Layout.preferredWidth: 160; elide: Text.ElideRight }
-                                    Text { text: modelData.desc; color: "#94a3b8"; font.pixelSize: 11; Layout.fillWidth: true; elide: Text.ElideRight }
-                                    Text {
-                                        text: modelData.status
-                                        color: modelData.status === "DONE" ? "#4ade80" : (modelData.status === "ACTIVE" ? "#38bdf8" : "#64748b")
-                                        font.bold: true
-                                        font.pixelSize: 11
-                                        Layout.preferredWidth: 60
-                                        horizontalAlignment: Text.AlignRight
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Right: Ingredients Bill of Materials (5 Columns width equivalent)
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: 420
-                    color: "#06182c"
-                    border.color: "#184d7e"
-                    border.width: 1
-                    radius: 6
-                    clip: true
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 8
-
-                        Text {
-                            text: "FORMULATION INGREDIENTS (BOM)"
-                            color: "#38bdf8"
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
-
-                        // Table Header
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 26
-                            color: "#0d2847"
-                            radius: 3
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 8
-                                anchors.rightMargin: 8
-                                spacing: 8
-
-                                Text { text: "#"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 10; Layout.preferredWidth: 24 }
-                                Text { text: "Ingredient"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 10; Layout.fillWidth: true }
-                                Text { text: "Phase"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 10; Layout.preferredWidth: 44; horizontalAlignment: Text.AlignHCenter }
-                                Text { text: "Qty"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 10; Layout.preferredWidth: 64; horizontalAlignment: Text.AlignRight }
-                            }
-                        }
-
-                        // Ingredients List
-                        ListView {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            model: recipesRoot.activeRecipe.ingredients || []
-                            spacing: 3
-                            clip: true
-
-                            delegate: Rectangle {
-                                width: parent.width
-                                height: 30
-                                color: index % 2 === 0 ? "#092440" : "#071b30"
-                                border.color: "#164673"
-                                border.width: 1
-                                radius: 3
-
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 8
-                                    anchors.rightMargin: 8
-                                    spacing: 8
-
-                                    Text { text: modelData.sr; color: "#94a3b8"; font.pixelSize: 11; Layout.preferredWidth: 24 }
-                                    Text { text: modelData.name; color: "#ffffff"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true; elide: Text.ElideRight }
-                                    Rectangle {
-                                        Layout.preferredWidth: 32
-                                        Layout.preferredHeight: 18
-                                        radius: 3
-                                        color: modelData.phase === "A" ? "#1e3a8a" : (modelData.phase === "B" ? "#7c2d12" : "#14532d")
-                                        Text { anchors.centerIn: parent; text: "Ph " + modelData.phase; color: "#ffffff"; font.bold: true; font.pixelSize: 9 }
-                                    }
-                                    Text { text: modelData.qty; color: "#4ade80"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 64; horizontalAlignment: Text.AlignRight }
-                                }
-                            }
-                        }
-                    }
-                }
+    StepConfirmDialog {
+        id: stepConfirmDialog
+        onConfirmed: {
+            var activeStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "ACTIVE"; });
+            if (activeStep) {
+                activeStep.status = "DONE";
+                var nextStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "WAITING"; });
+                if (nextStep) nextStep.status = "ACTIVE";
+                recipesScreenRoot.recipeDatabaseChanged();
             }
         }
     }
