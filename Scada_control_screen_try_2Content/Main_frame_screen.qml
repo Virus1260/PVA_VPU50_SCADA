@@ -116,8 +116,10 @@ Item {
                 ctrl.row1Media.playClicked.connect(function() {
                     rootWindow.r1Power = 3.8;
                     rootWindow.r1Current = 11.5;
-                    ctrl.row1PowerCard.primaryValue = rootWindow.r1Power.toFixed(1);
-                    ctrl.row1CurrentCard.primaryValue = rootWindow.r1Current.toFixed(1);
+                    if (ctrl.row1PowerCard) {
+                        ctrl.row1PowerCard.powerVal = rootWindow.r1Power.toFixed(1);
+                        ctrl.row1PowerCard.currentVal = rootWindow.r1Current.toFixed(1);
+                    }
                 });
 
                 ctrl.row1Media.stopClicked.connect(function() {
@@ -125,8 +127,10 @@ Item {
                     rootWindow.r1Current = 0.0;
                     rootWindow.r1RuntimeSeconds = 0;
                     if (ctrl.row1Runtime) ctrl.row1Runtime.timeText = "00:00:00";
-                    ctrl.row1PowerCard.primaryValue = "0.0";
-                    ctrl.row1CurrentCard.primaryValue = "0.0";
+                    if (ctrl.row1PowerCard) {
+                        ctrl.row1PowerCard.powerVal = "0.0";
+                        ctrl.row1PowerCard.currentVal = "0.0";
+                    }
                 });
             }
 
@@ -180,8 +184,10 @@ Item {
                 ctrl.row2Media.playClicked.connect(function() {
                     rootWindow.r2Power = 8.5;
                     rootWindow.r2Current = 24.2;
-                    ctrl.row2PowerCard.primaryValue = rootWindow.r2Power.toFixed(1);
-                    ctrl.row2CurrentCard.primaryValue = rootWindow.r2Current.toFixed(1);
+                    if (ctrl.row2PowerCard) {
+                        ctrl.row2PowerCard.powerVal = rootWindow.r2Power.toFixed(1);
+                        ctrl.row2PowerCard.currentVal = rootWindow.r2Current.toFixed(1);
+                    }
                 });
 
                 ctrl.row2Media.stopClicked.connect(function() {
@@ -189,8 +195,10 @@ Item {
                     rootWindow.r2Current = 0.0;
                     rootWindow.r2RuntimeSeconds = 0;
                     if (ctrl.row2Runtime) ctrl.row2Runtime.timeText = "00:00:00";
-                    ctrl.row2PowerCard.primaryValue = "0.0";
-                    ctrl.row2CurrentCard.primaryValue = "0.0";
+                    if (ctrl.row2PowerCard) {
+                        ctrl.row2PowerCard.powerVal = "0.0";
+                        ctrl.row2PowerCard.currentVal = "0.0";
+                    }
                 });
             }
 

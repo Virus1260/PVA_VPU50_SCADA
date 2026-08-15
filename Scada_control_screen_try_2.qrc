@@ -161,6 +161,7 @@
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaIcon.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaMediaControls.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaModeSelector.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/ScadaPowerCurrentCard.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaRuntimeWidget.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaSidebar.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaSpeedControl.qml</file>

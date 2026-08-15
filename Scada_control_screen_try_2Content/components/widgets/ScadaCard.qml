@@ -11,15 +11,17 @@ Rectangle {
     property real progressValue: 0.0
     property color progressColor: "#00d2ff"
 
-    property real preferredCardWidth: 92
-    property real cardHeight: 76
+    property real preferredCardWidth: 140
+    property real cardHeight: 64
 
     Layout.preferredWidth: preferredCardWidth
+    Layout.minimumWidth: preferredCardWidth
+    Layout.maximumWidth: preferredCardWidth
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight
 
-    color: "#092848"
+    color: "#082646"
     border.color: "#184d7e"
     border.width: 1
     radius: 4
@@ -50,7 +52,7 @@ Rectangle {
             Text {
                 text: cardRoot.primaryValue
                 color: "#ffffff"
-                font.pixelSize: 16
+                font.pixelSize: 15
                 font.bold: true
             }
 
@@ -75,7 +77,7 @@ Rectangle {
         // Optional Cyan Progress Bar
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 4
+            Layout.preferredHeight: 3
             color: "#0d365e"
             radius: 2
             visible: cardRoot.showProgressBar

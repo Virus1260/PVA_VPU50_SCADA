@@ -27,6 +27,8 @@ qt6_add_qml_module(Scada_control_screen_try_2Content
         "components/widgets/ScadaRuntimeWidget.qml"
         "components/widgets/ScadaSidebar.qml"
         "components/widgets/ScadaSpeedControl.qml"
+        "components/widgets/ScadaPowerCurrentCard.qml"
+        "components/widgets/ScadaPowerCurrentCard.qml"
         "screens/AlarmsScreen.qml"
         "screens/AuditScreen.qml"
         "screens/ControlScreen.ui.qml"
