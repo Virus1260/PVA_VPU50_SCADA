@@ -23,8 +23,8 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: 2
         anchors.rightMargin: 2
-        anchors.topMargin: 4
-        anchors.bottomMargin: 4
+        anchors.topMargin: 5
+        anchors.bottomMargin: 5
         spacing: 2
 
         // Top Header
@@ -45,8 +45,8 @@ Rectangle {
 
             Image {
                 anchors.centerIn: parent
-                width: 24
-                height: 24
+                width: 26
+                height: 26
                 source: "../../assets/icons/controls/clock.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
@@ -59,15 +59,7 @@ Rectangle {
             text: runtimeRoot.timeText
             color: "#ffffff"
             font.bold: true
-            font.pixelSize: 10
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        // Bottom Dropdown Arrow
-        Text {
-            text: "▼"
-            color: "#8cb5dc"
-            font.pixelSize: 7
+            font.pixelSize: 11
             Layout.alignment: Qt.AlignHCenter
         }
     }

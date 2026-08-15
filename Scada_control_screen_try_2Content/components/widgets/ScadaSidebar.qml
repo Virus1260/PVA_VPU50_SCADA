@@ -3,25 +3,28 @@ import QtQuick.Layouts
 
 Rectangle {
     id: sidebarRoot
-    width: 76
+    width: 88
     color: "#08213b"
 
     property int activeIndex: 0
 
     property var navItems: [
-        { name: "Control", icon: "status_stack", label: "Ctrl" },
+        { name: "Control", icon: "status_stack", label: "Control" },
         { name: "P&ID", icon: "pid_vessel", label: "P&ID" },
-        { name: "Trends", icon: "trends_chart", label: "Trend" },
-        { name: "Alarms", icon: "alarms_bell", label: "Alm" },
-        { name: "Recipes", icon: "recipes_checklist", label: "Rcp" },
-        { name: "Audit", icon: "docs_report", label: "EBR" },
-        { name: "Playback", icon: "logs_order", label: "Log" },
-        { name: "Tools", icon: "tools_maintenance", label: "Diag" }
+        { name: "Trends", icon: "trends_chart", label: "Trends" },
+        { name: "Alarms", icon: "alarms_bell", label: "Alarms" },
+        { name: "Recipes", icon: "recipes_checklist", label: "Recipes" },
+        { name: "Reports", icon: "docs_report", label: "Reports" },
+        { name: "AuditLog", icon: "logs_order", label: "Audit Log" },
+        { name: "Diagnostics", icon: "tools_maintenance", label: "Diagnostics" }
     ]
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 4
+        anchors.leftMargin: 4
+        anchors.rightMargin: 4
+        anchors.topMargin: 6
+        anchors.bottomMargin: 6
         spacing: 4
 
         Repeater {
@@ -41,13 +44,13 @@ Rectangle {
 
                 ColumnLayout {
                     anchors.centerIn: parent
-                    spacing: 2
+                    spacing: 3
 
                     ScadaIcon {
                         iconName: modelData.icon
                         iconColor: "#ffffff"
-                        width: 32
-                        height: 32
+                        width: 28
+                        height: 28
                         Layout.alignment: Qt.AlignHCenter
                     }
 
@@ -57,6 +60,7 @@ Rectangle {
                         font.bold: navBtn.isActive
                         font.pixelSize: 10
                         Layout.alignment: Qt.AlignHCenter
+                        elide: Text.ElideRight
                     }
                 }
 

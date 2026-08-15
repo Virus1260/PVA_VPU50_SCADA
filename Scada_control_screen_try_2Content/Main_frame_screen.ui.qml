@@ -54,18 +54,18 @@ Rectangle {
         anchors.right: parent.right
         height: 56
         z: 10
-        vesselName: "Unimix50"
+        vesselName: "VPU 50"
         systemTag: "B1"
-        alarmMessage: "SYSTEM READY - RECIPE [UNIMIX_BATCH_01] STANDBY"
+        alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     }
 
-    // 2. RIGHT-SIDE SCADA NAVIGATION DOCK (Anchored directly to right)
+    // 2. RIGHT-SIDE SCADA NAVIGATION DOCK (88px Width, Full Spellings)
     ScadaSidebar {
         id: rightSidebar
         anchors.top: scadaHeader.bottom
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: 76
+        width: 88
         z: 10
     }
 
@@ -121,20 +121,11 @@ Rectangle {
         }
     }
 
-    // Bottom yellow indicator accent tab matching authentic EKATO EPOS
-    Rectangle {
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        width: 64
-        height: 3
-        color: "#f5d033"
-        radius: 1
-        z: 15
-    }
+    // =========================================================================
+    // MODAL DIALOGS & OVERLAYS (Z: 100)
+    // =========================================================================
 
-    // =========================================================================
-    // MODAL DIALOGS OVERLAYS (Z: 100)
-    // =========================================================================
+    // 1. Numeric Keypad Setpoint Modal
     NumericKeypadModal {
         id: numpadOverlay
         anchors.fill: parent
@@ -142,6 +133,7 @@ Rectangle {
         z: 100
     }
 
+    // 2. Agitator Mode Selector Overlay
     AgitatorModeModal {
         id: agitatorModeOverlay
         anchors.fill: parent
@@ -149,6 +141,7 @@ Rectangle {
         z: 100
     }
 
+    // 3. Homogenizer Mode Selector Overlay
     HomogenizerModeModal {
         id: homoModeOverlay
         anchors.fill: parent
@@ -156,13 +149,7 @@ Rectangle {
         z: 100
     }
 
-    ExternalLineModeModal {
-        id: extLineOverlay
-        anchors.fill: parent
-        visible: false
-        z: 100
-    }
-
+    // 4. Vacuum Mode Selector Overlay
     VacuumModeModal {
         id: vacuumModeOverlay
         anchors.fill: parent
@@ -170,6 +157,15 @@ Rectangle {
         z: 100
     }
 
+    // 5. External Line Mode Selector Overlay
+    ExternalLineModeModal {
+        id: extLineOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+    }
+
+    // 6. Suction / Filling Mode Selector Overlay
     FillingModeModal {
         id: fillingModeOverlay
         anchors.fill: parent
@@ -177,6 +173,7 @@ Rectangle {
         z: 100
     }
 
+    // 7. Heating Mode Selector Overlay
     HeatingModeModal {
         id: heatModeOverlay
         anchors.fill: parent
@@ -184,6 +181,7 @@ Rectangle {
         z: 100
     }
 
+    // 8. Plant / Vessel Mode Selector Overlay
     PlantModeModal {
         id: plantModeOverlay
         anchors.fill: parent
@@ -191,6 +189,7 @@ Rectangle {
         z: 100
     }
 
+    // 9. Standard Confirm / Override Dialog Overlay
     ConfirmationModal {
         id: confirmDialogOverlay
         anchors.fill: parent
