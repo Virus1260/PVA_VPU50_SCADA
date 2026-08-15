@@ -10,11 +10,12 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
     PREFIX "/qt/qml"
     VERSION 1.0
     FILES 
+        "vercel.json"
         ".vscode/settings.json"
         "dist/config/motor_specs.json"
         "dist/config/plc_commands.json"
-        "dist/config/valves.json"
         "dist/config/row_visibility.json"
+        "dist/config/valves.json"
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
