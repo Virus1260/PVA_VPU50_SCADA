@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../../config"
 
 Rectangle {
     id: confirmRoot
@@ -9,22 +10,13 @@ Rectangle {
     visible: false
     z: 999
 
+    ScadaConfig { id: scadaConfig }
+
     property string title: "Confirm Valve Configuration"
     property string instruction: "Please verify and confirm manual valve positions before beginning sequence."
     property string activeOperationKey: "discharge_product"
     property bool allConfirmed: false
-
-    property var valveList: [
-        { tag: "V101", name: "Main Vessel Discharge Valve", isSolenoid: true, expectedStatus: "OPEN", previousStatus: "CLOSED", currentStatus: "OPEN", confirmed: true },
-        { tag: "V102", name: "External Circulation Return Valve", isSolenoid: true, expectedStatus: "OPEN", previousStatus: "CLOSED", currentStatus: "OPEN", confirmed: true },
-        { tag: "V103", name: "Recirculation Divert Valve", isSolenoid: true, expectedStatus: "CLOSED", previousStatus: "CLOSED", currentStatus: "CLOSED", confirmed: true },
-        { tag: "V201", name: "CIP Rinse Water Valve", isSolenoid: true, expectedStatus: "CLOSED", previousStatus: "CLOSED", currentStatus: "CLOSED", confirmed: true },
-        { tag: "V202", name: "CIP Drain Discharge Valve", isSolenoid: true, expectedStatus: "CLOSED", previousStatus: "CLOSED", currentStatus: "CLOSED", confirmed: true },
-        { tag: "V203", name: "CIP Air Drying Valve", isSolenoid: true, expectedStatus: "CLOSED", previousStatus: "CLOSED", currentStatus: "CLOSED", confirmed: true },
-        { tag: "V301", name: "Liquid Port Charging Valve", isSolenoid: false, expectedStatus: "CLOSED", previousStatus: "-", currentStatus: "-", confirmed: false },
-        { tag: "V302", name: "Solids Funnel Charging Valve", isSolenoid: false, expectedStatus: "CLOSED", previousStatus: "-", currentStatus: "-", confirmed: false },
-        { tag: "V303", name: "Bottom Suction Valve", isSolenoid: false, expectedStatus: "OPEN", previousStatus: "-", currentStatus: "-", confirmed: false }
-    ]
+    property var valveList: []
 
     signal confirmed(string operationKey)
     signal aborted()
@@ -383,101 +375,23 @@ Rectangle {
         allConfirmed = allOk;
     }
 
-    // --- Operation Preset Loader from config/valves.json ---
+    // --- Operation Preset Loader from centralized ScadaConfig ---
     function loadPreset(presetKey) {
         activeOperationKey = presetKey;
-        var presets = {
-            "discharge_product": {
-                name: "Discharge Product",
-                instruction: "Product Discharge requires opening V101 & V102 solenoid valves, and manually setting V303 Butterfly Valve to OPEN position.",
-                expected: { V101: "OPEN", V102: "OPEN", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "OPEN" }
-            },
-            "discharge_circulation_pipe": {
-                name: "Discharge Circulation Pipe",
-                instruction: "Discharge Circulation Pipe requires opening V101 & V102 solenoid valves, and closing all manual charging ports.",
-                expected: { V101: "OPEN", V102: "OPEN", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "recirculation": {
-                name: "External Circulation",
-                instruction: "External Circulation requires opening V102 & V103 solenoid valves, and closing all manual charging ports.",
-                expected: { V101: "CLOSED", V102: "OPEN", V103: "OPEN", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "cip_discharge": {
-                name: "CIP Discharge",
-                instruction: "CIP Drain Discharge requires opening V202 Drain Discharge solenoid valve.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "CLOSED", V202: "OPEN", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "cip_drying": {
-                name: "CIP Drying",
-                instruction: "CIP Air Drying requires opening V203 Air Drying solenoid valve.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "OPEN", V301: "CLOSED", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "cip_rinse": {
-                name: "CIP Rinse Water",
-                instruction: "CIP Water Rinse requires opening V201 Rinse & V202 Drain solenoid valves.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "OPEN", V202: "OPEN", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "suction_liquids": {
-                name: "Suction Liquids",
-                instruction: "Liquid Port Charging requires manually turning V301 Butterfly Valve to OPEN position.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "OPEN", V302: "CLOSED", V303: "CLOSED" }
-            },
-            "suction_solids": {
-                name: "Suction Solids",
-                instruction: "Solids Powder Funnel Charging requires manually turning V302 Butterfly Valve to OPEN position.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "CLOSED", V302: "OPEN", V303: "CLOSED" }
-            },
-            "suction_bottom": {
-                name: "Suction Bottom",
-                instruction: "Bottom Port Suction requires manually turning V303 Butterfly Valve to OPEN position.",
-                expected: { V101: "CLOSED", V102: "CLOSED", V103: "CLOSED", V201: "CLOSED", V202: "CLOSED", V203: "CLOSED", V301: "CLOSED", V302: "CLOSED", V303: "OPEN" }
-            }
-        };
-
-        // Normalize aliases:
-        var normKey = String(presetKey || "").toLowerCase();
-        if (normKey.indexOf("ext_") === 0) normKey = normKey.substring(4);
-        if (normKey === "discharge_circulation" || normKey === "discharge circulation" || normKey === "discharge circulation pipe") {
-            normKey = "discharge_circulation_pipe";
-        } else if (normKey === "discharge_product" || normKey === "discharge product") {
-            normKey = "discharge_product";
-        } else if (normKey === "cip_rinse" || normKey === "cip rinse") {
-            normKey = "cip_rinse";
-        } else if (normKey === "cip_discharge" || normKey === "cip discharge") {
-            normKey = "cip_discharge";
-        } else if (normKey === "cip_drying" || normKey === "cip drying") {
-            normKey = "cip_drying";
-        } else if (normKey === "suction_liquids" || normKey === "suction liquids") {
-            normKey = "suction_liquids";
-        } else if (normKey === "suction_solids" || normKey === "suction solids") {
-            normKey = "suction_solids";
-        } else if (normKey === "suction_bottom" || normKey === "suction bottom") {
-            normKey = "suction_bottom";
-        }
-
-        var p = presets[normKey] || presets["discharge_circulation_pipe"];
+        var p = scadaConfig.getPreset(presetKey);
         title = "Confirm Valve Configuration for " + p.name;
         instruction = p.instruction;
 
-        var baseValves = [
-            { tag: "V101", name: "Main Vessel Discharge Valve", isSolenoid: true },
-            { tag: "V102", name: "External Circulation Return Valve", isSolenoid: true },
-            { tag: "V103", name: "Recirculation Divert Valve", isSolenoid: true },
-            { tag: "V201", name: "CIP Rinse Water Valve", isSolenoid: true },
-            { tag: "V202", name: "CIP Drain Discharge Valve", isSolenoid: true },
-            { tag: "V203", name: "CIP Air Drying Valve", isSolenoid: true },
-            { tag: "V301", name: "Liquid Port Charging Valve", isSolenoid: false },
-            { tag: "V302", name: "Solids Funnel Charging Valve", isSolenoid: false },
-            { tag: "V303", name: "Bottom Suction Valve", isSolenoid: false }
-        ];
-
+        var baseValves = scadaConfig.valveList;
         var list = [];
         var allOk = true;
+
         for (var i = 0; i < baseValves.length; i++) {
             var v = baseValves[i];
-            var exp = p.expected[v.tag] || "CLOSED";
+            var exp = (p.expected && p.expected[v.tag]) ? p.expected[v.tag] : "CLOSED";
             var isSol = v.isSolenoid;
             var isConfirmed = false;
+
             if (isSol) {
                 isConfirmed = true;
             } else {

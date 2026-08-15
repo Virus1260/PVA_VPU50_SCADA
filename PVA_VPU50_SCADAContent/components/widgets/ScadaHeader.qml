@@ -7,8 +7,8 @@ Rectangle {
     color: "#08213b"
     clip: true
 
+    property string activeBatchId: "B1"
     property string vesselName: "VPU 50"
-    property string systemTag: "B1"
     property string plantModeText: "(A)"
     property string alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     property string operatorName: "Line Operator"
@@ -119,10 +119,10 @@ Rectangle {
                 spacing: 8
 
                 Text {
-                    text: headerRoot.vesselName
+                    text: headerRoot.activeBatchId + " - " + headerRoot.vesselName
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 15
+                    font.pixelSize: 14
                     Layout.fillWidth: true
                 }
 

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../../config"
 
 Rectangle {
     id: loginModalRoot
@@ -8,6 +9,8 @@ Rectangle {
     color: "#bb000000"
     visible: false
     z: 999
+
+    ScadaConfig { id: scadaConfig }
 
     // Active session details
     property string currentUserId: "operator"
@@ -158,13 +161,7 @@ Rectangle {
                 spacing: 6
 
                 Repeater {
-                    model: [
-                        { id: "operator", name: "Operator", role: "Operator (Level 1)", level: 1, desc: "Standard production operation, alarm acknowledgement, process start/stop." },
-                        { id: "supervisor", name: "Supervisor", role: "Supervisor (Level 2)", level: 2, desc: "Recipe parameter adjustment, batch phase verification, alarm limit overrides." },
-                        { id: "qa_officer", name: "QA Officer", role: "QA Officer (21 CFR Part 11)", level: 3, desc: "Electronic Batch Record sign-off, audit trail verification, batch release." },
-                        { id: "engineer", name: "Maintenance", role: "Maintenance (Level 4)", level: 4, desc: "Hardware I/O diagnostics, motor VFD calibration, forced valve overrides." },
-                        { id: "admin", name: "Administrator", role: "Administrator (Level 5)", level: 5, desc: "Full unrestricted system access, user management, security audit log export." }
-                    ]
+                    model: scadaConfig.userList
 
                     delegate: Rectangle {
                         Layout.fillWidth: true
@@ -190,10 +187,10 @@ Rectangle {
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 loginModalRoot.targetUserId = modelData.id;
-                                loginModalRoot.targetUserName = modelData.name === "QA Officer" ? "Florian Rismondo" : (modelData.name === "Operator" ? "Line Operator" : (modelData.name === "Supervisor" ? "Production Supervisor" : (modelData.name === "Maintenance" ? "Service Engineer" : "System Administrator")));
+                                loginModalRoot.targetUserName = modelData.name;
                                 loginModalRoot.targetUserRole = modelData.role;
                                 loginModalRoot.targetUserLevel = modelData.level;
-                                loginModalRoot.targetDescription = modelData.desc;
+                                loginModalRoot.targetDescription = modelData.description;
                                 loginModalRoot.enteredPin = "";
                                 loginModalRoot.errorMessage = "";
                             }
@@ -331,16 +328,7 @@ Rectangle {
 
     // --- Authentication Verification Function ---
     function verifyLogin() {
-        var userPins = {
-            "operator": "1234",
-            "supervisor": "2345",
-            "qa_officer": "3456",
-            "engineer": "4567",
-            "admin": "9999"
-        };
-
-        var correctPin = userPins[targetUserId] || "1234";
-        if (enteredPin === correctPin) {
+        if (scadaConfig.verifyCredentials(targetUserId, enteredPin)) {
             currentUserId = targetUserId;
             currentUserName = targetUserName;
             currentUserRole = targetUserRole;
