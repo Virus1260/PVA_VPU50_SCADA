@@ -13,15 +13,16 @@ Item {
     property bool showTags: true
 
     property int currentFrame: 0
+    readonly property int totalFrames: 18
 
-    // Smooth Dynamic Multi-Frame SVG Rotation Animation (18 Distinct 3D SVG Frames across 360°)
+    // High-Speed Ultra-Fast Dynamic Multi-Frame SVG Rotation Animation (8x Accelerated)
     NumberAnimation {
         id: frameAnim
         target: agitatorRoot
         property: "currentFrame"
         from: 0
-        to: 17
-        duration: Math.max(350, Math.min(10000, (60.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
+        to: agitatorRoot.totalFrames
+        duration: Math.max(300, Math.min(300, (2.25 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
         loops: Animation.Infinite
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
     }
@@ -33,12 +34,6 @@ Item {
         } else {
             frameAnim.restart();
         }
-    }
-
-    function getFrameSource(idx) {
-        var n = Math.floor(idx) % 18;
-        var pad = (n < 10 ? "0" + n : "" + n);
-        return Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + pad + ".svg");
     }
 
     // 1. TOP DRIVE MOTOR (Standard Reusable SCADA Motor)
@@ -88,7 +83,7 @@ Item {
         }
     }
 
-    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Driven by 28-Frame Vector SVG Sequence)
+    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-Loaded GPU Vector Cache - Zero Flicker)
     Item {
         id: impellerContainer
         anchors.top: parent.top
@@ -97,14 +92,18 @@ Item {
         width: 250
         height: 320
 
-        Image {
-            id: agitatorSvgImage
-            anchors.fill: parent
-            source: agitatorRoot.getFrameSource(agitatorRoot.currentFrame)
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            mipmap: true
-            asynchronous: true
+        // Preload all 18 vector SVG frames into GPU memory for 60+ FPS zero-latency switching
+        Repeater {
+            model: agitatorRoot.totalFrames
+            Image {
+                anchors.fill: parent
+                source: Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + (index < 10 ? "0" + index : "" + index) + ".svg")
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                mipmap: true
+                asynchronous: false
+                visible: Math.floor(agitatorRoot.currentFrame) === index
+            }
         }
     }
 }
