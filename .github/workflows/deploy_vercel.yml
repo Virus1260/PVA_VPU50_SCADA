@@ -22,9 +22,9 @@ jobs:
         run: |
           pip install aqtinstall ninja cmake
           # Install Linux Desktop Host Tools
-          python3 -m aqt install-qt linux desktop 6.8.2 linux_gcc_64 -m qtdeclarative qtshadertools --base https://download.qt.io -O $HOME/Qt
+          python3 -m aqt install-qt linux desktop 6.8.2 linux_gcc_64 --base https://download.qt.io -O $HOME/Qt
           # Install WebAssembly Target
-          python3 -m aqt install-qt all_os wasm 6.8.2 wasm_singlethread -m qtdeclarative qtshadertools --base https://download.qt.io -O $HOME/Qt
+          python3 -m aqt install-qt all_os wasm 6.8.2 wasm_singlethread --base https://download.qt.io -O $HOME/Qt
           
           # Add to Environment
           echo "$HOME/Qt/6.8.2/gcc_64/bin" >> $GITHUB_PATH
