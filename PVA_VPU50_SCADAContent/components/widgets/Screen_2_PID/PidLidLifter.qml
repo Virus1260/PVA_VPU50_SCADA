@@ -7,7 +7,10 @@ Item {
     height: 440
 
     property bool isLidRaised: false
+    property bool isMotorRunning: false
     property bool showTags: true
+
+    signal motorClicked()
 
     // 1. TOP HORIZONTAL LIFTING ARM (Extending from Lid Right Shoulder)
     Rectangle {
@@ -20,7 +23,7 @@ Item {
         radius: 2
     }
 
-    // 2. VERTICAL ELECTRIC PRECISION SCREW COLUMN
+    // 2. VERTICAL ELECTRIC PRECISION SCREW COLUMN (Declarative for Qt Design Studio)
     Rectangle {
         id: screwColumn
         anchors.left: parent.left
@@ -28,22 +31,22 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.bottom: electricGearBox.top
-        width: 5
+        width: 6
         color: "#cbd5e1"
+        clip: true
 
-        // Screw Thread Hatchings
-        Canvas {
+        // Declarative Screw Thread Hatchings (Zero JS Warnings in Qt Design Studio)
+        Column {
             anchors.fill: parent
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-                ctx.strokeStyle = "#94a3b8";
-                ctx.lineWidth = 1;
-                for (var y = 0; y < height; y += 8) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(width, y + 3);
-                    ctx.stroke();
+            spacing: 6
+
+            Repeater {
+                model: 45
+                Rectangle {
+                    width: 6
+                    height: 2
+                    color: "#94a3b8"
+                    rotation: 15
                 }
             }
         }
@@ -98,35 +101,17 @@ Item {
         }
     }
 
-    // 5. ELECTRIC DRIVE MOTOR M 164 001 (Electric Actuator)
-    RowLayout {
+    // 5. ELECTRIC DRIVE MOTOR M 164 001 (Reusable PidMotor)
+    PidMotor {
         anchors.left: electricGearBox.right
-        anchors.leftMargin: 8
+        anchors.leftMargin: 4
         anchors.verticalCenter: electricGearBox.verticalCenter
-        spacing: 6
-
-        Rectangle {
-            width: 22
-            height: 22
-            radius: 11
-            color: "#0d2847"
-            border.color: "#3b82f6"
-            border.width: 1.5
-
-            Text {
-                anchors.centerIn: parent
-                text: "M"
-                color: "#ffffff"
-                font.bold: true
-                font.pixelSize: 10
-            }
-        }
-
-        ColumnLayout {
-            spacing: 0
-            visible: lifterRoot.showTags
-            Text { text: "M 164 001"; color: "#ffffff"; font.bold: true; font.pixelSize: 8 }
-            Text { text: "Lid Motor"; color: "#8cb5dc"; font.pixelSize: 7 }
-        }
+        motorTag: "M 164 001"
+        speedTag: "Lid Motor"
+        speedRpm: 0
+        isRunning: lifterRoot.isMotorRunning
+        showTags: lifterRoot.showTags
+        showSpeedAbove: false
+        onClicked: lifterRoot.motorClicked()
     }
 }

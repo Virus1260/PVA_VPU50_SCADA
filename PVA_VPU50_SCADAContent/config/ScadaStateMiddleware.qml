@@ -17,19 +17,19 @@ QtObject {
     // 2. LIVE MOTOR & ACTUATOR STATES (Shared by Control, P&ID, Trends, Alarms)
     // =========================================================================
     // (A) Agitator Drive (1M1001 / M 162 001)
-    property bool isAgitatorRunning: true
+    property bool isAgitatorRunning: false
     property real agitatorTargetSpeed: 10.0 // RPM
-    property real agitatorSpeed: 10.0 // Actual RPM
-    property real agitatorPower: 1.2 // kW
-    property real agitatorCurrent: 3.4 // A
+    property real agitatorSpeed: 0.0 // Actual RPM
+    property real agitatorPower: 0.0 // kW
+    property real agitatorCurrent: 0.0 // A
     property string agitatorMode: "agitator_cw" // CW, CCW, Interval
 
     // (B) Homogenizer Drive (1M1002 / M 163 001)
-    property bool isHomogenizerRunning: true
+    property bool isHomogenizerRunning: false
     property real homogenizerTargetSpeed: 4800.0 // RPM
-    property real homogenizerSpeed: 4800.0 // Actual RPM
-    property real homogenizerPower: 8.5 // kW
-    property real homogenizerCurrent: 24.2 // A
+    property real homogenizerSpeed: 0.0 // Actual RPM
+    property real homogenizerPower: 0.0 // kW
+    property real homogenizerCurrent: 0.0 // A
     property string homogenizerMode: "homo_permanent"
 
     // (C) External Circulation & Suction (1M2001)

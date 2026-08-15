@@ -26,41 +26,42 @@ Item {
 
             var cx = 180;
             var r = 130; // Outer shell radius (D0 = 260px)
-            var leftX = cx - r;  // 50
-            var rightX = cx + r; // 310
-            var domeTop = 28;    // Peak of top torispherical dome
-            var seamY = 65;      // Straight flange tangent line
-            var bodyBottom = 315;// Lower tangent line
-            var dishBottom = 358;// Bottom torispherical dish apex
-            var neckW = 46;      // Bottom discharge neck width
+            var leftX = cx - r;   // 50
+            var rightX = cx + r;  // 310
+            var domeTop = 28;     // Peak of top torispherical dome
+            var seamY = 65;       // Straight flange tangent line
+            var bodyBottom = 310; // Lower tangent line
+            var dishBottom = 348; // Bottom torispherical dish apex
+            var neckW = 46;       // Bottom discharge neck width
 
             // -----------------------------------------------------------------
-            // 1. OUTER THERMAL JACKET (Wrapping lower shell & bottom dish)
+            // 1. CONCENTRIC THERMAL JACKET (Wrapping lower shell & bottom dish snugly)
             // -----------------------------------------------------------------
-            var jLeft = leftX - 14;  // 36
-            var jRight = rightX + 14;// 324
-            var jTop = 115;
+            var jLeft = leftX - 12;   // 38
+            var jRight = rightX + 12; // 322
+            var jTop = 120;
 
             ctx.beginPath();
             ctx.moveTo(jLeft, jTop);
             ctx.lineTo(jLeft, bodyBottom);
-            // Torispherical lower jacket curve
-            ctx.quadraticCurveTo(jLeft + 15, dishBottom + 8, cx - neckW / 2 - 8, dishBottom + 12);
-            ctx.lineTo(cx + neckW / 2 + 8, dishBottom + 12);
-            ctx.quadraticCurveTo(jRight - 15, dishBottom + 8, jRight, bodyBottom);
+            // Outer concentric torispherical curve
+            ctx.bezierCurveTo(jLeft, bodyBottom + 26, cx - 55, dishBottom + 12, cx - neckW / 2 - 4, dishBottom + 12);
+            ctx.lineTo(cx + neckW / 2 + 4, dishBottom + 12);
+            ctx.bezierCurveTo(cx + 55, dishBottom + 12, jRight, bodyBottom + 26, jRight, bodyBottom);
             ctx.lineTo(jRight, jTop);
+            // Inner contour (flush against vessel outer shell)
             ctx.lineTo(rightX, jTop);
             ctx.lineTo(rightX, bodyBottom);
-            ctx.quadraticCurveTo(rightX - 15, dishBottom - 2, cx + neckW / 2 + 3, dishBottom + 2);
-            ctx.lineTo(cx - neckW / 2 - 3, dishBottom + 2);
-            ctx.quadraticCurveTo(leftX + 15, dishBottom - 2, leftX, bodyBottom);
+            ctx.bezierCurveTo(rightX, bodyBottom + 24, cx + 55, dishBottom, cx + neckW / 2, dishBottom);
+            ctx.lineTo(cx - neckW / 2, dishBottom);
+            ctx.bezierCurveTo(cx - 55, dishBottom, leftX, bodyBottom + 24, leftX, bodyBottom);
             ctx.lineTo(leftX, jTop);
             ctx.closePath();
 
             ctx.fillStyle = vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "#5b95c9");
             ctx.fill();
             ctx.strokeStyle = "#1b4c7c";
-            ctx.lineWidth = 1.8;
+            ctx.lineWidth = 1.6;
             ctx.stroke();
 
             // -----------------------------------------------------------------
@@ -69,20 +70,16 @@ Item {
             ctx.beginPath();
             // (A) Top Torispherical Dome
             ctx.moveTo(leftX, seamY);
-            // Left knuckle curve (KR)
             ctx.bezierCurveTo(leftX, seamY - 24, cx - 75, domeTop, cx, domeTop);
-            // Right crown & knuckle curve (CR + KR)
             ctx.bezierCurveTo(cx + 75, domeTop, rightX, seamY - 24, rightX, seamY);
 
             // (B) Cylindrical Shell Walls
             ctx.lineTo(rightX, bodyBottom);
 
-            // (C) Bottom Torispherical Dish
-            // Right knuckle to bottom neck
-            ctx.bezierCurveTo(rightX, bodyBottom + 26, cx + 55, dishBottom, cx + neckW / 2, dishBottom);
+            // (C) Bottom Torispherical Dish to Bottom Neck
+            ctx.bezierCurveTo(rightX, bodyBottom + 24, cx + 55, dishBottom, cx + neckW / 2, dishBottom);
             ctx.lineTo(cx - neckW / 2, dishBottom);
-            // Left knuckle from bottom neck
-            ctx.bezierCurveTo(cx - 55, dishBottom, leftX, bodyBottom + 26, leftX, bodyBottom);
+            ctx.bezierCurveTo(cx - 55, dishBottom, leftX, bodyBottom + 24, leftX, bodyBottom);
             ctx.closePath();
 
             // Solid sky-blue fill
@@ -109,47 +106,26 @@ Item {
     }
 
     // -------------------------------------------------------------------------
-    // 3. RIGHT LEVEL GAUGE COLUMN (Built inside right wall with scale markers)
+    // 3. WIDE CAPSULE LEVEL GAUGE (Exact EKATO Semi-Transparent Design)
     // -------------------------------------------------------------------------
     Item {
         anchors.right: parent.right
-        anchors.rightMargin: 56
+        anchors.rightMargin: 52
         anchors.top: parent.top
-        anchors.topMargin: 80
-        width: 32
-        height: 180
+        anchors.topMargin: 105
+        width: 80
+        height: 205
         visible: vesselRoot.showTags
 
-        // Background Track
-        Rectangle {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 7
-            color: "#08213b"
-            border.color: "#1b4c7c"
-            border.width: 1
-            radius: 1
-
-            // Active Green Liquid Column
-            Rectangle {
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.margins: 1
-                height: (parent.height - 2) * (Math.max(0, Math.min(100, vesselRoot.levelPercent)) / 100)
-                color: "#22c55e"
-                radius: 1
-            }
-        }
-
-        // Scale Labels (1000.0 to 0.0)
+        // Scale Labels on Left of Gauge (1000.0 to 0.0)
         Column {
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            spacing: 32
+            anchors.right: gaugeTrack.left
+            anchors.rightMargin: 6
+            anchors.top: gaugeTrack.top
+            anchors.bottom: gaugeTrack.bottom
+            anchors.topMargin: 4
+            anchors.bottomMargin: 4
+            spacing: 34
 
             Repeater {
                 model: ["1000.0", "750.0", "500.0", "250.0", "0.0"]
@@ -162,10 +138,50 @@ Item {
                 }
             }
         }
+
+        // Wide Capsule Track
+        Rectangle {
+            id: gaugeTrack
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: 24
+            radius: 12
+            color: "#07203b"
+            border.color: "#1b4c7c"
+            border.width: 1.5
+            clip: true
+
+            // Fine Center Tick Line
+            Rectangle {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.topMargin: 8
+                anchors.bottomMargin: 8
+                width: 1
+                color: "#1d4ed8"
+                opacity: 0.6
+            }
+
+            // Active Green Liquid Fill
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: 1
+                height: (parent.height - 2) * (Math.max(0, Math.min(100, vesselRoot.levelPercent)) / 100)
+                radius: 11
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#4ade80" }
+                    GradientStop { position: 1.0; color: "#16a34a" }
+                }
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
-    // 4. TELEMETRY BADGES (Positioned cleanly with zero overlap)
+    // 4. TELEMETRY BADGES
     // -------------------------------------------------------------------------
     // Product Temperature (TIC 162001) - Top-Left Dome
     Rectangle {
@@ -231,7 +247,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: -65
         anchors.top: parent.top
-        anchors.topMargin: 220
+        anchors.topMargin: 235
         width: 86
         height: 28
         visible: vesselRoot.showTags

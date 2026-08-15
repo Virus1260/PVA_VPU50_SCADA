@@ -8,13 +8,13 @@ Item {
 
     property string motorTag: "M 162 001"
     property string speedTag: "SCR 162001"
-    property real speedRpm: 10.0
-    property bool isRunning: true
+    property real speedRpm: 0.0
+    property bool isRunning: false
     property bool showTags: true
 
     property real rotationAngle: 0.0
 
-    // Smooth Dynamic Rotation Animation Linked to SCADA State
+    // Smooth Dynamic Rotation Animation - ONLY runs when actually active in SCADA
     NumberAnimation {
         id: rotAnim
         target: agitatorRoot
@@ -35,60 +35,16 @@ Item {
         }
     }
 
-    // 1. TOP DRIVE MOTOR & SENSORS (Pixel-perfect EKATO Layout)
-    ColumnLayout {
+    // 1. TOP DRIVE MOTOR (Reusable Standard SCADA Motor)
+    PidMotor {
         anchors.top: parent.top
-        anchors.topMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 1
-
-        Text {
-            visible: agitatorRoot.showTags
-            text: agitatorRoot.speedTag
-            color: "#8cb5dc"
-            font.bold: true
-            font.pixelSize: 8
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Text {
-            visible: agitatorRoot.showTags
-            text: agitatorRoot.speedRpm.toFixed(1) + "rpm"
-            color: "#ffffff"
-            font.bold: true
-            font.pixelSize: 8
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Text {
-            visible: agitatorRoot.showTags
-            text: agitatorRoot.motorTag
-            color: "#8cb5dc"
-            font.bold: true
-            font.pixelSize: 8
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Item { Layout.preferredHeight: 2 }
-
-        // Motor Symbol 'M' with Vibrant EKATO Green Ring
-        Rectangle {
-            Layout.alignment: Qt.AlignHCenter
-            width: 24
-            height: 24
-            radius: 12
-            color: agitatorRoot.isRunning ? "#4ade80" : "#0d2847"
-            border.color: agitatorRoot.isRunning ? "#22c55e" : "#3b82f6"
-            border.width: 1.6
-
-            Text {
-                anchors.centerIn: parent
-                text: "M"
-                color: agitatorRoot.isRunning ? "#052e16" : "#ffffff"
-                font.bold: true
-                font.pixelSize: 12
-            }
-        }
+        motorTag: agitatorRoot.motorTag
+        speedTag: agitatorRoot.speedTag
+        speedRpm: agitatorRoot.speedRpm
+        isRunning: agitatorRoot.isRunning
+        showTags: agitatorRoot.showTags
+        showSpeedAbove: true
     }
 
     // 2. PROXIMITY SENSOR GZ 161501 ON DOME WITH VERTICAL LABEL
@@ -120,8 +76,8 @@ Item {
             width: 8
             height: 8
             radius: 4
-            color: "#4ade80"
-            border.color: "#22c55e"
+            color: agitatorRoot.isRunning ? "#4ade80" : "#475569"
+            border.color: agitatorRoot.isRunning ? "#22c55e" : "#64748b"
             border.width: 1
         }
     }

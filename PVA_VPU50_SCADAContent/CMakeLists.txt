@@ -45,6 +45,7 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "components/widgets/Screen_2_PID/PidSprayBall.qml"
         "components/widgets/Screen_2_PID/PidValve.qml"
         "components/widgets/Screen_2_PID/PidVessel.qml"
+        "components/widgets/Screen_2_PID/PidMotor.qml"
         "components/widgets/Screen_5_Recipes/FormulationView.qml"
         "components/widgets/Screen_5_Recipes/RecipeIngredientsTable.qml"
         "components/widgets/Screen_5_Recipes/RecipeMatrixView.qml"

@@ -265,7 +265,6 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (E) TOP CIP CLEANING HIGH ARCH HEADER & 3 SPRAY BALLS (z: 8, z: 9)
         // ---------------------------------------------------------------------
-        // High Arch Top Horizontal Pipe Header (Passing well above motor & speed labels)
         PidPipe { z: 8; startX: 240; startY: 15; endX: 605; endY: 15; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 240; startY: 15; endX: 240; endY: 125; baseColor: "#52a5ec" }
 
@@ -279,7 +278,7 @@ Rectangle {
         PidPipe { z: 8; startX: 605; startY: 15; endX: 605; endY: 145; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 605; startY: 145; endX: 642; endY: 185; baseColor: "#52a5ec" }
 
-        // 3 Dedicated Modular Spray Balls in Top Dome (z: 9 - Bell Heads & Non-Overlapping Tags)
+        // 3 Dedicated Modular Spray Balls in Top Dome (z: 9)
         PidSprayBall {
             z: 9
             x: 427
@@ -358,12 +357,12 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER ROTOR/STATOR CHAMBER (z: 6)
+        // (F) BOTTOM HIGH-SHEAR HOMOGENIZER (Mounted Snugly at Bottom Apex) (z: 6)
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog
-            x: 350
-            y: 445
+            x: 300
+            y: 458
             z: 6
             speedRpm: scadaBridge.homogenizerSpeed
             isRunning: scadaBridge.isHomogenizerRunning
@@ -371,14 +370,15 @@ Rectangle {
             onSuctionSolidsClicked: pidScreenRoot.componentTapped("K 143 002")
             onSuctionLiquidsClicked: pidScreenRoot.componentTapped("K 143 001")
             onRecircValveClicked: pidScreenRoot.componentTapped("K 163 002")
+            onMotorClicked: pidScreenRoot.componentTapped("M 163 001")
         }
 
         // Bottom Right Suction Branch V 142 201 (Suction Bottom)
-        PidPipe { z: 6; startX: 595; startY: 425; endX: 625; endY: 455; baseColor: "#52a5ec" }
+        PidPipe { z: 6; startX: 595; startY: 435; endX: 625; endY: 465; baseColor: "#52a5ec" }
         PidValve {
             z: 7
             x: 615
-            y: 442
+            y: 452
             tag: "V 142 201"
             subLabel: "Suction Bottom"
             showTags: pidScreenRoot.showTags
@@ -389,18 +389,18 @@ Rectangle {
         // ---------------------------------------------------------------------
         // (G) EXTERNAL HOMOGENIZATION RECIRCULATION LOOP (z: 6)
         // ---------------------------------------------------------------------
-        PidPipe { z: 6; startX: 690; startY: 490; endX: 790; endY: 490; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
-        PidPipe { z: 6; startX: 790; startY: 490; endX: 790; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
+        PidPipe { z: 6; startX: 650; startY: 532; endX: 790; endY: 532; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
+        PidPipe { z: 6; startX: 790; startY: 532; endX: 790; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d"; reverseFlow: true }
         PidPipe { z: 6; startX: 790; startY: 205; endX: 660; endY: 205; isActive: scadaBridge.isHomogenizerRunning; flowColor: "#38ef7d" }
 
-        PidValve { z: 7; x: 755; y: 476; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
+        PidValve { z: 7; x: 755; y: 518; tag: "K 165 002"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
         PidValve { z: 7; x: 725; y: 191; tag: "K 165 003"; showTags: pidScreenRoot.showTags; isOpen: scadaBridge.isHomogenizerRunning; onClicked: pidScreenRoot.componentTapped(tag) }
 
         // Sensor Indicator GOS 172 601 on Vertical Riser
         Rectangle {
             z: 8
             x: 798
-            y: 460
+            y: 500
             width: 8
             height: 8
             radius: 4
