@@ -26,12 +26,19 @@ jobs:
           # Install WebAssembly Target
           python3 -m aqt install-qt all_os wasm 6.8.2 wasm_singlethread --base https://download.qt.io -O $HOME/Qt
           
+          # Ensure executable permissions on extracted Qt tools
+          chmod -R +x $HOME/Qt/6.8.2/gcc_64/bin || true
+          chmod -R +x $HOME/Qt/6.8.2/gcc_64/libexec || true
+          chmod -R +x $HOME/Qt/6.8.2/wasm_singlethread/bin || true
+          chmod -R +x $HOME/Qt/6.8.2/wasm_singlethread/libexec || true
+          
           # Add to Environment
           echo "$HOME/Qt/6.8.2/gcc_64/bin" >> $GITHUB_PATH
           echo "$HOME/Qt/6.8.2/wasm_singlethread/bin" >> $GITHUB_PATH
 
       - name: Build WebAssembly Application
         run: |
+          chmod +x $HOME/Qt/6.8.2/wasm_singlethread/bin/qt-cmake || true
           $HOME/Qt/6.8.2/wasm_singlethread/bin/qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja
           cmake --build build_wasm --parallel $(nproc)
           mkdir -p dist
