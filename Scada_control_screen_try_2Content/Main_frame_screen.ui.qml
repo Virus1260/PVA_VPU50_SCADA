@@ -40,6 +40,9 @@ Rectangle {
     property alias agitatorModal: agitatorModeOverlay
     property alias homoModal: homoModeOverlay
     property alias vacuumModal: vacuumModeOverlay
+    property alias extLineModal: extLineOverlay
+    property alias fillingModal: fillingModeOverlay
+    property alias heatingModal: heatModeOverlay
     property alias plantModal: plantModeOverlay
     property alias confirmModal: confirmDialogOverlay
 
@@ -153,8 +156,29 @@ Rectangle {
         z: 100
     }
 
+    ExternalLineModeModal {
+        id: extLineOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+    }
+
     VacuumModeModal {
         id: vacuumModeOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+    }
+
+    FillingModeModal {
+        id: fillingModeOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+    }
+
+    HeatingModeModal {
+        id: heatModeOverlay
         anchors.fill: parent
         visible: false
         z: 100

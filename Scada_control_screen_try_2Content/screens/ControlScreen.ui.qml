@@ -52,6 +52,9 @@ Item {
     property alias row5Runtime: r5Runtime
 
     // Property Aliases for Row 6 (Heating / Temperature)
+    property alias row6ModeSelector: r6ModeSelector
+    property alias row6RegSelector: r6RegSelector
+    property alias row6TempSrcSelector: r6TempSrcSelector
     property alias row6GradientCard: r6Gradient
     property alias row6DeltaTCard: r6DeltaT
     property alias row6TempCard: r6Temp
@@ -120,7 +123,7 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
                     // Left Column Block (330px wide: Equipment + Mode)
                     RowLayout {
@@ -156,7 +159,7 @@ Item {
                         Item { Layout.fillWidth: true }
                     }
 
-                    // Column 1: Power & Current Card (Responsive width)
+                    // Column 1: Power & Current Card (180px)
                     ScadaPowerCurrentCard {
                         id: r1PowerCurrent
                         preferredCardWidth: 180
@@ -164,7 +167,7 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Column 2..4: Speed Controller (Responsive width)
+                    // Column 2..4: Speed Controller (560px)
                     ScadaSpeedControl {
                         id: r1Speed
                         minVal: 25.0
@@ -177,12 +180,14 @@ Item {
                         isLocked: r1Media.isPlaying
                         parameterTitle: "Agitator Speed"
                         parameterTag: "1M1501"
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 580
-                        Layout.minimumWidth: 460
-                        Layout.maximumWidth: 840
+                        Layout.preferredWidth: 560
+                        Layout.minimumWidth: 560
+                        Layout.maximumWidth: 560
                         Layout.alignment: Qt.AlignVCenter
                     }
+
+                    // Trailing Spacer to Right Media Controls (Guarantees locked right alignment)
+                    Item { Layout.fillWidth: true }
 
                     // Right Media Controls & Runtime
                     ScadaMediaControls { id: r1Media; Layout.alignment: Qt.AlignVCenter }
@@ -209,7 +214,7 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
                     // Left Column Block (330px wide: Equipment + Mode)
                     RowLayout {
@@ -245,7 +250,7 @@ Item {
                         Item { Layout.fillWidth: true }
                     }
 
-                    // Column 1: Power & Current Card (Responsive width)
+                    // Column 1: Power & Current Card (180px)
                     ScadaPowerCurrentCard {
                         id: r2PowerCurrent
                         preferredCardWidth: 180
@@ -253,7 +258,7 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Column 2..4: Speed Controller (Responsive width)
+                    // Column 2..4: Speed Controller (560px)
                     ScadaSpeedControl {
                         id: r2Speed
                         minVal: 600
@@ -266,12 +271,14 @@ Item {
                         isLocked: r2Media.isPlaying
                         parameterTitle: "Homogenizer Speed"
                         parameterTag: "1M2003"
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 580
-                        Layout.minimumWidth: 460
-                        Layout.maximumWidth: 840
+                        Layout.preferredWidth: 560
+                        Layout.minimumWidth: 560
+                        Layout.maximumWidth: 560
                         Layout.alignment: Qt.AlignVCenter
                     }
+
+                    // Trailing Spacer to Right Media Controls
+                    Item { Layout.fillWidth: true }
 
                     // Right Media Controls & Runtime
                     ScadaMediaControls { id: r2Media; Layout.alignment: Qt.AlignVCenter }
@@ -298,7 +305,7 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
                     // Left Column Block (330px wide: Equipment + Mode)
                     RowLayout {
@@ -322,7 +329,7 @@ Item {
                             id: r3ModeSelector
                             label: "Mode"
                             modeText: "Circulation"
-                            preferredWidth: 92
+                            preferredWidth: 100
                             selectorHeight: 74
                         }
 
@@ -357,7 +364,7 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
                     // Left Column Block (330px wide: Equipment + Mode)
                     RowLayout {
@@ -381,7 +388,7 @@ Item {
                             id: r4ModeSelector
                             label: "Mode"
                             modeText: "Vacuum"
-                            preferredWidth: 86
+                            preferredWidth: 88
                             selectorHeight: 74
                         }
 
@@ -402,12 +409,12 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Column 2..4: Start & End Pressure Cards + Spacer (Matches speed controller width)
+                    // Column 2..4: Start & End Pressure Cards
                     RowLayout {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 580
-                        Layout.maximumWidth: 840
-                        spacing: 14
+                        Layout.preferredWidth: 560
+                        Layout.minimumWidth: 560
+                        Layout.maximumWidth: 560
+                        spacing: 12
                         Layout.alignment: Qt.AlignVCenter
 
                         ScadaCard {
@@ -415,7 +422,7 @@ Item {
                             title: "Start pressure"
                             primaryValue: "-400.0"
                             unit: "mbar"
-                            preferredCardWidth: 180
+                            preferredCardWidth: 175
                             cardHeight: 74
                         }
                         ScadaCard {
@@ -423,11 +430,14 @@ Item {
                             title: "End pressure"
                             primaryValue: "-450.0"
                             unit: "mbar"
-                            preferredCardWidth: 180
+                            preferredCardWidth: 175
                             cardHeight: 74
                         }
                         Item { Layout.fillWidth: true }
                     }
+
+                    // Trailing Spacer to Right Media Controls
+                    Item { Layout.fillWidth: true }
 
                     // Right Media Controls & Runtime
                     ScadaMediaControls { id: r4Media; Layout.alignment: Qt.AlignVCenter }
@@ -454,7 +464,7 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
                     // Left Column Block (330px wide: Equipment + Mode)
                     RowLayout {
@@ -497,18 +507,21 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Column 2..4: Angle closed, Time open, Time closed (Spans smoothly across 580px - 840px)
+                    // Column 2..4: Angle closed, Time open, Time closed (560px total)
                     RowLayout {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 580
-                        Layout.maximumWidth: 840
-                        spacing: 14
+                        Layout.preferredWidth: 560
+                        Layout.minimumWidth: 560
+                        Layout.maximumWidth: 560
+                        spacing: 12
                         Layout.alignment: Qt.AlignVCenter
 
-                        ScadaCard { id: r5AngleClose; title: "Angle closed"; primaryValue: "0.0"; secondaryValue: "100.0%"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
-                        ScadaCard { id: r5TimeOpen; title: "Time open"; primaryValue: "0"; secondaryValue: "0.0 s"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
-                        ScadaCard { id: r5TimeClose; title: "Time closed"; primaryValue: "0"; secondaryValue: "0.0 s"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
+                        ScadaCard { id: r5AngleClose; title: "Angle closed"; primaryValue: "0.0"; secondaryValue: "100.0%"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
+                        ScadaCard { id: r5TimeOpen; title: "Time open"; primaryValue: "0"; secondaryValue: "0.0 s"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
+                        ScadaCard { id: r5TimeClose; title: "Time closed"; primaryValue: "0"; secondaryValue: "0.0 s"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
                     }
+
+                    // Trailing Spacer to Right Media Controls
+                    Item { Layout.fillWidth: true }
 
                     // Right Media Controls & Runtime
                     ScadaMediaControls { id: r5Media; Layout.alignment: Qt.AlignVCenter }
@@ -535,9 +548,9 @@ Item {
                     anchors.rightMargin: 10
                     anchors.topMargin: 8
                     anchors.bottomMargin: 8
-                    spacing: 14
+                    spacing: 12
 
-                    // Left Column Block (330px wide: Equipment + 3 spacious mode selectors)
+                    // Left Column Block (330px wide: Equipment + 3 mode selectors)
                     RowLayout {
                         Layout.preferredWidth: 330
                         Layout.minimumWidth: 330
@@ -555,9 +568,9 @@ Item {
                             ScadaIcon { anchors.centerIn: parent; iconName: "heating_jacket"; width: 48; height: 48 }
                         }
 
-                        ScadaModeSelector { label: "Mode"; modeText: "Heating"; preferredWidth: 78; selectorHeight: 74 }
-                        ScadaModeSelector { label: "Regulation"; modeText: "Product"; preferredWidth: 82; selectorHeight: 74 }
-                        ScadaModeSelector { label: "Temp. Indic."; modeText: "Baffle"; preferredWidth: 86; selectorHeight: 74 }
+                        ScadaModeSelector { id: r6ModeSelector; label: "Mode"; modeText: "Heating"; preferredWidth: 78; selectorHeight: 74 }
+                        ScadaModeSelector { id: r6RegSelector; label: "Regulation"; modeText: "Product"; preferredWidth: 82; selectorHeight: 74 }
+                        ScadaModeSelector { id: r6TempSrcSelector; label: "Temp. Indic."; modeText: "Baffle"; preferredWidth: 86; selectorHeight: 74 }
 
                         Item { Layout.fillWidth: true }
                     }
@@ -576,18 +589,21 @@ Item {
                         Layout.alignment: Qt.AlignVCenter
                     }
 
-                    // Column 2..4: Delta T Jacket, Temperature, Deviation (Spans smoothly across 580px - 840px)
+                    // Column 2..4: Delta T Jacket, Temperature, Deviation (560px total)
                     RowLayout {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 580
-                        Layout.maximumWidth: 840
-                        spacing: 14
+                        Layout.preferredWidth: 560
+                        Layout.minimumWidth: 560
+                        Layout.maximumWidth: 560
+                        spacing: 12
                         Layout.alignment: Qt.AlignVCenter
 
-                        ScadaCard { id: r6DeltaT; title: "Delta T Jacket"; primaryValue: "23.2"; secondaryValue: "0.0 °C"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
-                        ScadaCard { id: r6Temp; title: "Temperature"; primaryValue: "40.1"; secondaryValue: "89.0 °C"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
-                        ScadaCard { id: r6Dev; title: "Deviation"; primaryValue: "48.9"; secondaryValue: "1.0 °C"; unit: ""; preferredCardWidth: 180; cardHeight: 74 }
+                        ScadaCard { id: r6DeltaT; title: "Delta T Jacket"; primaryValue: "23.2"; secondaryValue: "0.0 °C"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
+                        ScadaCard { id: r6Temp; title: "Temperature"; primaryValue: "40.1"; secondaryValue: "89.0 °C"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
+                        ScadaCard { id: r6Dev; title: "Deviation"; primaryValue: "48.9"; secondaryValue: "1.0 °C"; unit: ""; preferredCardWidth: 175; cardHeight: 74 }
                     }
+
+                    // Trailing Spacer to Right Media Controls
+                    Item { Layout.fillWidth: true }
 
                     // Right Media Controls & Runtime
                     ScadaMediaControls { id: r6Media; Layout.alignment: Qt.AlignVCenter }

@@ -1,159 +1,225 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import "../widgets"
 
 Rectangle {
-    id: modalRoot
+    id: vacModalRoot
     anchors.fill: parent
-    color: "#95000000"
+    color: "#bb000000"
+    visible: false
+    z: 999
 
-    signal modeSelected(string mode)
+    property string selectedMode: "Vacuum"
+    property real vacuumPreset: -400.0
+    property real materialLoadingPreset: -850.0
+
+    signal modeApplied(string modeKey, string modeTitle, double presetVal)
     signal closed()
 
-    MouseArea { anchors.fill: parent }
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {}
+    }
 
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(460, Math.min(parent.width * 0.52, 600))
-        height: Math.max(300, Math.min(parent.height * 0.55, 380))
+        width: 580
+        height: 380
         color: "#08213b"
         border.color: "#184d7e"
         border.width: 2
-        radius: 8
+        radius: 12
+        clip: true
 
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 18
             spacing: 14
 
+            // Header Bar
             RowLayout {
                 Layout.fillWidth: true
-                Text { text: "SELECT VACUUM / SUCTION MODE"; color: "#ffffff"; font.bold: true; font.pixelSize: 15 }
-                Item { Layout.fillWidth: true }
+                Text {
+                    text: "Select Vacuum Operational Mode"
+                    color: "#ffffff"
+                    font.bold: true
+                    font.pixelSize: 17
+                    Layout.fillWidth: true
+                }
                 Rectangle {
-                    width: 28
-                    height: 28
-                    radius: 4
-                    color: "#0d365e"
-                    border.color: "#1d5b94"
+                    width: 30
+                    height: 30
+                    color: closeMouse.containsMouse ? "#c82333" : "#103358"
+                    border.color: "#215c9b"
                     border.width: 1
-                    Text { anchors.centerIn: parent; text: "✕"; color: "#ffffff"; font.bold: true; font.pixelSize: 14 }
+                    radius: 4
+                    Text {
+                        anchors.centerIn: parent
+                        text: "✕"
+                        color: "#ffffff"
+                        font.bold: true
+                        font.pixelSize: 13
+                    }
                     MouseArea {
+                        id: closeMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: modalRoot.closed()
+                        onClicked: vacModalRoot.closed()
                     }
                 }
             }
 
+            // 2 Mode Cards
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 12
+                spacing: 20
+                Layout.alignment: Qt.AlignHCenter
 
-                // 1. Suction Liquids
+                // Option 1: Vacuum
                 Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    Layout.preferredWidth: 240
+                    Layout.preferredHeight: 160
+                    color: vacModalRoot.selectedMode === "Vacuum" ? "#1f6cb0" : "#134170"
+                    border.color: vacModalRoot.selectedMode === "Vacuum" ? "#3892e6" : "#215c9b"
+                    border.width: 2.5
+                    radius: 10
 
                     ColumnLayout {
-                        anchors.centerIn: parent
-                        spacing: 10
-                        ScadaIcon { iconName: "suction_liquids"; width: 48; height: 48; Layout.alignment: Qt.AlignHCenter }
-                        Text { text: "Suction\nLiquids"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
+                        anchors.fill: parent
+                        anchors.margins: 14
+                        spacing: 6
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Text {
+                            text: "Vacuum"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 18
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Text {
+                            text: "Preset: -400.0 mbar"
+                            color: "#7dd3fc"
+                            font.bold: true
+                            font.pixelSize: 13
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Text {
+                            text: "Main Vessel Vacuum Control"
+                            color: "#94a3b8"
+                            font.pixelSize: 11
+                            Layout.alignment: Qt.AlignHCenter
+                        }
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("SUCTION_LIQUIDS"); modalRoot.closed(); }
+                        onClicked: vacModalRoot.selectedMode = "Vacuum"
                     }
                 }
 
-                // 2. Suction Solids
+                // Option 2: Material Loading
                 Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    Layout.preferredWidth: 240
+                    Layout.preferredHeight: 160
+                    color: vacModalRoot.selectedMode === "Material Loading" ? "#1f6cb0" : "#134170"
+                    border.color: vacModalRoot.selectedMode === "Material Loading" ? "#3892e6" : "#215c9b"
+                    border.width: 2.5
+                    radius: 10
 
                     ColumnLayout {
-                        anchors.centerIn: parent
-                        spacing: 10
-                        ScadaIcon { iconName: "suction_solids"; width: 48; height: 48; Layout.alignment: Qt.AlignHCenter }
-                        Text { text: "Suction\nSolids (Powder)"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
+                        anchors.fill: parent
+                        anchors.margins: 14
+                        spacing: 6
+                        Layout.alignment: Qt.AlignHCenter
+
+                        Text {
+                            text: "Material Loading"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 18
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Text {
+                            text: "Preset: -850.0 mbar"
+                            color: "#7dd3fc"
+                            font.bold: true
+                            font.pixelSize: 13
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Text {
+                            text: "High Vacuum Material Charging"
+                            color: "#94a3b8"
+                            font.pixelSize: 11
+                            Layout.alignment: Qt.AlignHCenter
+                        }
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("SUCTION_SOLIDS"); modalRoot.closed(); }
-                    }
-                }
-
-                // 3. Suction Bottom
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
-
-                    ColumnLayout {
-                        anchors.centerIn: parent
-                        spacing: 10
-                        ScadaIcon { iconName: "suction_bottom"; width: 48; height: 48; Layout.alignment: Qt.AlignHCenter }
-                        Text { text: "Suction\nBottom Valve"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("SUCTION_BOTTOM"); modalRoot.closed(); }
-                    }
-                }
-
-                // 4. Chamber Venting
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
-
-                    ColumnLayout {
-                        anchors.centerIn: parent
-                        spacing: 10
-                        ScadaIcon { iconName: "vacuum_gauge"; width: 48; height: 48; Layout.alignment: Qt.AlignHCenter }
-                        Text { text: "Atmospheric\nVenting"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("VENTING"); modalRoot.closed(); }
+                        onClicked: vacModalRoot.selectedMode = "Material Loading"
                     }
                 }
             }
 
-            Rectangle {
+            // Action Buttons Row
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 36
-                radius: 4
-                color: "#0d365e"
-                border.color: "#1d5b94"
-                border.width: 1
-                Text { anchors.centerIn: parent; text: "Cancel"; color: "#8cb5dc"; font.bold: true; font.pixelSize: 12 }
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: modalRoot.closed()
+                spacing: 16
+
+                Rectangle {
+                    Layout.preferredWidth: 160
+                    Layout.preferredHeight: 46
+                    color: cancelMouse.pressed ? "#0f3258" : "#184c82"
+                    border.color: "#276cb4"
+                    border.width: 1
+                    radius: 6
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Cancel"
+                        color: "#ffffff"
+                        font.bold: true
+                        font.pixelSize: 14
+                    }
+                    MouseArea {
+                        id: cancelMouse
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: vacModalRoot.closed()
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 46
+                    color: applyMouse.pressed ? "#5cb818" : "#78dc20"
+                    radius: 6
+                    Text {
+                        anchors.centerIn: parent
+                        text: "APPLY MODE"
+                        color: "#0b1d33"
+                        font.bold: true
+                        font.pixelSize: 14
+                    }
+                    MouseArea {
+                        id: applyMouse
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            var preset = vacModalRoot.selectedMode === "Vacuum" ? -400.0 : -850.0;
+                            vacModalRoot.modeApplied("vacuum_gauge", vacModalRoot.selectedMode, preset);
+                            vacModalRoot.closed();
+                        }
+                    }
                 }
             }
         }

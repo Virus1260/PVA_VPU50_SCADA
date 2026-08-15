@@ -92,12 +92,10 @@ Item {
             }
 
             if (ctrl && ctrl.row1SpeedControl) {
-                // Slider drag / click signal
                 ctrl.row1SpeedControl.targetValChangedByUser.connect(function(newVal) {
                     rootWindow.r1TargetSpeed = newVal;
                 });
 
-                // Setpoint box clicked -> Open Keypad Modal
                 ctrl.row1SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
                     if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
                     if (ui.keypadModal) {
@@ -160,12 +158,10 @@ Item {
             }
 
             if (ctrl && ctrl.row2SpeedControl) {
-                // Slider drag / click signal
                 ctrl.row2SpeedControl.targetValChangedByUser.connect(function(newVal) {
                     rootWindow.r2TargetSpeed = newVal;
                 });
 
-                // Setpoint box clicked -> Open Keypad Modal
                 ctrl.row2SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
                     if (ctrl.row2Media && ctrl.row2Media.isPlaying) return;
                     if (ui.keypadModal) {
@@ -209,7 +205,7 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 3. ROW 3: CIRCULATION CONTROLS
+            // 3. ROW 3: CIRCULATION CONTROLS (ExternalLineModeModal)
             // -------------------------------------------------------------
             if (ctrl && ctrl.row3Media) {
                 ctrl.row3Media.stopClicked.connect(function() {
@@ -220,12 +216,12 @@ Item {
 
             if (ctrl && ctrl.row3ModeSelector) {
                 ctrl.row3ModeSelector.clicked.connect(function() {
-                    if (ui.plantModal) ui.plantModal.visible = true;
+                    if (ui.extLineModal) ui.extLineModal.visible = true;
                 });
             }
 
             // -------------------------------------------------------------
-            // 4. ROW 4: VACUUM CONTROLS
+            // 4. ROW 4: VACUUM CONTROLS (VacuumModeModal)
             // -------------------------------------------------------------
             if (ctrl && ctrl.row4Media) {
                 ctrl.row4Media.stopClicked.connect(function() {
@@ -241,7 +237,7 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 5. ROW 5: SUCTION LIQUIDS CONTROLS
+            // 5. ROW 5: SUCTION LIQUIDS CONTROLS (FillingModeModal)
             // -------------------------------------------------------------
             if (ctrl && ctrl.row5Media) {
                 ctrl.row5Media.stopClicked.connect(function() {
@@ -252,12 +248,12 @@ Item {
 
             if (ctrl && ctrl.row5ModeSelector) {
                 ctrl.row5ModeSelector.clicked.connect(function() {
-                    if (ui.vacuumModal) ui.vacuumModal.visible = true;
+                    if (ui.fillingModal) ui.fillingModal.visible = true;
                 });
             }
 
             // -------------------------------------------------------------
-            // 6. ROW 6: HEATING CONTROLS
+            // 6. ROW 6: HEATING CONTROLS (HeatingModeModal)
             // -------------------------------------------------------------
             if (ctrl && ctrl.row6Media) {
                 ctrl.row6Media.playClicked.connect(function() {
@@ -266,6 +262,33 @@ Item {
                 ctrl.row6Media.stopClicked.connect(function() {
                     rootWindow.r6RuntimeSeconds = 0;
                     if (ctrl.row6Runtime) ctrl.row6Runtime.timeText = "00:00:00";
+                });
+            }
+
+            if (ctrl && ctrl.row6ModeSelector) {
+                ctrl.row6ModeSelector.clicked.connect(function() {
+                    if (ui.heatingModal) {
+                        ui.heatingModal.targetSelector = "mode";
+                        ui.heatingModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row6RegSelector) {
+                ctrl.row6RegSelector.clicked.connect(function() {
+                    if (ui.heatingModal) {
+                        ui.heatingModal.targetSelector = "regulation";
+                        ui.heatingModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row6TempSrcSelector) {
+                ctrl.row6TempSrcSelector.clicked.connect(function() {
+                    if (ui.heatingModal) {
+                        ui.heatingModal.targetSelector = "temp_src";
+                        ui.heatingModal.visible = true;
+                    }
                 });
             }
 
@@ -308,7 +331,7 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 10. MODAL SETPOINT ACCEPTANCE HANDLER (Dynamic Value Putter)
+            // 10. MODAL SETPOINT ACCEPTANCE HANDLER
             // -------------------------------------------------------------
             if (ui.keypadModal) {
                 ui.keypadModal.accepted.connect(function(val) {
@@ -326,33 +349,68 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 11. DYNAMIC MODE SELECTION (Updates icon on row immediately)
+            // 11. DYNAMIC MODAL APPLIED SIGNALS
             // -------------------------------------------------------------
+            // Agitator Modal
             if (ui.agitatorModal) {
                 ui.agitatorModal.modeSelected.connect(function(modeKey) {
-                    if (ctrl && ctrl.row1ModeSelector) {
-                        ctrl.row1ModeSelector.iconName = modeKey;
-                    }
+                    if (ctrl && ctrl.row1ModeSelector) ctrl.row1ModeSelector.iconName = modeKey;
                 });
                 ui.agitatorModal.closed.connect(function() { ui.agitatorModal.visible = false; });
             }
 
+            // Homogenizer Modal
             if (ui.homoModal) {
                 ui.homoModal.modeSelected.connect(function(modeKey) {
-                    if (ctrl && ctrl.row2ModeSelector) {
-                        ctrl.row2ModeSelector.iconName = modeKey;
-                    }
+                    if (ctrl && ctrl.row2ModeSelector) ctrl.row2ModeSelector.iconName = modeKey;
                 });
                 ui.homoModal.closed.connect(function() { ui.homoModal.visible = false; });
             }
 
-            if (ui.vacuumModal) {
-                ui.vacuumModal.modeSelected.connect(function(modeKey) {
-                    if (ctrl && ctrl.row5ModeSelector) {
-                        ctrl.row5ModeSelector.iconName = modeKey;
+            // External Line Modal (Row 3)
+            if (ui.extLineModal) {
+                ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
+                    if (ctrl && ctrl.row3ModeSelector) {
+                        ctrl.row3ModeSelector.modeText = modeTitle;
+                        ctrl.row3ModeSelector.iconName = "";
                     }
                 });
+                ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
+            }
+
+            // Vacuum Modal (Row 4)
+            if (ui.vacuumModal) {
+                ui.vacuumModal.modeApplied.connect(function(modeKey, modeTitle, preset) {
+                    if (ctrl && ctrl.row4ModeSelector) ctrl.row4ModeSelector.modeText = modeTitle;
+                    if (ctrl && ctrl.row4StartCard) ctrl.row4StartCard.primaryValue = preset.toFixed(1);
+                });
                 ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
+            }
+
+            // Filling Modal (Row 5)
+            if (ui.fillingModal) {
+                ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
+                    if (ctrl && ctrl.row5ModeSelector) {
+                        ctrl.row5ModeSelector.iconName = modeKey;
+                        ctrl.row5ModeSelector.modeText = "";
+                    }
+                });
+                ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
+            }
+
+            // Heating Modal (Row 6)
+            if (ui.heatingModal) {
+                ui.heatingModal.optionSelected.connect(function(selector, val, iconKey) {
+                    if (!ctrl) return;
+                    if (selector === "mode" && ctrl.row6ModeSelector) {
+                        ctrl.row6ModeSelector.modeText = val;
+                    } else if (selector === "regulation" && ctrl.row6RegSelector) {
+                        ctrl.row6RegSelector.modeText = val;
+                    } else if (selector === "temp_src" && ctrl.row6TempSrcSelector) {
+                        ctrl.row6TempSrcSelector.modeText = val;
+                    }
+                });
+                ui.heatingModal.closed.connect(function() { ui.heatingModal.visible = false; });
             }
 
             if (ui.plantModal) ui.plantModal.closed.connect(function() { ui.plantModal.visible = false; });

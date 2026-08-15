@@ -151,6 +151,9 @@
         <file>Scada_control_screen_try_2Content/assets/pid_schema_tags.json</file>
         <file>Scada_control_screen_try_2Content/components/modals/AgitatorModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/ConfirmationModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/ExternalLineModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/FillingModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/HeatingModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/HomogenizerModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/NumericKeypadModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/PlantModeModal.qml</file>
