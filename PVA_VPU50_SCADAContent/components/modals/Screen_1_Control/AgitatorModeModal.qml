@@ -8,6 +8,8 @@ Rectangle {
     anchors.fill: parent
     color: "#95000000"
 
+    property string currentMode: "agitator_cw"
+
     signal modeSelected(string mode)
     signal closed()
 
@@ -16,7 +18,7 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(420, Math.min(parent.width * 0.48, 560))
+        width: Math.max(440, Math.min(parent.width * 0.50, 580))
         height: Math.max(300, Math.min(parent.height * 0.55, 380))
         color: "#08213b"
         border.color: "#184d7e"
@@ -57,9 +59,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "agitator_cw" ? "#164e85" : (cwMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "agitator_cw" ? "#00d2ff" : (cwMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "agitator_cw" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -68,10 +71,35 @@ Rectangle {
                         Text { text: "Clockwise (CW)\nDown-Pumping"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "agitator_cw"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: cwMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("agitator_cw"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "agitator_cw";
+                            modalRoot.modeSelected("agitator_cw");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -79,9 +107,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "agitator_ccw" ? "#164e85" : (ccwMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "agitator_ccw" ? "#00d2ff" : (ccwMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "agitator_ccw" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -90,10 +119,35 @@ Rectangle {
                         Text { text: "Counter-CW (CCW)\nUp-Pumping"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "agitator_ccw"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: ccwMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("agitator_ccw"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "agitator_ccw";
+                            modalRoot.modeSelected("agitator_ccw");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -101,9 +155,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "agitator_reversing" ? "#164e85" : (revMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "agitator_reversing" ? "#00d2ff" : (revMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "agitator_reversing" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -112,10 +167,35 @@ Rectangle {
                         Text { text: "Reversing Cycle\n(Interval CW/CCW)"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "agitator_reversing"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: revMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("agitator_reversing"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "agitator_reversing";
+                            modalRoot.modeSelected("agitator_reversing");
+                            modalRoot.closed();
+                        }
                     }
                 }
             }

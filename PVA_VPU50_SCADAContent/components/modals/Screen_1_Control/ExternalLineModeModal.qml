@@ -21,7 +21,7 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: 760
+        width: 780
         height: 480
         color: "#08213b"
         border.color: "#184d7e"
@@ -130,9 +130,9 @@ Rectangle {
                                 Rectangle {
                                     Layout.preferredWidth: 110
                                     Layout.preferredHeight: 110
-                                    color: extModalRoot.selectedMode === "Discharge Product" ? "#1d4ed8" : "#0b2545"
-                                    border.color: extModalRoot.selectedMode === "Discharge Product" ? "#60a5fa" : "#1e40af"
-                                    border.width: 2.5
+                                    color: extModalRoot.selectedMode === "Discharge Product" ? "#164e85" : (p1Mouse.containsMouse ? "#124373" : "#0b2545")
+                                    border.color: extModalRoot.selectedMode === "Discharge Product" ? "#00d2ff" : (p1Mouse.containsMouse ? "#3b82f6" : "#1e40af")
+                                    border.width: extModalRoot.selectedMode === "Discharge Product" ? 2.5 : 1.5
                                     radius: 10
 
                                     ScadaIcon {
@@ -142,8 +142,29 @@ Rectangle {
                                         height: 80
                                     }
 
+                                    // Active Selection Badge
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        anchors.right: parent.right
+                                        anchors.margins: 6
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        color: "#00d2ff"
+                                        visible: extModalRoot.selectedMode === "Discharge Product"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "✓"
+                                            color: "#08213b"
+                                            font.bold: true
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: p1Mouse
                                         anchors.fill: parent
+                                        hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: extModalRoot.selectedMode = "Discharge Product"
                                     }
@@ -176,9 +197,9 @@ Rectangle {
                                 Rectangle {
                                     Layout.preferredWidth: 110
                                     Layout.preferredHeight: 110
-                                    color: extModalRoot.selectedMode === "Discharge Circulation" ? "#1d4ed8" : "#0b2545"
-                                    border.color: extModalRoot.selectedMode === "Discharge Circulation" ? "#60a5fa" : "#1e40af"
-                                    border.width: 2.5
+                                    color: extModalRoot.selectedMode === "Discharge Circulation" ? "#164e85" : (p2Mouse.containsMouse ? "#124373" : "#0b2545")
+                                    border.color: extModalRoot.selectedMode === "Discharge Circulation" ? "#00d2ff" : (p2Mouse.containsMouse ? "#3b82f6" : "#1e40af")
+                                    border.width: extModalRoot.selectedMode === "Discharge Circulation" ? 2.5 : 1.5
                                     radius: 10
 
                                     ScadaIcon {
@@ -188,8 +209,29 @@ Rectangle {
                                         height: 80
                                     }
 
+                                    // Active Selection Badge
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        anchors.right: parent.right
+                                        anchors.margins: 6
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        color: "#00d2ff"
+                                        visible: extModalRoot.selectedMode === "Discharge Circulation"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "✓"
+                                            color: "#08213b"
+                                            font.bold: true
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: p2Mouse
                                         anchors.fill: parent
+                                        hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: extModalRoot.selectedMode = "Discharge Circulation"
                                     }
@@ -263,9 +305,9 @@ Rectangle {
                                 Rectangle {
                                     Layout.preferredWidth: 110
                                     Layout.preferredHeight: 110
-                                    color: extModalRoot.selectedMode === "CIP Rinse" ? "#0891b2" : "#072a38"
-                                    border.color: extModalRoot.selectedMode === "CIP Rinse" ? "#67e8f9" : "#164e63"
-                                    border.width: 2.5
+                                    color: extModalRoot.selectedMode === "CIP Rinse" ? "#0891b2" : (c1Mouse.containsMouse ? "#0c4a5e" : "#072a38")
+                                    border.color: extModalRoot.selectedMode === "CIP Rinse" ? "#00d2ff" : (c1Mouse.containsMouse ? "#22d3ee" : "#164e63")
+                                    border.width: extModalRoot.selectedMode === "CIP Rinse" ? 2.5 : 1.5
                                     radius: 10
 
                                     ScadaIcon {
@@ -275,8 +317,29 @@ Rectangle {
                                         height: 80
                                     }
 
+                                    // Active Selection Badge
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        anchors.right: parent.right
+                                        anchors.margins: 6
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        color: "#00d2ff"
+                                        visible: extModalRoot.selectedMode === "CIP Rinse"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "✓"
+                                            color: "#08213b"
+                                            font.bold: true
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: c1Mouse
                                         anchors.fill: parent
+                                        hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: extModalRoot.selectedMode = "CIP Rinse"
                                     }
@@ -309,9 +372,9 @@ Rectangle {
                                 Rectangle {
                                     Layout.preferredWidth: 110
                                     Layout.preferredHeight: 110
-                                    color: extModalRoot.selectedMode === "CIP Discharge" ? "#0891b2" : "#072a38"
-                                    border.color: extModalRoot.selectedMode === "CIP Discharge" ? "#67e8f9" : "#164e63"
-                                    border.width: 2.5
+                                    color: extModalRoot.selectedMode === "CIP Discharge" ? "#0891b2" : (c2Mouse.containsMouse ? "#0c4a5e" : "#072a38")
+                                    border.color: extModalRoot.selectedMode === "CIP Discharge" ? "#00d2ff" : (c2Mouse.containsMouse ? "#22d3ee" : "#164e63")
+                                    border.width: extModalRoot.selectedMode === "CIP Discharge" ? 2.5 : 1.5
                                     radius: 10
 
                                     ScadaIcon {
@@ -321,8 +384,29 @@ Rectangle {
                                         height: 80
                                     }
 
+                                    // Active Selection Badge
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        anchors.right: parent.right
+                                        anchors.margins: 6
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        color: "#00d2ff"
+                                        visible: extModalRoot.selectedMode === "CIP Discharge"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "✓"
+                                            color: "#08213b"
+                                            font.bold: true
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: c2Mouse
                                         anchors.fill: parent
+                                        hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: extModalRoot.selectedMode = "CIP Discharge"
                                     }
@@ -355,9 +439,9 @@ Rectangle {
                                 Rectangle {
                                     Layout.preferredWidth: 110
                                     Layout.preferredHeight: 110
-                                    color: extModalRoot.selectedMode === "CIP Drying" ? "#0891b2" : "#072a38"
-                                    border.color: extModalRoot.selectedMode === "CIP Drying" ? "#67e8f9" : "#164e63"
-                                    border.width: 2.5
+                                    color: extModalRoot.selectedMode === "CIP Drying" ? "#0891b2" : (c3Mouse.containsMouse ? "#0c4a5e" : "#072a38")
+                                    border.color: extModalRoot.selectedMode === "CIP Drying" ? "#00d2ff" : (c3Mouse.containsMouse ? "#22d3ee" : "#164e63")
+                                    border.width: extModalRoot.selectedMode === "CIP Drying" ? 2.5 : 1.5
                                     radius: 10
 
                                     ScadaIcon {
@@ -367,8 +451,29 @@ Rectangle {
                                         height: 80
                                     }
 
+                                    // Active Selection Badge
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        anchors.right: parent.right
+                                        anchors.margins: 6
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        color: "#00d2ff"
+                                        visible: extModalRoot.selectedMode === "CIP Drying"
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: "✓"
+                                            color: "#08213b"
+                                            font.bold: true
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
                                     MouseArea {
+                                        id: c3Mouse
                                         anchors.fill: parent
+                                        hoverEnabled: true
                                         cursorShape: Qt.PointingHandCursor
                                         onClicked: extModalRoot.selectedMode = "CIP Drying"
                                     }

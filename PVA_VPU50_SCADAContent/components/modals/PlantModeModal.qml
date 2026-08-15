@@ -74,7 +74,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
             }
 
-            // 2x2 Grid of Plantmode Options (Matching EKATO EPOS Reference)
+            // 2x2 Grid of Plantmode Options
             GridLayout {
                 columns: 2
                 rows: 2
@@ -88,9 +88,9 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     color: modalRoot.isAuto ? "#0f3a64" : "#2a2412"
-                    border.color: modalRoot.isAuto ? "#78dc20" : "#f5d033"
-                    border.width: 2
-                    radius: 6
+                    border.color: modalRoot.isAuto ? "#00d2ff" : "#f5d033"
+                    border.width: 2.5
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -118,6 +118,24 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -133,10 +151,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: modalRoot.activeMode === "RECIPE" ? "#0f3a64" : "#082646"
-                    border.color: modalRoot.activeMode === "RECIPE" ? "#78dc20" : "#1d5b94"
-                    border.width: modalRoot.activeMode === "RECIPE" ? 2 : 1
-                    radius: 6
+                    color: modalRoot.activeMode === "RECIPE" ? "#164e85" : (rMouse.containsMouse ? "#124373" : "#082646")
+                    border.color: modalRoot.activeMode === "RECIPE" ? "#00d2ff" : (rMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.activeMode === "RECIPE" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -158,8 +176,29 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.activeMode === "RECIPE"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: rMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             modalRoot.activeMode = "RECIPE";
@@ -173,10 +212,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: modalRoot.activeMode === "CIP" ? "#0f3a64" : "#082646"
-                    border.color: modalRoot.activeMode === "CIP" ? "#78dc20" : "#1d5b94"
-                    border.width: modalRoot.activeMode === "CIP" ? 2 : 1
-                    radius: 6
+                    color: modalRoot.activeMode === "CIP" ? "#164e85" : (cipMouse.containsMouse ? "#124373" : "#082646")
+                    border.color: modalRoot.activeMode === "CIP" ? "#00d2ff" : (cipMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.activeMode === "CIP" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -198,8 +237,29 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.activeMode === "CIP"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: cipMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             modalRoot.activeMode = "CIP";
@@ -213,10 +273,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: modalRoot.activeMode === "PRODUCTION" ? "#0f3a64" : "#082646"
-                    border.color: modalRoot.activeMode === "PRODUCTION" ? "#78dc20" : "#1d5b94"
-                    border.width: modalRoot.activeMode === "PRODUCTION" ? 2 : 1
-                    radius: 6
+                    color: modalRoot.activeMode === "PRODUCTION" ? "#164e85" : (prodMouse.containsMouse ? "#124373" : "#082646")
+                    border.color: modalRoot.activeMode === "PRODUCTION" ? "#00d2ff" : (prodMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.activeMode === "PRODUCTION" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -238,8 +298,29 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.activeMode === "PRODUCTION"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: prodMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             modalRoot.activeMode = "PRODUCTION";

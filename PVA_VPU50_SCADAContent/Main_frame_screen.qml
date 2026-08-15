@@ -22,6 +22,8 @@ Item {
     property double r2Current: 0.0
     property int r2RuntimeSeconds: 0
 
+    property string row3SelectedPreset: "discharge_circulation_pipe"
+    property bool row3ValveConfirmed: false
     property int r3RuntimeSeconds: 0
 
     property double vacuumPressure: -209.8
@@ -29,11 +31,15 @@ Item {
     property double vacuumEndPressure: -450.0
     property int r4RuntimeSeconds: 0
 
+    property string row5SelectedPreset: "suction_liquids"
+    property bool row5ValveConfirmed: false
     property double suctionAngleOpen: 100.0
     property double suctionAngleClose: 100.0
     property double suctionTimeOpen: 0.0
     property double suctionTimeClose: 0.0
     property int r5RuntimeSeconds: 0
+
+    property string activeConfirmTarget: ""
 
     property double productTemp: 40.1
     property double targetTemp: 89.0
@@ -157,7 +163,10 @@ Item {
         if (ctrl.row1ModeSelector) {
             ctrl.row1ModeSelector.clicked.connect(function() {
                 if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
-                if (ui.agitatorModal) ui.agitatorModal.visible = true;
+                if (ui.agitatorModal) {
+                    ui.agitatorModal.currentMode = ctrl.row1ModeSelector.iconName || "agitator_cw";
+                    ui.agitatorModal.visible = true;
+                }
             });
         }
 
@@ -227,16 +236,35 @@ Item {
         if (ctrl.row2ModeSelector) {
             ctrl.row2ModeSelector.clicked.connect(function() {
                 if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
-                if (ui.homoModal) ui.homoModal.visible = true;
+                if (ui.homoModal) {
+                    ui.homoModal.currentMode = ctrl.row2ModeSelector.iconName || "homo_permanent";
+                    ui.homoModal.visible = true;
+                }
             });
         }
 
         // -------------------------------------------------------------
-        // 3. ROW 3: CIRCULATION CONTROLS (ExternalLineModeModal)
+        // 3. ROW 3: CIRCULATION CONTROLS & VALVE SAFETY CONFIRMATION ON PLAY
         // -------------------------------------------------------------
         if (ctrl.row3Media) {
+            ctrl.row3Media.playClicked.connect(function() {
+                if (!rootWindow.row3ValveConfirmed) {
+                    // Stop automatic start until manual valves are verified
+                    ctrl.row3Media.isPlaying = false;
+                    rootWindow.activeConfirmTarget = "row3";
+                    if (ui.confirmModal) {
+                        ui.confirmModal.loadPreset(rootWindow.row3SelectedPreset);
+                    }
+                } else {
+                    if (ui.header) {
+                        ui.header.alarmMessage = "CIRCULATION SEQUENCE RUNNING - 1M2001 ACTIVE";
+                    }
+                }
+            });
+
             ctrl.row3Media.stopClicked.connect(function() {
                 rootWindow.r3RuntimeSeconds = 0;
+                rootWindow.row3ValveConfirmed = false;
                 if (ctrl.row3Runtime) ctrl.row3Runtime.timeText = "00:00:00";
             });
         }
@@ -296,11 +324,27 @@ Item {
         }
 
         // -------------------------------------------------------------
-        // 5. ROW 5: SUCTION LIQUIDS CONTROLS & SETPOINTS
+        // 5. ROW 5: SUCTION LIQUIDS CONTROLS & VALVE SAFETY CONFIRMATION ON PLAY
         // -------------------------------------------------------------
         if (ctrl.row5Media) {
+            ctrl.row5Media.playClicked.connect(function() {
+                if (!rootWindow.row5ValveConfirmed) {
+                    // Stop automatic start until manual valves are verified
+                    ctrl.row5Media.isPlaying = false;
+                    rootWindow.activeConfirmTarget = "row5";
+                    if (ui.confirmModal) {
+                        ui.confirmModal.loadPreset(rootWindow.row5SelectedPreset);
+                    }
+                } else {
+                    if (ui.header) {
+                        ui.header.alarmMessage = "SUCTION PORT CHARGING ACTIVE - 1V1001 REGULATING";
+                    }
+                }
+            });
+
             ctrl.row5Media.stopClicked.connect(function() {
                 rootWindow.r5RuntimeSeconds = 0;
+                rootWindow.row5ValveConfirmed = false;
                 if (ctrl.row5Runtime) ctrl.row5Runtime.timeText = "00:00:00";
             });
         }
@@ -387,6 +431,7 @@ Item {
                 if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                 if (ui.heatingModal) {
                     ui.heatingModal.targetSelector = "mode";
+                    ui.heatingModal.selectedValue = ctrl.row6ModeSelector.modeText || "Heating";
                     ui.heatingModal.visible = true;
                 }
             });
@@ -397,6 +442,7 @@ Item {
                 if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                 if (ui.heatingModal) {
                     ui.heatingModal.targetSelector = "regulation";
+                    ui.heatingModal.selectedValue = ctrl.row6RegSelector.modeText || "Product";
                     ui.heatingModal.visible = true;
                 }
             });
@@ -407,6 +453,7 @@ Item {
                 if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                 if (ui.heatingModal) {
                     ui.heatingModal.targetSelector = "temp_src";
+                    ui.heatingModal.selectedValue = ctrl.row6TempSrcSelector.modeText || "Baffle";
                     ui.heatingModal.visible = true;
                 }
             });
@@ -496,7 +543,6 @@ Item {
             ui.pidScreen.componentTapped.connect(function(tagName) {
                 if (ui.confirmModal) {
                     ui.confirmModal.title = "Confirm Device Action: " + tagName;
-                    ui.confirmModal.tag = tagName;
                     ui.confirmModal.instruction = "Please verify safety interlocks before toggling position of " + tagName + ".";
                     ui.confirmModal.visible = true;
                 }
@@ -593,11 +639,18 @@ Item {
             ui.homoModal.closed.connect(function() { ui.homoModal.visible = false; });
         }
 
-        // External Line Modal (Row 3)
+        // External Line Modal (Row 3) - Applies configuration quietly without popping confirmation
         if (ui.extLineModal) {
             ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
                 ui.extLineModal.visible = false;
-                if (ui.confirmModal) ui.confirmModal.loadPreset(modeKey);
+                rootWindow.row3SelectedPreset = modeKey;
+                rootWindow.row3ValveConfirmed = false;
+                if (ctrl.row3ModeSelector) {
+                    ctrl.row3ModeSelector.iconName = modeKey;
+                }
+                if (ui.header) {
+                    ui.header.alarmMessage = "EXTERNAL LINE CONFIGURED: [" + modeTitle.toUpperCase() + "] - PRESS START TO CONFIRM VALVES";
+                }
             });
             ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
         }
@@ -614,33 +667,51 @@ Item {
             ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
         }
 
-        // Filling / Suction Modal (Row 5)
+        // Filling / Suction Modal (Row 5) - Applies configuration quietly without popping confirmation
         if (ui.fillingModal) {
             ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
                 ui.fillingModal.visible = false;
-                if (ui.confirmModal) ui.confirmModal.loadPreset(modeKey);
+                rootWindow.row5SelectedPreset = modeKey;
+                rootWindow.row5ValveConfirmed = false;
+                if (ctrl.row5ModeSelector) {
+                    ctrl.row5ModeSelector.iconName = modeKey;
+                }
+                if (ui.header) {
+                    ui.header.alarmMessage = "SUCTION PORT CONFIGURED: [" + modeTitle.toUpperCase() + "] - PRESS START TO CONFIRM VALVES";
+                }
             });
             ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
         }
 
-        // Valve Status Matrix & Safety Interlock Modal
+        // Valve Status Matrix & Safety Interlock Modal (Triggers when Start is pressed)
         if (ui.confirmModal) {
             ui.confirmModal.confirmed.connect(function(opKey) {
-                if (ctrl.row3ModeSelector && (opKey.indexOf("discharge") >= 0 || opKey.indexOf("cip") >= 0 || opKey.indexOf("recirculation") >= 0)) {
-                    ctrl.row3ModeSelector.iconName = opKey;
-                }
-                if (ctrl.row5ModeSelector && opKey.indexOf("suction") >= 0) {
-                    ctrl.row5ModeSelector.iconName = opKey;
+                if (rootWindow.activeConfirmTarget === "row3") {
+                    rootWindow.row3ValveConfirmed = true;
+                    if (ctrl.row3Media) ctrl.row3Media.isPlaying = true;
+                } else if (rootWindow.activeConfirmTarget === "row5") {
+                    rootWindow.row5ValveConfirmed = true;
+                    if (ctrl.row5Media) ctrl.row5Media.isPlaying = true;
                 }
                 if (ui.header) {
                     ui.header.alarmMessage = "VALVE POSITIONING CONFIRMED: [" + opKey.toUpperCase() + "] SEQUENCE RUNNING";
                 }
             });
+
             ui.confirmModal.aborted.connect(function() {
+                if (rootWindow.activeConfirmTarget === "row3") {
+                    rootWindow.row3ValveConfirmed = false;
+                    if (ctrl.row3Media) ctrl.row3Media.isPlaying = false;
+                } else if (rootWindow.activeConfirmTarget === "row5") {
+                    rootWindow.row5ValveConfirmed = false;
+                    if (ctrl.row5Media) ctrl.row5Media.isPlaying = false;
+                }
                 if (ui.header) {
-                    ui.header.alarmMessage = "PROCESS SEQUENCE ABORTED BY OPERATOR";
+                    ui.header.alarmMessage = "SAFETY INTERLOCK: PROCESS START ABORTED - VALVES NOT CONFIRMED";
+                    ui.header.isAlarmActive = true;
                 }
             });
+
             ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
         }
 

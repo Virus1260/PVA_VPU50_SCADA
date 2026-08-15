@@ -8,6 +8,8 @@ Rectangle {
     anchors.fill: parent
     color: "#95000000"
 
+    property string currentMode: "homo_permanent"
+
     signal modeSelected(string mode)
     signal closed()
 
@@ -16,7 +18,7 @@ Rectangle {
     Rectangle {
         id: modalBox
         anchors.centerIn: parent
-        width: Math.max(420, Math.min(parent.width * 0.48, 560))
+        width: Math.max(440, Math.min(parent.width * 0.50, 580))
         height: Math.max(300, Math.min(parent.height * 0.55, 380))
         color: "#08213b"
         border.color: "#184d7e"
@@ -57,9 +59,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "homo_permanent" ? "#164e85" : (permMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "homo_permanent" ? "#00d2ff" : (permMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "homo_permanent" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -68,10 +71,35 @@ Rectangle {
                         Text { text: "Permanent\nContinuous Run"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "homo_permanent"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: permMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("homo_permanent"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "homo_permanent";
+                            modalRoot.modeSelected("homo_permanent");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -79,9 +107,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "homo_interval" ? "#164e85" : (intMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "homo_interval" ? "#00d2ff" : (intMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "homo_interval" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -90,10 +119,35 @@ Rectangle {
                         Text { text: "Interval Pulse\n(Timer ON/OFF)"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "homo_interval"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: intMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("homo_interval"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "homo_interval";
+                            modalRoot.modeSelected("homo_interval");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -101,9 +155,10 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3862"
-                    border.color: "#184d7e"
-                    radius: 6
+                    color: modalRoot.currentMode === "homogenizer" ? "#164e85" : (loopMouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: modalRoot.currentMode === "homogenizer" ? "#00d2ff" : (loopMouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: modalRoot.currentMode === "homogenizer" ? 2.5 : 1
+                    radius: 8
 
                     ColumnLayout {
                         anchors.centerIn: parent
@@ -112,10 +167,35 @@ Rectangle {
                         Text { text: "Internal Vessel\nRecirculation"; color: "#ffffff"; font.bold: true; font.pixelSize: 12; horizontalAlignment: Text.AlignHCenter }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: modalRoot.currentMode === "homogenizer"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: loopMouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("homogenizer"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.currentMode = "homogenizer";
+                            modalRoot.modeSelected("homogenizer");
+                            modalRoot.closed();
+                        }
                     }
                 }
             }

@@ -98,10 +98,10 @@ Rectangle {
                         Layout.preferredWidth: 110
                         Layout.preferredHeight: 110
                         color: (heatModalRoot.selectedValue === "Heating" || heatModalRoot.selectedValue === "Product" || heatModalRoot.selectedValue === "Baffle") ?
-                               (heatModalRoot.targetSelector === "mode" ? "#7f1d1d" : "#1d4ed8") : "#0b2545"
+                               (heatModalRoot.targetSelector === "mode" ? "#7f1d1d" : "#164e85") : (h1Mouse.containsMouse ? "#124373" : "#0b2545")
                         border.color: (heatModalRoot.selectedValue === "Heating" || heatModalRoot.selectedValue === "Product" || heatModalRoot.selectedValue === "Baffle") ?
-                                      (heatModalRoot.targetSelector === "mode" ? "#f87171" : "#60a5fa") : "#1e40af"
-                        border.width: 2.5
+                                      "#00d2ff" : (h1Mouse.containsMouse ? "#3b82f6" : "#1e40af")
+                        border.width: (heatModalRoot.selectedValue === "Heating" || heatModalRoot.selectedValue === "Product" || heatModalRoot.selectedValue === "Baffle") ? 2.5 : 1.5
                         radius: 12
 
                         ScadaIcon {
@@ -112,8 +112,29 @@ Rectangle {
                             height: 84
                         }
 
+                        // Active Selection Badge
+                        Rectangle {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.margins: 6
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: "#00d2ff"
+                            visible: (heatModalRoot.selectedValue === "Heating" || heatModalRoot.selectedValue === "Product" || heatModalRoot.selectedValue === "Baffle")
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✓"
+                                color: "#08213b"
+                                font.bold: true
+                                font.pixelSize: 12
+                            }
+                        }
+
                         MouseArea {
+                            id: h1Mouse
                             anchors.fill: parent
+                            hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 if (heatModalRoot.targetSelector === "mode") heatModalRoot.selectedValue = "Heating";
@@ -153,10 +174,10 @@ Rectangle {
                         Layout.preferredWidth: 110
                         Layout.preferredHeight: 110
                         color: (heatModalRoot.selectedValue === "Cooling" || heatModalRoot.selectedValue === "Jacket" || heatModalRoot.selectedValue === "Homogenizer") ?
-                               (heatModalRoot.targetSelector === "mode" ? "#0e7490" : "#1d4ed8") : "#0b2545"
+                               (heatModalRoot.targetSelector === "mode" ? "#0e7490" : "#164e85") : (h2Mouse.containsMouse ? "#124373" : "#0b2545")
                         border.color: (heatModalRoot.selectedValue === "Cooling" || heatModalRoot.selectedValue === "Jacket" || heatModalRoot.selectedValue === "Homogenizer") ?
-                                      (heatModalRoot.targetSelector === "mode" ? "#67e8f9" : "#60a5fa") : "#1e40af"
-                        border.width: 2.5
+                                      "#00d2ff" : (h2Mouse.containsMouse ? "#3b82f6" : "#1e40af")
+                        border.width: (heatModalRoot.selectedValue === "Cooling" || heatModalRoot.selectedValue === "Jacket" || heatModalRoot.selectedValue === "Homogenizer") ? 2.5 : 1.5
                         radius: 12
 
                         ScadaIcon {
@@ -167,8 +188,29 @@ Rectangle {
                             height: 84
                         }
 
+                        // Active Selection Badge
+                        Rectangle {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.margins: 6
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: "#00d2ff"
+                            visible: (heatModalRoot.selectedValue === "Cooling" || heatModalRoot.selectedValue === "Jacket" || heatModalRoot.selectedValue === "Homogenizer")
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✓"
+                                color: "#08213b"
+                                font.bold: true
+                                font.pixelSize: 12
+                            }
+                        }
+
                         MouseArea {
+                            id: h2Mouse
                             anchors.fill: parent
+                            hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
                                 if (heatModalRoot.targetSelector === "mode") heatModalRoot.selectedValue = "Cooling";

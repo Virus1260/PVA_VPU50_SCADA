@@ -94,9 +94,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredWidth: 140
                         Layout.preferredHeight: 140
-                        color: fillModalRoot.selectedMode === "Suction Liquids" ? "#1f6cb0" : "#134170"
-                        border.color: fillModalRoot.selectedMode === "Suction Liquids" ? "#3892e6" : "#215c9b"
-                        border.width: 2.5
+                        color: fillModalRoot.selectedMode === "Suction Liquids" ? "#164e85" : (s1Mouse.containsMouse ? "#124373" : "#0c345a")
+                        border.color: fillModalRoot.selectedMode === "Suction Liquids" ? "#00d2ff" : (s1Mouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                        border.width: fillModalRoot.selectedMode === "Suction Liquids" ? 2.5 : 1
                         radius: 12
 
                         ScadaIcon {
@@ -106,8 +106,29 @@ Rectangle {
                             height: 96
                         }
 
+                        // Active Selection Badge
+                        Rectangle {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.margins: 6
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: "#00d2ff"
+                            visible: fillModalRoot.selectedMode === "Suction Liquids"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✓"
+                                color: "#08213b"
+                                font.bold: true
+                                font.pixelSize: 12
+                            }
+                        }
+
                         MouseArea {
+                            id: s1Mouse
                             anchors.fill: parent
+                            hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: fillModalRoot.selectedMode = "Suction Liquids"
                         }
@@ -140,9 +161,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredWidth: 140
                         Layout.preferredHeight: 140
-                        color: fillModalRoot.selectedMode === "Suction Solids" ? "#1f6cb0" : "#134170"
-                        border.color: fillModalRoot.selectedMode === "Suction Solids" ? "#3892e6" : "#215c9b"
-                        border.width: 2.5
+                        color: fillModalRoot.selectedMode === "Suction Solids" ? "#164e85" : (s2Mouse.containsMouse ? "#124373" : "#0c345a")
+                        border.color: fillModalRoot.selectedMode === "Suction Solids" ? "#00d2ff" : (s2Mouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                        border.width: fillModalRoot.selectedMode === "Suction Solids" ? 2.5 : 1
                         radius: 12
 
                         ScadaIcon {
@@ -152,8 +173,29 @@ Rectangle {
                             height: 96
                         }
 
+                        // Active Selection Badge
+                        Rectangle {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.margins: 6
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: "#00d2ff"
+                            visible: fillModalRoot.selectedMode === "Suction Solids"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✓"
+                                color: "#08213b"
+                                font.bold: true
+                                font.pixelSize: 12
+                            }
+                        }
+
                         MouseArea {
+                            id: s2Mouse
                             anchors.fill: parent
+                            hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: fillModalRoot.selectedMode = "Suction Solids"
                         }
@@ -186,9 +228,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredWidth: 140
                         Layout.preferredHeight: 140
-                        color: fillModalRoot.selectedMode === "Suction Bottom" ? "#1f6cb0" : "#134170"
-                        border.color: fillModalRoot.selectedMode === "Suction Bottom" ? "#3892e6" : "#215c9b"
-                        border.width: 2.5
+                        color: fillModalRoot.selectedMode === "Suction Bottom" ? "#164e85" : (s3Mouse.containsMouse ? "#124373" : "#0c345a")
+                        border.color: fillModalRoot.selectedMode === "Suction Bottom" ? "#00d2ff" : (s3Mouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                        border.width: fillModalRoot.selectedMode === "Suction Bottom" ? 2.5 : 1
                         radius: 12
 
                         ScadaIcon {
@@ -198,8 +240,29 @@ Rectangle {
                             height: 96
                         }
 
+                        // Active Selection Badge
+                        Rectangle {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.margins: 6
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: "#00d2ff"
+                            visible: fillModalRoot.selectedMode === "Suction Bottom"
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✓"
+                                color: "#08213b"
+                                font.bold: true
+                                font.pixelSize: 12
+                            }
+                        }
+
                         MouseArea {
+                            id: s3Mouse
                             anchors.fill: parent
+                            hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: fillModalRoot.selectedMode = "Suction Bottom"
                         }

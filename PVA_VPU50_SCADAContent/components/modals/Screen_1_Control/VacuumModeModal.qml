@@ -82,9 +82,9 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 240
                     Layout.preferredHeight: 160
-                    color: vacModalRoot.selectedMode === "Vacuum" ? "#1f6cb0" : "#134170"
-                    border.color: vacModalRoot.selectedMode === "Vacuum" ? "#3892e6" : "#215c9b"
-                    border.width: 2.5
+                    color: vacModalRoot.selectedMode === "Vacuum" ? "#164e85" : (v1Mouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: vacModalRoot.selectedMode === "Vacuum" ? "#00d2ff" : (v1Mouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: vacModalRoot.selectedMode === "Vacuum" ? 2.5 : 1
                     radius: 10
 
                     ColumnLayout {
@@ -117,8 +117,29 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: vacModalRoot.selectedMode === "Vacuum"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: v1Mouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: vacModalRoot.selectedMode = "Vacuum"
                     }
@@ -128,9 +149,9 @@ Rectangle {
                 Rectangle {
                     Layout.preferredWidth: 240
                     Layout.preferredHeight: 160
-                    color: vacModalRoot.selectedMode === "Material Loading" ? "#1f6cb0" : "#134170"
-                    border.color: vacModalRoot.selectedMode === "Material Loading" ? "#3892e6" : "#215c9b"
-                    border.width: 2.5
+                    color: vacModalRoot.selectedMode === "Material Loading" ? "#164e85" : (v2Mouse.containsMouse ? "#124373" : "#0c345a")
+                    border.color: vacModalRoot.selectedMode === "Material Loading" ? "#00d2ff" : (v2Mouse.containsMouse ? "#3b82f6" : "#1d5b94")
+                    border.width: vacModalRoot.selectedMode === "Material Loading" ? 2.5 : 1
                     radius: 10
 
                     ColumnLayout {
@@ -163,8 +184,29 @@ Rectangle {
                         }
                     }
 
+                    // Active Selection Badge
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.margins: 6
+                        width: 20
+                        height: 20
+                        radius: 10
+                        color: "#00d2ff"
+                        visible: vacModalRoot.selectedMode === "Material Loading"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "✓"
+                            color: "#08213b"
+                            font.bold: true
+                            font.pixelSize: 12
+                        }
+                    }
+
                     MouseArea {
+                        id: v2Mouse
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
                         onClicked: vacModalRoot.selectedMode = "Material Loading"
                     }
