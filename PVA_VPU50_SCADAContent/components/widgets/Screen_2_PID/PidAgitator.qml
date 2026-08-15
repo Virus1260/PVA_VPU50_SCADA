@@ -15,14 +15,14 @@ Item {
     property int currentFrame: 0
     readonly property int totalFrames: 18
 
-    // High-Speed Ultra-Fast Dynamic Multi-Frame SVG Rotation Animation (8x Accelerated)
+    // Dynamic Multi-Frame SVG Rotation Animation (Speed Proportional to Control Screen Target RPM)
     NumberAnimation {
         id: frameAnim
         target: agitatorRoot
         property: "currentFrame"
         from: 0
         to: agitatorRoot.totalFrames
-        duration: Math.max(300, Math.min(300, (2.25 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
+        duration: Math.max(100, Math.min(3000, (30.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
         loops: Animation.Infinite
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
     }
@@ -83,7 +83,7 @@ Item {
         }
     }
 
-    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-Loaded GPU Vector Cache - Zero Flicker)
+    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-warmed GPU Vector Cache - Zero Lag on Start)
     Item {
         id: impellerContainer
         anchors.top: parent.top
@@ -92,17 +92,20 @@ Item {
         width: 250
         height: 320
 
-        // Preload all 18 vector SVG frames into GPU memory for 60+ FPS zero-latency switching
+        // Pre-warm and cache all 18 vector SVG frames into GPU memory at startup
         Repeater {
             model: agitatorRoot.totalFrames
             Image {
                 anchors.fill: parent
                 source: Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + (index < 10 ? "0" + index : "" + index) + ".svg")
+                sourceSize: Qt.size(250, 320)
                 fillMode: Image.PreserveAspectFit
                 smooth: true
                 mipmap: true
                 asynchronous: false
-                visible: Math.floor(agitatorRoot.currentFrame) === index
+                cache: true
+                visible: true
+                opacity: Math.floor(agitatorRoot.currentFrame) === index ? 1.0 : 0.0
             }
         }
     }
