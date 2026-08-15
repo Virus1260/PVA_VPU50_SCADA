@@ -17,11 +17,22 @@ RowLayout {
     signal pauseClicked()
     signal stopClicked()
 
+    Layout.preferredWidth: 144
+    Layout.minimumWidth: 144
+    Layout.maximumWidth: 144
+    Layout.preferredHeight: 44
+    Layout.minimumHeight: 44
+    Layout.maximumHeight: 44
+
     // 1. Industrial STOP Button
     Rectangle {
         id: stopBtn
         Layout.preferredWidth: 44
+        Layout.minimumWidth: 44
+        Layout.maximumWidth: 44
         Layout.preferredHeight: 44
+        Layout.minimumHeight: 44
+        Layout.maximumHeight: 44
         radius: 4
         color: mediaRoot.isStopped ? "#8b1c1c" : "#0c3359"
         border.color: mediaRoot.isStopped ? "#ff4d4d" : "#1a5286"
@@ -53,7 +64,11 @@ RowLayout {
     Rectangle {
         id: pauseBtn
         Layout.preferredWidth: 44
+        Layout.minimumWidth: 44
+        Layout.maximumWidth: 44
         Layout.preferredHeight: 44
+        Layout.minimumHeight: 44
+        Layout.maximumHeight: 44
         radius: 4
         color: mediaRoot.isPaused ? "#8b681c" : "#0c3359"
         border.color: mediaRoot.isPaused ? "#ffcc00" : "#1a5286"
@@ -85,7 +100,11 @@ RowLayout {
     Rectangle {
         id: playBtn
         Layout.preferredWidth: 44
+        Layout.minimumWidth: 44
+        Layout.maximumWidth: 44
         Layout.preferredHeight: 44
+        Layout.minimumHeight: 44
+        Layout.maximumHeight: 44
         radius: 4
         color: mediaRoot.isPlaying ? "#78dc20" : "#0c3359"
         border.color: mediaRoot.isPlaying ? "#ffffff" : "#1a5286"

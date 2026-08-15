@@ -192,11 +192,11 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 
@@ -292,11 +292,11 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 
@@ -366,11 +366,11 @@ Item {
                         Layout.fillHeight: true
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 
@@ -480,16 +480,16 @@ Item {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.minimumWidth: 80
-                            Layout.maximumWidth: 220
+                            Layout.maximumWidth: 240
                             Layout.preferredHeight: 68
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 
@@ -608,11 +608,11 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 
@@ -747,11 +747,11 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 216px)
                     RowLayout {
-                        Layout.preferredWidth: 212
-                        Layout.minimumWidth: 212
-                        Layout.maximumWidth: 212
+                        Layout.preferredWidth: 216
+                        Layout.minimumWidth: 216
+                        Layout.maximumWidth: 216
                         Layout.alignment: Qt.AlignVCenter
                         spacing: 6
 

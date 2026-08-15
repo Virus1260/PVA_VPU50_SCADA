@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-Rectangle {
+Item {
     id: powerCurrentRoot
     property string powerVal: "0.0"
     property string powerUnit: "kW"
@@ -12,98 +12,101 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
-    Layout.maximumWidth: 220
+    Layout.maximumWidth: 240
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight
 
-    color: "#082646"
-    border.color: "#184d7e"
-    border.width: 1
-    radius: 4
-
     ColumnLayout {
         anchors.fill: parent
-        anchors.leftMargin: 6
-        anchors.rightMargin: 6
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
-        spacing: 2
+        spacing: 3
 
-        // Top Headers (Power on left, Current on right)
+        // 1. Titles OUTSIDE and ABOVE the card
         RowLayout {
             Layout.fillWidth: true
             Text {
                 text: "Power"
-                color: "#8cb5dc"
-                font.pixelSize: 10
+                color: "#ffffff"
+                font.pixelSize: 11
                 Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
             }
             Text {
                 text: "Current"
-                color: "#8cb5dc"
-                font.pixelSize: 10
+                color: "#ffffff"
+                font.pixelSize: 11
                 Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
             }
         }
 
-        Item { Layout.fillHeight: true }
-
-        // Values Row (0.0 kW on left, 0.0 A on right)
-        RowLayout {
+        // 2. The Dual-Shade Card Rectangle
+        Rectangle {
             Layout.fillWidth: true
-            spacing: 4
+            Layout.fillHeight: true
+            color: "#0c345a"
+            border.color: "#1d5b94"
+            border.width: 1
+            radius: 4
+            clip: true
 
-            // Power Value Box
             RowLayout {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 2
-                Text {
-                    text: powerCurrentRoot.powerVal
-                    color: "#ffffff"
-                    font.bold: true
-                    font.pixelSize: 15
-                    horizontalAlignment: Text.AlignRight
-                    Layout.fillWidth: true
-                }
-                Text {
-                    text: powerCurrentRoot.powerUnit
-                    color: "#8cb5dc"
-                    font.pixelSize: 10
-                }
-            }
+                anchors.fill: parent
+                spacing: 0
 
-            // Subtle vertical separator
-            Rectangle {
-                width: 1
-                Layout.preferredHeight: 18
-                color: "#164673"
-            }
-
-            // Current Value Box
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 2
-                Text {
-                    text: powerCurrentRoot.currentVal
-                    color: "#ffffff"
-                    font.bold: true
-                    font.pixelSize: 15
-                    horizontalAlignment: Text.AlignRight
+                // Left Compartment (Power in darker blue)
+                Rectangle {
                     Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    color: "#0a2e50"
+
+                    RowLayout {
+                        anchors.centerIn: parent
+                        spacing: 2
+                        Text {
+                            text: powerCurrentRoot.powerVal
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 15
+                        }
+                        Text {
+                            text: powerCurrentRoot.powerUnit
+                            color: "#8cb5dc"
+                            font.pixelSize: 10
+                        }
+                    }
                 }
-                Text {
-                    text: powerCurrentRoot.currentUnit
-                    color: "#8cb5dc"
-                    font.pixelSize: 10
+
+                // Vertical Divider Line
+                Rectangle {
+                    width: 1
+                    Layout.fillHeight: true
+                    color: "#1d5b94"
+                }
+
+                // Right Compartment (Current in lighter contrast blue)
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    color: "#154d80"
+
+                    RowLayout {
+                        anchors.centerIn: parent
+                        spacing: 2
+                        Text {
+                            text: powerCurrentRoot.currentVal
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 15
+                        }
+                        Text {
+                            text: powerCurrentRoot.currentUnit
+                            color: "#8cb5dc"
+                            font.pixelSize: 10
+                        }
+                    }
                 }
             }
         }
-
-        Item { Layout.fillHeight: true }
     }
 }
