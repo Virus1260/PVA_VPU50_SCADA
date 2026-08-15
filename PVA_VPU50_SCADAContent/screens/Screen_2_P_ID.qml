@@ -291,31 +291,40 @@ Rectangle {
         PidPipe { z: 8; startX: 605; startY: 15; endX: 605; endY: 145; baseColor: "#52a5ec" }
         PidPipe { z: 8; startX: 605; startY: 145; endX: 642; endY: 185; baseColor: "#52a5ec" }
 
-        // 3 Dedicated Modular Spray Balls in Top Dome (z: 9)
+        // 3 Dedicated Modular Spray Balls in Top Dome (z: 10 - Elevated over Agitator)
         PidSprayBall {
-            z: 9
+            z: 10
             x: 427
             y: 190
             tag: "X 165 501"
             showTags: pidScreenRoot.showTags
-            isSpraying: false
+            isSpraying: scadaBridge.isCipActive
         }
         PidSprayBall {
-            z: 9
+            z: 10
             x: 557
             y: 190
             tag: "X 165 502"
             showTags: pidScreenRoot.showTags
-            isSpraying: false
+            isSpraying: scadaBridge.isCipActive
         }
         PidSprayBall {
-            z: 9
+            z: 10
             x: 624
             y: 185
             tag: "X 165 503"
-            sprayAngle: 42
+            sprayAngle: -42
             showTags: pidScreenRoot.showTags
-            isSpraying: scadaBridge.isHomogenizerRunning
+            isSpraying: scadaBridge.isCipActive
+        }
+
+        // Dedicated Elevated Level Gauge (z: 9 - Elevated over Agitator on Vessel Right Wall)
+        PidLevelGauge {
+            z: 9
+            x: 578
+            y: 275
+            levelPercent: scadaBridge.vesselLevelPercent
+            showTags: pidScreenRoot.showTags
         }
 
         // Top Solids Charging Hopper / Funnel (B 141 001)

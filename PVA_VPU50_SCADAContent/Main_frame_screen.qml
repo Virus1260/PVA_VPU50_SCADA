@@ -868,6 +868,7 @@ Item {
             scadaMiddleware.isHomogenizerRunning = (ctrl.row2Media && ctrl.row2Media.isPlaying);
             scadaMiddleware.homogenizerSpeed = rootWindow.r2ActualSpeed;
             scadaMiddleware.isCirculationRunning = (ctrl.row3Media && ctrl.row3Media.isPlaying);
+            scadaMiddleware.isCipActive = (ctrl.row3Media && ctrl.row3Media.isPlaying && (rootWindow.row3SelectedPreset === "ext_cip_rinse" || rootWindow.row3SelectedPreset === "ext_cip_recirculation"));
             scadaMiddleware.isVacuumActive = (ctrl.row4Media && ctrl.row4Media.isPlaying);
             scadaMiddleware.vacuumPressure = rootWindow.vacuumPressure;
             scadaMiddleware.isHeating = (ctrl.row6Media && ctrl.row6Media.isPlaying);
@@ -882,6 +883,7 @@ Item {
                 ui.pidScreen.scadaBridge.isHomogenizerRunning = scadaMiddleware.isHomogenizerRunning;
                 ui.pidScreen.scadaBridge.homogenizerSpeed = scadaMiddleware.homogenizerSpeed;
                 ui.pidScreen.scadaBridge.isCirculationRunning = scadaMiddleware.isCirculationRunning;
+                ui.pidScreen.scadaBridge.isCipActive = scadaMiddleware.isCipActive;
                 ui.pidScreen.scadaBridge.isVacuumActive = scadaMiddleware.isVacuumActive;
                 ui.pidScreen.scadaBridge.vacuumPressure = scadaMiddleware.vacuumPressure;
                 ui.pidScreen.scadaBridge.isHeating = scadaMiddleware.isHeating;
