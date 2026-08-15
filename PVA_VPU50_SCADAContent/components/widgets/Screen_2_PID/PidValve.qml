@@ -2,8 +2,8 @@ import QtQuick
 
 Item {
     id: valveRoot
-    width: 32
-    height: 32
+    width: 28
+    height: 28
 
     property string tag: "V101"
     property string subLabel: ""
@@ -23,14 +23,14 @@ Item {
 
             var cx = width / 2;
             var cy = height / 2;
-            var fill = valveRoot.isOpen ? "#166534" : "#0d2847";
-            var stroke = valveRoot.isOpen ? "#4ade80" : "#4a90d9";
+            var fill = valveRoot.isOpen ? "#15803d" : "#092647";
+            var stroke = valveRoot.isOpen ? "#4ade80" : "#38bdf8";
 
             if (valveRoot.isVertical) {
-                // Vertical Valve Triangles
+                // Top Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 7, cy - 8);
-                ctx.lineTo(cx + 7, cy - 8);
+                ctx.moveTo(cx - 6, cy - 7);
+                ctx.lineTo(cx + 6, cy - 7);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -39,27 +39,20 @@ Item {
                 ctx.lineWidth = 1.2;
                 ctx.stroke();
 
+                // Bottom Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 7, cy + 8);
-                ctx.lineTo(cx + 7, cy + 8);
+                ctx.moveTo(cx - 6, cy + 7);
+                ctx.lineTo(cx + 6, cy + 7);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
                 ctx.fill();
-                ctx.stroke();
-
-                // Center Actuator Stem
-                ctx.beginPath();
-                ctx.moveTo(cx - 9, cy);
-                ctx.lineTo(cx + 9, cy);
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.5;
                 ctx.stroke();
             } else {
-                // Horizontal Valve Triangles
+                // Left Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 8, cy - 7);
-                ctx.lineTo(cx - 8, cy + 7);
+                ctx.moveTo(cx - 7, cy - 6);
+                ctx.lineTo(cx - 7, cy + 6);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -68,21 +61,14 @@ Item {
                 ctx.lineWidth = 1.2;
                 ctx.stroke();
 
+                // Right Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx + 8, cy - 7);
-                ctx.lineTo(cx + 8, cy + 7);
+                ctx.moveTo(cx + 7, cy - 6);
+                ctx.lineTo(cx + 7, cy + 6);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
                 ctx.fill();
-                ctx.stroke();
-
-                // Center Actuator Stem
-                ctx.beginPath();
-                ctx.moveTo(cx, cy - 8);
-                ctx.lineTo(cx, cy + 8);
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = 1.5;
                 ctx.stroke();
             }
         }
@@ -98,22 +84,22 @@ Item {
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.top
-        anchors.bottomMargin: 2
+        anchors.bottomMargin: 1
         text: valveRoot.tag
-        color: valveRoot.isOpen ? "#4ade80" : "#8cb5dc"
-        font.pixelSize: 10
+        color: valveRoot.isOpen ? "#4ade80" : "#93c5fd"
+        font.pixelSize: 8
         font.bold: valveRoot.isOpen
     }
 
-    // Optional Sub-Label (e.g. "Solids", "Liquids", "Bottom")
+    // Sub-Label
     Text {
         visible: valveRoot.subLabel.length > 0
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
-        anchors.topMargin: 2
+        anchors.topMargin: 1
         text: valveRoot.subLabel
-        color: "#94a3b8"
-        font.pixelSize: 9
+        color: "#cbd5e1"
+        font.pixelSize: 7
     }
 
     MouseArea {

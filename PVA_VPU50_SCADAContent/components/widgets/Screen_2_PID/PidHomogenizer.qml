@@ -4,68 +4,68 @@ import QtQuick.Layouts
 Item {
     id: homogRoot
     width: 140
-    height: 90
+    height: 75
 
     property string motorTag: "M 163 001"
     property string speedTag: "SCR 163001"
-    property real speedRpm: 0.0
-    property bool isRunning: false
+    property real speedRpm: 4800.0
+    property bool isRunning: true
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 4
+        spacing: 3
 
         // 1. ROTOR / STATOR CHAMBER
         Rectangle {
-            Layout.preferredWidth: 64
-            Layout.preferredHeight: 30
+            Layout.preferredWidth: 38
+            Layout.preferredHeight: 18
             Layout.alignment: Qt.AlignHCenter
-            radius: 4
-            color: homogRoot.isRunning ? "#14532d" : "#0d2847"
-            border.color: homogRoot.isRunning ? "#22c55e" : "#4a90d9"
-            border.width: 1.5
+            radius: 2
+            color: homogRoot.isRunning ? "#15803d" : "#0d2847"
+            border.color: homogRoot.isRunning ? "#4ade80" : "#3b82f6"
+            border.width: 1.2
 
             Text {
                 anchors.centerIn: parent
-                text: "HOMOG"
-                color: homogRoot.isRunning ? "#4ade80" : "#8cb5dc"
+                text: "Z 163 001"
+                color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 10
+                font.pixelSize: 7
             }
         }
 
-        // 2. BOTTOM DRIVE MOTOR (M 163 001)
+        // 2. BOTTOM DRIVE MOTOR & SPEED TAG
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            spacing: 8
+            spacing: 6
 
             Rectangle {
-                width: 28
-                height: 28
-                radius: 14
-                color: homogRoot.isRunning ? "#166534" : "#0d2847"
-                border.color: homogRoot.isRunning ? "#22c55e" : "#4a90d9"
-                border.width: 1.5
+                width: 22
+                height: 22
+                radius: 11
+                color: homogRoot.isRunning ? "#16a34a" : "#0d2847"
+                border.color: homogRoot.isRunning ? "#4ade80" : "#3b82f6"
+                border.width: 1.2
 
                 Text {
                     anchors.centerIn: parent
                     text: "M"
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 11
+                    font.pixelSize: 10
                 }
             }
 
             ColumnLayout {
                 spacing: 0
-                Text { text: homogRoot.motorTag; color: "#94a3b8"; font.pixelSize: 8 }
-                Text { text: homogRoot.speedTag; color: "#8cb5dc"; font.pixelSize: 8 }
+                Text { text: homogRoot.speedTag; color: "#8cb5dc"; font.pixelSize: 7 }
                 Text {
-                    text: homogRoot.speedRpm.toFixed(0) + " rpm"
-                    color: homogRoot.isRunning ? "#22c55e" : "#94a3b8"
+                    text: homogRoot.speedRpm.toFixed(0) + "rpm"
+                    color: homogRoot.isRunning ? "#4ade80" : "#94a3b8"
                     font.bold: true
-                    font.pixelSize: 10
+                    font.pixelSize: 8
                 }
+                Text { text: homogRoot.motorTag; color: "#64748b"; font.pixelSize: 7 }
             }
         }
     }

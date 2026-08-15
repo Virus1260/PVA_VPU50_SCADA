@@ -7,19 +7,18 @@ Item {
     property real startY: 0
     property real endX: 100
     property real endY: 0
-    property real pipeWidth: 3
-    property color baseColor: "#285888"
-    property color flowColor: "#22c55e"
+    property real pipeWidth: 2.5
+    property color baseColor: "#2164a6"
+    property color flowColor: "#38ef7d"
     property bool isActive: false
     property bool reverseFlow: false
-    property real flowSpeed: 1200 // ms per cycle
+    property real flowSpeed: 1000
 
-    x: Math.min(startX, endX) - pipeWidth
-    y: Math.min(startY, endY) - pipeWidth
-    width: Math.abs(endX - startX) + pipeWidth * 2
-    height: Math.abs(endY - startY) + pipeWidth * 2
+    x: Math.min(startX, endX) - pipeWidth - 2
+    y: Math.min(startY, endY) - pipeWidth - 2
+    width: Math.abs(endX - startX) + (pipeWidth + 2) * 2
+    height: Math.abs(endY - startY) + (pipeWidth + 2) * 2
 
-    // Canvas rendering for crisp, hardware-accelerated pipeline and flow particles
     Canvas {
         id: pipeCanvas
         anchors.fill: parent
@@ -28,7 +27,7 @@ Item {
 
         NumberAnimation on offset {
             from: 0
-            to: pipeRoot.reverseFlow ? -24 : 24
+            to: pipeRoot.reverseFlow ? -20 : 20
             duration: pipeRoot.flowSpeed
             loops: Animation.Infinite
             running: pipeRoot.isActive
@@ -45,24 +44,24 @@ Item {
             var lx2 = pipeRoot.endX - pipeRoot.x;
             var ly2 = pipeRoot.endY - pipeRoot.y;
 
-            // 1. Base Stainless Steel Pipeline
+            // Base pipe
             ctx.beginPath();
             ctx.moveTo(lx1, ly1);
             ctx.lineTo(lx2, ly2);
-            ctx.lineWidth = pipeRoot.pipeWidth;
-            ctx.strokeStyle = pipeRoot.baseColor;
+            ctx.lineWidth = pipeRoot.isActive ? 3.0 : pipeRoot.pipeWidth;
+            ctx.strokeStyle = pipeRoot.isActive ? "#14532d" : pipeRoot.baseColor;
             ctx.lineCap = "round";
             ctx.stroke();
 
-            // 2. Active Fluid Flow Animation (Dashes & Flow Pulse)
+            // Active animated fluid dashes
             if (pipeRoot.isActive) {
                 ctx.save();
                 ctx.beginPath();
                 ctx.moveTo(lx1, ly1);
                 ctx.lineTo(lx2, ly2);
-                ctx.lineWidth = pipeRoot.pipeWidth;
+                ctx.lineWidth = 3.0;
                 ctx.strokeStyle = pipeRoot.flowColor;
-                ctx.setLineDash([8, 8]);
+                ctx.setLineDash([6, 6]);
                 ctx.lineDashOffset = -offset;
                 ctx.lineCap = "round";
                 ctx.stroke();

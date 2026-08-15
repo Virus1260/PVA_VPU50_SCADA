@@ -3,103 +3,112 @@ import QtQuick.Layouts
 
 Item {
     id: agitatorRoot
-    width: 200
-    height: 260
+    width: 260
+    height: 330
 
     property string motorTag: "M 162 001"
     property string speedTag: "SCR 162001"
     property real speedRpm: 10.0
     property bool isRunning: true
 
-    // 1. TOP DRIVE MOTOR (M 162 001)
-    Rectangle {
-        id: motorBadge
+    // 1. TOP DRIVE MOTOR & SENSORS
+    ColumnLayout {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 30
-        height: 30
-        radius: 15
-        color: agitatorRoot.isRunning ? "#166534" : "#0d2847"
-        border.color: agitatorRoot.isRunning ? "#22c55e" : "#4a90d9"
-        border.width: 1.5
+        spacing: 1
 
-        Text {
-            anchors.centerIn: parent
-            text: "M"
-            color: "#ffffff"
-            font.bold: true
-            font.pixelSize: 12
+        Text { text: agitatorRoot.speedTag; color: "#8cb5dc"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
+        Text { text: agitatorRoot.speedRpm.toFixed(1) + "rpm"; color: agitatorRoot.isRunning ? "#4ade80" : "#94a3b8"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+        Text { text: agitatorRoot.motorTag; color: "#8cb5dc"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 6
+
+            // Motor Symbol 'M'
+            Rectangle {
+                width: 22
+                height: 22
+                radius: 11
+                color: agitatorRoot.isRunning ? "#16a34a" : "#0d2847"
+                border.color: agitatorRoot.isRunning ? "#4ade80" : "#3b82f6"
+                border.width: 1.2
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "M"
+                    color: "#ffffff"
+                    font.bold: true
+                    font.pixelSize: 10
+                }
+            }
+
+            // GZ 161501 Sensor
+            Rectangle {
+                width: 8
+                height: 8
+                radius: 4
+                color: "#eab308"
+            }
         }
     }
 
-    // Speed & Motor Tag Readout
-    ColumnLayout {
-        anchors.bottom: motorBadge.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottomMargin: 4
-        spacing: 0
-
-        Text { text: agitatorRoot.speedTag; color: "#8cb5dc"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
-        Text { text: agitatorRoot.speedRpm.toFixed(1) + " rpm"; color: agitatorRoot.isRunning ? "#22c55e" : "#94a3b8"; font.bold: true; font.pixelSize: 10; Layout.alignment: Qt.AlignHCenter }
-        Text { text: agitatorRoot.motorTag; color: "#94a3b8"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
-    }
-
-    // 2. CENTRAL SHAFT
+    // 2. CENTRAL ROTATING SHAFT
     Rectangle {
         id: shaft
-        anchors.top: motorBadge.bottom
+        anchors.top: parent.top
+        anchors.topMargin: 56
         anchors.horizontalCenter: parent.horizontalCenter
         width: 4
-        height: 120
-        color: agitatorRoot.isRunning ? "#22c55e" : "#4a90d9"
+        height: 180
+        color: "#ffffff"
     }
 
-    // 3. PARAVISC / ANCHOR IMPELLER (Matching EKATO Authentic Geometry)
+    // 3. AUTHENTIC EKATO PARAVISC DOUBLE X-BRACE IMPELLER
     Canvas {
         id: bladeCanvas
-        anchors.top: shaft.bottom
+        anchors.top: shaft.top
+        anchors.topMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: -50
-        width: 160
-        height: 130
+        width: 230
+        height: 210
 
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
             var cx = width / 2;
-            var cy = 65;
-            var hw = 68; // fixed half-width
+            var cy = height / 2;
+            var hw = 85;
+            var topY = 10;
+            var botY = 175;
 
             ctx.beginPath();
-            // Outer Anchor U-shape
-            ctx.moveTo(cx - hw, cy - 45);
-            ctx.lineTo(cx - hw, cy + 30);
-            ctx.quadraticCurveTo(cx, cy + 50, cx + hw, cy + 30);
-            ctx.lineTo(cx + hw, cy - 45);
+            // Outer Paravisc Boundary (with bottom central arch)
+            ctx.moveTo(cx - hw, topY);
+            ctx.lineTo(cx - hw, botY - 30);
+            ctx.quadraticCurveTo(cx - hw * 0.5, botY, cx - 18, botY - 10);
+            // Center Arch Cutout
+            ctx.quadraticCurveTo(cx, botY - 26, cx + 18, botY - 10);
+            ctx.quadraticCurveTo(cx + hw * 0.5, botY, cx + hw, botY - 30);
+            ctx.lineTo(cx + hw, topY);
 
-            // Double X-Bracing (Authentic EKATO Paravisc)
-            ctx.moveTo(cx - hw, cy - 45);
-            ctx.lineTo(cx + hw, cy + 30);
+            // Double Diagonal X-Braces
+            ctx.moveTo(cx - hw, topY);
+            ctx.lineTo(cx + hw, botY - 30);
 
-            ctx.moveTo(cx + hw, cy - 45);
-            ctx.lineTo(cx - hw, cy + 30);
+            ctx.moveTo(cx + hw, topY);
+            ctx.lineTo(cx - hw, botY - 30);
 
-            // Bottom horizontal support
-            ctx.moveTo(cx - hw * 0.7, cy + 35);
-            ctx.lineTo(cx + hw * 0.7, cy + 35);
+            // Top cross link
+            ctx.moveTo(cx - hw, topY);
+            ctx.lineTo(cx + hw, topY);
 
-            ctx.strokeStyle = agitatorRoot.isRunning ? "#22c55e" : "#4a90d9";
-            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 3.0;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.stroke();
-
-            // Center Hub
-            ctx.beginPath();
-            ctx.arc(cx, cy - 7, 4, 0, 2 * Math.PI);
-            ctx.fillStyle = agitatorRoot.isRunning ? "#22c55e" : "#4a90d9";
-            ctx.fill();
         }
     }
 }
