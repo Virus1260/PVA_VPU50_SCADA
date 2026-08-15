@@ -693,6 +693,10 @@ Item {
         if (ui.agitatorModal) {
             ui.agitatorModal.modeSelected.connect(function(modeKey) {
                 if (ctrl.row1ModeSelector) ctrl.row1ModeSelector.iconName = modeKey;
+                scadaMiddleware.agitatorMode = modeKey;
+                if (ui.pidScreen && ui.pidScreen.scadaBridge) {
+                    ui.pidScreen.scadaBridge.agitatorMode = modeKey;
+                }
             });
             ui.agitatorModal.closed.connect(function() { ui.agitatorModal.visible = false; });
         }
@@ -860,6 +864,7 @@ Item {
             // 5. Synchronize State with ScadaStateMiddleware for P&ID and other screens
             scadaMiddleware.isAgitatorRunning = (ctrl.row1Media && ctrl.row1Media.isPlaying);
             scadaMiddleware.agitatorSpeed = rootWindow.r1ActualSpeed;
+            scadaMiddleware.agitatorMode = (ctrl.row1ModeSelector && ctrl.row1ModeSelector.iconName) ? ctrl.row1ModeSelector.iconName : "agitator_cw";
             scadaMiddleware.isHomogenizerRunning = (ctrl.row2Media && ctrl.row2Media.isPlaying);
             scadaMiddleware.homogenizerSpeed = rootWindow.r2ActualSpeed;
             scadaMiddleware.isCirculationRunning = (ctrl.row3Media && ctrl.row3Media.isPlaying);
@@ -873,6 +878,7 @@ Item {
             if (ui.pidScreen && ui.pidScreen.scadaBridge) {
                 ui.pidScreen.scadaBridge.isAgitatorRunning = scadaMiddleware.isAgitatorRunning;
                 ui.pidScreen.scadaBridge.agitatorSpeed = scadaMiddleware.agitatorSpeed;
+                ui.pidScreen.scadaBridge.agitatorMode = scadaMiddleware.agitatorMode;
                 ui.pidScreen.scadaBridge.isHomogenizerRunning = scadaMiddleware.isHomogenizerRunning;
                 ui.pidScreen.scadaBridge.homogenizerSpeed = scadaMiddleware.homogenizerSpeed;
                 ui.pidScreen.scadaBridge.isCirculationRunning = scadaMiddleware.isCirculationRunning;

@@ -11,29 +11,63 @@ Item {
     property real speedRpm: 0.0
     property bool isRunning: false
     property bool showTags: true
+    property string rotationMode: "agitator_cw" // "agitator_cw", "agitator_ccw", "agitator_reversing"
 
-    property int currentFrame: 0
+    property real currentFrame: 0.0
     readonly property int totalFrames: 36
+    property bool isIntervalForward: true
+    readonly property int activeFrameIndex: ((Math.floor(currentFrame) % totalFrames) + totalFrames) % totalFrames
+
+    function isForwardDirection() {
+        if (rotationMode === "agitator_ccw") return false;
+        if (rotationMode === "agitator_reversing") return isIntervalForward;
+        return true;
+    }
+
+    // 10-Second Interval Reversing Timer for "agitator_reversing" Mode
+    Timer {
+        id: intervalTimer
+        interval: 10000 // 10 seconds
+        running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0 && agitatorRoot.rotationMode === "agitator_reversing"
+        repeat: true
+        onTriggered: {
+            agitatorRoot.isIntervalForward = !agitatorRoot.isIntervalForward;
+            updateAnimation();
+        }
+    }
+
+    onRotationModeChanged: {
+        isIntervalForward = true;
+        updateAnimation();
+    }
+
+    onIsRunningChanged: updateAnimation()
+    onSpeedRpmChanged: updateAnimation()
+
+    function updateAnimation() {
+        if (!isRunning || speedRpm <= 0) {
+            frameAnim.stop();
+            currentFrame = 0.0;
+            return;
+        }
+        var forward = isForwardDirection();
+        frameAnim.stop();
+        frameAnim.from = forward ? 0.0 : agitatorRoot.totalFrames;
+        frameAnim.to = forward ? agitatorRoot.totalFrames : 0.0;
+        frameAnim.duration = Math.max(100, Math.min(3000, (30.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000));
+        frameAnim.restart();
+    }
 
     // Dynamic Multi-Frame SVG Rotation Animation (Speed Proportional to Control Screen Target RPM)
     NumberAnimation {
         id: frameAnim
         target: agitatorRoot
         property: "currentFrame"
-        from: 0
+        from: 0.0
         to: agitatorRoot.totalFrames
         duration: Math.max(100, Math.min(3000, (30.0 / Math.max(1.0, agitatorRoot.speedRpm)) * 1000))
         loops: Animation.Infinite
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
-    }
-
-    onIsRunningChanged: {
-        if (!isRunning) {
-            frameAnim.stop();
-            currentFrame = 0;
-        } else {
-            frameAnim.restart();
-        }
     }
 
     // 1. TOP DRIVE MOTOR (Standard Reusable SCADA Motor)
@@ -87,25 +121,25 @@ Item {
     Item {
         id: impellerContainer
         anchors.top: parent.top
-        anchors.topMargin: 65
+        anchors.topMargin: 120
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 250
-        height: 320
+        width: 240
+        height: 285
 
-        // Pre-warm and cache all 18 vector SVG frames into GPU memory at startup
+        // Pre-warm and cache all 36 vector SVG frames into GPU memory at startup
         Repeater {
             model: agitatorRoot.totalFrames
             Image {
                 anchors.fill: parent
                 source: Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + (index < 10 ? "0" + index : "" + index) + ".svg")
-                sourceSize: Qt.size(250, 320)
+                sourceSize: Qt.size(215, 285)
                 fillMode: Image.PreserveAspectFit
                 smooth: true
                 mipmap: true
                 asynchronous: false
                 cache: true
                 visible: true
-                opacity: Math.floor(agitatorRoot.currentFrame) === index ? 1.0 : 0.0
+                opacity: agitatorRoot.activeFrameIndex === index ? 1.0 : 0.0
             }
         }
     }

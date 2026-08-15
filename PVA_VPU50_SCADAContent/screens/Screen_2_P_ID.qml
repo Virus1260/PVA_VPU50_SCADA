@@ -197,6 +197,7 @@ Rectangle {
             z: 3
             speedRpm: scadaBridge.agitatorSpeed
             isRunning: scadaBridge.isAgitatorRunning
+            rotationMode: scadaBridge.agitatorMode
             showTags: pidScreenRoot.showTags
         }
 
