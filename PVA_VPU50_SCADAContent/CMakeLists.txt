@@ -157,6 +157,21 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "assets/agitator_sequence/agitator_frame_20.svg"
         "assets/agitator_sequence/agitator_frame_19.svg"
         "assets/agitator_sequence/agitator_frame_18.svg"
+        "assets/agitator_sequence/agitator_frame_26.svg"
+        "assets/agitator_sequence/agitator_frame_30.svg"
+        "assets/agitator_sequence/agitator_frame_34.svg"
+        "assets/agitator_sequence/agitator_frame_28.svg"
+        "assets/agitator_sequence/agitator_frame_29.svg"
+        "assets/agitator_sequence/agitator_frame_23.svg"
+        "assets/agitator_sequence/agitator_frame_27.svg"
+        "assets/agitator_sequence/agitator_frame_24.svg"
+        "assets/agitator_sequence/agitator_frame_25.svg"
+        "assets/agitator_sequence/agitator_frame_32.svg"
+        "assets/agitator_sequence/agitator_frame_31.svg"
+        "assets/agitator_sequence/agitator_frame_21.svg"
+        "assets/agitator_sequence/agitator_frame_22.svg"
+        "assets/agitator_sequence/agitator_frame_35.svg"
+        "assets/agitator_sequence/agitator_frame_33.svg"
 )
 
 
