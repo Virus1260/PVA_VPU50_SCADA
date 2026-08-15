@@ -134,6 +134,16 @@
   $HOME/Qt/6.8.2/wasm_singlethread/bin/qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release -G Ninja -DQT_HOST_PATH=$HOME/Qt/6.8.2/gcc_64
   ```
 
+### Issue 8: Missing `QuickTimeline` Component
+- **Symptom**: `CMake Error at CMakeLists.txt: Failed to find required Qt component "QuickTimeline".`
+- **Root Cause**: `QuickTimeline` and `ShaderTools` were listed under `REQUIRED COMPONENTS` in `CMakeLists.txt` but are optional animation modules in some Qt WebAssembly distributions.
+- **Solution**:
+  1. Change `CMakeLists.txt` to mark them as `OPTIONAL_COMPONENTS`:
+     ```cmake
+     find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick OPTIONAL_COMPONENTS QuickTimeline ShaderTools)
+     ```
+  2. Request `-m qtquicktimeline qtshadertools` during CI installation.
+
 ---
 
 ## 3. Complete, Production-Ready GitHub Actions Workflow
