@@ -61,7 +61,7 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
-                text: headerRoot.systemTag
+                text: headerRoot.activeBatchId
                 color: "#ffffff"
                 font.bold: true
                 font.pixelSize: 14

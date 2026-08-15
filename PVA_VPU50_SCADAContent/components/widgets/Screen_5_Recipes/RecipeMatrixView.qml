@@ -226,7 +226,9 @@ ColumnLayout {
                         RecipeOperationRow {
                             operationData: modelData
                             opIndex: index
-                            onRemoveRequested: matrixViewRoot.removeOperationRequested(stepBox.ListView.view.currentIndex, opIndex)
+                            onRemoveRequested: function(opIdx) {
+                                matrixViewRoot.removeOperationRequested(index, opIdx);
+                            }
                         }
                     }
 

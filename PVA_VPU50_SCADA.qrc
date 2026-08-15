@@ -173,6 +173,15 @@
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control/ScadaPowerCurrentCard.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control/ScadaRuntimeWidget.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control/ScadaSpeedControl.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidAgitator.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidControlBox.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidHomogenizer.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidLidLifter.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidMinimap.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidPipe.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidSprayBall.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidValve.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidVessel.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/FormulationView.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/RecipeIngredientsTable.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/RecipeMatrixView.qml</file>

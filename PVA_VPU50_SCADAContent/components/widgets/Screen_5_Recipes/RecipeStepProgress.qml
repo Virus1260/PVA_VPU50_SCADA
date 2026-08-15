@@ -26,6 +26,7 @@ Rectangle {
         }
 
         ListView {
+            id: progListView
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: stepProgressRoot.steps
@@ -33,7 +34,7 @@ Rectangle {
             clip: true
 
             delegate: Rectangle {
-                width: parent.width
+                width: progListView.width
                 height: 42
                 radius: 5
                 color: modelData.status === "ACTIVE" ? "#0f3a64" : (modelData.status === "DONE" ? "#06231a" : "#092440")

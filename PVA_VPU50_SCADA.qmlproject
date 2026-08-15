@@ -26,6 +26,10 @@ Project {
     }
 
     QmlFiles {
+        directory: "PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID"
+    }
+
+    QmlFiles {
         directory: "PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes"
     }
 

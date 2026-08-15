@@ -46,6 +46,7 @@ Rectangle {
 
         // Ingredients List
         ListView {
+            id: ingListView
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: ingTableRoot.ingredients
@@ -53,7 +54,7 @@ Rectangle {
             clip: true
 
             delegate: Rectangle {
-                width: parent.width
+                width: ingListView.width
                 height: 30
                 color: index % 2 === 0 ? "#092440" : "#071b30"
                 border.color: "#164673"
