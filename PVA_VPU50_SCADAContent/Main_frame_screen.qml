@@ -1,10 +1,13 @@
 import QtQuick
 import QtQuick.Controls
+import "config"
 
 Item {
     id: rootWindow
     width: 1280
     height: 720
+
+    ScadaStateMiddleware { id: scadaMiddleware }
 
     // --- 21 CFR Part 11 User Authentication State ---
     property string activeUserId: "operator"
@@ -855,16 +858,16 @@ Item {
             }
 
             // 5. Synchronize State with ScadaStateMiddleware for P&ID and other screens
-            ScadaStateMiddleware.isAgitatorRunning = (ctrl.row1Media && ctrl.row1Media.isPlaying);
-            ScadaStateMiddleware.agitatorSpeed = rootWindow.r1ActualSpeed;
-            ScadaStateMiddleware.isHomogenizerRunning = (ctrl.row2Media && ctrl.row2Media.isPlaying);
-            ScadaStateMiddleware.homogenizerSpeed = rootWindow.r2ActualSpeed;
-            ScadaStateMiddleware.isCirculationRunning = (ctrl.row3Media && ctrl.row3Media.isPlaying);
-            ScadaStateMiddleware.isVacuumActive = (ctrl.row4Media && ctrl.row4Media.isPlaying);
-            ScadaStateMiddleware.vacuumPressure = rootWindow.vacuumPressure;
-            ScadaStateMiddleware.isHeating = (ctrl.row6Media && ctrl.row6Media.isPlaying);
-            ScadaStateMiddleware.vesselTemp = rootWindow.productTemp;
-            ScadaStateMiddleware.targetTemp = rootWindow.targetTemp;
+            scadaMiddleware.isAgitatorRunning = (ctrl.row1Media && ctrl.row1Media.isPlaying);
+            scadaMiddleware.agitatorSpeed = rootWindow.r1ActualSpeed;
+            scadaMiddleware.isHomogenizerRunning = (ctrl.row2Media && ctrl.row2Media.isPlaying);
+            scadaMiddleware.homogenizerSpeed = rootWindow.r2ActualSpeed;
+            scadaMiddleware.isCirculationRunning = (ctrl.row3Media && ctrl.row3Media.isPlaying);
+            scadaMiddleware.isVacuumActive = (ctrl.row4Media && ctrl.row4Media.isPlaying);
+            scadaMiddleware.vacuumPressure = rootWindow.vacuumPressure;
+            scadaMiddleware.isHeating = (ctrl.row6Media && ctrl.row6Media.isPlaying);
+            scadaMiddleware.vesselTemp = rootWindow.productTemp;
+            scadaMiddleware.targetTemp = rootWindow.targetTemp;
         }
     }
 

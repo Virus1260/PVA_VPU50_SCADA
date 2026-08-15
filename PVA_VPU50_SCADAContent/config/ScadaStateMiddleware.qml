@@ -1,7 +1,5 @@
 import QtQuick
 
-pragma Singleton
-
 QtObject {
     id: middlewareRoot
 

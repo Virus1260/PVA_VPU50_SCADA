@@ -8,10 +8,12 @@ Rectangle {
     id: trendsRoot
     color: "#08213b"
 
-    readonly property double currentTemp: ScadaStateMiddleware.vesselTemp
-    readonly property double currentPress: ScadaStateMiddleware.vacuumPressure
-    readonly property double currentStirrer: ScadaStateMiddleware.agitatorSpeed
-    readonly property double currentHomo: ScadaStateMiddleware.homogenizerSpeed
+    ScadaStateMiddleware { id: stateMiddleware }
+
+    readonly property double currentTemp: stateMiddleware.vesselTemp
+    readonly property double currentPress: stateMiddleware.vacuumPressure
+    readonly property double currentStirrer: stateMiddleware.agitatorSpeed
+    readonly property double currentHomo: stateMiddleware.homogenizerSpeed
 
     property var tempHistory: []
     property var pressHistory: []

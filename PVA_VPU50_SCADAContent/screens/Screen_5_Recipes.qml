@@ -9,6 +9,8 @@ Rectangle {
     id: recipesScreenRoot
     color: "#081d33"
 
+    ScadaStateMiddleware { id: stateMiddleware }
+
     // --- State Management ---
     property string activeTab: "matrix" // "matrix" or "formulation"
     property int activeRecipeIndex: 0
@@ -160,12 +162,12 @@ Rectangle {
             }
             onExecuteToggleRequested: {
                 recipesScreenRoot.isExecuting = !recipesScreenRoot.isExecuting;
-                ScadaStateMiddleware.isRecipeRunning = recipesScreenRoot.isExecuting;
+                stateMiddleware.isRecipeRunning = recipesScreenRoot.isExecuting;
 
                 if (recipesScreenRoot.isExecuting) {
                     var activeStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "ACTIVE"; }) || recipesScreenRoot.currentRecipe.steps[0];
                     if (activeStep) {
-                        ScadaStateMiddleware.currentRecipeStepName = activeStep.name;
+                        stateMiddleware.currentRecipeStepName = activeStep.name;
                         if (activeStep.isManual) {
                             stepConfirmDialog.stepName = activeStep.name;
                             stepConfirmDialog.confirmMessage = activeStep.confirmMsg || "Manual operator check required for this step.";
@@ -175,22 +177,22 @@ Rectangle {
                                 var op = activeStep.ops[i];
                                 var numVal = parseFloat(op.val);
                                 if (op.dev === "Agitator") {
-                                    ScadaStateMiddleware.setAgitator(true, isNaN(numVal) ? 40.0 : numVal);
+                                    stateMiddleware.setAgitator(true, isNaN(numVal) ? 40.0 : numVal);
                                 } else if (op.dev === "Homogenizer") {
-                                    ScadaStateMiddleware.setHomogenizer(true, isNaN(numVal) ? 3600.0 : numVal);
+                                    stateMiddleware.setHomogenizer(true, isNaN(numVal) ? 3600.0 : numVal);
                                 } else if (op.dev === "Heater") {
-                                    ScadaStateMiddleware.setHeating(true, isNaN(numVal) ? 80.0 : numVal);
+                                    stateMiddleware.setHeating(true, isNaN(numVal) ? 80.0 : numVal);
                                 } else if (op.dev === "Vacuum") {
-                                    ScadaStateMiddleware.setVacuum(true, isNaN(numVal) ? -450.0 : numVal);
+                                    stateMiddleware.setVacuum(true, isNaN(numVal) ? -450.0 : numVal);
                                 }
                             }
                         }
                     }
                 } else {
-                    ScadaStateMiddleware.setAgitator(false, 0);
-                    ScadaStateMiddleware.setHomogenizer(false, 0);
-                    ScadaStateMiddleware.setHeating(false, 20.7);
-                    ScadaStateMiddleware.setVacuum(false, 0);
+                    stateMiddleware.setAgitator(false, 0);
+                    stateMiddleware.setHomogenizer(false, 0);
+                    stateMiddleware.setHeating(false, 20.7);
+                    stateMiddleware.setVacuum(false, 0);
                 }
             }
         }

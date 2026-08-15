@@ -10,7 +10,7 @@ Rectangle {
     clip: true
 
     ScadaConfig { id: scadaConfig }
-    readonly property var scadaBridge: ScadaStateMiddleware
+    ScadaStateMiddleware { id: scadaBridge }
 
     // Base Coordinate Canvas Dimensions
     readonly property real worldWidth: 1060
