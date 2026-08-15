@@ -117,7 +117,27 @@ Item {
         }
     }
 
-    // 3. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-warmed GPU Vector Cache - Zero Lag on Start)
+    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange)
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 46
+        anchors.bottom: impellerContainer.top
+        anchors.bottomMargin: -6
+        width: 14
+        radius: 2
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: "#64748b" }
+            GradientStop { position: 0.35; color: "#94a3b8" }
+            GradientStop { position: 0.65; color: "#cbd5e1" }
+            GradientStop { position: 1.0; color: "#475569" }
+        }
+        border.color: "#334155"
+        border.width: 1
+    }
+
+    // 4. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-warmed GPU Vector Cache - Zero Lag on Start)
     Item {
         id: impellerContainer
         anchors.top: parent.top

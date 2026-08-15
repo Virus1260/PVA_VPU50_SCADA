@@ -3,8 +3,8 @@ import QtQuick.Layouts
 
 Item {
     id: gaugeRoot
-    width: 84
-    height: 230
+    width: 78
+    height: 195
 
     property real levelPercent: 65.0
     property string tag: "X 165 503"
@@ -23,25 +23,17 @@ Item {
     }
 
     // 2. SCALE LABELS (1000.0 to 0.0) ALONG LEFT SIDE
-    Column {
+    Item {
         anchors.right: gaugePill.left
-        anchors.rightMargin: 6
+        anchors.rightMargin: 5
         anchors.top: gaugePill.top
         anchors.bottom: gaugePill.bottom
-        anchors.topMargin: 6
-        anchors.bottomMargin: 6
-        spacing: (gaugePill.height - 12 - (5 * 10)) / 4
 
-        Repeater {
-            model: ["1000.0", "750.0", "500.0", "250.0", "0.0"]
-            Text {
-                text: modelData
-                color: "#1e3a5f"
-                font.pixelSize: 8
-                font.bold: true
-                font.family: "Arial"
-            }
-        }
+        Text { anchors.top: parent.top; anchors.topMargin: 2; anchors.right: parent.right; text: "1000.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
+        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.25; anchors.right: parent.right; text: "750.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
+        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.50; anchors.right: parent.right; text: "500.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
+        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.75; anchors.right: parent.right; text: "250.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
+        Text { anchors.bottom: parent.bottom; anchors.bottomMargin: 2; anchors.right: parent.right; text: "0.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
     }
 
     // 3. MAIN CAPSULE PILL GAUGE (Elevated Z-Axis Over Agitator)
@@ -49,10 +41,10 @@ Item {
         id: gaugePill
         anchors.right: parent.right
         anchors.top: tagLabel.bottom
-        anchors.topMargin: 4
+        anchors.topMargin: 2
         anchors.bottom: parent.bottom
-        width: 28
-        radius: 14
+        width: 24
+        radius: 12
         color: "#082342"
         border.color: "#1d5b94"
         border.width: 1.5
@@ -61,7 +53,7 @@ Item {
         // Inner Shadow / Glow Rim
         Rectangle {
             anchors.fill: parent
-            radius: 14
+            radius: 12
             color: "transparent"
             border.color: "#0f3a68"
             border.width: 1
@@ -69,8 +61,9 @@ Item {
 
         // Center Scale Ticks (Dotted / Dashed Line)
         Canvas {
+            id: tickCanvas
             anchors.fill: parent
-            anchors.margins: 6
+            anchors.margins: 4
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.clearRect(0, 0, width, height);
@@ -90,8 +83,8 @@ Item {
                 for (var i = 1; i <= 3; ++i) {
                     var y = height * (i / 4.0);
                     ctx.beginPath();
-                    ctx.moveTo(cx - 4, y);
-                    ctx.lineTo(cx + 4, y);
+                    ctx.moveTo(cx - 3, y);
+                    ctx.lineTo(cx + 3, y);
                     ctx.strokeStyle = "#38bdf8";
                     ctx.lineWidth = 1;
                     ctx.stroke();
@@ -107,7 +100,7 @@ Item {
             anchors.right: parent.right
             anchors.margins: 1.5
             height: Math.max(0, (parent.height - 3) * (Math.max(0, Math.min(100, gaugeRoot.levelPercent)) / 100.0))
-            radius: 13
+            radius: 11
             visible: height > 2
 
             gradient: Gradient {
