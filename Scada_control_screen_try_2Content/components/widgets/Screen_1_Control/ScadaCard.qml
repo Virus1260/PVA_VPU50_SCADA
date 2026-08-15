@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import ".."
 
 Item {
     id: cardRoot
@@ -12,6 +13,10 @@ Item {
     property color progressColor: "#00d2ff"
 
     property real cardHeight: 68
+    property bool isClickable: true
+
+    signal clicked()
+    signal setpointClicked()
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
@@ -73,11 +78,12 @@ Item {
                     color: "#1d5b94"
                 }
 
-                // Right Compartment (Secondary / Target Value in lighter contrasting blue)
+                // Right Compartment (Secondary / Target Value in lighter contrasting blue - Clickable)
                 Rectangle {
+                    id: targetComp
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#154d80"
+                    color: targetMouse.pressed ? "#0f365a" : (targetMouse.containsMouse ? "#1c62a0" : "#154d80")
 
                     Text {
                         anchors.centerIn: parent
@@ -86,26 +92,50 @@ Item {
                         font.bold: true
                         font.pixelSize: 14
                     }
+
+                    MouseArea {
+                        id: targetMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: cardRoot.isClickable ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        onClicked: {
+                            cardRoot.setpointClicked();
+                            cardRoot.clicked();
+                        }
+                    }
                 }
             }
 
-            // CASE B: Single-Value Card (Centered value + unit)
-            RowLayout {
-                anchors.centerIn: parent
-                spacing: 4
+            // CASE B: Single-Value Card (Centered value + unit - Clickable)
+            Rectangle {
+                anchors.fill: parent
+                color: singleMouse.pressed ? "#07203a" : (singleMouse.containsMouse ? "#114472" : "transparent")
                 visible: cardRoot.secondaryValue === ""
 
-                Text {
-                    text: cardRoot.primaryValue
-                    color: "#ffffff"
-                    font.bold: true
-                    font.pixelSize: 15
+                RowLayout {
+                    anchors.centerIn: parent
+                    spacing: 4
+
+                    Text {
+                        text: cardRoot.primaryValue
+                        color: "#ffffff"
+                        font.bold: true
+                        font.pixelSize: 15
+                    }
+
+                    Text {
+                        text: cardRoot.unit
+                        color: "#8cb5dc"
+                        font.pixelSize: 11
+                    }
                 }
 
-                Text {
-                    text: cardRoot.unit
-                    color: "#8cb5dc"
-                    font.pixelSize: 11
+                MouseArea {
+                    id: singleMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: cardRoot.isClickable ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: cardRoot.clicked()
                 }
             }
 

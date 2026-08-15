@@ -22,7 +22,15 @@ Project {
     }
 
     QmlFiles {
+        directory: "Scada_control_screen_try_2Content/components/widgets/Screen_1_Control"
+    }
+
+    QmlFiles {
         directory: "Scada_control_screen_try_2Content/components/modals"
+    }
+
+    QmlFiles {
+        directory: "Scada_control_screen_try_2Content/components/modals/Screen_1_Control"
     }
 
     QmlFiles {
@@ -105,7 +113,15 @@ Project {
     qt6Project: true
 
     /* List of plugin directories passed to QML runtime */
-    importPaths: [ ".", "Scada_control_screen_try_2Content" ]
+    importPaths: [
+        ".",
+        "Scada_control_screen_try_2Content",
+        "Scada_control_screen_try_2Content/components/widgets",
+        "Scada_control_screen_try_2Content/components/widgets/Screen_1_Control",
+        "Scada_control_screen_try_2Content/components/modals",
+        "Scada_control_screen_try_2Content/components/modals/Screen_1_Control",
+        "Scada_control_screen_try_2Content/screens"
+    ]
 
     /* Required for deployment */
     targetDirectory: "/opt/Scada_control_screen_try_2"

@@ -16,10 +16,12 @@ Rectangle {
     property bool isInputValid: true
 
     signal accepted(double value)
-    signal rejected()
-    signal closed()
+    signal rejected
+    signal closed
 
-    MouseArea { anchors.fill: parent }
+    MouseArea {
+        anchors.fill: parent
+    }
 
     // Modal Card Container (Scalable for Full-Screen)
     Rectangle {
@@ -65,7 +67,10 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { keypadRoot.rejected(); keypadRoot.closed(); }
+                        onClicked: {
+                            keypadRoot.rejected();
+                            keypadRoot.closed();
+                        }
                     }
                 }
             }
@@ -111,14 +116,18 @@ Rectangle {
                     font.bold: true
                     font.pixelSize: 12
                 }
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
                 Text {
                     text: keypadRoot.isInputValid ? "" : "OUT OF RANGE"
                     color: "#ff5555"
                     font.bold: true
                     font.pixelSize: 10
                 }
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
                 Text {
                     text: keypadRoot.maxVal.toFixed(1)
                     color: "#8cb5dc"
@@ -127,7 +136,7 @@ Rectangle {
                 }
             }
 
-            // 4. Authentic 4x4 Keypad Grid (Image 3)
+            // 4. Authentic 4x4 Keypad Grid (Image 3 with Clear at Row 3)
             GridLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -135,28 +144,80 @@ Rectangle {
                 rowSpacing: 6
                 columnSpacing: 6
 
-                // Row 1: 7, 8, 9, <--
-                KeypadButton { text: "7"; onClicked: keypadRoot.appendDigit("7") }
-                KeypadButton { text: "8"; onClicked: keypadRoot.appendDigit("8") }
-                KeypadButton { text: "9"; onClicked: keypadRoot.appendDigit("9") }
-                KeypadButton { text: "<--"; isAction: true; onClicked: keypadRoot.backspace() }
+                // Row 1: 7, 8, 9, Del
+                KeypadButton {
+                    text: "7"
+                    onClicked: keypadRoot.appendDigit("7")
+                }
+                KeypadButton {
+                    text: "8"
+                    onClicked: keypadRoot.appendDigit("8")
+                }
+                KeypadButton {
+                    text: "9"
+                    onClicked: keypadRoot.appendDigit("9")
+                }
+                KeypadButton {
+                    text: "Del"
+                    isAction: true
+                    onClicked: keypadRoot.backspace()
+                }
 
                 // Row 2: 4, 5, 6, Esc
-                KeypadButton { text: "4"; onClicked: keypadRoot.appendDigit("4") }
-                KeypadButton { text: "5"; onClicked: keypadRoot.appendDigit("5") }
-                KeypadButton { text: "6"; onClicked: keypadRoot.appendDigit("6") }
-                KeypadButton { text: "Esc"; isAction: true; onClicked: { keypadRoot.rejected(); keypadRoot.closed(); } }
+                KeypadButton {
+                    text: "4"
+                    onClicked: keypadRoot.appendDigit("4")
+                }
+                KeypadButton {
+                    text: "5"
+                    onClicked: keypadRoot.appendDigit("5")
+                }
+                KeypadButton {
+                    text: "6"
+                    onClicked: keypadRoot.appendDigit("6")
+                }
+                KeypadButton {
+                    text: "Esc"
+                    isAction: true
+                    onClicked: {
+                        keypadRoot.rejected();
+                        keypadRoot.closed();
+                    }
+                }
 
-                // Row 3: 1, 2, 3, -
-                KeypadButton { text: "1"; onClicked: keypadRoot.appendDigit("1") }
-                KeypadButton { text: "2"; onClicked: keypadRoot.appendDigit("2") }
-                KeypadButton { text: "3"; onClicked: keypadRoot.appendDigit("3") }
-                KeypadButton { text: "−"; isAction: true; onClicked: keypadRoot.toggleMinus() }
+                // Row 3: 1, 2, 3, Clear
+                KeypadButton {
+                    text: "1"
+                    onClicked: keypadRoot.appendDigit("1")
+                }
+                KeypadButton {
+                    text: "2"
+                    onClicked: keypadRoot.appendDigit("2")
+                }
+                KeypadButton {
+                    text: "3"
+                    onClicked: keypadRoot.appendDigit("3")
+                }
+                KeypadButton {
+                    text: "Clear"
+                    isAction: true
+                    onClicked: keypadRoot.clear()
+                }
 
-                // Row 4: 0, ., +/-, OK
-                KeypadButton { text: "0"; onClicked: keypadRoot.appendDigit("0") }
-                KeypadButton { text: "."; onClicked: keypadRoot.appendDot() }
-                KeypadButton { text: "±"; isAction: true; onClicked: keypadRoot.toggleMinus() }
+                // Row 4: 0, ., −, OK
+                KeypadButton {
+                    text: "0"
+                    onClicked: keypadRoot.appendDigit("0")
+                }
+                KeypadButton {
+                    text: "."
+                    onClicked: keypadRoot.appendDot()
+                }
+                KeypadButton {
+                    text: "−"
+                    isAction: true
+                    onClicked: keypadRoot.toggleMinus()
+                }
                 KeypadButton {
                     text: "OK"
                     isOk: true
@@ -187,6 +248,11 @@ Rectangle {
         if (currentInput.length > 0) {
             currentInput = currentInput.substring(0, currentInput.length - 1);
         }
+        validateInput();
+    }
+
+    function clear() {
+        currentInput = "0";
         validateInput();
     }
 
@@ -226,7 +292,7 @@ Rectangle {
         property string text: ""
         property bool isOk: false
         property bool isAction: false
-        signal clicked()
+        signal clicked
 
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -241,7 +307,7 @@ Rectangle {
             text: parent.text
             color: "#08213b"
             font.bold: true
-            font.pixelSize: isOk ? 16 : (isAction ? 14 : 20)
+            font.pixelSize: isOk ? 16 : (isAction ? 13 : 20)
         }
 
         MouseArea {

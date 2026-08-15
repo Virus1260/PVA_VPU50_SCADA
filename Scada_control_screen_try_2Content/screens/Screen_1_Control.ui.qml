@@ -6,6 +6,7 @@ It is supposed to be strictly declarative and only uses a subset of QML.
 import QtQuick
 import QtQuick.Layouts
 import "../components/widgets"
+import "../components/widgets/Screen_1_Control"
 
 Item {
     id: controlRoot

@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import ".."
 
 RowLayout {
     id: mediaRoot
@@ -42,7 +43,7 @@ RowLayout {
             anchors.centerIn: parent
             width: 22
             height: 22
-            source: "../../assets/icons/controls/stop.svg"
+            source: "../../../assets/icons/controls/stop.svg"
             fillMode: Image.PreserveAspectFit
             mipmap: true
             smooth: true
@@ -78,7 +79,7 @@ RowLayout {
             anchors.centerIn: parent
             width: 22
             height: 22
-            source: mediaRoot.isPaused ? "../../assets/icons/controls/pause_dark.svg" : "../../assets/icons/controls/pause.svg"
+            source: mediaRoot.isPaused ? "../../../assets/icons/controls/pause_dark.svg" : "../../../assets/icons/controls/pause.svg"
             fillMode: Image.PreserveAspectFit
             mipmap: true
             smooth: true
@@ -114,7 +115,7 @@ RowLayout {
             anchors.centerIn: parent
             width: 22
             height: 22
-            source: mediaRoot.isPlaying ? "../../assets/icons/controls/start_dark.svg" : "../../assets/icons/controls/start.svg"
+            source: mediaRoot.isPlaying ? "../../../assets/icons/controls/start_dark.svg" : "../../../assets/icons/controls/start.svg"
             fillMode: Image.PreserveAspectFit
             mipmap: true
             smooth: true

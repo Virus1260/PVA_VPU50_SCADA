@@ -7,10 +7,16 @@ Rectangle {
     anchors.fill: parent
     color: "#95000000"
 
+    property bool isAuto: true
+    property string activeMode: "PRODUCTION"
+
     signal modeSelected(string mode)
+    signal autoToggled(bool isAuto)
     signal closed()
 
-    MouseArea { anchors.fill: parent }
+    MouseArea {
+        anchors.fill: parent
+    }
 
     Rectangle {
         id: modalBox
@@ -61,14 +67,14 @@ Rectangle {
 
             // Subtitle Tag
             Text {
-                text: "B1 - Unimix50"
+                text: "B1 - VPU 50"
                 color: "#8cb5dc"
                 font.bold: true
                 font.pixelSize: 13
                 Layout.alignment: Qt.AlignHCenter
             }
 
-            // 2x2 Grid of Plantmode Options (Matching EKATO EPOS Image 5)
+            // 2x2 Grid of Plantmode Options (Matching EKATO EPOS Reference)
             GridLayout {
                 columns: 2
                 rows: 2
@@ -77,12 +83,12 @@ Rectangle {
                 columnSpacing: 14
                 rowSpacing: 14
 
-                // 1. Automatic Tile (Active Green Border)
+                // 1. Automatic / Manual Tile
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3a64"
-                    border.color: "#78dc20"
+                    color: modalRoot.isAuto ? "#0f3a64" : "#2a2412"
+                    border.color: modalRoot.isAuto ? "#78dc20" : "#f5d033"
                     border.width: 2
                     radius: 6
 
@@ -90,7 +96,7 @@ Rectangle {
                         anchors.centerIn: parent
                         spacing: 8
                         Text {
-                            text: "Automatic"
+                            text: modalRoot.isAuto ? "Automatic" : "Manual"
                             color: "#ffffff"
                             font.bold: true
                             font.pixelSize: 13
@@ -100,10 +106,10 @@ Rectangle {
                             width: 48
                             height: 48
                             radius: 24
-                            color: "#78dc20"
+                            color: modalRoot.isAuto ? "#78dc20" : "#f5d033"
                             Text {
                                 anchors.centerIn: parent
-                                text: "(A)"
+                                text: modalRoot.isAuto ? "(A)" : "(M)"
                                 color: "#000000"
                                 font.bold: true
                                 font.pixelSize: 18
@@ -115,7 +121,11 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("AUTOMATIC"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.isAuto = !modalRoot.isAuto;
+                            modalRoot.autoToggled(modalRoot.isAuto);
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -123,9 +133,9 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3a64"
-                    border.color: "#1d5b94"
-                    border.width: 1
+                    color: modalRoot.activeMode === "RECIPE" ? "#0f3a64" : "#082646"
+                    border.color: modalRoot.activeMode === "RECIPE" ? "#78dc20" : "#1d5b94"
+                    border.width: modalRoot.activeMode === "RECIPE" ? 2 : 1
                     radius: 6
 
                     ColumnLayout {
@@ -151,7 +161,11 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("RECIPE"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.activeMode = "RECIPE";
+                            modalRoot.modeSelected("RECIPE");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
@@ -159,9 +173,9 @@ Rectangle {
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3a64"
-                    border.color: "#1d5b94"
-                    border.width: 1
+                    color: modalRoot.activeMode === "CIP" ? "#0f3a64" : "#082646"
+                    border.color: modalRoot.activeMode === "CIP" ? "#78dc20" : "#1d5b94"
+                    border.width: modalRoot.activeMode === "CIP" ? 2 : 1
                     radius: 6
 
                     ColumnLayout {
@@ -187,17 +201,21 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("CIP"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.activeMode = "CIP";
+                            modalRoot.modeSelected("CIP");
+                            modalRoot.closed();
+                        }
                     }
                 }
 
-                // 4. Production Tile (Active Green Border)
+                // 4. Production Tile
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    color: "#0f3a64"
-                    border.color: "#78dc20"
-                    border.width: 2
+                    color: modalRoot.activeMode === "PRODUCTION" ? "#0f3a64" : "#082646"
+                    border.color: modalRoot.activeMode === "PRODUCTION" ? "#78dc20" : "#1d5b94"
+                    border.width: modalRoot.activeMode === "PRODUCTION" ? 2 : 1
                     radius: 6
 
                     ColumnLayout {
@@ -223,7 +241,11 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: { modalRoot.modeSelected("PRODUCTION"); modalRoot.closed(); }
+                        onClicked: {
+                            modalRoot.activeMode = "PRODUCTION";
+                            modalRoot.modeSelected("PRODUCTION");
+                            modalRoot.closed();
+                        }
                     }
                 }
             }

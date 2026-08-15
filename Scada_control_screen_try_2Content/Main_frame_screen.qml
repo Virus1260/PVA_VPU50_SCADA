@@ -8,13 +8,16 @@ Item {
     height: 720
 
     // --- Industrial Process State Variables ---
-    property double r1TargetSpeed: 25.0
+    property bool isAutoMode: true
+    property string currentRecipeName: "UNIMIX_BATCH_01"
+
+    property double r1TargetSpeed: 100.0
     property double r1ActualSpeed: 0.0
     property double r1Power: 0.0
     property double r1Current: 0.0
     property int r1RuntimeSeconds: 0
 
-    property double r2TargetSpeed: 600.0
+    property double r2TargetSpeed: 1800.0
     property double r2ActualSpeed: 0.0
     property double r2Power: 0.0
     property double r2Current: 0.0
@@ -23,13 +26,20 @@ Item {
     property int r3RuntimeSeconds: 0
 
     property double vacuumPressure: -209.8
+    property double vacuumStartPressure: -400.0
+    property double vacuumEndPressure: -450.0
     property int r4RuntimeSeconds: 330
 
+    property double suctionAngleOpen: 100.0
+    property double suctionAngleClose: 100.0
+    property double suctionTimeOpen: 0.0
+    property double suctionTimeClose: 0.0
     property int r5RuntimeSeconds: 0
 
     property double productTemp: 40.1
     property double targetTemp: 89.0
     property double jacketDeltaT: 23.2
+    property double tempDeviation: 1.0
     property double tempGradient: 12.1
     property int r6RuntimeSeconds: 0
 
@@ -59,17 +69,15 @@ Item {
         return String(hrs).padStart(2, '0') + ":" + String(mins).padStart(2, '0') + ":" + String(secs).padStart(2, '0');
     }
 
+    // --- UI Loader for Safe Instantiation & Clean Separation ---
     Loader {
         id: uiLoader
         anchors.fill: parent
         source: "Main_frame_screen.ui.qml"
 
         onLoaded: {
-            console.log("EKATO EPOS SCADA Main Frame initialized successfully.");
-
             var ui = uiLoader.item;
             if (!ui) return;
-
             var ctrl = ui.controlView;
 
             // -------------------------------------------------------------
@@ -78,7 +86,7 @@ Item {
             if (ctrl && ctrl.row1MinusBtn) {
                 ctrl.row1MinusBtn.clicked.connect(function() {
                     if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
-                    rootWindow.r1TargetSpeed = Math.max(25.0, rootWindow.r1TargetSpeed - 2.5);
+                    rootWindow.r1TargetSpeed = Math.max(25.0, rootWindow.r1TargetSpeed - 5.0);
                     ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
                 });
             }
@@ -86,7 +94,7 @@ Item {
             if (ctrl && ctrl.row1PlusBtn) {
                 ctrl.row1PlusBtn.clicked.connect(function() {
                     if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
-                    rootWindow.r1TargetSpeed = Math.min(120.0, rootWindow.r1TargetSpeed + 2.5);
+                    rootWindow.r1TargetSpeed = Math.min(120.0, rootWindow.r1TargetSpeed + 5.0);
                     ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
                 });
             }
@@ -221,7 +229,7 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 4. ROW 4: VACUUM CONTROLS (VacuumModeModal)
+            // 4. ROW 4: VACUUM CONTROLS & SETPOINTS
             // -------------------------------------------------------------
             if (ctrl && ctrl.row4Media) {
                 ctrl.row4Media.stopClicked.connect(function() {
@@ -236,8 +244,36 @@ Item {
                 });
             }
 
+            if (ctrl && ctrl.row4StartCard) {
+                ctrl.row4StartCard.clicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Start Pressure";
+                        ui.keypadModal.targetTag = "1P1001_START";
+                        ui.keypadModal.minVal = -1000.0;
+                        ui.keypadModal.maxVal = 0.0;
+                        ui.keypadModal.unit = "mbar";
+                        ui.keypadModal.currentInput = rootWindow.vacuumStartPressure.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row4EndCard) {
+                ctrl.row4EndCard.clicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "End Pressure";
+                        ui.keypadModal.targetTag = "1P1001_END";
+                        ui.keypadModal.minVal = -1000.0;
+                        ui.keypadModal.maxVal = 0.0;
+                        ui.keypadModal.unit = "mbar";
+                        ui.keypadModal.currentInput = rootWindow.vacuumEndPressure.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
             // -------------------------------------------------------------
-            // 5. ROW 5: SUCTION LIQUIDS CONTROLS (FillingModeModal)
+            // 5. ROW 5: SUCTION LIQUIDS CONTROLS & SETPOINTS
             // -------------------------------------------------------------
             if (ctrl && ctrl.row5Media) {
                 ctrl.row5Media.stopClicked.connect(function() {
@@ -252,8 +288,64 @@ Item {
                 });
             }
 
+            if (ctrl && ctrl.row5AngleOpenCard) {
+                ctrl.row5AngleOpenCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Angle Open";
+                        ui.keypadModal.targetTag = "1V1001_AO";
+                        ui.keypadModal.minVal = 0.0;
+                        ui.keypadModal.maxVal = 100.0;
+                        ui.keypadModal.unit = "%";
+                        ui.keypadModal.currentInput = rootWindow.suctionAngleOpen.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row5AngleCloseCard) {
+                ctrl.row5AngleCloseCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Angle Closed";
+                        ui.keypadModal.targetTag = "1V1001_AC";
+                        ui.keypadModal.minVal = 0.0;
+                        ui.keypadModal.maxVal = 100.0;
+                        ui.keypadModal.unit = "%";
+                        ui.keypadModal.currentInput = rootWindow.suctionAngleClose.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row5TimeOpenCard) {
+                ctrl.row5TimeOpenCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Time Open";
+                        ui.keypadModal.targetTag = "1V1001_TO";
+                        ui.keypadModal.minVal = 0.0;
+                        ui.keypadModal.maxVal = 999.0;
+                        ui.keypadModal.unit = "s";
+                        ui.keypadModal.currentInput = rootWindow.suctionTimeOpen.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row5TimeCloseCard) {
+                ctrl.row5TimeCloseCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Time Closed";
+                        ui.keypadModal.targetTag = "1V1001_TC";
+                        ui.keypadModal.minVal = 0.0;
+                        ui.keypadModal.maxVal = 999.0;
+                        ui.keypadModal.unit = "s";
+                        ui.keypadModal.currentInput = rootWindow.suctionTimeClose.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
             // -------------------------------------------------------------
-            // 6. ROW 6: HEATING CONTROLS (HeatingModeModal)
+            // 6. ROW 6: HEATING CONTROLS & SETPOINTS
             // -------------------------------------------------------------
             if (ctrl && ctrl.row6Media) {
                 ctrl.row6Media.playClicked.connect(function() {
@@ -292,14 +384,65 @@ Item {
                 });
             }
 
+            if (ctrl && ctrl.row6DeltaTCard) {
+                ctrl.row6DeltaTCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Delta T Jacket";
+                        ui.keypadModal.targetTag = "1T1001_DT";
+                        ui.keypadModal.minVal = 0.0;
+                        ui.keypadModal.maxVal = 50.0;
+                        ui.keypadModal.unit = "°C";
+                        ui.keypadModal.currentInput = rootWindow.jacketDeltaT.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row6TempCard) {
+                ctrl.row6TempCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Temperature Setpoint";
+                        ui.keypadModal.targetTag = "1T1001_TEMP";
+                        ui.keypadModal.minVal = 20.0;
+                        ui.keypadModal.maxVal = 130.0;
+                        ui.keypadModal.unit = "°C";
+                        ui.keypadModal.currentInput = rootWindow.targetTemp.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
+            if (ctrl && ctrl.row6DevCard) {
+                ctrl.row6DevCard.setpointClicked.connect(function() {
+                    if (ui.keypadModal) {
+                        ui.keypadModal.title = "Temperature Deviation";
+                        ui.keypadModal.targetTag = "1T1001_DEV";
+                        ui.keypadModal.minVal = 0.1;
+                        ui.keypadModal.maxVal = 10.0;
+                        ui.keypadModal.unit = "°C";
+                        ui.keypadModal.currentInput = rootWindow.tempDeviation.toFixed(1);
+                        ui.keypadModal.visible = true;
+                    }
+                });
+            }
+
             // -------------------------------------------------------------
-            // 7. HEADER ACKNOWLEDGE BUTTON
+            // 7. HEADER ACKNOWLEDGE & PLANTMODE OPEN BUTTONS
             // -------------------------------------------------------------
             if (ui.ackButton) {
                 ui.ackButton.clicked.connect(function() {
                     rootWindow.alarmIndex = (rootWindow.alarmIndex + 1) % rootWindow.alarmList.length;
                     ui.header.alarmMessage = rootWindow.alarmList[rootWindow.alarmIndex];
                     ui.header.isAlarmActive = false;
+                });
+            }
+
+            if (ui.header) {
+                ui.header.plantModeRequested.connect(function() {
+                    if (ui.plantModal) {
+                        ui.plantModal.isAuto = rootWindow.isAutoMode;
+                        ui.plantModal.visible = true;
+                    }
                 });
             }
 
@@ -331,16 +474,44 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 10. MODAL SETPOINT ACCEPTANCE HANDLER
+            // 10. MODAL SETPOINT ACCEPTANCE HANDLER (Universal Dispatcher)
             // -------------------------------------------------------------
             if (ui.keypadModal) {
                 ui.keypadModal.accepted.connect(function(val) {
-                    if (ui.keypadModal.targetTag.indexOf("1M1501") !== -1 && ctrl) {
+                    var tag = ui.keypadModal.targetTag;
+                    if (tag.indexOf("1M1501") !== -1 && ctrl && ctrl.row1SpeedControl) {
                         rootWindow.r1TargetSpeed = val;
                         ctrl.row1SpeedControl.targetVal = val;
-                    } else if (ui.keypadModal.targetTag.indexOf("1M2003") !== -1 && ctrl) {
+                    } else if (tag.indexOf("1M2003") !== -1 && ctrl && ctrl.row2SpeedControl) {
                         rootWindow.r2TargetSpeed = val;
                         ctrl.row2SpeedControl.targetVal = val;
+                    } else if (tag.indexOf("1P1001_START") !== -1 && ctrl && ctrl.row4StartCard) {
+                        rootWindow.vacuumStartPressure = val;
+                        ctrl.row4StartCard.primaryValue = val.toFixed(1);
+                    } else if (tag.indexOf("1P1001_END") !== -1 && ctrl && ctrl.row4EndCard) {
+                        rootWindow.vacuumEndPressure = val;
+                        ctrl.row4EndCard.primaryValue = val.toFixed(1);
+                    } else if (tag.indexOf("1V1001_AO") !== -1 && ctrl && ctrl.row5AngleOpenCard) {
+                        rootWindow.suctionAngleOpen = val;
+                        ctrl.row5AngleOpenCard.secondaryValue = val.toFixed(1) + "%";
+                    } else if (tag.indexOf("1V1001_AC") !== -1 && ctrl && ctrl.row5AngleCloseCard) {
+                        rootWindow.suctionAngleClose = val;
+                        ctrl.row5AngleCloseCard.secondaryValue = val.toFixed(1) + "%";
+                    } else if (tag.indexOf("1V1001_TO") !== -1 && ctrl && ctrl.row5TimeOpenCard) {
+                        rootWindow.suctionTimeOpen = val;
+                        ctrl.row5TimeOpenCard.secondaryValue = val.toFixed(1) + " s";
+                    } else if (tag.indexOf("1V1001_TC") !== -1 && ctrl && ctrl.row5TimeCloseCard) {
+                        rootWindow.suctionTimeClose = val;
+                        ctrl.row5TimeCloseCard.secondaryValue = val.toFixed(1) + " s";
+                    } else if (tag.indexOf("1T1001_DT") !== -1 && ctrl && ctrl.row6DeltaTCard) {
+                        rootWindow.jacketDeltaT = val;
+                        ctrl.row6DeltaTCard.secondaryValue = val.toFixed(1) + " °C";
+                    } else if (tag.indexOf("1T1001_TEMP") !== -1 && ctrl && ctrl.row6TempCard) {
+                        rootWindow.targetTemp = val;
+                        ctrl.row6TempCard.secondaryValue = val.toFixed(1) + " °C";
+                    } else if (tag.indexOf("1T1001_DEV") !== -1 && ctrl && ctrl.row6DevCard) {
+                        rootWindow.tempDeviation = val;
+                        ctrl.row6DevCard.secondaryValue = val.toFixed(1) + " °C";
                     }
                     ui.keypadModal.visible = false;
                 });
@@ -349,7 +520,32 @@ Item {
             }
 
             // -------------------------------------------------------------
-            // 11. DYNAMIC MODAL APPLIED SIGNALS
+            // 11. PLANTMODE MODAL WIRING
+            // -------------------------------------------------------------
+            if (ui.plantModal) {
+                ui.plantModal.autoToggled.connect(function(isAuto) {
+                    rootWindow.isAutoMode = isAuto;
+                    if (ui.header) {
+                        ui.header.plantModeText = isAuto ? "(A)" : "(M)";
+                        ui.header.alarmMessage = isAuto ? "AUTOMATIC PRODUCTION MODE - RECIPE [" + rootWindow.currentRecipeName + "] ACTIVE" : "MANUAL OVERRIDE MODE - OPERATOR SETPOINTS ENABLED";
+                    }
+                });
+
+                ui.plantModal.modeSelected.connect(function(mode) {
+                    if (mode === "RECIPE" && ui.sidebar) {
+                        ui.sidebar.activeIndex = 4; // Switch to Recipes Screen
+                    } else if (mode === "CIP" && ui.header) {
+                        ui.header.alarmMessage = "CIP MODE - CLEANING IN PLACE SEQUENCE ACTIVE";
+                    } else if (mode === "PRODUCTION" && ui.header) {
+                        ui.header.alarmMessage = "PRODUCTION MODE - VESSEL READY";
+                    }
+                });
+
+                ui.plantModal.closed.connect(function() { ui.plantModal.visible = false; });
+            }
+
+            // -------------------------------------------------------------
+            // 12. DYNAMIC MODE MODALS
             // -------------------------------------------------------------
             // Agitator Modal
             if (ui.agitatorModal) {
@@ -419,7 +615,6 @@ Item {
                 ui.heatingModal.closed.connect(function() { ui.heatingModal.visible = false; });
             }
 
-            if (ui.plantModal) ui.plantModal.closed.connect(function() { ui.plantModal.visible = false; });
             if (ui.confirmModal) ui.confirmModal.closed.connect(function() { ui.confirmModal.visible = false; });
         }
     }

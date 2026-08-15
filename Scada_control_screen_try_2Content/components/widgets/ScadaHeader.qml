@@ -3,11 +3,12 @@ import QtQuick.Layouts
 
 Rectangle {
     id: headerRoot
-    height: 56
+    height: 86
     color: "#08213b"
 
     property string vesselName: "VPU 50"
     property string systemTag: "B1"
+    property string plantModeText: "(A)"
     property string alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     property string operatorName: "Administrator"
     property string operatorRole: "21 CFR / GAMP 5"
@@ -17,89 +18,100 @@ Rectangle {
 
     property alias ackButton: ackBtn
 
+    signal plantModeRequested()
+
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 8
-        anchors.rightMargin: 12
-        spacing: 10
+        anchors.leftMargin: 12
+        anchors.rightMargin: 16
+        anchors.topMargin: 8
+        anchors.bottomMargin: 8
+        spacing: 12
 
-        // 1. Machine Identifier Badges & Pill
+        // 1. Machine Identifier Badges & Pill (Clickable -> Opens Plantmode Modal)
         RowLayout {
-            spacing: 6
+            spacing: 8
             Layout.alignment: Qt.AlignVCenter
 
-            // B1 Badge
+            // B1 Badge (38px circle)
             Rectangle {
-                Layout.preferredWidth: 32
-                Layout.preferredHeight: 32
-                radius: 16
+                Layout.preferredWidth: 38
+                Layout.preferredHeight: 38
+                radius: 19
                 color: "#0c345a"
                 border.color: "#1d5b94"
-                border.width: 1
+                border.width: 1.5
 
                 Text {
                     anchors.centerIn: parent
                     text: headerRoot.systemTag
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 11
+                    font.pixelSize: 13
                 }
             }
 
-            // Auto (A) Badge
+            // Auto (A) / Manual (M) Badge (38px circle - Clickable)
             Rectangle {
-                Layout.preferredWidth: 32
-                Layout.preferredHeight: 32
-                radius: 16
-                color: "#0c345a"
-                border.color: "#1d5b94"
-                border.width: 1
+                Layout.preferredWidth: 38
+                Layout.preferredHeight: 38
+                radius: 19
+                color: headerRoot.plantModeText === "(A)" ? "#0c345a" : "#4a3512"
+                border.color: headerRoot.plantModeText === "(A)" ? "#1d5b94" : "#f5d033"
+                border.width: 1.5
 
                 Text {
                     anchors.centerIn: parent
-                    text: "(A)"
-                    color: "#ffffff"
+                    text: headerRoot.plantModeText
+                    color: headerRoot.plantModeText === "(A)" ? "#ffffff" : "#f5d033"
                     font.bold: true
-                    font.pixelSize: 11
+                    font.pixelSize: 13
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: headerRoot.plantModeRequested()
                 }
             }
 
             // Status Green Dot
             Rectangle {
-                Layout.preferredWidth: 10
-                Layout.preferredHeight: 10
-                radius: 5
+                Layout.preferredWidth: 12
+                Layout.preferredHeight: 12
+                radius: 6
                 color: "#78dc20"
                 border.color: "#ffffff"
                 border.width: 1
             }
 
-            // VPU 50 Machine Pill
+            // VPU 50 Machine Pill (48px height, rounded capsule - Clickable)
             Rectangle {
-                Layout.preferredWidth: 135
-                Layout.preferredHeight: 36
-                radius: 18
-                color: "#0d365e"
-                border.color: "#1d5b94"
-                border.width: 1
+                id: vesselPill
+                Layout.preferredWidth: 150
+                Layout.preferredHeight: 48
+                radius: 24
+                color: pillMouse.pressed ? "#07203a" : (pillMouse.containsMouse ? "#164d80" : "#0d365e")
+                border.color: pillMouse.containsMouse ? "#3892e6" : "#1d5b94"
+                border.width: 1.5
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 6
+                    anchors.leftMargin: 16
+                    anchors.rightMargin: 14
+                    spacing: 8
 
                     Text {
                         text: headerRoot.vesselName
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 12
+                        font.pixelSize: 14
                         Layout.fillWidth: true
                     }
 
                     Item {
-                        Layout.preferredWidth: 18
-                        Layout.preferredHeight: 18
+                        Layout.preferredWidth: 22
+                        Layout.preferredHeight: 22
                         Image {
                             anchors.fill: parent
                             source: "../../assets/icons/header/lightbulb.svg"
@@ -109,27 +121,35 @@ Rectangle {
                         }
                     }
                 }
+
+                MouseArea {
+                    id: pillMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: headerRoot.plantModeRequested()
+                }
             }
         }
 
-        // 2. Alarm / Annunciator Box
+        // 2. Alarm / Annunciator Box (50px height, spacious)
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 38
+            Layout.preferredHeight: 50
             color: headerRoot.isAlarmActive ? "#4a1212" : "#092a4a"
             border.color: headerRoot.isAlarmActive ? "#ff4444" : "#1b5b94"
-            border.width: 1
-            radius: 4
+            border.width: 1.5
+            radius: 6
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 10
-                anchors.rightMargin: 4
-                spacing: 8
+                anchors.leftMargin: 14
+                anchors.rightMargin: 6
+                spacing: 10
 
                 Item {
-                    Layout.preferredWidth: 20
-                    Layout.preferredHeight: 20
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
                     Image {
                         anchors.fill: parent
                         source: "../../assets/icons/header/alarm_bell.svg"
@@ -143,17 +163,17 @@ Rectangle {
                     text: headerRoot.alarmMessage
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 12
+                    font.pixelSize: 13
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                 }
 
-                // Ack Button (Lime Green)
+                // Ack Button (Lime Green, 40px height)
                 Rectangle {
                     id: ackBtn
-                    Layout.preferredWidth: 64
-                    Layout.preferredHeight: 30
-                    radius: 3
+                    Layout.preferredWidth: 76
+                    Layout.preferredHeight: 40
+                    radius: 4
                     color: headerRoot.isAlarmActive ? "#ff4444" : "#78dc20"
 
                     signal clicked()
@@ -163,7 +183,7 @@ Rectangle {
                         text: "Ack"
                         color: headerRoot.isAlarmActive ? "#ffffff" : "#000000"
                         font.bold: true
-                        font.pixelSize: 12
+                        font.pixelSize: 13
                     }
 
                     MouseArea {
@@ -177,19 +197,19 @@ Rectangle {
 
         // 3. User Language & Credentials
         RowLayout {
-            spacing: 8
+            spacing: 10
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "EN"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 12
+                font.pixelSize: 13
             }
 
             Item {
-                Layout.preferredWidth: 20
-                Layout.preferredHeight: 20
+                Layout.preferredWidth: 24
+                Layout.preferredHeight: 24
                 Image {
                     anchors.fill: parent
                     source: "../../assets/icons/header/user.svg"
@@ -203,40 +223,40 @@ Rectangle {
                 text: headerRoot.operatorName
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 11
+                font.pixelSize: 12
             }
         }
 
         // 4. Live Clock & Date
         ColumnLayout {
-            spacing: 0
+            spacing: 2
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: headerRoot.timeString
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 11
+                font.pixelSize: 13
                 Layout.alignment: Qt.AlignHCenter
             }
             Text {
                 text: headerRoot.dateString
                 color: "#8cb5dc"
-                font.pixelSize: 9
+                font.pixelSize: 10
                 Layout.alignment: Qt.AlignHCenter
             }
         }
 
         // 5. PVA Systems Brand Identity (OEM)
         Rectangle {
-            Layout.preferredWidth: 84
-            Layout.preferredHeight: 32
+            Layout.preferredWidth: 100
+            Layout.preferredHeight: 42
             color: "transparent"
 
             PvaLogo {
                 anchors.centerIn: parent
-                width: 80
-                height: 28
+                width: 95
+                height: 36
             }
         }
     }

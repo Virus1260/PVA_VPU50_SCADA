@@ -149,36 +149,35 @@
         <file>Scada_control_screen_try_2Content/assets/icons/nav/trends_chart.svg</file>
         <file>Scada_control_screen_try_2Content/assets/pid_schema.svg</file>
         <file>Scada_control_screen_try_2Content/assets/pid_schema_tags.json</file>
-        <file>Scada_control_screen_try_2Content/components/modals/AgitatorModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/ConfirmationModal.qml</file>
-        <file>Scada_control_screen_try_2Content/components/modals/ExternalLineModeModal.qml</file>
-        <file>Scada_control_screen_try_2Content/components/modals/FillingModeModal.qml</file>
-        <file>Scada_control_screen_try_2Content/components/modals/HeatingModeModal.qml</file>
-        <file>Scada_control_screen_try_2Content/components/modals/HomogenizerModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/NumericKeypadModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/PlantModeModal.qml</file>
-        <file>Scada_control_screen_try_2Content/components/modals/VacuumModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/AgitatorModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/ExternalLineModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/FillingModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/HeatingModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/HomogenizerModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/modals/Screen_1_Control/VacuumModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/PvaLogo.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaButton.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaCard.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/PvaLogo.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaHeader.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaIcon.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaMediaControls.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaModeSelector.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaPowerCurrentCard.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaRuntimeWidget.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaSidebar.qml</file>
-        <file>Scada_control_screen_try_2Content/components/widgets/ScadaSpeedControl.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaCard.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaMediaControls.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaModeSelector.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaPowerCurrentCard.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaRuntimeWidget.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/Screen_1_Control/ScadaSpeedControl.qml</file>
         <file>Scada_control_screen_try_2Content/Main_frame_screen.qml</file>
         <file>Scada_control_screen_try_2Content/Main_frame_screen.ui.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/AlarmsScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/AuditScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/ControlScreen.ui.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/MaintenanceScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/PidScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/PlaybackScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/RecipesScreen.qml</file>
-        <file>Scada_control_screen_try_2Content/screens/TrendsScreen.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_1_Control.ui.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_2_P_ID.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_3_Trends.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_4_Alarms.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_5_Recipes.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_6_Audit.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_7_Playback.qml</file>
+        <file>Scada_control_screen_try_2Content/screens/Screen_8_Diagnostics.qml</file>
     </qresource>
 </RCC>

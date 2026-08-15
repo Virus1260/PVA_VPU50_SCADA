@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import "../widgets"
+import "../../widgets"
 
 Rectangle {
     id: fillModalRoot

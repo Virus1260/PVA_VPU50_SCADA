@@ -1,9 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
+import ".."
 
 Rectangle {
     id: runtimeRoot
     property string timeText: "00:00:00"
+    property string label: "Runtime"
     property real preferredWidth: 66
     property real widgetHeight: 68
 
@@ -23,13 +25,13 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: 2
         anchors.rightMargin: 2
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
         spacing: 2
 
-        // Top Header
+        // Top Label
         Text {
-            text: "Runtime"
+            text: runtimeRoot.label
             color: "#8cb5dc"
             font.pixelSize: 9
             font.bold: true
@@ -38,7 +40,7 @@ Rectangle {
             elide: Text.ElideRight
         }
 
-        // Center Clock Icon
+        // Center Clock Icon (26px)
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -47,7 +49,7 @@ Rectangle {
                 anchors.centerIn: parent
                 width: 26
                 height: 26
-                source: "../../assets/icons/controls/clock.svg"
+                source: "../../../assets/icons/controls/clock.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
                 smooth: true
@@ -58,9 +60,10 @@ Rectangle {
         Text {
             text: runtimeRoot.timeText
             color: "#ffffff"
+            font.pixelSize: 9
             font.bold: true
-            font.pixelSize: 11
-            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
         }
     }
 }

@@ -9,7 +9,9 @@ import QtQuick.Layouts
 import Scada_control_screen_try_2
 import "screens"
 import "components/widgets"
+import "components/widgets/Screen_1_Control"
 import "components/modals"
+import "components/modals/Screen_1_Control"
 
 Rectangle {
     id: rootScreen
@@ -46,13 +48,13 @@ Rectangle {
     property alias plantModal: plantModeOverlay
     property alias confirmModal: confirmDialogOverlay
 
-    // 1. TOP PROCESS HEADER BAR (Anchored directly to top)
+    // 1. TOP PROCESS HEADER BAR (Anchored directly to top, 86px height matching process cards)
     ScadaHeader {
         id: scadaHeader
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 56
+        height: 86
         z: 10
         vesselName: "VPU 50"
         systemTag: "B1"
@@ -81,42 +83,42 @@ Rectangle {
         currentIndex: rightSidebar.activeIndex
 
         // SCREEN 0: 6-ROW PROCESS CONTROL DASHBOARD
-        ControlScreen {
+        Screen_1_Control {
             id: controlScreenView
         }
 
         // SCREEN 1: P&ID VESSEL & PLANT SCHEMATIC
-        PidScreen {
+        Screen_2_P_ID {
             id: pidView
         }
 
         // SCREEN 2: PROCESS TRENDS & HISTORICAL ANALYTICS
-        TrendsScreen {
+        Screen_3_Trends {
             id: trendsView
         }
 
         // SCREEN 3: ALARMS & ANNUNCIATOR
-        AlarmsScreen {
+        Screen_4_Alarms {
             id: alarmsView
         }
 
         // SCREEN 4: RECIPES & BATCH PHASES
-        RecipesScreen {
+        Screen_5_Recipes {
             id: recipesView
         }
 
         // SCREEN 5: AUDIT TRAIL & 21 CFR PART 11 EBR
-        AuditScreen {
+        Screen_6_Audit {
             id: auditView
         }
 
         // SCREEN 6: PROCESS LOG PLAYBACK
-        PlaybackScreen {
+        Screen_7_Playback {
             id: playbackView
         }
 
         // SCREEN 7: HARDWARE MAINTENANCE & I/O DIAGNOSTICS
-        MaintenanceScreen {
+        Screen_8_Diagnostics {
             id: maintView
         }
     }
@@ -125,7 +127,7 @@ Rectangle {
     // MODAL DIALOGS & OVERLAYS (Z: 100)
     // =========================================================================
 
-    // 1. Numeric Keypad Setpoint Modal
+    // 1. Numeric Keypad Setpoint Modal (Global)
     NumericKeypadModal {
         id: numpadOverlay
         anchors.fill: parent
@@ -133,7 +135,7 @@ Rectangle {
         z: 100
     }
 
-    // 2. Agitator Mode Selector Overlay
+    // 2. Agitator Mode Selector Overlay (Screen 1 Control)
     AgitatorModeModal {
         id: agitatorModeOverlay
         anchors.fill: parent
@@ -141,7 +143,7 @@ Rectangle {
         z: 100
     }
 
-    // 3. Homogenizer Mode Selector Overlay
+    // 3. Homogenizer Mode Selector Overlay (Screen 1 Control)
     HomogenizerModeModal {
         id: homoModeOverlay
         anchors.fill: parent
@@ -149,7 +151,7 @@ Rectangle {
         z: 100
     }
 
-    // 4. Vacuum Mode Selector Overlay
+    // 4. Vacuum Mode Selector Overlay (Screen 1 Control)
     VacuumModeModal {
         id: vacuumModeOverlay
         anchors.fill: parent
@@ -157,7 +159,7 @@ Rectangle {
         z: 100
     }
 
-    // 5. External Line Mode Selector Overlay
+    // 5. External Line Mode Selector Overlay (Screen 1 Control)
     ExternalLineModeModal {
         id: extLineOverlay
         anchors.fill: parent
@@ -165,7 +167,7 @@ Rectangle {
         z: 100
     }
 
-    // 6. Suction / Filling Mode Selector Overlay
+    // 6. Suction / Filling Mode Selector Overlay (Screen 1 Control)
     FillingModeModal {
         id: fillingModeOverlay
         anchors.fill: parent
@@ -173,7 +175,7 @@ Rectangle {
         z: 100
     }
 
-    // 7. Heating Mode Selector Overlay
+    // 7. Heating Mode Selector Overlay (Screen 1 Control)
     HeatingModeModal {
         id: heatModeOverlay
         anchors.fill: parent
@@ -181,7 +183,7 @@ Rectangle {
         z: 100
     }
 
-    // 8. Plant / Vessel Mode Selector Overlay
+    // 8. Plant / Vessel Mode Selector Overlay (Global)
     PlantModeModal {
         id: plantModeOverlay
         anchors.fill: parent
@@ -189,7 +191,7 @@ Rectangle {
         z: 100
     }
 
-    // 9. Standard Confirm / Override Dialog Overlay
+    // 9. Standard Confirm / Override Dialog Overlay (Global)
     ConfirmationModal {
         id: confirmDialogOverlay
         anchors.fill: parent
