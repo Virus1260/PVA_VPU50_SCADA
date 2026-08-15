@@ -1,7 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "bash scripts/vercel_build.sh",
-  "outputDirectory": "dist",
+  "buildCommand": null,
+  "installCommand": null,
+  "framework": null,
+  "outputDirectory": null,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

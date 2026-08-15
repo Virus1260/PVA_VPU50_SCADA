@@ -150,15 +150,20 @@
 - **Solution**:
   Name the root executable project `project(PVA_VPU50_SCADAApp LANGUAGES CXX)` in root `CMakeLists.txt`.
 
-### Issue 11: Legacy Vercel Action (`amondnet/vercel-action`) Failure
-- **Symptom**: `Vercel CLI 25.1.0: Error! Could not retrieve Project Settings. To link your Project, remove the .vercel directory and deploy again.`
-- **Root Cause**: Third-party GitHub action `amondnet/vercel-action` used an outdated Vercel CLI version (v25) incompatible with modern Vercel project configurations.
+### Issue 12: Vercel Cloud Build Attempt (`bash scripts/vercel_build.sh exited with 127`)
+- **Symptom**: `Running build in Washington, D.C., USA... Error: Command "bash scripts/vercel_build.sh" exited with 127`.
+- **Root Cause**: An old `"buildCommand": "bash scripts/vercel_build.sh"` was present in `vercel.json`. When deploying the prebuilt `dist/` directory, Vercel detected the build command and attempted to re-run the non-existent build script on Vercel servers.
 - **Solution**:
-  Use the official modern Vercel CLI directly in the workflow step:
-  ```bash
-  mkdir -p .vercel
-  echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
-  npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+  Set `"buildCommand": null`, `"installCommand": null`, `"framework": null` in `vercel.json` so Vercel immediately recognizes the upload as pre-compiled static WebAssembly assets:
+  ```json
+  {
+    "version": 2,
+    "buildCommand": null,
+    "installCommand": null,
+    "framework": null,
+    "cleanUrls": true,
+    ...
+  }
   ```
 
 ---
