@@ -853,6 +853,18 @@ Item {
                 if (ctrl.row6DevCard) ctrl.row6DevCard.primaryValue = dev.toFixed(1);
                 if (ctrl.row6GradientCard) ctrl.row6GradientCard.progressValue = Math.min(1.0, rootWindow.productTemp / rootWindow.targetTemp);
             }
+
+            // 5. Synchronize State with ScadaStateMiddleware for P&ID and other screens
+            ScadaStateMiddleware.isAgitatorRunning = (ctrl.row1Media && ctrl.row1Media.isPlaying);
+            ScadaStateMiddleware.agitatorSpeed = rootWindow.r1ActualSpeed;
+            ScadaStateMiddleware.isHomogenizerRunning = (ctrl.row2Media && ctrl.row2Media.isPlaying);
+            ScadaStateMiddleware.homogenizerSpeed = rootWindow.r2ActualSpeed;
+            ScadaStateMiddleware.isCirculationRunning = (ctrl.row3Media && ctrl.row3Media.isPlaying);
+            ScadaStateMiddleware.isVacuumActive = (ctrl.row4Media && ctrl.row4Media.isPlaying);
+            ScadaStateMiddleware.vacuumPressure = rootWindow.vacuumPressure;
+            ScadaStateMiddleware.isHeating = (ctrl.row6Media && ctrl.row6Media.isPlaying);
+            ScadaStateMiddleware.vesselTemp = rootWindow.productTemp;
+            ScadaStateMiddleware.targetTemp = rootWindow.targetTemp;
         }
     }
 

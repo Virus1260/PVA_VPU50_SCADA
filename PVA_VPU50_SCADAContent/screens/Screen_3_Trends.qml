@@ -2,14 +2,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "../config"
+
 Rectangle {
     id: trendsRoot
     color: "#08213b"
 
-    property double currentTemp: 40.1
-    property double currentPress: -209.8
-    property double currentStirrer: 25.0
-    property double currentHomo: 600.0
+    readonly property double currentTemp: ScadaStateMiddleware.vesselTemp
+    readonly property double currentPress: ScadaStateMiddleware.vacuumPressure
+    readonly property double currentStirrer: ScadaStateMiddleware.agitatorSpeed
+    readonly property double currentHomo: ScadaStateMiddleware.homogenizerSpeed
 
     property var tempHistory: []
     property var pressHistory: []

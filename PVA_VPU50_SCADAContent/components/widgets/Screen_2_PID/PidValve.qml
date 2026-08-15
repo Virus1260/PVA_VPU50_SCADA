@@ -2,14 +2,15 @@ import QtQuick
 
 Item {
     id: valveRoot
-    width: 28
-    height: 28
+    width: 26
+    height: 26
 
     property string tag: "V101"
     property string subLabel: ""
     property bool isOpen: false
     property bool isVertical: false
     property bool isSolenoid: true
+    property bool showTags: true
 
     signal clicked()
 
@@ -23,14 +24,14 @@ Item {
 
             var cx = width / 2;
             var cy = height / 2;
-            var fill = valveRoot.isOpen ? "#15803d" : "#092647";
-            var stroke = valveRoot.isOpen ? "#4ade80" : "#38bdf8";
+            var fill = valveRoot.isOpen ? "#22c55e" : "#0a284a";
+            var stroke = valveRoot.isOpen ? "#4ade80" : "#ffffff";
 
             if (valveRoot.isVertical) {
                 // Top Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 6, cy - 7);
-                ctx.lineTo(cx + 6, cy - 7);
+                ctx.moveTo(cx - 5.5, cy - 6.5);
+                ctx.lineTo(cx + 5.5, cy - 6.5);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -41,8 +42,8 @@ Item {
 
                 // Bottom Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 6, cy + 7);
-                ctx.lineTo(cx + 6, cy + 7);
+                ctx.moveTo(cx - 5.5, cy + 6.5);
+                ctx.lineTo(cx + 5.5, cy + 6.5);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -51,8 +52,8 @@ Item {
             } else {
                 // Left Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx - 7, cy - 6);
-                ctx.lineTo(cx - 7, cy + 6);
+                ctx.moveTo(cx - 6.5, cy - 5.5);
+                ctx.lineTo(cx - 6.5, cy + 5.5);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -63,8 +64,8 @@ Item {
 
                 // Right Triangle
                 ctx.beginPath();
-                ctx.moveTo(cx + 7, cy - 6);
-                ctx.lineTo(cx + 7, cy + 6);
+                ctx.moveTo(cx + 6.5, cy - 5.5);
+                ctx.lineTo(cx + 6.5, cy + 5.5);
                 ctx.lineTo(cx, cy);
                 ctx.closePath();
                 ctx.fillStyle = fill;
@@ -82,23 +83,24 @@ Item {
 
     // Tag Label
     Text {
+        visible: valveRoot.showTags
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.top
         anchors.bottomMargin: 1
         text: valveRoot.tag
-        color: valveRoot.isOpen ? "#4ade80" : "#93c5fd"
+        color: valveRoot.isOpen ? "#4ade80" : "#cbd5e1"
         font.pixelSize: 8
         font.bold: valveRoot.isOpen
     }
 
     // Sub-Label
     Text {
-        visible: valveRoot.subLabel.length > 0
+        visible: valveRoot.showTags && valveRoot.subLabel.length > 0
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
         anchors.topMargin: 1
         text: valveRoot.subLabel
-        color: "#cbd5e1"
+        color: "#94a3b8"
         font.pixelSize: 7
     }
 

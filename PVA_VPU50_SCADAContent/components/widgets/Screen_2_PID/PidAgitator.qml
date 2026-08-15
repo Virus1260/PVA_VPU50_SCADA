@@ -3,13 +3,14 @@ import QtQuick.Layouts
 
 Item {
     id: agitatorRoot
-    width: 260
-    height: 330
+    width: 280
+    height: 380
 
     property string motorTag: "M 162 001"
     property string speedTag: "SCR 162001"
     property real speedRpm: 10.0
     property bool isRunning: true
+    property bool showTags: true
 
     // 1. TOP DRIVE MOTOR & SENSORS
     ColumnLayout {
@@ -17,37 +18,43 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 1
 
-        Text { text: agitatorRoot.speedTag; color: "#8cb5dc"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
-        Text { text: agitatorRoot.speedRpm.toFixed(1) + "rpm"; color: agitatorRoot.isRunning ? "#4ade80" : "#94a3b8"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
-        Text { text: agitatorRoot.motorTag; color: "#8cb5dc"; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
+        Text {
+            visible: agitatorRoot.showTags
+            text: agitatorRoot.speedTag + " " + agitatorRoot.speedRpm.toFixed(1) + "rpm"
+            color: "#ffffff"
+            font.bold: true
+            font.pixelSize: 8
+            Layout.alignment: Qt.AlignHCenter
+        }
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
             spacing: 6
 
-            // Motor Symbol 'M'
+            // Motor Symbol 'M' with Authentic EKATO Green Ring
             Rectangle {
                 width: 22
                 height: 22
                 radius: 11
-                color: agitatorRoot.isRunning ? "#16a34a" : "#0d2847"
-                border.color: agitatorRoot.isRunning ? "#4ade80" : "#3b82f6"
-                border.width: 1.2
+                color: agitatorRoot.isRunning ? "#4ade80" : "#0d2847"
+                border.color: agitatorRoot.isRunning ? "#22c55e" : "#3b82f6"
+                border.width: 1.5
 
                 Text {
                     anchors.centerIn: parent
                     text: "M"
-                    color: "#ffffff"
+                    color: agitatorRoot.isRunning ? "#052e16" : "#ffffff"
                     font.bold: true
-                    font.pixelSize: 10
+                    font.pixelSize: 11
                 }
             }
 
             // GZ 161501 Sensor
             Rectangle {
-                width: 8
-                height: 8
-                radius: 4
+                visible: agitatorRoot.showTags
+                width: 7
+                height: 7
+                radius: 3.5
                 color: "#eab308"
             }
         }
@@ -57,10 +64,10 @@ Item {
     Rectangle {
         id: shaft
         anchors.top: parent.top
-        anchors.topMargin: 56
+        anchors.topMargin: 46
         anchors.horizontalCenter: parent.horizontalCenter
         width: 4
-        height: 180
+        height: 220
         color: "#ffffff"
     }
 
@@ -68,44 +75,43 @@ Item {
     Canvas {
         id: bladeCanvas
         anchors.top: shaft.top
-        anchors.topMargin: 50
+        anchors.topMargin: 65
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 230
-        height: 210
+        width: 260
+        height: 250
 
         onPaint: {
             var ctx = getContext("2d");
             ctx.clearRect(0, 0, width, height);
 
             var cx = width / 2;
-            var cy = height / 2;
-            var hw = 85;
+            var hw = 95;
             var topY = 10;
-            var botY = 175;
+            var botY = 205;
 
             ctx.beginPath();
             // Outer Paravisc Boundary (with bottom central arch)
             ctx.moveTo(cx - hw, topY);
-            ctx.lineTo(cx - hw, botY - 30);
-            ctx.quadraticCurveTo(cx - hw * 0.5, botY, cx - 18, botY - 10);
+            ctx.lineTo(cx - hw, botY - 32);
+            ctx.quadraticCurveTo(cx - hw * 0.5, botY + 2, cx - 22, botY - 10);
             // Center Arch Cutout
-            ctx.quadraticCurveTo(cx, botY - 26, cx + 18, botY - 10);
-            ctx.quadraticCurveTo(cx + hw * 0.5, botY, cx + hw, botY - 30);
+            ctx.quadraticCurveTo(cx, botY - 30, cx + 22, botY - 10);
+            ctx.quadraticCurveTo(cx + hw * 0.5, botY + 2, cx + hw, botY - 32);
             ctx.lineTo(cx + hw, topY);
 
             // Double Diagonal X-Braces
             ctx.moveTo(cx - hw, topY);
-            ctx.lineTo(cx + hw, botY - 30);
+            ctx.lineTo(cx + hw, botY - 32);
 
             ctx.moveTo(cx + hw, topY);
-            ctx.lineTo(cx - hw, botY - 30);
+            ctx.lineTo(cx - hw, botY - 32);
 
             // Top cross link
             ctx.moveTo(cx - hw, topY);
             ctx.lineTo(cx + hw, topY);
 
             ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 3.0;
+            ctx.lineWidth = 4.0;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.stroke();

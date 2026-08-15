@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "../components/widgets/Screen_5_Recipes"
 import "../components/modals/Screen_5_Recipes"
+import "../config"
 
 Rectangle {
     id: recipesScreenRoot
@@ -159,13 +160,37 @@ Rectangle {
             }
             onExecuteToggleRequested: {
                 recipesScreenRoot.isExecuting = !recipesScreenRoot.isExecuting;
+                ScadaStateMiddleware.isRecipeRunning = recipesScreenRoot.isExecuting;
+
                 if (recipesScreenRoot.isExecuting) {
-                    var activeStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "ACTIVE"; });
-                    if (activeStep && activeStep.isManual) {
-                        stepConfirmDialog.stepName = activeStep.name;
-                        stepConfirmDialog.confirmMessage = activeStep.confirmMsg || "Manual operator check required for this step.";
-                        stepConfirmDialog.visible = true;
+                    var activeStep = recipesScreenRoot.currentRecipe.steps.find(function(s) { return s.status === "ACTIVE"; }) || recipesScreenRoot.currentRecipe.steps[0];
+                    if (activeStep) {
+                        ScadaStateMiddleware.currentRecipeStepName = activeStep.name;
+                        if (activeStep.isManual) {
+                            stepConfirmDialog.stepName = activeStep.name;
+                            stepConfirmDialog.confirmMessage = activeStep.confirmMsg || "Manual operator check required for this step.";
+                            stepConfirmDialog.visible = true;
+                        } else if (activeStep.ops) {
+                            for (var i = 0; i < activeStep.ops.length; i++) {
+                                var op = activeStep.ops[i];
+                                var numVal = parseFloat(op.val);
+                                if (op.dev === "Agitator") {
+                                    ScadaStateMiddleware.setAgitator(true, isNaN(numVal) ? 40.0 : numVal);
+                                } else if (op.dev === "Homogenizer") {
+                                    ScadaStateMiddleware.setHomogenizer(true, isNaN(numVal) ? 3600.0 : numVal);
+                                } else if (op.dev === "Heater") {
+                                    ScadaStateMiddleware.setHeating(true, isNaN(numVal) ? 80.0 : numVal);
+                                } else if (op.dev === "Vacuum") {
+                                    ScadaStateMiddleware.setVacuum(true, isNaN(numVal) ? -450.0 : numVal);
+                                }
+                            }
+                        }
                     }
+                } else {
+                    ScadaStateMiddleware.setAgitator(false, 0);
+                    ScadaStateMiddleware.setHomogenizer(false, 0);
+                    ScadaStateMiddleware.setHeating(false, 20.7);
+                    ScadaStateMiddleware.setVacuum(false, 0);
                 }
             }
         }

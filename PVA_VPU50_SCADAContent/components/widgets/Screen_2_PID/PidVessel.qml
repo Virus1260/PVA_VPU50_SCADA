@@ -3,17 +3,18 @@ import QtQuick.Layouts
 
 Item {
     id: vesselRoot
-    width: 270
-    height: 360
+    width: 320
+    height: 420
 
     property string vesselName: "Unimix 50"
     property real levelPercent: 65.0
-    property real vesselTemp: 20.7
-    property real jacketTemp: 21.2
-    property real vacuumPressure: -179.0
+    property real vesselTemp: 35.9
+    property real jacketTemp: 34.4
+    property real vacuumPressure: -11.0
     property real weightKg: 154.4
     property bool isHeating: false
     property bool isCooling: false
+    property bool showTags: true
 
     Canvas {
         id: vesselCanvas
@@ -24,54 +25,72 @@ Item {
             ctx.clearRect(0, 0, width, height);
 
             var cx = width / 2;
-            var w = 240;
+            var w = 270;
             var leftX = cx - w / 2;
             var rightX = cx + w / 2;
-            var domeTop = 30;
-            var bodyTop = 70;
-            var bodyBottom = 270;
-            var coneBottom = 320;
-            var neckW = 34;
+            var domeTop = 38;
+            var bodyTop = 78;
+            var bodyBottom = 300;
+            var coneBottom = 345;
+            var neckW = 40;
 
-            // 1. OUTER THERMAL JACKET
+            // 1. OUTER THERMAL JACKET (Wrapping lower sides & bottom dish)
             ctx.beginPath();
-            ctx.moveTo(leftX - 10, bodyTop + 20);
-            ctx.lineTo(leftX - 10, bodyBottom);
-            ctx.quadraticCurveTo(cx - 40, coneBottom + 10, cx - neckW / 2 - 6, coneBottom + 12);
-            ctx.lineTo(cx + neckW / 2 + 6, coneBottom + 12);
-            ctx.quadraticCurveTo(cx + 40, coneBottom + 10, rightX + 10, bodyBottom);
-            ctx.lineTo(rightX + 10, bodyTop + 20);
-            ctx.strokeStyle = vesselRoot.isHeating ? "#f97316" : (vesselRoot.isCooling ? "#06b6d4" : "#1a5188");
-            ctx.lineWidth = 2.0;
-            ctx.fillStyle = vesselRoot.isHeating ? "#25f97316" : (vesselRoot.isCooling ? "#2506b6d4" : "transparent");
+            ctx.moveTo(leftX - 12, bodyTop + 40);
+            ctx.lineTo(leftX - 12, bodyBottom);
+            ctx.quadraticCurveTo(cx - 50, coneBottom + 12, cx - neckW / 2 - 8, coneBottom + 14);
+            ctx.lineTo(cx + neckW / 2 + 8, coneBottom + 14);
+            ctx.quadraticCurveTo(cx + 50, coneBottom + 12, rightX + 12, bodyBottom);
+            ctx.lineTo(rightX + 12, bodyTop + 40);
+            ctx.lineTo(rightX, bodyTop + 40);
+            ctx.lineTo(rightX, bodyBottom - 5);
+            ctx.quadraticCurveTo(cx + 45, coneBottom + 2, cx + neckW / 2 + 4, coneBottom + 4);
+            ctx.lineTo(cx - neckW / 2 - 4, coneBottom + 4);
+            ctx.quadraticCurveTo(cx - 45, coneBottom + 2, leftX, bodyBottom - 5);
+            ctx.lineTo(leftX, bodyTop + 40);
+            ctx.closePath();
+
+            ctx.fillStyle = vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "#5b95c9");
             ctx.fill();
+            ctx.strokeStyle = "#1b4c7c";
+            ctx.lineWidth = 1.8;
             ctx.stroke();
 
-            // 2. MAIN VESSEL INTERIOR BODY
+            // 2. MAIN SOLID LIGHT-BLUE REACTOR BODY (Authentic EKATO EPOS Palette)
             ctx.beginPath();
             // Top Dome
             ctx.moveTo(leftX, bodyTop);
-            ctx.quadraticCurveTo(cx, domeTop - 10, rightX, bodyTop);
-            // Cylindrical walls
+            ctx.quadraticCurveTo(cx, domeTop - 12, rightX, bodyTop);
+            // Cylindrical Walls
             ctx.lineTo(rightX, bodyBottom);
-            // Bottom Cone
-            ctx.quadraticCurveTo(cx + 35, coneBottom, cx + neckW / 2, coneBottom + 5);
+            // Bottom Conical Dish
+            ctx.quadraticCurveTo(cx + 45, coneBottom, cx + neckW / 2, coneBottom + 5);
             ctx.lineTo(cx - neckW / 2, coneBottom + 5);
-            ctx.quadraticCurveTo(cx - 35, coneBottom, leftX, bodyBottom);
+            ctx.quadraticCurveTo(cx - 45, coneBottom, leftX, bodyBottom);
             ctx.closePath();
 
-            ctx.fillStyle = "#0c335b";
+            // Light sky-blue solid body
+            ctx.fillStyle = "#76b0e0";
             ctx.fill();
-            ctx.strokeStyle = "#3b82f6";
+            ctx.strokeStyle = "#1b4c7c";
             ctx.lineWidth = 2.2;
             ctx.stroke();
 
-            // 3. CENTER DISCHARGE NECK
-            ctx.beginPath();
-            ctx.rect(cx - neckW / 2, coneBottom + 5, neckW, 30);
-            ctx.fillStyle = "#0a2a4c";
+            // Subtle inner highlight gradient
+            var grad = ctx.createLinearGradient(leftX, bodyTop, rightX, bodyTop);
+            grad.addColorStop(0, "rgba(255,255,255,0.18)");
+            grad.addColorStop(0.3, "rgba(255,255,255,0.02)");
+            grad.addColorStop(0.7, "rgba(0,0,0,0.02)");
+            grad.addColorStop(1, "rgba(0,0,0,0.12)");
+            ctx.fillStyle = grad;
             ctx.fill();
-            ctx.strokeStyle = "#3b82f6";
+
+            // 3. BOTTOM CYLINDRICAL NECK
+            ctx.beginPath();
+            ctx.rect(cx - neckW / 2, coneBottom + 5, neckW, 35);
+            ctx.fillStyle = "#8ec4f0";
+            ctx.fill();
+            ctx.strokeStyle = "#1b4c7c";
             ctx.lineWidth = 1.8;
             ctx.stroke();
         }
@@ -83,25 +102,26 @@ Item {
         function onIsCoolingChanged() { vesselCanvas.requestPaint(); }
     }
 
-    // 4. RIGHT LEVEL GAUGE COLUMN (0.0 to 1000.0 with Green Liquid Fill)
+    // 4. RIGHT LEVEL GAUGE COLUMN (0.0 to 1000.0 with Green Liquid Column)
     Item {
         anchors.right: parent.right
-        anchors.rightMargin: 18
+        anchors.rightMargin: 12
         anchors.top: parent.top
-        anchors.topMargin: 90
-        width: 32
-        height: 190
+        anchors.topMargin: 100
+        width: 36
+        height: 195
+        visible: vesselRoot.showTags
 
         // Background Track
         Rectangle {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: 8
-            color: "#081d33"
-            border.color: "#388be3"
+            width: 7
+            color: "#08213b"
+            border.color: "#1b4c7c"
             border.width: 1
-            radius: 2
+            radius: 1
 
             // Active Green Liquid Fill
             Rectangle {
@@ -115,72 +135,113 @@ Item {
             }
         }
 
-        // Scale Labels
+        // Scale Labels (1000.0, 750.0, 500.0, 250.0, 0.0)
         Column {
             anchors.left: parent.left
-            anchors.leftMargin: 12
+            anchors.leftMargin: 10
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            spacing: 34
+            spacing: 36
 
             Repeater {
                 model: ["1000.0", "750.0", "500.0", "250.0", "0.0"]
                 Text {
                     text: modelData
-                    color: "#7fa5cb"
+                    color: "#1e3a5f"
                     font.pixelSize: 8
-                    font.family: "Monospace"
+                    font.bold: true
+                    font.family: "Arial"
                 }
             }
         }
     }
 
-    // 5. PROCESS INSTRUMENT CALLOUTS
-    // Vacuum (PIC 161001)
-    Column {
+    // 5. PROCESS INSTRUMENT CALLOUT PILLS (Spaced cleanly without overlapping)
+    // Vacuum Transmitter (PIC 161001)
+    Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: 14
+        anchors.leftMargin: -30
         anchors.top: parent.top
-        anchors.topMargin: 55
-        spacing: 1
+        anchors.topMargin: 65
+        width: 76
+        height: 28
+        radius: 3
+        color: "#0b2e54"
+        border.color: "#1d609e"
+        border.width: 1
+        visible: vesselRoot.showTags
 
-        Text { text: "PIC 161001"; color: "#8cb5dc"; font.pixelSize: 8 }
-        Text { text: vesselRoot.vacuumPressure.toFixed(0) + "mbar"; color: "#93c5fd"; font.bold: true; font.pixelSize: 9 }
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 0
+            Text { text: "PIC 161001"; color: "#8cb5dc"; font.pixelSize: 7; Layout.alignment: Qt.AlignHCenter }
+            Text { text: vesselRoot.vacuumPressure.toFixed(0) + "mbar"; color: "#93c5fd"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+        }
     }
 
-    // Vessel Temperature (TIC 162001)
-    Column {
+    // Product Temperature (TIC 162001)
+    Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: 14
+        anchors.leftMargin: 20
         anchors.top: parent.top
-        anchors.topMargin: 82
-        spacing: 1
+        anchors.topMargin: 60
+        width: 76
+        height: 28
+        radius: 3
+        color: "#0b2e54"
+        border.color: "#1d609e"
+        border.width: 1
+        visible: vesselRoot.showTags
 
-        Text { text: "TIC 162001"; color: "#8cb5dc"; font.pixelSize: 8 }
-        Text { text: vesselRoot.vesselTemp.toFixed(1) + "°C"; color: vesselRoot.isHeating ? "#f97316" : "#4ade80"; font.bold: true; font.pixelSize: 9 }
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 0
+            Text { text: "TIC 162001"; color: "#8cb5dc"; font.pixelSize: 7; Layout.alignment: Qt.AlignHCenter }
+            Text { text: vesselRoot.vesselTemp.toFixed(1) + "°C"; color: "#ffffff"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+        }
     }
 
     // Jacket Temperature (TIC 163001)
-    Column {
+    Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: -25
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 8
-        spacing: 1
+        anchors.bottomMargin: 42
+        width: 76
+        height: 28
+        radius: 3
+        color: "#0b2e54"
+        border.color: "#1d609e"
+        border.width: 1
+        visible: vesselRoot.showTags
 
-        Text { text: "TIC 163001"; color: "#8cb5dc"; font.pixelSize: 8 }
-        Text { text: vesselRoot.jacketTemp.toFixed(1) + "°C"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 0
+            Text { text: "TIC 163001"; color: "#8cb5dc"; font.pixelSize: 7; Layout.alignment: Qt.AlignHCenter }
+            Text { text: vesselRoot.jacketTemp.toFixed(1) + "°C"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+        }
     }
 
     // Weight Indicator (WIRAH 161001)
-    Column {
+    Rectangle {
         anchors.right: parent.right
-        anchors.rightMargin: -30
+        anchors.rightMargin: -48
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 40
-        spacing: 1
+        anchors.verticalCenterOffset: 35
+        width: 78
+        height: 28
+        radius: 3
+        color: "#0b2e54"
+        border.color: "#1d609e"
+        border.width: 1
+        visible: vesselRoot.showTags
 
-        Text { text: "WIRAH 161001"; color: "#8cb5dc"; font.pixelSize: 8 }
-        Text { text: vesselRoot.weightKg.toFixed(1) + "kg"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 0
+            Text { text: "WIRAH 161001"; color: "#8cb5dc"; font.pixelSize: 7; Layout.alignment: Qt.AlignHCenter }
+            Text { text: vesselRoot.weightKg.toFixed(1) + "kg"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9; Layout.alignment: Qt.AlignHCenter }
+        }
     }
 }

@@ -52,6 +52,7 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "components/widgets/Screen_5_Recipes/RecipeStepProgress.qml"
         "components/widgets/Screen_5_Recipes/RecipeToolbar.qml"
         "config/ScadaConfig.qml"
+        "config/ScadaStateMiddleware.qml"
         "screens/Screen_1_Control.ui.qml"
         "screens/Screen_2_P_ID.qml"
         "screens/Screen_3_Trends.qml"
