@@ -5,6 +5,9 @@
 # Build output directories
 build/
 build-*/
+build_wasm/
+dist/
+.vercel/
 cmake-build-*/
 bin/
 lib/

@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js (Latest LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Setup Emscripten SDK
         uses: mymindstorm/setup-emsdk@v14
         with:
@@ -51,10 +56,8 @@ jobs:
           cp vercel.json dist/ 2>/dev/null || true
 
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./dist
-          vercel-args: '--prod'
+        run: |
+          mkdir -p .vercel
+          echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
+          npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+        working-directory: ./dist

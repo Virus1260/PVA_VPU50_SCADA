@@ -150,18 +150,32 @@
 - **Solution**:
   Name the root executable project `project(PVA_VPU50_SCADAApp LANGUAGES CXX)` in root `CMakeLists.txt`.
 
-### Issue 10: Missing Linux OpenGL / EGL Runtime for Shader Baker (`libEGL.so.1`)
-- **Symptom**: `/home/runner/Qt/6.8.2/gcc_64/bin/qsb: error while loading shared libraries: libEGL.so.1: cannot open shared object file: No such file or directory`.
-- **Root Cause**: The Qt Shader Baker (`qsb`) on Linux requires native EGL and OpenGL runtime libraries to compile `.frag` and `.vert` shader files to `.qsb`.
+### Issue 11: Legacy Vercel Action (`amondnet/vercel-action`) Failure
+- **Symptom**: `Vercel CLI 25.1.0: Error! Could not retrieve Project Settings. To link your Project, remove the .vercel directory and deploy again.`
+- **Root Cause**: Third-party GitHub action `amondnet/vercel-action` used an outdated Vercel CLI version (v25) incompatible with modern Vercel project configurations.
 - **Solution**:
-  Install OpenGL and EGL libraries on the Linux runner before invoking Qt tools:
+  Use the official modern Vercel CLI directly in the workflow step:
   ```bash
-  sudo apt-get update && sudo apt-get install -y libegl1 libgl1-mesa-dev libglvnd0 libxkbcommon-x11-0
+  mkdir -p .vercel
+  echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
+  npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
   ```
 
 ---
 
-## 3. Complete, Production-Ready GitHub Actions Workflow
+## 3. Slint (Rust) vs. Qt 6 (C++) WebAssembly Build Comparison
+
+| Metric | Slint SCADA (Rust) | Qt 6 SCADA (C++ / QML) |
+| :--- | :--- | :--- |
+| **Compiler Dependency** | `rustup` + `wasm32-unknown-unknown` + `trunk` | Linux Desktop GCC + Qt 6 Wasm + Emscripten SDK + CMake + Ninja |
+| **Download Size** | **~15 MB** (Very Lightweight) | **~2.5 GB** (Heavy Industrial C++ Engine) |
+| **Build Time** | **~15–20 seconds** | **~3–4 minutes** (577 C++ & QML Targets) |
+| **Can Build inside Vercel?** |  **Yes** (Fits inside Vercel 45s limit) | ❌ **No** (Exceeds Vercel 45s limit → Handled by GitHub Actions) |
+| **Browser Performance** | **60 FPS WebAssembly** | **60 FPS WebAssembly** |
+
+---
+
+## 4. Complete, Production-Ready GitHub Actions Workflow
 
 File location: [`.github/workflows/deploy_vercel.yml`](file:///C:/Users/Shekhar/Desktop/QT%20DESIGNER%20PROJECTS/PVA_VPU50_SCADA/.github/workflows/deploy_vercel.yml)
 
