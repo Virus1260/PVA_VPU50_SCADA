@@ -6,13 +6,15 @@ Rectangle {
     property string label: "Mode"
     property string modeText: ""
     property string iconName: ""
-    property real preferredWidth: 76
+    property real preferredWidth: 66
     property real selectorHeight: 68
     property bool isPressed: mouseArea.pressed
 
     signal clicked()
 
     Layout.preferredWidth: preferredWidth
+    Layout.minimumWidth: preferredWidth
+    Layout.maximumWidth: preferredWidth
     Layout.preferredHeight: selectorHeight
     Layout.minimumHeight: selectorHeight
     Layout.maximumHeight: selectorHeight
@@ -24,16 +26,24 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 4
+        anchors.leftMargin: 2
+        anchors.rightMargin: 2
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
         spacing: 2
 
+        // Top Label (e.g. Mode, Regulation, Temp. Indic.)
         Text {
             text: selectorRoot.label
             color: "#8cb5dc"
-            font.pixelSize: 10
-            Layout.alignment: Qt.AlignHCenter
+            font.pixelSize: 9
+            font.bold: true
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
         }
 
+        // Center Icon or Mode Text
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -41,8 +51,8 @@ Rectangle {
             ScadaIcon {
                 anchors.centerIn: parent
                 iconName: selectorRoot.iconName
-                width: 34
-                height: 34
+                width: 32
+                height: 32
                 visible: selectorRoot.iconName !== ""
             }
 
@@ -58,10 +68,11 @@ Rectangle {
             }
         }
 
+        // Bottom Dropdown Indicator Arrow
         Text {
             text: "▼"
             color: "#8cb5dc"
-            font.pixelSize: 8
+            font.pixelSize: 7
             Layout.alignment: Qt.AlignHCenter
         }
     }

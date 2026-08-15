@@ -127,17 +127,21 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px)
+                    // ZONE 1: Left Equipment Block (Locked 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 8
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r1Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r1Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
@@ -149,14 +153,14 @@ Item {
                             id: r1ModeSelector
                             label: "Mode"
                             iconName: "agitator_cw"
-                            preferredWidth: 74
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         Item { Layout.fillWidth: true }
                     }
 
-                    // ZONE 2 & 3: Unified Middle 4-Column Container (Col 1: 25%, Col 2..4: 75%)
+                    // ZONE 2 & 3: Unified 4-Column Middle (Col 1: 25%, Col 2..4: 75%)
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
@@ -164,7 +168,7 @@ Item {
 
                         ScadaPowerCurrentCard {
                             id: r1PowerCurrent
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -178,7 +182,7 @@ Item {
                             targetVal: 25.0
                             unit: "rpm"
                             decimals: 1
-                            controlHeight: 70
+                            controlHeight: 68
                             isLocked: r1Media.isPlaying
                             parameterTitle: "Agitator Speed"
                             parameterTag: "1M1501"
@@ -197,7 +201,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r1Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r1Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r1Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -223,17 +227,21 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px)
+                    // ZONE 1: Left Equipment Block (Locked 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 8
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r2Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r2Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
@@ -245,14 +253,14 @@ Item {
                             id: r2ModeSelector
                             label: "Mode"
                             iconName: "homo_permanent"
-                            preferredWidth: 74
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         Item { Layout.fillWidth: true }
                     }
 
-                    // ZONE 2 & 3: Unified Middle 4-Column Container (Col 1: 25%, Col 2..4: 75%)
+                    // ZONE 2 & 3: Unified 4-Column Middle (Col 1: 25%, Col 2..4: 75%)
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
@@ -260,7 +268,7 @@ Item {
 
                         ScadaPowerCurrentCard {
                             id: r2PowerCurrent
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -274,7 +282,7 @@ Item {
                             targetVal: 600
                             unit: "rpm"
                             decimals: 0
-                            controlHeight: 70
+                            controlHeight: 68
                             isLocked: r2Media.isPlaying
                             parameterTitle: "Homogenizer Speed"
                             parameterTag: "1M2003"
@@ -293,7 +301,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r2Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r2Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r2Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -319,17 +327,21 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px)
+                    // ZONE 1: Left Equipment Block (Locked 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 8
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r3Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r3Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
@@ -341,15 +353,14 @@ Item {
                             id: r3ModeSelector
                             label: "Mode"
                             iconName: "ext_discharge_circulation"
-                            modeText: "Circulation"
-                            preferredWidth: 74
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         Item { Layout.fillWidth: true }
                     }
 
-                    // ZONE 2 & 3: Empty Middle Filler (100% width)
+                    // ZONE 2 & 3: Unified Middle Empty Area (100%)
                     Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -364,7 +375,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r3Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r3Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r3Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -390,17 +401,21 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px)
+                    // ZONE 1: Left Equipment Block (Locked 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 8
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r4Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r4Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
@@ -412,15 +427,14 @@ Item {
                             id: r4ModeSelector
                             label: "Mode"
                             iconName: "vacuum_gauge"
-                            modeText: "Vacuum"
-                            preferredWidth: 74
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         Item { Layout.fillWidth: true }
                     }
 
-                    // ZONE 2 & 3: Unified 4 Equal Columns (Pressure, Start, End, Spacer)
+                    // ZONE 2 & 3: Unified 4 Equal Columns (Col 1: Pressure, Col 2: Start, Col 3: End, Col 4: Spacer)
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
@@ -431,7 +445,7 @@ Item {
                             title: "Pressure"
                             primaryValue: "-209.8"
                             unit: "mbar"
-                            cardHeight: 70
+                            cardHeight: 68
                             showProgressBar: true
                             progressValue: 0.46
                             progressColor: "#00d2ff"
@@ -445,7 +459,7 @@ Item {
                             title: "Start pressure"
                             primaryValue: "-400.0"
                             unit: "mbar"
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -456,7 +470,7 @@ Item {
                             title: "End pressure"
                             primaryValue: "-450.0"
                             unit: "mbar"
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -478,7 +492,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r4Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r4Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r4Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -504,17 +518,21 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px)
+                    // ZONE 1: Left Equipment Block (Locked 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 8
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r5Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r5Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
@@ -526,8 +544,8 @@ Item {
                             id: r5ModeSelector
                             label: "Mode"
                             iconName: "suction_liquids"
-                            preferredWidth: 74
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         Item { Layout.fillWidth: true }
@@ -545,7 +563,7 @@ Item {
                             primaryValue: "0.0"
                             secondaryValue: "100.0%"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -557,7 +575,7 @@ Item {
                             primaryValue: "0.0"
                             secondaryValue: "100.0%"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -569,7 +587,7 @@ Item {
                             primaryValue: "0"
                             secondaryValue: "0.0 s"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -581,7 +599,7 @@ Item {
                             primaryValue: "0"
                             secondaryValue: "0.0 s"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -597,7 +615,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r5Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r5Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r5Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -623,49 +641,50 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 240px: Equipment 60px + 3 Mode Selectors @ 54px, 56px, 56px + 3x4px spacing = 238px)
+                    // ZONE 1: Left Equipment Block (Locked 282px: 66px + 6px + 66px + 6px + 66px + 6px + 66px = 282px)
                     RowLayout {
-                        Layout.preferredWidth: 240
-                        Layout.minimumWidth: 240
-                        Layout.maximumWidth: 240
+                        Layout.preferredWidth: 282
+                        Layout.minimumWidth: 282
+                        Layout.maximumWidth: 282
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         Rectangle {
-                            Layout.preferredWidth: 60
-                            Layout.preferredHeight: 70
+                            Layout.preferredWidth: 66
+                            Layout.minimumWidth: 66
+                            Layout.maximumWidth: 66
+                            Layout.preferredHeight: 68
+                            Layout.minimumHeight: 68
+                            Layout.maximumHeight: 68
                             color: r6Media.isPlaying ? "#78dc20" : "#0c345a"
                             border.color: r6Media.isPlaying ? "#ffffff" : "#1d5b94"
                             border.width: 1
                             radius: 4
-                            ScadaIcon { anchors.centerIn: parent; iconName: "heating_jacket"; width: 42; height: 42 }
+                            ScadaIcon { anchors.centerIn: parent; iconName: "heating_jacket"; width: 44; height: 44 }
                         }
 
                         ScadaModeSelector {
                             id: r6ModeSelector
                             label: "Mode"
                             iconName: "heat_mode_heating"
-                            modeText: "Heating"
-                            preferredWidth: 54
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         ScadaModeSelector {
                             id: r6RegSelector
                             label: "Regulation"
                             iconName: "heat_reg_product"
-                            modeText: "Product"
-                            preferredWidth: 56
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
 
                         ScadaModeSelector {
                             id: r6TempSrcSelector
                             label: "Temp. Indic."
                             iconName: "heat_src_baffle"
-                            modeText: "Baffle"
-                            preferredWidth: 56
-                            selectorHeight: 70
+                            preferredWidth: 66
+                            selectorHeight: 68
                         }
                     }
 
@@ -680,7 +699,7 @@ Item {
                             title: "Gradient"
                             primaryValue: "12.1"
                             unit: "°C/h"
-                            cardHeight: 70
+                            cardHeight: 68
                             showProgressBar: true
                             progressValue: 0.35
                             progressColor: "#00d2ff"
@@ -695,7 +714,7 @@ Item {
                             primaryValue: "23.2"
                             secondaryValue: "0.0 °C"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -707,7 +726,7 @@ Item {
                             primaryValue: "40.1"
                             secondaryValue: "89.0 °C"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -719,7 +738,7 @@ Item {
                             primaryValue: "48.9"
                             secondaryValue: "1.0 °C"
                             unit: ""
-                            cardHeight: 70
+                            cardHeight: 68
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             Layout.alignment: Qt.AlignVCenter
@@ -735,7 +754,7 @@ Item {
                         spacing: 4
 
                         ScadaMediaControls { id: r6Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r6Runtime; preferredWidth: 76; widgetHeight: 70; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r6Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
