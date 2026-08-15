@@ -28,7 +28,6 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.minimumWidth: 260
-    Layout.maximumWidth: 680
     Layout.preferredHeight: 68
     Layout.minimumHeight: 68
     Layout.maximumHeight: 68
@@ -42,49 +41,53 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: 6
         anchors.rightMargin: 6
-        anchors.topMargin: 5
-        anchors.bottomMargin: 5
-        spacing: 6
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
+        spacing: 4
 
         // =====================================================================
         // 1. SET MIN COMPARTMENT
         // =====================================================================
         ColumnLayout {
-            Layout.preferredWidth: 46
-            Layout.minimumWidth: 40
-            Layout.maximumWidth: 50
+            Layout.preferredWidth: 42
+            Layout.minimumWidth: 38
+            Layout.maximumWidth: 48
             Layout.fillHeight: true
-            spacing: 2
+            spacing: 1
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "SET MIN"
                 color: "#8cb5dc"
-                font.pixelSize: 9
+                font.pixelSize: 8
                 Layout.alignment: Qt.AlignHCenter
             }
-            Item { Layout.fillHeight: true }
+            Item {
+                Layout.fillHeight: true
+            }
             Text {
                 text: speedRoot.minVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 14
+                font.pixelSize: 13
                 Layout.alignment: Qt.AlignHCenter
             }
-            Item { Layout.fillHeight: true }
+            Item {
+                Layout.fillHeight: true
+            }
         }
 
         // =====================================================================
-        // 2. PERFECT SQUARE MINUS BUTTON (44px x 44px)
+        // 2. PERFECT SQUARE MINUS BUTTON (40px x 40px)
         // =====================================================================
         Rectangle {
             id: decBtn
-            Layout.preferredWidth: 44
-            Layout.minimumWidth: 44
-            Layout.maximumWidth: 44
-            Layout.preferredHeight: 44
-            Layout.minimumHeight: 44
-            Layout.maximumHeight: 44
+            Layout.preferredWidth: 40
+            Layout.minimumWidth: 40
+            Layout.maximumWidth: 40
+            Layout.preferredHeight: 40
+            Layout.minimumHeight: 40
+            Layout.maximumHeight: 40
             Layout.alignment: Qt.AlignVCenter
             radius: 4
             color: decMouse.pressed ? "#07203a" : (decMouse.containsMouse ? "#154d80" : "#0d365e")
@@ -93,14 +96,14 @@ Rectangle {
             enabled: speedRoot.enabled && !speedRoot.isLocked
             opacity: enabled ? 1.0 : 0.45
 
-            signal clicked()
+            signal clicked
 
             Text {
                 anchors.centerIn: parent
                 text: "−"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 22
+                font.pixelSize: 20
             }
 
             MouseArea {
@@ -122,7 +125,7 @@ Rectangle {
             color: "transparent"
             clip: false
 
-            // Actual Speed Readout (Top Center/Right)
+            // Actual Speed Readout (Top Right)
             RowLayout {
                 anchors.right: parent.right
                 anchors.top: parent.top
@@ -134,12 +137,12 @@ Rectangle {
                     text: speedRoot.currentVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                     color: "#ffffff"
                     font.bold: true
-                    font.pixelSize: 13
+                    font.pixelSize: 12
                 }
                 Text {
                     text: speedRoot.unit
                     color: "#8cb5dc"
-                    font.pixelSize: 10
+                    font.pixelSize: 9
                 }
             }
 
@@ -149,8 +152,8 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.topMargin: 17
-                height: 10
+                anchors.topMargin: 16
+                height: 8
                 color: "#09243e"
                 border.color: "#154673"
                 border.width: 1
@@ -170,10 +173,10 @@ Rectangle {
                 // White Setpoint Needle Marker
                 Rectangle {
                     id: setpointNeedle
-                    x: Math.max(0, Math.min(trackRail.width - 5, (trackRail.width - 5) * ((speedRoot.targetVal - speedRoot.minVal) / Math.max(1.0, (speedRoot.maxVal - speedRoot.minVal)))))
+                    x: Math.max(0, Math.min(trackRail.width - 4, (trackRail.width - 4) * ((speedRoot.targetVal - speedRoot.minVal) / Math.max(1.0, (speedRoot.maxVal - speedRoot.minVal)))))
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 5
-                    height: 24
+                    width: 4
+                    height: 20
                     color: "#ffffff"
                     border.color: "#00d2ff"
                     border.width: 1
@@ -200,18 +203,23 @@ Rectangle {
                         speedRoot.targetValChangedByUser(steppedVal);
                     }
 
-                    onPressed: function(mouse) { updateValueFromPos(mouse.x); }
-                    onPositionChanged: function(mouse) { if (pressed) updateValueFromPos(mouse.x); }
+                    onPressed: function (mouse) {
+                        updateValueFromPos(mouse.x);
+                    }
+                    onPositionChanged: function (mouse) {
+                        if (pressed)
+                            updateValueFromPos(mouse.x);
+                    }
                 }
             }
 
-            // Target Setpoint Digital Button (Centered below rail in large bold text)
+            // Target Setpoint Digital Button (Centered below rail)
             Rectangle {
                 id: setpointClickArea
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
-                width: 130
+                width: 120
                 height: 18
                 color: "transparent"
 
@@ -222,19 +230,19 @@ Rectangle {
                     Text {
                         text: speedRoot.isLocked ? "🔒" : ""
                         color: "#8cb5dc"
-                        font.pixelSize: 10
+                        font.pixelSize: 9
                         visible: speedRoot.isLocked
                     }
                     Text {
                         text: speedRoot.targetVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 15
+                        font.pixelSize: 14
                     }
                     Text {
                         text: speedRoot.unit
                         color: "#8cb5dc"
-                        font.pixelSize: 11
+                        font.pixelSize: 10
                     }
                 }
 
@@ -244,30 +252,23 @@ Rectangle {
                     enabled: speedRoot.enabled && !speedRoot.isLocked
                     cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                     onClicked: {
-                        speedRoot.setpointRequested(
-                            speedRoot.parameterTitle,
-                            speedRoot.parameterTag,
-                            speedRoot.targetVal,
-                            speedRoot.minVal,
-                            speedRoot.maxVal,
-                            speedRoot.unit
-                        );
+                        speedRoot.setpointRequested(speedRoot.parameterTitle, speedRoot.parameterTag, speedRoot.targetVal, speedRoot.minVal, speedRoot.maxVal, speedRoot.unit);
                     }
                 }
             }
         }
 
         // =====================================================================
-        // 4. PERFECT SQUARE PLUS BUTTON (44px x 44px)
+        // 4. PERFECT SQUARE PLUS BUTTON (40px x 40px)
         // =====================================================================
         Rectangle {
             id: incBtn
-            Layout.preferredWidth: 44
-            Layout.minimumWidth: 44
-            Layout.maximumWidth: 44
-            Layout.preferredHeight: 44
-            Layout.minimumHeight: 44
-            Layout.maximumHeight: 44
+            Layout.preferredWidth: 40
+            Layout.minimumWidth: 40
+            Layout.maximumWidth: 40
+            Layout.preferredHeight: 40
+            Layout.minimumHeight: 40
+            Layout.maximumHeight: 40
             Layout.alignment: Qt.AlignVCenter
             radius: 4
             color: incMouse.pressed ? "#07203a" : (incMouse.containsMouse ? "#154d80" : "#0d365e")
@@ -276,14 +277,14 @@ Rectangle {
             enabled: speedRoot.enabled && !speedRoot.isLocked
             opacity: enabled ? 1.0 : 0.45
 
-            signal clicked()
+            signal clicked
 
             Text {
                 anchors.centerIn: parent
                 text: "+"
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 22
+                font.pixelSize: 20
             }
 
             MouseArea {
@@ -299,28 +300,32 @@ Rectangle {
         // 5. SET MAX COMPARTMENT
         // =====================================================================
         ColumnLayout {
-            Layout.preferredWidth: 46
-            Layout.minimumWidth: 40
-            Layout.maximumWidth: 50
+            Layout.preferredWidth: 42
+            Layout.minimumWidth: 38
+            Layout.maximumWidth: 48
             Layout.fillHeight: true
-            spacing: 2
+            spacing: 1
             Layout.alignment: Qt.AlignVCenter
 
             Text {
                 text: "SET MAX"
                 color: "#8cb5dc"
-                font.pixelSize: 9
+                font.pixelSize: 8
                 Layout.alignment: Qt.AlignHCenter
             }
-            Item { Layout.fillHeight: true }
+            Item {
+                Layout.fillHeight: true
+            }
             Text {
                 text: speedRoot.maxVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                 color: "#ffffff"
                 font.bold: true
-                font.pixelSize: 14
+                font.pixelSize: 13
                 Layout.alignment: Qt.AlignHCenter
             }
-            Item { Layout.fillHeight: true }
+            Item {
+                Layout.fillHeight: true
+            }
         }
     }
 }

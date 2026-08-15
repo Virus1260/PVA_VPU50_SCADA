@@ -12,7 +12,6 @@ Item {
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
-    Layout.maximumWidth: 240
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight

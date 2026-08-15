@@ -15,7 +15,6 @@ Item {
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
-    Layout.maximumWidth: 240
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight
@@ -52,7 +51,7 @@ Item {
                 spacing: 0
                 visible: cardRoot.secondaryValue !== ""
 
-                // Left Compartment (Primary / Actual Process Value)
+                // Left Compartment (Primary / Actual Process Value in darker blue)
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -74,7 +73,7 @@ Item {
                     color: "#1d5b94"
                 }
 
-                // Right Compartment (Secondary / Target Value with lighter contrasting shade)
+                // Right Compartment (Secondary / Target Value in lighter contrasting blue)
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -110,7 +109,7 @@ Item {
                 }
             }
 
-            // Bottom Progress Bar (if enabled, e.g. Vacuum Pressure, Temperature Gradient)
+            // Bottom Progress Bar (if enabled)
             Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
