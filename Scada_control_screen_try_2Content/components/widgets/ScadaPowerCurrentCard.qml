@@ -8,10 +8,11 @@ Rectangle {
     property string currentVal: "0.0"
     property string currentUnit: "A"
 
-    property real cardHeight: 70
+    property real cardHeight: 68
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
+    Layout.maximumWidth: 220
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight

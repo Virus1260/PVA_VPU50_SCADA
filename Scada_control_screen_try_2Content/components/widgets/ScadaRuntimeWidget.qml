@@ -4,8 +4,8 @@ import QtQuick.Layouts
 Rectangle {
     id: runtimeRoot
     property string timeText: "00:00:00"
-    property real preferredWidth: 80
-    property real widgetHeight: 74
+    property real preferredWidth: 66
+    property real widgetHeight: 68
 
     Layout.preferredWidth: preferredWidth
     Layout.minimumWidth: preferredWidth
@@ -21,24 +21,32 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 6
+        anchors.leftMargin: 2
+        anchors.rightMargin: 2
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
         spacing: 2
 
+        // Top Header
         Text {
             text: "Runtime"
             color: "#8cb5dc"
-            font.pixelSize: 11
-            Layout.alignment: Qt.AlignHCenter
+            font.pixelSize: 9
+            font.bold: true
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            elide: Text.ElideRight
         }
 
+        // Center Clock Icon
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             Image {
                 anchors.centerIn: parent
-                width: 26
-                height: 26
+                width: 24
+                height: 24
                 source: "../../assets/icons/controls/clock.svg"
                 fillMode: Image.PreserveAspectFit
                 mipmap: true
@@ -46,18 +54,20 @@ Rectangle {
             }
         }
 
+        // Digital Time Readout
         Text {
             text: runtimeRoot.timeText
             color: "#ffffff"
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: 10
             Layout.alignment: Qt.AlignHCenter
         }
 
+        // Bottom Dropdown Arrow
         Text {
             text: "▼"
             color: "#8cb5dc"
-            font.pixelSize: 8
+            font.pixelSize: 7
             Layout.alignment: Qt.AlignHCenter
         }
     }

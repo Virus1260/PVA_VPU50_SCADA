@@ -3,8 +3,8 @@ import QtQuick.Layouts
 
 Rectangle {
     id: speedRoot
-    implicitHeight: 70
-    height: 70
+    implicitHeight: 68
+    height: 68
 
     // Process & Range Properties
     property real minVal: 25.0
@@ -13,7 +13,7 @@ Rectangle {
     property real targetVal: 25.0
     property string unit: "rpm"
     property int decimals: 1
-    property real controlHeight: 70
+    property real controlHeight: 68
 
     property string parameterTitle: "Speed Setpoint"
     property string parameterTag: "1M1501"
@@ -28,9 +28,10 @@ Rectangle {
 
     Layout.fillWidth: true
     Layout.minimumWidth: 260
-    Layout.preferredHeight: 70
-    Layout.minimumHeight: 70
-    Layout.maximumHeight: 70
+    Layout.maximumWidth: 680
+    Layout.preferredHeight: 68
+    Layout.minimumHeight: 68
+    Layout.maximumHeight: 68
 
     color: "#082646"
     border.color: "#184d7e"
@@ -41,8 +42,8 @@ Rectangle {
         anchors.fill: parent
         anchors.leftMargin: 6
         anchors.rightMargin: 6
-        anchors.topMargin: 6
-        anchors.bottomMargin: 6
+        anchors.topMargin: 5
+        anchors.bottomMargin: 5
         spacing: 6
 
         // =====================================================================
@@ -148,7 +149,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.topMargin: 18
+                anchors.topMargin: 17
                 height: 10
                 color: "#09243e"
                 border.color: "#154673"

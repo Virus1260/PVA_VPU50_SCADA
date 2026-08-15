@@ -11,10 +11,11 @@ Rectangle {
     property real progressValue: 0.0
     property color progressColor: "#00d2ff"
 
-    property real cardHeight: 70
+    property real cardHeight: 68
 
     Layout.fillWidth: true
     Layout.minimumWidth: 80
+    Layout.maximumWidth: 220
     Layout.preferredHeight: cardHeight
     Layout.minimumHeight: cardHeight
     Layout.maximumHeight: cardHeight

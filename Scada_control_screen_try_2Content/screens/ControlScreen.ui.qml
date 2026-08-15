@@ -192,16 +192,16 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r1Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r1Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r1Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -292,16 +292,16 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r2Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r2Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r2Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -366,16 +366,16 @@ Item {
                         Layout.fillHeight: true
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r3Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r3Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r3Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -434,7 +434,7 @@ Item {
                         Item { Layout.fillWidth: true }
                     }
 
-                    // ZONE 2 & 3: Unified 4 Equal Columns (Col 1: Pressure, Col 2: Start, Col 3: End, Col 4: Spacer)
+                    // ZONE 2 & 3: Unified 4 Equal Columns (Pressure, Start, End, 4th Column Spacer)
                     RowLayout {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
@@ -479,20 +479,22 @@ Item {
                         Item {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
-                            Layout.fillHeight: true
+                            Layout.minimumWidth: 80
+                            Layout.maximumWidth: 220
+                            Layout.preferredHeight: 68
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r4Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r4Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r4Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -606,16 +608,16 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r5Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r5Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r5Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
@@ -641,7 +643,7 @@ Item {
                     anchors.bottomMargin: 8
                     spacing: 10
 
-                    // ZONE 1: Left Equipment Block (Locked 282px: 66px + 6px + 66px + 6px + 66px + 6px + 66px = 282px)
+                    // ZONE 1: Left Equipment Block (Locked 282px: 4 buttons @ 66px + 3x6px gaps = 282px)
                     RowLayout {
                         Layout.preferredWidth: 282
                         Layout.minimumWidth: 282
@@ -745,16 +747,16 @@ Item {
                         }
                     }
 
-                    // ZONE 4: Right Media Controls & Runtime (Locked 195px)
+                    // ZONE 4: Right Media Controls & Runtime (Locked 212px)
                     RowLayout {
-                        Layout.preferredWidth: 195
-                        Layout.minimumWidth: 195
-                        Layout.maximumWidth: 195
+                        Layout.preferredWidth: 212
+                        Layout.minimumWidth: 212
+                        Layout.maximumWidth: 212
                         Layout.alignment: Qt.AlignVCenter
-                        spacing: 4
+                        spacing: 6
 
                         ScadaMediaControls { id: r6Media; Layout.alignment: Qt.AlignVCenter }
-                        ScadaRuntimeWidget { id: r6Runtime; preferredWidth: 76; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
+                        ScadaRuntimeWidget { id: r6Runtime; preferredWidth: 66; widgetHeight: 68; Layout.alignment: Qt.AlignVCenter }
                     }
                 }
             }
