@@ -185,23 +185,12 @@ Rectangle {
         // ---------------------------------------------------------------------
         // 7. SOLIDS HOPPER, INLET VALVES & LID LIFTER BRACKET (z: 7, z: 8, z: 9)
         // ---------------------------------------------------------------------
-        Canvas {
+        // Top Solids Charging Hopper / Funnel (B 141 001)
+        PidHopper {
+            id: solidsHopper
             z: 8
-            x: 668; y: 25; width: 24; height: 24
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.beginPath();
-                ctx.moveTo(2, 2);
-                ctx.lineTo(22, 2);
-                ctx.lineTo(15, 20);
-                ctx.lineTo(9, 20);
-                ctx.closePath();
-                ctx.fillStyle = "#8ec4f0";
-                ctx.fill();
-                ctx.strokeStyle = "#1b4c7c";
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-            }
+            x: 668
+            y: 25
         }
         Text { z: 9; visible: pidViewRoot.showTags; x: 698; y: 28; text: "B 141 001"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true }
         PidPipe { z: 8; startX: 680; startY: 46; endX: 680; endY: 135; baseColor: "#52a5ec" }
