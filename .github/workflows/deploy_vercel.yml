@@ -17,8 +17,9 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.8.0'
-          target: 'wasm_multithread'
-          arch: 'wasm_multithread'
+          target: 'desktop'
+          arch: 'wasm_singlethread'
+          modules: 'qtdeclarative qtshadertools'
 
       - name: Setup Emscripten SDK
         uses: mymindstorm/setup-emsdk@v14
@@ -30,8 +31,8 @@ jobs:
           qt-cmake -B build_wasm -S . -DCMAKE_BUILD_TYPE=Release
           cmake --build build_wasm --parallel $(nproc)
           mkdir -p dist
-          cp -r build_wasm/App/* dist/ || cp -r build_wasm/* dist/
-          cp vercel.json dist/
+          cp -r build_wasm/App/* dist/ 2>/dev/null || cp -r build_wasm/* dist/ 2>/dev/null
+          cp vercel.json dist/ 2>/dev/null || true
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
