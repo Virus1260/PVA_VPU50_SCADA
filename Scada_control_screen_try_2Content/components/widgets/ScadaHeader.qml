@@ -6,9 +6,9 @@ Rectangle {
     height: 56
     color: "#08213b"
 
-    property string vesselName: "Unimix50"
+    property string vesselName: "VPU 50"
     property string systemTag: "B1"
-    property string alarmMessage: "SYSTEM READY - RECIPE [UNIMIX_BATCH_01] STANDBY"
+    property string alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     property string operatorName: "Administrator"
     property string operatorRole: "21 CFR / GAMP 5"
     property string timeString: "09:50:25"
@@ -74,7 +74,7 @@ Rectangle {
                 border.width: 1
             }
 
-            // Unimix50 Machine Pill
+            // VPU 50 Machine Pill
             Rectangle {
                 Layout.preferredWidth: 135
                 Layout.preferredHeight: 36
@@ -148,7 +148,7 @@ Rectangle {
                     elide: Text.ElideRight
                 }
 
-                // Ack Button (Lime Green in EKATO)
+                // Ack Button (Lime Green)
                 Rectangle {
                     id: ackBtn
                     Layout.preferredWidth: 64
@@ -227,19 +227,16 @@ Rectangle {
             }
         }
 
-        // 5. EKATO Brand Logo
+        // 5. PVA Systems Brand Identity (OEM)
         Rectangle {
-            Layout.preferredWidth: 90
-            Layout.preferredHeight: 36
+            Layout.preferredWidth: 84
+            Layout.preferredHeight: 32
             color: "transparent"
 
-            Text {
+            PvaLogo {
                 anchors.centerIn: parent
-                text: "EKATO"
-                color: "#ffffff"
-                font.bold: true
-                font.pixelSize: 22
-                font.letterSpacing: 2
+                width: 80
+                height: 28
             }
         }
     }

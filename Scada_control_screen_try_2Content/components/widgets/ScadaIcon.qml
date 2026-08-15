@@ -31,18 +31,35 @@ Item {
             "heating_jacket": "../../assets/icons/modes/plant/heating_jacket.svg",
             "thermometer": "../../assets/icons/modes/plant/heating_jacket.svg",
 
-            // Mode Tiles
+            // Mode Tiles (Agitator & Homogenizer)
             "agitator_cw": "../../assets/icons/modes/agitator/agitator_cw.svg",
             "agitator_ccw": "../../assets/icons/modes/agitator/agitator_ccw.svg",
             "agitator_reversing": "../../assets/icons/modes/agitator/agitator_reversing.svg",
             "homo_permanent": "../../assets/icons/modes/homogenizer/homo_permanent.svg",
             "homo_interval": "../../assets/icons/modes/homogenizer/homo_interval.svg",
+
+            // External Line Recirculation Mode Tiles
+            "ext_discharge_product": "../../assets/icons/modes/ext/ext_discharge_product.svg",
+            "ext_discharge_circulation": "../../assets/icons/modes/ext/ext_discharge_circulation.svg",
+            "ext_cip_rinse": "../../assets/icons/modes/ext/ext_cip_rinse.svg",
+            "ext_cip_discharge": "../../assets/icons/modes/ext/ext_cip_discharge.svg",
+            "ext_cip_drying": "../../assets/icons/modes/ext/ext_cip_drying.svg",
+
+            // Suction Mode Tiles
             "suction_liquids": "../../assets/icons/modes/suction/suction_liquids_tile.svg",
             "suction_liquids_tile": "../../assets/icons/modes/suction/suction_liquids_tile.svg",
             "suction_solids": "../../assets/icons/modes/suction/suction_solids_tile.svg",
             "suction_solids_tile": "../../assets/icons/modes/suction/suction_solids_tile.svg",
             "suction_bottom": "../../assets/icons/modes/suction/suction_bottom_tile.svg",
             "suction_bottom_tile": "../../assets/icons/modes/suction/suction_bottom_tile.svg",
+
+            // Heating & Regulation Mode Tiles
+            "heat_mode_heating": "../../assets/icons/modes/heating/heat_mode_heating.svg",
+            "heat_mode_cooling": "../../assets/icons/modes/heating/heat_mode_cooling.svg",
+            "heat_reg_product": "../../assets/icons/modes/heating/heat_reg_product.svg",
+            "heat_reg_jacket": "../../assets/icons/modes/heating/heat_reg_jacket.svg",
+            "heat_src_baffle": "../../assets/icons/modes/heating/heat_src_baffle.svg",
+            "heat_src_homo": "../../assets/icons/modes/heating/heat_src_homo.svg",
 
             // Navigation Icons
             "dashboard": "../../assets/icons/nav/status_stack.svg",

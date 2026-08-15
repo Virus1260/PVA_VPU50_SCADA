@@ -158,8 +158,10 @@
         <file>Scada_control_screen_try_2Content/components/modals/NumericKeypadModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/PlantModeModal.qml</file>
         <file>Scada_control_screen_try_2Content/components/modals/VacuumModeModal.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/PvaLogo.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaButton.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaCard.qml</file>
+        <file>Scada_control_screen_try_2Content/components/widgets/PvaLogo.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaHeader.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaIcon.qml</file>
         <file>Scada_control_screen_try_2Content/components/widgets/ScadaMediaControls.qml</file>

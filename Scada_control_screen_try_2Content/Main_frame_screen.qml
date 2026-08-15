@@ -34,16 +34,16 @@ Item {
     property int r6RuntimeSeconds: 0
 
     property var alarmList: [
-        "SYSTEM READY - RECIPE [UNIMIX_BATCH_01] STANDBY",
-        "INFO: AGITATOR MOTOR [M01] READY FOR SEQUENCE",
+        "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY",
+        "INFO: AGITATOR MOTOR [1M1501] READY FOR SEQUENCE",
         "NOTICE: VACUUM CHAMBER SEAL INTEGRITY VERIFIED",
         "STATUS: HEATING JACKET PROPORTIONAL REGULATION ACTIVE"
     ]
     property int alarmIndex: 0
 
     property var screenTitles: [
-        "SYSTEM READY - RECIPE [UNIMIX_BATCH_01] STANDBY",
-        "P&ID VIEW - UNIMIX 50 SKID & PROCESS UTILITY VALVES",
+        "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY",
+        "P&ID VIEW - PVA SYSTEMS VPU-50 SKID & PROCESS VALVES",
         "PROCESS TRENDS - MULTI-CHANNEL HISTORICAL LOG",
         "ALARM ANNUNCIATOR - ACTIVE PROCESS NOTIFICATIONS",
         "RECIPES - STEP-BY-STEP PHASE EXECUTION MANAGER",
@@ -371,8 +371,8 @@ Item {
             if (ui.extLineModal) {
                 ui.extLineModal.modeApplied.connect(function(modeKey, modeTitle) {
                     if (ctrl && ctrl.row3ModeSelector) {
+                        ctrl.row3ModeSelector.iconName = modeKey;
                         ctrl.row3ModeSelector.modeText = modeTitle;
-                        ctrl.row3ModeSelector.iconName = "";
                     }
                 });
                 ui.extLineModal.closed.connect(function() { ui.extLineModal.visible = false; });
@@ -381,7 +381,10 @@ Item {
             // Vacuum Modal (Row 4)
             if (ui.vacuumModal) {
                 ui.vacuumModal.modeApplied.connect(function(modeKey, modeTitle, preset) {
-                    if (ctrl && ctrl.row4ModeSelector) ctrl.row4ModeSelector.modeText = modeTitle;
+                    if (ctrl && ctrl.row4ModeSelector) {
+                        ctrl.row4ModeSelector.iconName = modeKey;
+                        ctrl.row4ModeSelector.modeText = modeTitle;
+                    }
                     if (ctrl && ctrl.row4StartCard) ctrl.row4StartCard.primaryValue = preset.toFixed(1);
                 });
                 ui.vacuumModal.closed.connect(function() { ui.vacuumModal.visible = false; });
@@ -392,7 +395,7 @@ Item {
                 ui.fillingModal.modeApplied.connect(function(modeKey, modeTitle) {
                     if (ctrl && ctrl.row5ModeSelector) {
                         ctrl.row5ModeSelector.iconName = modeKey;
-                        ctrl.row5ModeSelector.modeText = "";
+                        ctrl.row5ModeSelector.modeText = modeTitle;
                     }
                 });
                 ui.fillingModal.closed.connect(function() { ui.fillingModal.visible = false; });
@@ -403,10 +406,13 @@ Item {
                 ui.heatingModal.optionSelected.connect(function(selector, val, iconKey) {
                     if (!ctrl) return;
                     if (selector === "mode" && ctrl.row6ModeSelector) {
+                        ctrl.row6ModeSelector.iconName = iconKey;
                         ctrl.row6ModeSelector.modeText = val;
                     } else if (selector === "regulation" && ctrl.row6RegSelector) {
+                        ctrl.row6RegSelector.iconName = iconKey;
                         ctrl.row6RegSelector.modeText = val;
                     } else if (selector === "temp_src" && ctrl.row6TempSrcSelector) {
+                        ctrl.row6TempSrcSelector.iconName = iconKey;
                         ctrl.row6TempSrcSelector.modeText = val;
                     }
                 });
