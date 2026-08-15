@@ -6,7 +6,7 @@ Window {
     width: 1280
     height: 720
     visible: true
-    title: "EKATO EPOS SCADA - UNIMIX 50 VPU Control System"
+    title: "PVA Systems - VPU 50 Industrial SCADA Control System"
     color: "#08213b"
 
     Main_frame_screen {

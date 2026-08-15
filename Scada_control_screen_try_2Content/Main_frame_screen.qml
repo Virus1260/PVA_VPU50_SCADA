@@ -80,12 +80,24 @@ Item {
             if (!ui) return;
             var ctrl = ui.controlView;
 
+            // --- SAFETY INTERLOCK HELPER ---
+            function checkProcessRunning(equipmentName, isRunning) {
+                if (isRunning) {
+                    if (ui.header) {
+                        ui.header.alarmMessage = "SAFETY INTERLOCK: Stop " + equipmentName + " before modifying mode or setpoint parameters.";
+                        ui.header.isAlarmActive = true;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
             // -------------------------------------------------------------
             // 1. ROW 1: AGITATOR SPEED & INTERACTIVE CONTROLS
             // -------------------------------------------------------------
             if (ctrl && ctrl.row1MinusBtn) {
                 ctrl.row1MinusBtn.clicked.connect(function() {
-                    if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
+                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
                     rootWindow.r1TargetSpeed = Math.max(25.0, rootWindow.r1TargetSpeed - 5.0);
                     ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
                 });
@@ -93,7 +105,7 @@ Item {
 
             if (ctrl && ctrl.row1PlusBtn) {
                 ctrl.row1PlusBtn.clicked.connect(function() {
-                    if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
+                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
                     rootWindow.r1TargetSpeed = Math.min(120.0, rootWindow.r1TargetSpeed + 5.0);
                     ctrl.row1SpeedControl.targetVal = rootWindow.r1TargetSpeed;
                 });
@@ -101,11 +113,12 @@ Item {
 
             if (ctrl && ctrl.row1SpeedControl) {
                 ctrl.row1SpeedControl.targetValChangedByUser.connect(function(newVal) {
+                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
                     rootWindow.r1TargetSpeed = newVal;
                 });
 
                 ctrl.row1SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
-                    if (ctrl.row1Media && ctrl.row1Media.isPlaying) return;
+                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = title;
                         ui.keypadModal.targetTag = tag;
@@ -122,6 +135,7 @@ Item {
                 ctrl.row1Media.playClicked.connect(function() {
                     rootWindow.r1Power = 3.8;
                     rootWindow.r1Current = 11.5;
+                    if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = true;
                     if (ctrl.row1PowerCard) {
                         ctrl.row1PowerCard.powerVal = rootWindow.r1Power.toFixed(1);
                         ctrl.row1PowerCard.currentVal = rootWindow.r1Current.toFixed(1);
@@ -132,6 +146,7 @@ Item {
                     rootWindow.r1Power = 0.0;
                     rootWindow.r1Current = 0.0;
                     rootWindow.r1RuntimeSeconds = 0;
+                    if (ctrl.row1SpeedControl) ctrl.row1SpeedControl.isLocked = false;
                     if (ctrl.row1Runtime) ctrl.row1Runtime.timeText = "00:00:00";
                     if (ctrl.row1PowerCard) {
                         ctrl.row1PowerCard.powerVal = "0.0";
@@ -142,6 +157,7 @@ Item {
 
             if (ctrl && ctrl.row1ModeSelector) {
                 ctrl.row1ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Agitator", ctrl.row1Media && ctrl.row1Media.isPlaying)) return;
                     if (ui.agitatorModal) ui.agitatorModal.visible = true;
                 });
             }
@@ -151,7 +167,7 @@ Item {
             // -------------------------------------------------------------
             if (ctrl && ctrl.row2MinusBtn) {
                 ctrl.row2MinusBtn.clicked.connect(function() {
-                    if (ctrl.row2Media && ctrl.row2Media.isPlaying) return;
+                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
                     rootWindow.r2TargetSpeed = Math.max(600.0, rootWindow.r2TargetSpeed - 100.0);
                     ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
                 });
@@ -159,7 +175,7 @@ Item {
 
             if (ctrl && ctrl.row2PlusBtn) {
                 ctrl.row2PlusBtn.clicked.connect(function() {
-                    if (ctrl.row2Media && ctrl.row2Media.isPlaying) return;
+                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
                     rootWindow.r2TargetSpeed = Math.min(4800.0, rootWindow.r2TargetSpeed + 100.0);
                     ctrl.row2SpeedControl.targetVal = rootWindow.r2TargetSpeed;
                 });
@@ -167,11 +183,12 @@ Item {
 
             if (ctrl && ctrl.row2SpeedControl) {
                 ctrl.row2SpeedControl.targetValChangedByUser.connect(function(newVal) {
+                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
                     rootWindow.r2TargetSpeed = newVal;
                 });
 
                 ctrl.row2SpeedControl.setpointRequested.connect(function(title, tag, current, min, max, unit) {
-                    if (ctrl.row2Media && ctrl.row2Media.isPlaying) return;
+                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = title;
                         ui.keypadModal.targetTag = tag;
@@ -188,6 +205,7 @@ Item {
                 ctrl.row2Media.playClicked.connect(function() {
                     rootWindow.r2Power = 8.5;
                     rootWindow.r2Current = 24.2;
+                    if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = true;
                     if (ctrl.row2PowerCard) {
                         ctrl.row2PowerCard.powerVal = rootWindow.r2Power.toFixed(1);
                         ctrl.row2PowerCard.currentVal = rootWindow.r2Current.toFixed(1);
@@ -198,6 +216,7 @@ Item {
                     rootWindow.r2Power = 0.0;
                     rootWindow.r2Current = 0.0;
                     rootWindow.r2RuntimeSeconds = 0;
+                    if (ctrl.row2SpeedControl) ctrl.row2SpeedControl.isLocked = false;
                     if (ctrl.row2Runtime) ctrl.row2Runtime.timeText = "00:00:00";
                     if (ctrl.row2PowerCard) {
                         ctrl.row2PowerCard.powerVal = "0.0";
@@ -208,6 +227,7 @@ Item {
 
             if (ctrl && ctrl.row2ModeSelector) {
                 ctrl.row2ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Homogenizer", ctrl.row2Media && ctrl.row2Media.isPlaying)) return;
                     if (ui.homoModal) ui.homoModal.visible = true;
                 });
             }
@@ -224,6 +244,7 @@ Item {
 
             if (ctrl && ctrl.row3ModeSelector) {
                 ctrl.row3ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("External Line", ctrl.row3Media && ctrl.row3Media.isPlaying)) return;
                     if (ui.extLineModal) ui.extLineModal.visible = true;
                 });
             }
@@ -232,20 +253,26 @@ Item {
             // 4. ROW 4: VACUUM CONTROLS & SETPOINTS
             // -------------------------------------------------------------
             if (ctrl && ctrl.row4Media) {
+                ctrl.row4Media.playClicked.connect(function() {
+                    if (ctrl.row4SpeedControl) ctrl.row4SpeedControl.isLocked = true;
+                });
                 ctrl.row4Media.stopClicked.connect(function() {
                     rootWindow.r4RuntimeSeconds = 0;
+                    if (ctrl.row4SpeedControl) ctrl.row4SpeedControl.isLocked = false;
                     if (ctrl.row4Runtime) ctrl.row4Runtime.timeText = "00:00:00";
                 });
             }
 
             if (ctrl && ctrl.row4ModeSelector) {
                 ctrl.row4ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
                     if (ui.vacuumModal) ui.vacuumModal.visible = true;
                 });
             }
 
             if (ctrl && ctrl.row4StartCard) {
                 ctrl.row4StartCard.clicked.connect(function() {
+                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Start Pressure";
                         ui.keypadModal.targetTag = "1P1001_START";
@@ -260,6 +287,7 @@ Item {
 
             if (ctrl && ctrl.row4EndCard) {
                 ctrl.row4EndCard.clicked.connect(function() {
+                    if (checkProcessRunning("Vacuum", ctrl.row4Media && ctrl.row4Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "End Pressure";
                         ui.keypadModal.targetTag = "1P1001_END";
@@ -284,12 +312,14 @@ Item {
 
             if (ctrl && ctrl.row5ModeSelector) {
                 ctrl.row5ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
                     if (ui.fillingModal) ui.fillingModal.visible = true;
                 });
             }
 
             if (ctrl && ctrl.row5AngleOpenCard) {
                 ctrl.row5AngleOpenCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Angle Open";
                         ui.keypadModal.targetTag = "1V1001_AO";
@@ -304,6 +334,7 @@ Item {
 
             if (ctrl && ctrl.row5AngleCloseCard) {
                 ctrl.row5AngleCloseCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Angle Closed";
                         ui.keypadModal.targetTag = "1V1001_AC";
@@ -318,6 +349,7 @@ Item {
 
             if (ctrl && ctrl.row5TimeOpenCard) {
                 ctrl.row5TimeOpenCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Time Open";
                         ui.keypadModal.targetTag = "1V1001_TO";
@@ -332,6 +364,7 @@ Item {
 
             if (ctrl && ctrl.row5TimeCloseCard) {
                 ctrl.row5TimeCloseCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Suction", ctrl.row5Media && ctrl.row5Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Time Closed";
                         ui.keypadModal.targetTag = "1V1001_TC";
@@ -359,6 +392,7 @@ Item {
 
             if (ctrl && ctrl.row6ModeSelector) {
                 ctrl.row6ModeSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.heatingModal) {
                         ui.heatingModal.targetSelector = "mode";
                         ui.heatingModal.visible = true;
@@ -368,6 +402,7 @@ Item {
 
             if (ctrl && ctrl.row6RegSelector) {
                 ctrl.row6RegSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.heatingModal) {
                         ui.heatingModal.targetSelector = "regulation";
                         ui.heatingModal.visible = true;
@@ -377,6 +412,7 @@ Item {
 
             if (ctrl && ctrl.row6TempSrcSelector) {
                 ctrl.row6TempSrcSelector.clicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.heatingModal) {
                         ui.heatingModal.targetSelector = "temp_src";
                         ui.heatingModal.visible = true;
@@ -386,6 +422,7 @@ Item {
 
             if (ctrl && ctrl.row6DeltaTCard) {
                 ctrl.row6DeltaTCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Delta T Jacket";
                         ui.keypadModal.targetTag = "1T1001_DT";
@@ -400,6 +437,7 @@ Item {
 
             if (ctrl && ctrl.row6TempCard) {
                 ctrl.row6TempCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Temperature Setpoint";
                         ui.keypadModal.targetTag = "1T1001_TEMP";
@@ -414,6 +452,7 @@ Item {
 
             if (ctrl && ctrl.row6DevCard) {
                 ctrl.row6DevCard.setpointClicked.connect(function() {
+                    if (checkProcessRunning("Temperature Regulation", ctrl.row6Media && ctrl.row6Media.isPlaying)) return;
                     if (ui.keypadModal) {
                         ui.keypadModal.title = "Temperature Deviation";
                         ui.keypadModal.targetTag = "1T1001_DEV";
