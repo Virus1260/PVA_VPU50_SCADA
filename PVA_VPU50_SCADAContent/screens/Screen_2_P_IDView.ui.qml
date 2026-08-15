@@ -71,6 +71,8 @@ Rectangle {
         // ---------------------------------------------------------------------
         PidAgitator {
             id: agitator
+            x: 390
+            y: 41
             anchors.horizontalCenter: mainVessel.horizontalCenter
             anchors.top: mainVessel.top
             anchors.topMargin: -70
@@ -141,8 +143,6 @@ Rectangle {
         PidPipe { z: 8; startX: 575; startY: 15; endX: 575; endY: 190; baseColor: "#52a5ec" }
 
         // Spray Ball 3 Seamless Continuous Dogleg Drop Pipe (Far-Right Angled)
-        PidPipe { z: 8; startX: 605; startY: 15; endX: 605; endY: 130; baseColor: "#52a5ec" }
-        PidPipe { z: 8; startX: 605; startY: 130; endX: 614; endY: 178; baseColor: "#52a5ec" }
 
         // 3 Dedicated Modular Spray Balls in Top Dome (z: 10 - Elevated over Agitator)
         PidSprayBall {
@@ -164,8 +164,8 @@ Rectangle {
         PidSprayBall {
             id: sprayBall3
             z: 10
-            x: 596
-            y: 172
+            x: 588
+            y: 190
             tag: "X 165 503"
             sprayAngle: -35
             showTags: pidViewRoot.showTags
@@ -271,11 +271,22 @@ Rectangle {
         }
 
         PidControlBox {
-            id: controlBox
-            x: 35
-            y: 500
-            z: 15
-            visible: pidViewRoot.showTags
+                id: controlBox
+                x: 35
+                y: 500
+                z: 15
+                visible: pidViewRoot.showTags
+        }
+
+        PidPipe {
+                x: 600
+                y: 10
+                z: 8
+                startY: 15
+                startX: 575
+                endY: 190
+                endX: 575
+                baseColor: "#52a5ec"
         }
     }
 }

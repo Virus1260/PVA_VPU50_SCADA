@@ -72,6 +72,8 @@ Item {
 
     // 1. TOP DRIVE MOTOR (Standard Reusable SCADA Motor)
     PidMotor {
+        id: topMotor
+        z: 2
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         motorTag: agitatorRoot.motorTag
@@ -84,6 +86,7 @@ Item {
 
     // 2. PROXIMITY SENSOR GZ 161501 ON DOME WITH VERTICAL LABEL
     Item {
+        z: 3
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: 24
         anchors.top: parent.top
@@ -117,11 +120,12 @@ Item {
         }
     }
 
-    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange)
+    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange - Anchored to bottom of Motor circle)
     Rectangle {
+        z: 1
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 46
+        anchors.top: topMotor.bottom
+        anchors.topMargin: -4
         anchors.bottom: impellerContainer.top
         anchors.bottomMargin: -6
         width: 14
