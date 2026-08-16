@@ -4,28 +4,36 @@ import QtQuick.Shapes
 Item {
     id: pipeRoot
 
-    property string section: ""
+    // Geometry Properties
     property real startX: 0
     property real startY: 0
-    property real endX: 100
+    property real endX: 0
     property real endY: 0
     property real pipeWidth: 2.5
     property real zoomScale: 1.0
+
+    // Style & State Properties
+    property string section: ""
     property color baseColor: "#1b538c"
     property color flowColor: "#38ef7d"
     property bool isActive: false
     property bool reverseFlow: false
     property real flowSpeed: 800
 
-    x: Math.min(startX, endX) - pipeWidth - 3
-    y: Math.min(startY, endY) - pipeWidth - 3
-    width: Math.max(1, Math.abs(endX - startX)) + (pipeWidth + 3) * 2
-    height: Math.max(1, Math.abs(endY - startY)) + (pipeWidth + 3) * 2
+    // Bounding Box Calculation (Seamlessly supports both absolute startX/endX and Designer x/y/w/h)
+    readonly property bool hasAbsoluteCoordinates: (startX !== 0 || startY !== 0 || endX !== 0 || endY !== 0)
+    readonly property real pad: pipeWidth + 2
 
-    property real localX1: startX - x
-    property real localY1: startY - y
-    property real localX2: endX - x
-    property real localY2: endY - y
+    x: hasAbsoluteCoordinates ? (Math.min(startX, endX) - pad) : 0
+    y: hasAbsoluteCoordinates ? (Math.min(startY, endY) - pad) : 0
+    width: hasAbsoluteCoordinates ? (Math.max(1, Math.abs(endX - startX)) + 2 * pad) : 100
+    height: hasAbsoluteCoordinates ? (Math.max(1, Math.abs(endY - startY)) + 2 * pad) : pad * 2
+
+    // Local Drawing Points (Guaranteed to stay strictly inside the visual bounding box)
+    readonly property real localX1: hasAbsoluteCoordinates ? (startX <= endX ? pad : width - pad) : 0
+    readonly property real localY1: hasAbsoluteCoordinates ? (startY <= endY ? pad : height - pad) : (height / 2)
+    readonly property real localX2: hasAbsoluteCoordinates ? (startX <= endX ? width - pad : pad) : width
+    readonly property real localY2: hasAbsoluteCoordinates ? (startY <= endY ? height - pad : pad) : (height / 2)
 
     // Dynamic AutoCAD Constant-Screen-Pixel Width Compensation
     readonly property real dynamicStrokeWidth: Math.max(0.8, (pipeRoot.isActive ? (pipeRoot.pipeWidth + 0.8) : pipeRoot.pipeWidth) / Math.max(0.3, Math.min(3.0, pipeRoot.zoomScale)))

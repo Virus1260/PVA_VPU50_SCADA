@@ -192,14 +192,10 @@ Rectangle {
         bottomHomog.onRecircValveClicked: pidScreenRoot.componentTapped("K 163 002")
         bottomHomog.onMotorClicked: pidScreenRoot.componentTapped("M 163 001")
 
-        // Temperature Control Telemetry Box
-        controlBox.setpointTemp: scadaBridge.targetTemp
-        controlBox.gradientSp: 20.7
-        controlBox.processVal: scadaBridge.vesselTemp
-
-        // Electric Heater Exchanger & Circulation Pump
-        electricHeater.isHeating: scadaBridge.isHeating
-        electricHeater.currentTemp: scadaBridge.jacketTemp
+        // Inline Heater, Circulation Pump & Seal Pot
+        inlineHeater.isHeating: scadaBridge.isHeating
         circPump1.isRunning: scadaBridge.isHeating || scadaBridge.isCooling
+        sealPot.isHeating: scadaBridge.isHeating
+        sealPot.currentTemp: scadaBridge.jacketTemp
     }
 }

@@ -2,14 +2,13 @@ import QtQuick
 import QtQuick.Shapes
 
 Item {
-    id: heaterRoot
-    width: 68
-    height: 140
+    id: sealPotRoot
+    width: 60
+    height: 130
 
-    property string tag: "W 171 001"
+    property string tag: "B 171 001"
     property string tempTag: "TI 171 001"
-    property real currentTemp: 85.0
-    property real powerKw: 12.5
+    property real currentTemp: 45.0
     property bool isHeating: false
     property bool showTags: true
 
@@ -20,17 +19,17 @@ Item {
         id: dialGauge
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.rightMargin: 4
-        width: 24
-        height: 24
+        anchors.rightMargin: 2
+        width: 22
+        height: 22
 
-        // Stem down to heater vessel
+        // Stem down to seal pot vessel
         Rectangle {
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -6
+            anchors.bottomMargin: -4
             anchors.horizontalCenter: parent.horizontalCenter
             width: 2
-            height: 10
+            height: 8
             color: "#64748b"
         }
 
@@ -46,10 +45,10 @@ Item {
             Rectangle {
                 anchors.centerIn: parent
                 width: 1.5
-                height: 8
+                height: 7
                 color: "#f43f5e"
                 transformOrigin: Item.Bottom
-                rotation: -45 + Math.min(180, (heaterRoot.currentTemp / 120.0) * 180)
+                rotation: -45 + Math.min(180, (sealPotRoot.currentTemp / 100.0) * 180)
             }
 
             // Center Pin
@@ -63,18 +62,18 @@ Item {
         }
     }
 
-    // 2. MAIN ELECTRIC HEATER VESSEL (Vertical Insulated Cylinder)
+    // 2. MAIN SEAL POT VESSEL (Vertical Insulated Cylinder)
     Rectangle {
-        id: heaterBody
+        id: potBody
         anchors.left: parent.left
-        anchors.leftMargin: 8
+        anchors.leftMargin: 4
         anchors.top: parent.top
-        anchors.topMargin: 20
-        width: 38
-        height: 85
+        anchors.topMargin: 16
+        width: 34
+        height: 75
         radius: 3
         color: "#0b2e52"
-        border.color: heaterRoot.isHeating ? "#ec4899" : "#1d5b94"
+        border.color: sealPotRoot.isHeating ? "#ec4899" : "#1d5b94"
         border.width: 1.6
 
         // Bottom Mounting Base Flange
@@ -89,50 +88,43 @@ Item {
             border.width: 1
         }
 
-        // 3. INTERNAL ELECTRIC ZIGZAG HEATING ELEMENT COIL (Magenta AutoCAD #ec4899)
+        // 3. INTERNAL ELECTRIC ZIGZAG COIL (AutoCAD Magenta #ec4899)
         Shape {
             id: coilShape
             anchors.fill: parent
-            anchors.margins: 6
+            anchors.margins: 4
             preferredRendererType: Shape.CurveRenderer
 
             ShapePath {
-                strokeWidth: 2.2
-                strokeColor: heaterRoot.isHeating ? "#f43f5e" : "#ec4899"
+                strokeWidth: 2
+                strokeColor: sealPotRoot.isHeating ? "#f43f5e" : "#ec4899"
                 fillColor: "transparent"
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
 
-                startX: 13; startY: 8
-                PathLine { x: 18; y: 16 }
-                PathLine { x: 8; y: 26 }
-                PathLine { x: 18; y: 36 }
-                PathLine { x: 8; y: 46 }
-                PathLine { x: 18; y: 56 }
-                PathLine { x: 13; y: 64 }
+                startX: 13; startY: 6
+                PathLine { x: 18; y: 14 }
+                PathLine { x: 8; y: 22 }
+                PathLine { x: 18; y: 30 }
+                PathLine { x: 8; y: 38 }
+                PathLine { x: 18; y: 46 }
+                PathLine { x: 8; y: 54 }
+                PathLine { x: 13; y: 62 }
             }
-        }
-
-        // Subtle Glow Pulse when actively heating
-        SequentialAnimation on opacity {
-            running: heaterRoot.isHeating
-            loops: Animation.Infinite
-            NumberAnimation { to: 0.75; duration: 600 }
-            NumberAnimation { to: 1.0; duration: 600 }
         }
     }
 
     // 4. TAG & READOUT LABELS
     Column {
-        visible: heaterRoot.showTags
-        anchors.top: heaterBody.bottom
-        anchors.topMargin: 8
-        anchors.horizontalCenter: heaterBody.horizontalCenter
+        visible: sealPotRoot.showTags
+        anchors.top: potBody.bottom
+        anchors.topMargin: 6
+        anchors.horizontalCenter: potBody.horizontalCenter
         spacing: 1
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: heaterRoot.tag
+            text: sealPotRoot.tag
             color: "#ffffff"
             font.pixelSize: 8
             font.bold: true
@@ -140,9 +132,9 @@ Item {
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: heaterRoot.currentTemp.toFixed(1) + "°C"
-            color: heaterRoot.isHeating ? "#f43f5e" : "#8cb5dc"
-            font.pixelSize: 8
+            text: sealPotRoot.currentTemp.toFixed(1) + "°C"
+            color: "#8cb5dc"
+            font.pixelSize: 7
             font.bold: true
         }
     }
@@ -151,6 +143,6 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: heaterRoot.clicked()
+        onClicked: sealPotRoot.clicked()
     }
 }

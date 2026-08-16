@@ -27,13 +27,12 @@ Rectangle {
     property alias agitator: agitator
     property alias levelGauge: levelGauge
     property alias bottomHomog: bottomHomog
-    property alias lidLifter: lidLifter
-    property alias controlBox: controlBox
     property alias sprayBall1: sprayBall1
     property alias sprayBall2: sprayBall2
     property alias sprayBall3: sprayBall3
-    property alias electricHeater: electricHeater
     property alias circPump1: circPump1
+    property alias inlineHeater: inlineHeater
+    property alias sealPot: sealPot
 
     // =========================================================================
     // ZOOMABLE & PANNABLE WORLD CANVAS (Interactive in Qt Design Studio Canvas)
@@ -80,179 +79,27 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // 3. TOP-LEFT FLOATING SCADA PID TELEMETRY BOX (z: 12 - Clean Space)
+        // 3. TOP CIP CLEANING DISTRIBUTION ARCH & 3 SPRAY BALLS (z: 8, z: 10 - Yellow)
         // ---------------------------------------------------------------------
-        PidControlBox {
-            id: controlBox
-            x: 20
-            y: 65
-            z: 12
-            visible: pidViewRoot.showTags
-        }
-
-        // ---------------------------------------------------------------------
-        // 4. LEFT-SIDE UTILITY MANIFOLD GRID & THERMAL JACKET LOOPS (z: 5, z: 6, z: 7)
-        // ---------------------------------------------------------------------
-        Text { z: 9; visible: pidViewRoot.showTags; x: 16; y: 246; text: "CW IN"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true }
-        Text { z: 9; visible: pidViewRoot.showTags; x: 16; y: 306; text: "CW OUT"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true }
-        Text { z: 9; visible: pidViewRoot.showTags; x: 16; y: 366; text: "HW IN"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true }
-        Text { z: 9; visible: pidViewRoot.showTags; x: 16; y: 436; text: "HW OUT"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true }
-
-        // Vertical Manifold Utility Headers (Green HW Line & Blue CW Line)
-        PidPipe { z: 5; startX: 60; startY: 240; endX: 60; endY: 620; baseColor: "#22c55e" }
-        PidPipe { z: 5; startX: 130; startY: 210; endX: 130; endY: 630; baseColor: "#3b82f6" }
-
-        // Left Isolation Valves
-        PidValve { id: vK168201; z: 6; x: 47; y: 245; tag: "K 168 201"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168202; z: 6; x: 117; y: 245; tag: "K 168 202"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168204; z: 6; x: 47; y: 305; tag: "K 168 204"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168206; z: 6; x: 117; y: 305; tag: "K 168 206"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168208; z: 6; x: 47; y: 365; tag: "K 168 208"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168205; z: 6; x: 117; y: 365; tag: "K 168 205"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168207; z: 6; x: 47; y: 435; tag: "K 168 207"; showTags: pidViewRoot.showTags }
-
-        // Upper Jacket Blue Return Line (from top-left jacket nozzle at y=210 left to manifold)
-        Rectangle { z: 6; x: 402; y: 206; width: 6; height: 8; color: "#1e293b"; border.color: "#3b82f6"; border.width: 1 }
-        PidPipe { id: pipeJacketReturn; z: 5; startX: 408; startY: 210; endX: 130; endY: 210; baseColor: "#3b82f6" }
-
-        // Lower Jacket Red Supply Line (from lower-left jacket nozzle at y=320 to circulation pump)
-        Rectangle { z: 6; x: 402; y: 316; width: 6; height: 8; color: "#1e293b"; border.color: "#ef4444"; border.width: 1 }
-        PidPipe { id: pipeJacketSupply1; z: 5; startX: 408; startY: 320; endX: 60; endY: 320; baseColor: "#ef4444" }
-        PidPipe { id: pipeJacketSupply2; z: 5; startX: 60; startY: 320; endX: 60; endY: 410; baseColor: "#ef4444" }
-        PidPipe { id: pipeJacketSupply3; z: 5; startX: 60; startY: 410; endX: 98; endY: 410; baseColor: "#ef4444" }
-        PidPipe { id: pipeJacketSupply4; z: 5; startX: 98; startY: 410; endX: 98; endY: 460; baseColor: "#ef4444" }
-
-        // Dedicated Modular Inline Circulation Pump (P 168 001)
-        PidCirculationPump {
-            id: circPump1
-            z: 7
-            x: 80
-            y: 460
-            tag: "P 168 001"
-            showTags: pidViewRoot.showTags
-        }
-
-        // ---------------------------------------------------------------------
-        // 5. BOTTOM-LEFT MODULAR ELECTRIC HEATER UNIT (W 171 001) (z: 7)
-        // ---------------------------------------------------------------------
-        PidElectricHeater {
-            id: electricHeater
-            z: 7
-            x: 195
-            y: 440
-            tag: "W 171 001"
-            tempTag: "TI 171 001"
-            showTags: pidViewRoot.showTags
-        }
-
-        // Jacket Temperature Sensor Callout (TIC 163 001)
-        Rectangle {
-            z: 8
-            x: 290
-            y: 420
-            width: 58
-            height: 24
-            radius: 3
-            color: "#08213b"
-            border.color: "#38bdf8"
-            border.width: 1
-            Column {
-                anchors.centerIn: parent
-                Text { text: "TIC 163 001"; color: "#8cb5dc"; font.pixelSize: 7; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
-                Text { text: "35.8 °C"; color: "#ffffff"; font.pixelSize: 8; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
-            }
-        }
-        PidPipe { z: 7; startX: 348; startY: 432; endX: 408; endY: 432; baseColor: "#38bdf8" }
-
-        // Pump Cross-Connect Valve (K 172 002)
-        PidValve { id: vK172002; z: 6; x: 295; y: 495; tag: "K 172 002"; showTags: pidViewRoot.showTags }
-        PidPipe { z: 5; startX: 263; startY: 507; endX: 410; endY: 507; baseColor: "#1b538c" }
-
-        // Homogenizer Seal Mechanical Cooling Circuit (Red & Blue Lines to Left-Bottom Heater)
-        PidPipe { z: 5; startX: 532; startY: 530; endX: 250; endY: 530; baseColor: "#ef4444" }
-        PidPipe { z: 5; startX: 250; startY: 530; endX: 250; endY: 525; baseColor: "#ef4444" }
-
-        PidPipe { z: 5; startX: 532; startY: 538; endX: 240; endY: 538; baseColor: "#3b82f6" }
-        PidPipe { z: 5; startX: 240; startY: 538; endX: 240; endY: 525; baseColor: "#3b82f6" }
-
-        // Bottom Full-Span Utility Headers (Green HW Line & Blue CW Line)
-        PidPipe { z: 5; startX: 220; startY: 525; endX: 220; endY: 620; baseColor: "#22c55e" }
-        PidPipe { z: 5; startX: 20; startY: 620; endX: 680; endY: 620; baseColor: "#22c55e" }
-
-        PidPipe { z: 5; startX: 210; startY: 525; endX: 210; endY: 630; baseColor: "#3b82f6" }
-        PidPipe { z: 5; startX: 20; startY: 630; endX: 680; endY: 630; baseColor: "#3b82f6" }
-
-        // ---------------------------------------------------------------------
-        // 6. GAS INLET & RELIEF LINES (z: 8)
-        // ---------------------------------------------------------------------
-        PidPipe { z: 8; startX: 20; startY: 180; endX: 300; endY: 180; baseColor: "#1b538c" }
-        PidPipe { z: 8; startX: 300; startY: 180; endX: 300; endY: 125; baseColor: "#1b538c" }
-        PidPipe { z: 8; startX: 300; startY: 125; endX: 440; endY: 125; baseColor: "#1b538c" }
-        Text { z: 9; visible: pidViewRoot.showTags; x: 25; y: 164; text: "gas inlet"; color: "#8cb5dc"; font.pixelSize: 8 }
-        PidValve { id: vK166002; z: 9; x: 287; y: 166; tag: "K 166 002"; showTags: pidViewRoot.showTags }
-
-        // Top Left Dome Relief Vent Column
-        Rectangle {
-            z: 8
-            x: 415
-            y: 110
-            width: 12
-            height: 24
-            radius: 3
-            color: "#8ec4f0"
-            border.color: "#1b4c7c"
-            border.width: 1.2
-        }
-        PidPipe { z: 8; startX: 421; startY: 15; endX: 421; endY: 110; baseColor: "#52a5ec" }
-
-        // ---------------------------------------------------------------------
-        // 7. TOP CIP CLEANING HIGH ARCH HEADER & SPRAY BALLS (z: 8, z: 10)
-        // ---------------------------------------------------------------------
-        PidPipe { z: 8; startX: 240; startY: 15; endX: 625; endY: 15; baseColor: "#52a5ec" }
-        PidPipe { z: 8; startX: 240; startY: 15; endX: 240; endY: 125; baseColor: "#52a5ec" }
+        // Top CIP Horizontal Supply Header
+        PidPipe { z: 8; startX: 200; startY: 15; endX: 635; endY: 15; baseColor: "#eab308" }
 
         // Spray Ball 1 Vertical Drop Pipe (Left)
-        PidPipe { z: 8; startX: 465; startY: 15; endX: 465; endY: 190; baseColor: "#52a5ec" }
+        PidPipe { z: 8; startX: 447; startY: 15; endX: 447; endY: 190; baseColor: "#eab308" }
 
-        // Spray Ball 2 Vertical Drop Pipe (Middle-Right)
-        PidPipe { z: 8; startX: 595; startY: 15; endX: 595; endY: 190; baseColor: "#52a5ec" }
+        // Spray Ball 2 Vertical Drop Pipe (Middle)
+        PidPipe { z: 8; startX: 577; startY: 15; endX: 577; endY: 190; baseColor: "#eab308" }
 
-        // Spray Ball 3 Seamless Continuous Dogleg Drop Pipe (Far-Right Angled)
-        PidPipe { z: 8; startX: 625; startY: 15; endX: 625; endY: 172; baseColor: "#52a5ec" }
-        PidPipe { z: 8; startX: 625; startY: 172; endX: 634; endY: 190; baseColor: "#52a5ec" }
+        // Spray Ball 3 Vertical Drop Pipe (Right Angled)
+        PidPipe { z: 8; startX: 635; startY: 15; endX: 635; endY: 172; baseColor: "#eab308" }
+        PidPipe { z: 8; startX: 635; startY: 172; endX: 642; endY: 190; baseColor: "#eab308" }
 
-        // 3 Dedicated Modular Spray Balls in Top Dome (z: 10 - Elevated over Agitator)
-        PidSprayBall {
-            id: sprayBall1
-            z: 10
-            x: 447
-            y: 190
-            tag: "X 165 501"
-            showTags: pidViewRoot.showTags
-        }
-        PidSprayBall {
-            id: sprayBall2
-            z: 10
-            x: 577
-            y: 190
-            tag: "X 165 502"
-            showTags: pidViewRoot.showTags
-        }
-        PidSprayBall {
-            id: sprayBall3
-            z: 10
-            x: 619
-            y: 184
-            width: 35
-            height: 48
-            tag: "X 165 503"
-            sprayAngle: -35
-            showTags: pidViewRoot.showTags
-        }
+        // 3 Modular Spray Balls inside Dome
+        PidSprayBall { id: sprayBall1; z: 10; x: 429; y: 190; tag: "X 165 501"; showTags: pidViewRoot.showTags }
+        PidSprayBall { id: sprayBall2; z: 10; x: 559; y: 190; tag: "X 165 502"; showTags: pidViewRoot.showTags }
+        PidSprayBall { id: sprayBall3; z: 10; x: 625; y: 184; tag: "X 165 503"; sprayAngle: -35; showTags: pidViewRoot.showTags }
 
-        // ---------------------------------------------------------------------
-        // 8. DEDICATED ELEVATED LEVEL GAUGE (z: 9 - Elevated over Agitator)
-        // ---------------------------------------------------------------------
+        // Dedicated Elevated Level Gauge inside Dome (z: 9)
         PidLevelGauge {
             id: levelGauge
             z: 9
@@ -262,74 +109,81 @@ Rectangle {
         }
 
         // ---------------------------------------------------------------------
-        // 9. SOLIDS HOPPER, INLET VALVES & LID LIFTER BRACKET (z: 7, z: 8, z: 9)
+        // 4. LEFT-SIDE UTILITY MANIFOLD, CIRCULATION PUMP & INLINE HEATER (z: 5, z: 6, z: 7)
         // ---------------------------------------------------------------------
-        PidHopper {
-            id: solidsHopper
-            z: 8
-            x: 688
-            y: 25
-        }
-        Text {
-            z: 9
-            visible: pidViewRoot.showTags
-            x: 718
-            y: 28
-            text: "B 141 001"
-            color: "#8cb5dc"
-            font.pixelSize: 8
-            font.bold: true
-        }
-        PidPipe {
-            z: 8
-            startX: 700
-            startY: 46
-            endX: 700
-            endY: 135
-            baseColor: "#52a5ec"
-        }
-        PidValve {
-            id: vK141001
-            z: 9
-            x: 687
-            y: 80
-            tag: "K 141 001"
-            showTags: pidViewRoot.showTags
-        }
+        // Vertical Green Header & Left Isolation Valves
+        PidPipe { z: 5; startX: 60; startY: 340; endX: 60; endY: 615; baseColor: "#22c55e" }
+        PidPipe { z: 5; startX: 120; startY: 340; endX: 120; endY: 625; baseColor: "#3b82f6" }
 
-        // Hopper Purge Line
-        PidPipe {
-            z: 8
-            startX: 700
-            startY: 135
-            endX: 790
-            endY: 135
-            baseColor: "#52a5ec"
-        }
-        PidValve {
-            id: vK161001
-            z: 9
-            x: 740
-            y: 121
-            tag: "K 161 001"
-            showTags: pidViewRoot.showTags
-        }
+        PidValve { id: vK168201; z: 6; x: 47; y: 350; tag: "K 168 201"; showTags: pidViewRoot.showTags }
+        PidValve { id: vK168202; z: 6; x: 107; y: 350; tag: "K 168 202"; showTags: pidViewRoot.showTags }
 
-        // Horizontal Lid Lifter Bracket Hinge Bar
-        Rectangle {
+        // Horizontal Bridge Valve
+        PidPipe { z: 5; startX: 60; startY: 480; endX: 180; endY: 480; baseColor: "#22c55e" }
+        PidValve { id: vK168204; z: 6; x: 70; y: 468; tag: "K 168 204"; showTags: pidViewRoot.showTags }
+
+        // Dedicated Modular Inline Circulation Pump (P 168 001)
+        PidCirculationPump {
+            id: circPump1
             z: 7
-            x: 710
-            y: 155
-            width: 175
-            height: 7
-            radius: 2
-            color: "#334155"
-            border.color: "#475569"
-            border.width: 1
+            x: 100
+            y: 456
+            tag: "P 168 001"
+            showTags: pidViewRoot.showTags
         }
 
+        // Dedicated Modular Inline Heater (W 168 001)
+        PidInlineHeater {
+            id: inlineHeater
+            z: 7
+            x: 145
+            y: 458
+            tag: "W 168 001"
+            showTags: pidViewRoot.showTags
+        }
+
+        // Hot Water Red Supply Pipe (from Inline Heater up to lower jacket nozzle at y=320)
+        Rectangle { z: 6; x: 402; y: 316; width: 6; height: 8; color: "#1e293b"; border.color: "#ef4444"; border.width: 1 }
+        PidPipe { id: pipeJacketSupply1; z: 5; startX: 180; startY: 480; endX: 180; endY: 320; baseColor: "#ef4444" }
+        PidPipe { id: pipeJacketSupply2; z: 5; startX: 180; startY: 320; endX: 408; endY: 320; baseColor: "#ef4444" }
+
+        // Cold Water Blue Return Pipe (from upper jacket nozzle at y=210 left to blue header)
+        Rectangle { z: 6; x: 402; y: 206; width: 6; height: 8; color: "#1e293b"; border.color: "#3b82f6"; border.width: 1 }
+        PidPipe { id: pipeJacketReturn1; z: 5; startX: 408; startY: 210; endX: 120; endY: 210; baseColor: "#3b82f6" }
+        PidPipe { id: pipeJacketReturn2; z: 5; startX: 120; startY: 210; endX: 120; endY: 340; baseColor: "#3b82f6" }
+
         // ---------------------------------------------------------------------
-        // 10. BOTTOM HOMOGENIZER & SUCTION BRANCH (z: 6, z: 7)
+        // 5. MECHANICAL SEAL COOLING CIRCUIT & SEAL POT BUFFER TANK (z: 6, z: 7)
+        // ---------------------------------------------------------------------
+        // Homogenizer Seal Cooling Lines (Red & Blue from collar to Seal Pot)
+        PidPipe { z: 5; startX: 532; startY: 530; endX: 532; endY: 560; baseColor: "#ef4444" }
+        PidPipe { z: 5; startX: 532; startY: 560; endX: 685; endY: 560; baseColor: "#ef4444" }
+        PidPipe { z: 5; startX: 685; startY: 560; endX: 685; endY: 520; baseColor: "#ef4444" }
+
+        PidPipe { z: 5; startX: 540; startY: 538; endX: 540; endY: 568; baseColor: "#3b82f6" }
+        PidPipe { z: 5; startX: 540; startY: 568; endX: 695; endY: 568; baseColor: "#3b82f6" }
+        PidPipe { z: 5; startX: 695; startY: 568; endX: 695; endY: 520; baseColor: "#3b82f6" }
+
+        // Dedicated Modular Seal Pot (B 171 001)
+        PidSealPot {
+            id: sealPot
+            z: 7
+            x: 675
+            y: 430
+            tag: "B 171 001"
+            tempTag: "TI 171 001"
+            showTags: pidViewRoot.showTags
+        }
+
+        // Seal Pot Bottom Utility Headers (Green HW Line & Blue CW Line)
+        PidPipe { z: 5; startX: 705; startY: 520; endX: 705; endY: 615; baseColor: "#22c55e" }
+        PidPipe { z: 5; startX: 20; startY: 615; endX: 705; endY: 615; baseColor: "#22c55e" }
+
+        PidPipe { z: 5; startX: 715; startY: 520; endX: 715; endY: 625; baseColor: "#3b82f6" }
+        PidPipe { z: 5; startX: 20; startY: 625; endX: 715; endY: 625; baseColor: "#3b82f6" }
+
+        // ---------------------------------------------------------------------
+        // 6. BOTTOM HOMOGENIZER & SUCTION VALVES (z: 6, z: 7)
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog
@@ -339,105 +193,85 @@ Rectangle {
             showTags: pidViewRoot.showTags
         }
 
-        PidPipe {
-            z: 6
-            startX: 610
-            startY: 438
-            endX: 620
-            endY: 462
-            baseColor: "#52a5ec"
-        }
-        PidValve {
-            id: vV142201
-            z: 7
-            x: 608
-            y: 450
-            tag: "V 142 201"
-            subLabel: "Suction Bottom"
-            showTags: pidViewRoot.showTags
-        }
-
-        // Suction Valves (K 143 002 Solids & K 143 001 Liquids)
+        // Left Suction Valves (K 143 002 Solids & K 143 001 Liquids)
         PidValve { id: vK143002; z: 7; x: 420; y: 475; tag: "K 143 002"; showTags: pidViewRoot.showTags }
         PidValve { id: vK143001; z: 7; x: 420; y: 520; tag: "K 143 001"; showTags: pidViewRoot.showTags }
 
-        // Stator Discharge Valve (K 163 002)
+        // Right Stator Discharge Valve (K 163 002)
         PidValve { id: vK163002; z: 7; x: 580; y: 495; tag: "K 163 002"; showTags: pidViewRoot.showTags }
 
         // ---------------------------------------------------------------------
-        // 11. RECIRCULATION LOOP & RISER (z: 6, z: 7, z: 8 - 100% Free of Overlaps)
+        // 7. RECIRCULATION LOOP & RISER (z: 6, z: 7, z: 8 - Cyan)
         // ---------------------------------------------------------------------
         PidPipe {
             id: pipeRecirc1
             z: 6
             startX: 600
             startY: 507
-            endX: 830
+            endX: 840
             endY: 507
+            baseColor: "#00d2ff"
         }
         PidPipe {
             id: pipeRecirc2
             z: 6
-            startX: 830
+            startX: 840
             startY: 507
-            endX: 830
+            endX: 840
             endY: 205
+            baseColor: "#00d2ff"
             reverseFlow: true
         }
         PidPipe {
             id: pipeRecirc3
             z: 6
-            startX: 830
+            startX: 840
             startY: 205
             endX: 680
             endY: 205
+            baseColor: "#00d2ff"
         }
 
-        PidValve {
-            id: vK165002
-            z: 7
-            x: 820
-            y: 495
-            tag: "K 165 002"
-            showTags: pidViewRoot.showTags
-        }
-        PidValve {
-            id: vK165003
-            z: 7
-            x: 745
-            y: 191
-            tag: "K 165 003"
-            showTags: pidViewRoot.showTags
-        }
+        // Recirculation Valves
+        PidValve { id: vK165002; z: 7; x: 830; y: 495; tag: "K 165 002"; showTags: pidViewRoot.showTags }
+        PidValve { id: vK165003; z: 7; x: 745; y: 191; tag: "K 165 003"; showTags: pidViewRoot.showTags }
 
+        // ---------------------------------------------------------------------
+        // 8. LID LIFTER MECHANICAL SUPPORT & MOTOR (z: 6, z: 8)
+        // ---------------------------------------------------------------------
+        // Top Support Arm
+        PidPipe { z: 5; startX: 680; startY: 155; endX: 920; endY: 155; baseColor: "#00d2ff" }
+
+        // Vertical Guide Column
+        PidPipe { z: 5; startX: 920; startY: 120; endX: 920; endY: 560; baseColor: "#00d2ff" }
+
+        // Bottom Lifter Drive Motor (M)
         Rectangle {
-            id: sensorGos172601
             z: 8
-            x: 838
-            y: 480
-            width: 8
-            height: 8
+            x: 906
+            y: 560
+            width: 28
+            height: 28
             radius: 4
-            color: "#475569"
-            Text {
-                visible: pidViewRoot.showTags
-                x: 12
-                y: -2
-                text: "GOS 172 601"
-                color: "#8cb5dc"
-                font.pixelSize: 7
-            }
-        }
+            color: "#08213b"
+            border.color: "#38bdf8"
+            border.width: 1.4
 
-        // ---------------------------------------------------------------------
-        // 12. LID LIFTER MOTOR & POSITION SENSORS (z: 6, z: 8)
-        // ---------------------------------------------------------------------
-        PidLidLifter {
-            id: lidLifter
-            x: 805
-            y: 100
-            z: 6
-            showTags: pidViewRoot.showTags
+            Rectangle {
+                anchors.centerIn: parent
+                width: 18
+                height: 18
+                radius: 9
+                color: "#22c55e"
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "M"
+                    color: "#000000"
+                    font.bold: true
+                    font.pixelSize: 10
+                }
+            }
         }
     }
 }
