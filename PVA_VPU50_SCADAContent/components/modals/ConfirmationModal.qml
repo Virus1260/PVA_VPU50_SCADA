@@ -323,8 +323,8 @@ Rectangle {
                         spacing: 8
 
                         Text {
-                            text: confirmRoot.allConfirmed ? "✓" : "🔒"
-                            color: confirmRoot.allConfirmed ? "#000000" : "#94a3b8"
+                            text: confirmRoot.allConfirmed ? "✓" : "!"
+                            color: confirmRoot.allConfirmed ? "#000000" : "#fbbf24"
                             font.bold: true
                             font.pixelSize: 16
                         }

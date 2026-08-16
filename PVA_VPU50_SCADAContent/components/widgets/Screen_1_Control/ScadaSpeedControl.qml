@@ -213,20 +213,38 @@ Rectangle {
 
                 RowLayout {
                     anchors.centerIn: parent
-                    spacing: 3
+                    spacing: 5
 
-                    Text {
-                        text: speedRoot.isLocked ? "🔒 " : ""
-                        color: "#8cb5dc"
-                        font.pixelSize: 10
-                        visible: speedRoot.isLocked
+                    // Mini Numeric Keypad Entry Icon (Vector QML - No Missing Glyph Tofu Box)
+                    Rectangle {
+                        width: 12
+                        height: 10
+                        radius: 1.5
+                        color: "#06182c"
+                        border.color: "#38bdf8"
+                        border.width: 1
+
+                        Grid {
+                            anchors.centerIn: parent
+                            columns: 3
+                            spacing: 1.2
+                            Repeater {
+                                model: 6
+                                Rectangle {
+                                    width: 1.2
+                                    height: 1.2
+                                    radius: 0.3
+                                    color: "#38bdf8"
+                                }
+                            }
+                        }
                     }
 
                     Text {
                         text: speedRoot.targetVal.toFixed(speedRoot.decimals === 0 ? 0 : 1)
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 16
+                        font.pixelSize: 15
                     }
 
                     Text {
