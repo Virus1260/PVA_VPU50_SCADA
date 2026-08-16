@@ -25,6 +25,7 @@ Rectangle {
     property alias equipmentLayer: equipmentLayer
     property alias instrumentationLayer: equipmentLayer.instrumentationLayer
     property alias pipingLayer: equipmentLayer.pipingLayer
+    property alias pidMinimap: pidMinimap
 
     // Direct Equipment Aliases (Layer 3)
     property alias mainVessel: equipmentLayer.mainVessel
@@ -75,5 +76,22 @@ Rectangle {
             anchors.fill: parent
             showTags: pidViewRoot.showTags
         }
+    }
+
+    // =========================================================================
+    // FLOATING OVERVIEW NAVIGATOR & RADAR MINIMAP (100% Qt Design Studio Visible)
+    // =========================================================================
+    PidMinimap {
+        id: pidMinimap
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.margins: 14
+        z: 100
+        contentWidth: 1440
+        contentHeight: 840
+        viewWidth: 1440
+        viewHeight: 840
+        zoomScale: pidViewRoot.worldScale
+        isLegendActive: pidViewRoot.showTags
     }
 }

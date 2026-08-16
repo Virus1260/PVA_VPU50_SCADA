@@ -17,12 +17,15 @@ Rectangle {
     readonly property real worldWidth: 1440
     readonly property real worldHeight: 840
 
+    // Dynamic Viewport Fit Ratio (Fits entire P&ID comfortably without empty void)
+    readonly property real fitZoom: Math.max(0.68, Math.min(width / worldWidth, height / worldHeight))
+
     // Zoom & Pan State
-    property real zoomScale: 1.0
-    property real minZoom: 0.65
+    property real zoomScale: fitZoom
+    readonly property real minZoom: fitZoom
     property real maxZoom: 2.5
-    property real rawPanX: 0
-    property real rawPanY: 0
+    property real rawPanX: (width - worldWidth * fitZoom) / 2
+    property real rawPanY: (height - worldHeight * fitZoom) / 2
     property bool showTags: true
 
     readonly property real actualContentWidth: worldWidth * zoomScale
@@ -42,7 +45,17 @@ Rectangle {
     readonly property real displayX: actualContentWidth <= width ? (width - actualContentWidth) / 2 : Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
     readonly property real displayY: actualContentHeight <= height ? (height - actualContentHeight) / 2 : Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
 
+    onWidthChanged: {
+        if (zoomScale < fitZoom) zoomScale = fitZoom;
+        if (actualContentWidth <= width) rawPanX = (width - actualContentWidth) / 2;
+    }
+    onHeightChanged: {
+        if (zoomScale < fitZoom) zoomScale = fitZoom;
+        if (actualContentHeight <= height) rawPanY = (height - actualContentHeight) / 2;
+    }
+
     Component.onCompleted: {
+        zoomScale = fitZoom;
         rawPanX = (width - actualContentWidth) / 2;
         rawPanY = (height - actualContentHeight) / 2;
     }
@@ -65,11 +78,35 @@ Rectangle {
         viewWidth: pidScreenRoot.width
         viewHeight: pidScreenRoot.height
         zoomScale: pidScreenRoot.zoomScale
+        fitZoom: pidScreenRoot.fitZoom
         isLegendActive: pidScreenRoot.showTags
-        targetSourceItem: ui.worldContainer
 
         onLegendToggled: {
             pidScreenRoot.showTags = !pidScreenRoot.showTags;
+        }
+
+        onFitRequested: {
+            pidScreenRoot.zoomScale = pidScreenRoot.fitZoom;
+            pidScreenRoot.rawPanX = (pidScreenRoot.width - pidScreenRoot.actualContentWidth) / 2;
+            pidScreenRoot.rawPanY = (pidScreenRoot.height - pidScreenRoot.actualContentHeight) / 2;
+        }
+
+        onZoomInRequested: {
+            var newZoom = Math.min(pidScreenRoot.maxZoom, pidScreenRoot.zoomScale * 1.2);
+            var centerWorldX = (pidScreenRoot.width / 2 - pidScreenRoot.displayX) / pidScreenRoot.zoomScale;
+            var centerWorldY = (pidScreenRoot.height / 2 - pidScreenRoot.displayY) / pidScreenRoot.zoomScale;
+            pidScreenRoot.zoomScale = newZoom;
+            pidScreenRoot.rawPanX = pidScreenRoot.width / 2 - centerWorldX * newZoom;
+            pidScreenRoot.rawPanY = pidScreenRoot.height / 2 - centerWorldY * newZoom;
+        }
+
+        onZoomOutRequested: {
+            var newZoom = Math.max(pidScreenRoot.minZoom, pidScreenRoot.zoomScale / 1.2);
+            var centerWorldX = (pidScreenRoot.width / 2 - pidScreenRoot.displayX) / pidScreenRoot.zoomScale;
+            var centerWorldY = (pidScreenRoot.height / 2 - pidScreenRoot.displayY) / pidScreenRoot.zoomScale;
+            pidScreenRoot.zoomScale = newZoom;
+            pidScreenRoot.rawPanX = pidScreenRoot.width / 2 - centerWorldX * newZoom;
+            pidScreenRoot.rawPanY = pidScreenRoot.height / 2 - centerWorldY * newZoom;
         }
 
         onPanRequested: function(tx, ty) {
