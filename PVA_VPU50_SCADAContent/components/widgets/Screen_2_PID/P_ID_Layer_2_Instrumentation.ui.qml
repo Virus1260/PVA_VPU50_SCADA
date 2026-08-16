@@ -33,7 +33,6 @@ Item {
     property alias vK165002: vK165002
     property alias vK165003: vK165003
     property alias vK165004: vK165004
-    property alias pressGauge1: pressGauge1
     property alias sprayBall1: sprayBall1
     property alias sprayBall2: sprayBall2
     property alias sprayBall3: sprayBall3
@@ -76,15 +75,6 @@ Item {
     }
 
     // 2. In-Line Pressure Gauge (Between Pump & Inline Heater)
-    PidPressureGauge {
-        id: pressGauge1
-        z: 3
-        x: 177
-        y: 545
-        tag: "PI 168 001"
-        pressureBar: 2.4
-        showTags: instrumentationLayerRoot.showTags
-    }
 
     // 3. Suction Charging Butterfly Valves
     PidValve {
