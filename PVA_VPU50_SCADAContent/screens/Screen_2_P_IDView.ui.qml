@@ -144,6 +144,8 @@ Rectangle {
         PidPipe { z: 8; startX: 575; startY: 15; endX: 575; endY: 190; baseColor: "#52a5ec" }
 
         // Spray Ball 3 Seamless Continuous Dogleg Drop Pipe (Far-Right Angled)
+        PidPipe { z: 8; startX: 605; startY: 15; endX: 605; endY: 172; baseColor: "#52a5ec" }
+        PidPipe { z: 8; startX: 605; startY: 172; endX: 614; endY: 190; baseColor: "#52a5ec" }
 
         // 3 Dedicated Modular Spray Balls in Top Dome (z: 10 - Elevated over Agitator)
         PidSprayBall {
@@ -280,7 +282,7 @@ Rectangle {
         }
 
         PidPipe {
-                x: 600
+                x: 599
                 y: 10
                 z: 8
                 startY: 15
@@ -288,6 +290,9 @@ Rectangle {
                 endY: 190
                 endX: 575
                 baseColor: "#52a5ec"
+        }
+
+        Item {
         }
     }
 }
