@@ -16,6 +16,7 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+    Qt6::Quick3D
     PVA_VPU50_SCADAplugin
     PVA_VPU50_SCADAContentplugin
     QtQuickDesignerComponents)
