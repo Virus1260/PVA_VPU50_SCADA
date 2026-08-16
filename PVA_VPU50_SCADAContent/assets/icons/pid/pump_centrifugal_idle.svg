@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 44" width="48" height="44">
+  <!-- 1. Heavy Industrial Pedestal Base / Mounting Foot -->
+  <polygon points="8,42 40,42 35,32 13,32" fill="#0f172a" stroke="#475569" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Base Bolt Anchors -->
+  <circle cx="12" cy="38" r="1.5" fill="#94a3b8"/>
+  <circle cx="36" cy="38" r="1.5" fill="#94a3b8"/>
+
+  <!-- 2. Tangential Top Vertical Discharge Nozzle with Flange -->
+  <rect x="27" y="5" width="8" height="15" fill="#0284c7" stroke="#0c4a6e" stroke-width="1.0"/>
+  <rect x="25" y="1" width="12" height="4" rx="1" fill="#38bdf8" stroke="#0c4a6e" stroke-width="1.0"/>
+
+  <!-- 3. Left Axial Suction Nozzle with Flange -->
+  <rect x="1" y="17" width="12" height="8" fill="#0284c7" stroke="#0c4a6e" stroke-width="1.0"/>
+  <rect x="0" y="15" width="4" height="12" rx="1" fill="#38bdf8" stroke="#0c4a6e" stroke-width="1.0"/>
+
+  <!-- 4. Spiral Centrifugal Volute Casing (Industrial Sky-Blue Finish) -->
+  <circle cx="23" cy="21" r="15" fill="#38bdf8" stroke="#0369a1" stroke-width="1.4"/>
+  <!-- Specular 3D Volute Highlight Curve -->
+  <path d="M 12 14 A 12 12 0 0 1 31 14" fill="none" stroke="#e0f2fe" stroke-width="1.2" opacity="0.8"/>
+
+  <!-- 5. Center Drive Impeller Hub -->
+  <circle cx="23" cy="21" r="8" fill="#0b2e54" stroke="#bae6fd" stroke-width="1.2"/>
+  <!-- Motor "M" Identifier -->
+  <text x="23" y="24.5" font-family="Arial, sans-serif" font-size="8.5" font-weight="bold" fill="#ffffff" text-anchor="middle">M</text>
+</svg>

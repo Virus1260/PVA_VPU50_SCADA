@@ -1,3 +1,4 @@
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML.
@@ -18,10 +19,12 @@ Item {
     Text {
         id: tagLabel
         anchors.top: parent.top
+        anchors.topMargin: 0
         anchors.horizontalCenter: gaugePill.horizontalCenter
         text: gaugeRoot.tag
         color: "#8cb5dc"
         font.pixelSize: 8
+        anchors.horizontalCenterOffset: 27
         font.bold: true
         visible: gaugeRoot.showTags
     }
@@ -33,20 +36,79 @@ Item {
         anchors.top: gaugePill.top
         anchors.bottom: gaugePill.bottom
 
-        Text { anchors.top: parent.top; anchors.topMargin: 2; anchors.right: parent.right; text: "1000.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
-        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.25; anchors.right: parent.right; text: "750.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
-        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.50; anchors.right: parent.right; text: "500.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
-        Text { anchors.verticalCenter: parent.top; anchors.verticalCenterOffset: parent.height * 0.75; anchors.right: parent.right; text: "250.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
-        Text { anchors.bottom: parent.bottom; anchors.bottomMargin: 2; anchors.right: parent.right; text: "0.0"; color: "#1e3a5f"; font.pixelSize: 7; font.bold: true; font.family: "Arial" }
+        Text {
+            x: 31
+            anchors.top: parent.top
+            anchors.rightMargin: -53
+            anchors.topMargin: 8
+            anchors.right: parent.right
+            text: "1000.0"
+            color: "#ffffff"
+            font.pixelSize: 7
+            font.bold: true
+            font.family: "Arial"
+        }
+        Text {
+            x: 30
+            anchors.verticalCenter: parent.top
+            anchors.right: parent.right
+            anchors.rightMargin: -48
+            text: "750.0"
+            color: "#ffffff"
+            font.pixelSize: 7
+            anchors.verticalCenterOffset: 52
+            font.bold: true
+            font.family: "Arial"
+        }
+        Text {
+            x: 31
+            anchors.verticalCenter: parent.top
+            anchors.right: parent.right
+            anchors.rightMargin: -49
+            text: "500.0"
+            color: "#ffffff"
+            font.pixelSize: 7
+            anchors.verticalCenterOffset: 91
+            font.bold: true
+            font.family: "Arial"
+        }
+        Text {
+            x: 31
+            anchors.verticalCenter: parent.top
+            anchors.right: parent.right
+            anchors.rightMargin: -49
+            text: "250.0"
+            color: "#ffffff"
+            font.pixelSize: 7
+            anchors.verticalCenterOffset: 129
+            font.bold: true
+            font.family: "Arial"
+        }
+        Text {
+            x: 31
+            y: 174
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: -41
+            anchors.bottomMargin: 0
+            anchors.right: parent.right
+            text: "0.0"
+            color: "#ffffff"
+            font.pixelSize: 7
+            font.bold: true
+            font.family: "Arial"
+        }
     }
 
     // 3. MAIN CAPSULE PILL GAUGE (Elevated Z-Axis Over Agitator)
     Rectangle {
         id: gaugePill
+        x: 0
         anchors.right: parent.right
         anchors.top: tagLabel.bottom
         anchors.topMargin: 2
+        anchors.bottomMargin: 0
         anchors.bottom: parent.bottom
+        anchors.rightMargin: 54
         width: 24
         radius: 12
         color: "#082342"
@@ -67,9 +129,27 @@ Item {
         }
 
         // Major horizontal tick marks (25%, 50%, 75%)
-        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.25; width: 8; height: 1; color: "#38bdf8" }
-        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.50; width: 8; height: 1; color: "#38bdf8" }
-        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.75; width: 8; height: 1; color: "#38bdf8" }
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * 0.25
+            width: 8
+            height: 1
+            color: "#38bdf8"
+        }
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * 0.50
+            width: 8
+            height: 1
+            color: "#38bdf8"
+        }
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height * 0.75
+            width: 8
+            height: 1
+            color: "#38bdf8"
+        }
 
         // Active Glowing Green Liquid Column
         Rectangle {
@@ -78,18 +158,35 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 1.5
-            height: Math.max(0, (parent.height - 3) * (Math.max(0, Math.min(100, gaugeRoot.levelPercent)) / 100.0))
+            height: Math.max(
+                        0,
+                        (parent.height - 3) * (Math.max(
+                                                   0, Math.min(
+                                                       100,
+                                                       gaugeRoot.levelPercent)) / 100.0))
             radius: 11
             visible: height > 2
 
             gradient: Gradient {
-                GradientStop { position: 0.0; color: "#4ade80" }
-                GradientStop { position: 0.3; color: "#22c55e" }
-                GradientStop { position: 1.0; color: "#15803d" }
+                GradientStop {
+                    position: 0.0
+                    color: "#4ade80"
+                }
+                GradientStop {
+                    position: 0.3
+                    color: "#22c55e"
+                }
+                GradientStop {
+                    position: 1.0
+                    color: "#15803d"
+                }
             }
 
             Behavior on height {
-                NumberAnimation { duration: 400; easing.type: Easing.OutQuad }
+                NumberAnimation {
+                    duration: 400
+                    easing.type: Easing.OutQuad
+                }
             }
         }
     }

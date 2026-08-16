@@ -35,6 +35,7 @@ QtObject {
     // (C) External Circulation & Suction (1M2001) & CIP System
     property bool isCirculationRunning: true
     property string circulationMode: "recirculation" // "recirculation", "discharge_product", "discharge_circulation_pipe"
+    readonly property bool isRecirculating: (isCirculationRunning && circulationMode === "recirculation")
     property bool isCipActive: false // Active during CIP spray rinsing
 
     // (D) Vacuum & Pressure System (1M3001)

@@ -3,12 +3,11 @@ This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio on
 It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
-import QtQuick.Shapes
 
 Item {
     id: heaterRoot
-    width: 32
-    height: 48
+    width: 40
+    height: 64
 
     property string tag: "W 168 001"
     property bool isHeating: false
@@ -18,56 +17,27 @@ Item {
 
     signal clicked()
 
-    // 1. INLINE HEATER HOUSING (AutoCAD In-line Red Vessel / Heater M Symbol)
-    Rectangle {
-        id: heaterCircle
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 4
-        width: 24
-        height: 24
-        radius: width / 2
-        color: heaterRoot.isHeating ? "#450a0a" : "#08213b"
-        border.color: heaterRoot.isHeating ? "#f43f5e" : "#ef4444"
-        border.width: 1.6
-
-        // Internal Red Electric Heating M / Chevron Symbol
-        Shape {
-            anchors.fill: parent
-
-            ShapePath {
-                strokeWidth: 1.8
-                strokeColor: heaterRoot.isHeating ? "#fda4af" : "#ef4444"
-                fillColor: "transparent"
-                capStyle: ShapePath.RoundCap
-                joinStyle: ShapePath.MiterJoin
-
-                startX: 6; startY: 18
-                PathLine { x: 6; y: 7 }
-                PathLine { x: 12; y: 15 }
-                PathLine { x: 18; y: 7 }
-                PathLine { x: 18; y: 18 }
-            }
-        }
-
-        // Active heating pulse glow
-        SequentialAnimation on opacity {
-            running: heaterRoot.isHeating
-            loops: Animation.Infinite
-            NumberAnimation { to: 0.7; duration: 500 }
-            NumberAnimation { to: 1.0; duration: 500 }
-        }
+    // 1. INLINE ELECTRIC HEATER VECTOR (Bottom Inlet & Top Outlet - 100% Qt Design Studio Visible)
+    Image {
+        id: heaterVector
+        anchors.fill: parent
+        source: heaterRoot.isHeating ? 
+                "../../../assets/icons/pid/heater_inline_active.svg" : 
+                "../../../assets/icons/pid/heater_inline_idle.svg"
+        sourceSize.width: 80
+        sourceSize.height: 128
+        fillMode: Image.PreserveAspectFit
     }
 
     // 2. TAG LABEL
     Text {
         visible: heaterRoot.showTags
-        anchors.top: heaterCircle.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.bottom
         anchors.topMargin: 2
-        anchors.horizontalCenter: heaterCircle.horizontalCenter
         text: heaterRoot.tag
-        color: "#8cb5dc"
-        font.pixelSize: 7
+        color: heaterRoot.isHeating ? "#f97316" : "#8cb5dc"
+        font.pixelSize: 8
         font.bold: true
     }
 

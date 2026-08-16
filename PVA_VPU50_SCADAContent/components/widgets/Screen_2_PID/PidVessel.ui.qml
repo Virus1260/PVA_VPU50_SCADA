@@ -1,3 +1,4 @@
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML.
@@ -76,9 +77,9 @@ Item {
     // Product Temperature (TIC 162001) - Top-Left Dome
     Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: 55
+        anchors.leftMargin: -19
         anchors.top: parent.top
-        anchors.topMargin: 38
+        anchors.topMargin: 26
         width: 72
         height: 24
         radius: 3
@@ -91,8 +92,20 @@ Item {
         ColumnLayout {
             anchors.centerIn: parent
             spacing: 0
-            Text { text: "TIC 162001"; color: "#8cb5dc"; font.pixelSize: 7; font.bold: true; Layout.alignment: Qt.AlignHCenter }
-            Text { text: vesselRoot.vesselTemp.toFixed(1) + "°C"; color: "#ffffff"; font.bold: true; font.pixelSize: 8; Layout.alignment: Qt.AlignHCenter }
+            Text {
+                text: "TIC 162001"
+                color: "#8cb5dc"
+                font.pixelSize: 7
+                font.bold: true
+                Layout.alignment: Qt.AlignHCenter
+            }
+            Text {
+                text: vesselRoot.vesselTemp.toFixed(1) + "°C"
+                color: "#ffffff"
+                font.bold: true
+                font.pixelSize: 8
+                Layout.alignment: Qt.AlignHCenter
+            }
         }
     }
 }

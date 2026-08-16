@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 64" width="40" height="64">
+  <!-- 1. Top Outlet Vertical Pipe Nozzle with Flange -->
+  <rect x="16" y="0" width="8" height="10" fill="#7c2d12" stroke="#451a03" stroke-width="1.0"/>
+  <rect x="13" y="0" width="14" height="3" rx="0.5" fill="#f97316" stroke="#451a03" stroke-width="1.0"/>
+
+  <!-- 2. Bottom Inlet Vertical Pipe Nozzle with Flange -->
+  <rect x="16" y="54" width="8" height="10" fill="#7c2d12" stroke="#451a03" stroke-width="1.0"/>
+  <rect x="13" y="61" width="14" height="3" rx="0.5" fill="#f97316" stroke="#451a03" stroke-width="1.0"/>
+
+  <!-- 3. Main Cylindrical Pressure Vessel Shell (Active Radiant Thermal Glow) -->
+  <rect x="6" y="9" width="28" height="46" rx="4" fill="#431407" stroke="#ef4444" stroke-width="1.6"/>
+
+  <!-- 4. Terminal Electrical Junction Box on Side -->
+  <rect x="0" y="24" width="6" height="14" rx="1" fill="#7c2d12" stroke="#f97316" stroke-width="1.0"/>
+  <line x1="2" y1="31" x2="6" y2="31" stroke="#fbbf24" stroke-width="1.0"/>
+
+  <!-- 5. Internal Electric Heating Resistor Element (Radiant Amber Glowing Zigzag) -->
+  <polyline points="20,15 20,20 13,24 27,28 13,32 27,36 13,40 27,44 20,48 20,53" 
+            fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="20,15 20,20 13,24 27,28 13,32 27,36 13,40 27,44 20,48 20,53" 
+            fill="none" stroke="#ffffff" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+</svg>

@@ -90,24 +90,6 @@ Item {
     }
 
     // Mechanical Seal Cooling Nozzle Ports (Connecting to Red & Blue Seal Cooling Loop)
-    Rectangle {
-        x: (homogRoot.width / 2) - 18
-        y: 120
-        width: 6
-        height: 4
-        color: "#ef4444"
-        border.color: "#334155"
-        border.width: 1
-    }
-    Rectangle {
-        x: (homogRoot.width / 2) - 18
-        y: 128
-        width: 6
-        height: 4
-        color: "#3b82f6"
-        border.color: "#334155"
-        border.width: 1
-    }
 
     // 3. STATOR CHAMBER (Z 163 001) - Horizontal Band with Direct Right Valve
     Rectangle {
@@ -140,28 +122,16 @@ Item {
 
     // Right Stator Direct Valve Symbol (Z 163 001)
 
-    Text {
-        visible: homogRoot.showTags
-        anchors.leftMargin: 4
-        anchors.bottomMargin: -4
-        text: "Z 163 001"
-        color: "#8cb5dc"
-        font.pixelSize: 8
-        font.bold: true
-    }
-
     // 4. LEFT SUCTION CONNECTION NOZZLES (Solids Upper & Liquids Lower)
-    Rectangle { x: 194; y: 47; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
-    Rectangle { x: 194; y: 83; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
 
     // 5. RIGHT DISCHARGE CONNECTION NOZZLE
-    Rectangle { x: 260; y: 65; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
 
     // 6. BOTTOM DRIVE MOTOR (M 163 001) - Centered Directly Below Homogenizer Column
     Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 142
+        anchors.horizontalCenterOffset: 0
         width: 180
         height: 55
 

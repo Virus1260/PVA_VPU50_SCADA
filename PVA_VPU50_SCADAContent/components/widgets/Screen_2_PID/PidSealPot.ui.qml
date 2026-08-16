@@ -1,3 +1,4 @@
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML.
@@ -18,7 +19,7 @@ Item {
 
     property alias mouseArea: sealPotMouseArea
 
-    signal clicked()
+    signal clicked
 
     // 1. TOP DIAL TEMPERATURE GAUGE (AutoCAD TI 171 001)
     Item {
@@ -31,8 +32,10 @@ Item {
 
         // Stem down to seal pot vessel
         Rectangle {
+            y: 10
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: -4
+            anchors.bottomMargin: 4
+            anchors.horizontalCenterOffset: -10
             anchors.horizontalCenter: parent.horizontalCenter
             width: 2
             height: 8
@@ -42,6 +45,10 @@ Item {
         // Circular Dial Housing
         Rectangle {
             anchors.fill: parent
+            anchors.leftMargin: -10
+            anchors.rightMargin: 10
+            anchors.topMargin: -8
+            anchors.bottomMargin: 8
             radius: width / 2
             color: "#08213b"
             border.color: "#38bdf8"
@@ -54,7 +61,8 @@ Item {
                 height: 7
                 color: "#f43f5e"
                 transformOrigin: Item.Bottom
-                rotation: -45 + Math.min(180, (sealPotRoot.currentTemp / 100.0) * 180)
+                rotation: -45 + Math.min(
+                              180, (sealPotRoot.currentTemp / 100.0) * 180)
             }
 
             // Center Pin
@@ -107,14 +115,36 @@ Item {
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
 
-                startX: 13; startY: 6
-                PathLine { x: 18; y: 14 }
-                PathLine { x: 8; y: 22 }
-                PathLine { x: 18; y: 30 }
-                PathLine { x: 8; y: 38 }
-                PathLine { x: 18; y: 46 }
-                PathLine { x: 8; y: 54 }
-                PathLine { x: 13; y: 62 }
+                startX: 13
+                startY: 6
+                PathLine {
+                    x: 18
+                    y: 14
+                }
+                PathLine {
+                    x: 8
+                    y: 22
+                }
+                PathLine {
+                    x: 18
+                    y: 30
+                }
+                PathLine {
+                    x: 8
+                    y: 38
+                }
+                PathLine {
+                    x: 18
+                    y: 46
+                }
+                PathLine {
+                    x: 8
+                    y: 54
+                }
+                PathLine {
+                    x: 13
+                    y: 62
+                }
             }
         }
     }
@@ -123,7 +153,8 @@ Item {
     Column {
         visible: sealPotRoot.showTags
         anchors.top: potBody.bottom
-        anchors.topMargin: 6
+        anchors.topMargin: -63
+        anchors.horizontalCenterOffset: 42
         anchors.horizontalCenter: potBody.horizontalCenter
         spacing: 1
 
@@ -147,6 +178,7 @@ Item {
     MouseArea {
         id: sealPotMouseArea
         anchors.fill: parent
+        anchors.topMargin: -10
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
     }

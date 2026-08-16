@@ -3,16 +3,16 @@ This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio on
 It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
-import QtQuick.Shapes
+import QtQuick.Layouts
 
 Item {
     id: pumpRoot
-    width: 36
+    width: 52
     height: 52
 
     property string tag: "P 168 001"
     property string pressTag: "PI 168 001"
-    property real pressureBar: 2.8
+    property real pressureBar: 1.2
     property bool isRunning: false
     property bool showTags: true
 
@@ -20,91 +20,65 @@ Item {
 
     signal clicked()
 
-    // 1. DIAL PRESSURE GAUGE (AutoCAD Top-Right Dial)
-    Item {
+    // 1. DIAL PRESSURE GAUGE (Top-Right Process Dial)
+    Rectangle {
+        id: dialHousing
         anchors.top: parent.top
         anchors.right: parent.right
+        anchors.topMargin: 0
+        anchors.rightMargin: 0
         width: 16
         height: 16
+        radius: 8
+        color: "#ffffff"
+        border.color: "#0369a1"
+        border.width: 1.2
+        z: 5
 
+        // Dial Pointer Needle (45 deg)
         Rectangle {
-            anchors.fill: parent
-            radius: width / 2
-            color: "#08213b"
-            border.color: "#38bdf8"
-            border.width: 1
-
-            // Diagonal needle pointer
-            Rectangle {
-                anchors.centerIn: parent
-                width: 1
-                height: 5
-                color: "#38bdf8"
-                rotation: 45
-            }
-        }
-    }
-
-    // 2. INLINE CENTRIFUGAL PUMP HOUSING (AutoCAD Volute Circle with Impeller Wedge)
-    Rectangle {
-        id: pumpCircle
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.topMargin: 8
-        width: 22
-        height: 22
-        radius: width / 2
-        color: pumpRoot.isRunning ? "#0f4229" : "#08213b"
-        border.color: pumpRoot.isRunning ? "#4ade80" : "#38bdf8"
-        border.width: 1.4
-
-        // Internal Directional Triangle Wedge
-        Shape {
-            anchors.fill: parent
-
-            ShapePath {
-                strokeWidth: 1
-                strokeColor: pumpRoot.isRunning ? "#4ade80" : "#38bdf8"
-                fillColor: pumpRoot.isRunning ? "#22c55e" : "#0284c7"
-                startX: 11; startY: 3
-                PathLine { x: 19; y: 11 }
-                PathLine { x: 11; y: 19 }
-                PathLine { x: 11; y: 3 }
-            }
-        }
-    }
-
-    // 3. ELECTRIC MOTOR BADGE (M)
-    Rectangle {
-        id: motorBadge
-        anchors.horizontalCenter: pumpCircle.horizontalCenter
-        anchors.top: pumpCircle.bottom
-        anchors.topMargin: 2
-        width: 14
-        height: 14
-        radius: 7
-        color: pumpRoot.isRunning ? "#22c55e" : "#0a284a"
-        border.color: pumpRoot.isRunning ? "#4ade80" : "#38bdf8"
-        border.width: 1
-
-        Text {
             anchors.centerIn: parent
-            text: "M"
-            color: pumpRoot.isRunning ? "#000000" : "#8cb5dc"
-            font.bold: true
-            font.pixelSize: 8
+            width: 1.2
+            height: 6
+            color: "#dc2626"
+            transformOrigin: Item.Bottom
+            rotation: pumpRoot.isRunning ? 55 : -35
+        }
+
+        // Center Pivot Pin
+        Rectangle {
+            anchors.centerIn: parent
+            width: 3
+            height: 3
+            radius: 1.5
+            color: "#0f172a"
         }
     }
 
-    // 4. TAG TEXT
+    // 2. REALISTIC INDUSTRIAL CENTRIFUGAL VOLUTE PUMP (100% Qt Design Studio Visible)
+    Image {
+        id: pumpVector
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: 44
+        height: 40
+        source: pumpRoot.isRunning ? 
+                "../../../assets/icons/pid/pump_centrifugal_running.svg" : 
+                "../../../assets/icons/pid/pump_centrifugal_idle.svg"
+        sourceSize.width: 88
+        sourceSize.height: 80
+        fillMode: Image.PreserveAspectFit
+    }
+
+    // 3. TAG LABELS
     Text {
         visible: pumpRoot.showTags
-        anchors.top: motorBadge.bottom
-        anchors.topMargin: 1
-        anchors.horizontalCenter: motorBadge.horizontalCenter
+        anchors.horizontalCenter: pumpVector.horizontalCenter
+        anchors.top: pumpVector.bottom
+        anchors.topMargin: 2
         text: pumpRoot.tag
-        color: "#8cb5dc"
-        font.pixelSize: 7
+        color: pumpRoot.isRunning ? "#4ade80" : "#8cb5dc"
+        font.pixelSize: 8
         font.bold: true
     }
 

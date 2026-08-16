@@ -1,3 +1,4 @@
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML.
@@ -19,7 +20,7 @@ Item {
 
     property alias mouseArea: valveMouseArea
 
-    signal clicked()
+    signal clicked
 
     // 1. Pixel-Perfect Vector Valve Symbol (Diaphragm & Butterfly - Open=Green, Closed=Red)
     Image {
@@ -27,9 +28,7 @@ Item {
         anchors.centerIn: parent
         width: 24
         height: 22
-        source: valveRoot.isButterfly ? 
-                (valveRoot.isOpen ? "../../../assets/icons/pid/valve_butterfly_open.svg" : "../../../assets/icons/pid/valve_butterfly_closed.svg") :
-                (valveRoot.isOpen ? "../../../assets/icons/pid/valve_diaphragm_open.svg" : "../../../assets/icons/pid/valve_diaphragm_closed.svg")
+        source: valveRoot.isButterfly ? (valveRoot.isOpen ? "../../../assets/icons/pid/valve_butterfly_open.svg" : "../../../assets/icons/pid/valve_butterfly_closed.svg") : (valveRoot.isOpen ? "../../../assets/icons/pid/valve_diaphragm_open.svg" : "../../../assets/icons/pid/valve_diaphragm_closed.svg")
         sourceSize.width: 48
         sourceSize.height: 44
         fillMode: Image.PreserveAspectFit
@@ -38,25 +37,30 @@ Item {
 
     // 2. Tag Label
     Text {
+        y: 0
         visible: valveRoot.showTags
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.top
-        anchors.bottomMargin: 1
+        anchors.bottomMargin: -11
         text: valveRoot.tag
         color: valveRoot.isOpen ? "#4ade80" : "#cbd5e1"
         font.pixelSize: 8
+        anchors.horizontalCenterOffset: 27
         font.bold: valveRoot.isOpen
     }
 
     // 3. Sub-Label
     Text {
+        width: 24
+        height: 10
         visible: valveRoot.showTags && valveRoot.subLabel.length > 0
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
-        anchors.topMargin: 1
+        anchors.topMargin: -27
         text: valveRoot.subLabel
         color: "#94a3b8"
         font.pixelSize: 7
+        anchors.horizontalCenterOffset: -30
     }
 
     MouseArea {

@@ -14,16 +14,19 @@ Item {
     property real startY: 0
     property real endX: 0
     property real endY: 0
-    property real pipeWidth: 2.0
+    property real pipeWidth: 5.0
+    property real wallThickness: 1.0
     property string section: ""
 
     // =========================================================================
-    // 2. FLOW DYNAMICS & VISUAL STATE
+    // 2. INDUSTRIAL PIPE WALL & FLUID CORE COLORS
     // =========================================================================
-    property color baseColor: "#1b538c"
-    property color flowColor: "#38ef7d"
+    property color wallColor: "#0f2338"       // Dark metallic pipe wall casing
+    property color wallBorderColor: "#1e3a5f" // Outer pipe wall highlight contour
+    property color baseColor: "#0284c7"       // Inner fluid core color (idle)
+    property color flowColor: "#38ef7d"       // Active fluid flow color
     property bool isActive: false
-    property string flowDirection: "forward" // "forward", "reverse", "none"
+    property string flowDirection: "forward"  // "forward", "reverse", "none"
     property bool reverseFlow: (flowDirection === "reverse")
     property real flowSpeed: 800
 
@@ -40,48 +43,62 @@ Item {
     height: isHorizontal ? pipeWidth : Math.max(2, maxY - minY)
 
     // =========================================================================
-    // 3. NATIVE SOLID PIPE BODY (100% Straight, Zero Shatter, Zero Subpixel Jitter)
+    // 3. OUTER METALLIC PIPE WALL CASING (Thick Industrial Shell)
     // =========================================================================
     Rectangle {
-        id: pipeBody
+        id: outerPipeWall
         anchors.fill: parent
+        color: pipeRoot.wallColor
+        border.color: pipeRoot.wallBorderColor
+        border.width: 1
+        radius: 0
+    }
+
+    // =========================================================================
+    // 4. INNER FLUID CHANNEL (Visible Process Medium Flow Core)
+    // =========================================================================
+    Rectangle {
+        id: innerFluidCore
+        anchors.fill: parent
+        anchors.topMargin: pipeRoot.isHorizontal ? pipeRoot.wallThickness : 0
+        anchors.bottomMargin: pipeRoot.isHorizontal ? pipeRoot.wallThickness : 0
+        anchors.leftMargin: pipeRoot.isHorizontal ? 0 : pipeRoot.wallThickness
+        anchors.rightMargin: pipeRoot.isHorizontal ? 0 : pipeRoot.wallThickness
         color: pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 1.8) : pipeRoot.baseColor
         radius: 0
     }
 
     // =========================================================================
-    // 4. ANIMATED FLOW STREAM OVERLAY (Active Medium Transportation)
+    // 5. ANIMATED ACTIVE FLOW STREAM (Dynamic Moving Flow Core)
     // =========================================================================
     Item {
         id: flowOverlay
-        anchors.fill: parent
+        anchors.fill: innerFluidCore
         visible: pipeRoot.isActive && pipeRoot.flowDirection !== "none"
         clip: true
 
-        // Pulsing Flow Particles / Chevrons
         Rectangle {
             id: flowPulse
             color: pipeRoot.flowColor
-            opacity: 0.85
+            opacity: 0.9
 
-            // Horizontal Flow Pulse
             x: pipeRoot.isHorizontal ? (pipeRoot.reverseFlow ? (parent.width - width) : 0) : 0
             y: pipeRoot.isHorizontal ? 0 : (pipeRoot.reverseFlow ? (parent.height - height) : 0)
-            width: pipeRoot.isHorizontal ? Math.min(parent.width, 32) : parent.width
-            height: pipeRoot.isHorizontal ? parent.height : Math.min(parent.height, 32)
+            width: pipeRoot.isHorizontal ? Math.min(parent.width, 36) : parent.width
+            height: pipeRoot.isHorizontal ? parent.height : Math.min(parent.height, 36)
 
             NumberAnimation on x {
                 running: pipeRoot.isActive && pipeRoot.isHorizontal
-                from: pipeRoot.reverseFlow ? (pipeRoot.width) : -32
-                to: pipeRoot.reverseFlow ? -32 : (pipeRoot.width)
+                from: pipeRoot.reverseFlow ? (pipeRoot.width) : -36
+                to: pipeRoot.reverseFlow ? -36 : (pipeRoot.width)
                 duration: pipeRoot.flowSpeed
                 loops: Animation.Infinite
             }
 
             NumberAnimation on y {
                 running: pipeRoot.isActive && !pipeRoot.isHorizontal
-                from: pipeRoot.reverseFlow ? (pipeRoot.height) : -32
-                to: pipeRoot.reverseFlow ? -32 : (pipeRoot.height)
+                from: pipeRoot.reverseFlow ? (pipeRoot.height) : -36
+                to: pipeRoot.reverseFlow ? -36 : (pipeRoot.height)
                 duration: pipeRoot.flowSpeed
                 loops: Animation.Infinite
             }
