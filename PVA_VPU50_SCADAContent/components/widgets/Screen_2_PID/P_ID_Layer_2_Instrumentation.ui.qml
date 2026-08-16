@@ -29,8 +29,10 @@ Item {
     property alias vK143002: vK143002
     property alias vK143001: vK143001
     property alias vK163002: vK163002
+    property alias vK165001: vK165001
     property alias vK165002: vK165002
     property alias vK165003: vK165003
+    property alias vK165004: vK165004
     property alias pressGauge1: pressGauge1
     property alias sprayBall1: sprayBall1
     property alias sprayBall2: sprayBall2
@@ -77,8 +79,8 @@ Item {
     PidPressureGauge {
         id: pressGauge1
         z: 3
-        x: 212
-        y: 432
+        x: 177
+        y: 545
         tag: "PI 168 001"
         pressureBar: 2.4
         showTags: instrumentationLayerRoot.showTags
@@ -119,10 +121,21 @@ Item {
     }
 
     PidValve {
+        id: vK165001
+        z: 3
+        x: 1148
+        y: 110
+        tag: "K 165 001"
+        valveType: "butterfly"
+        isVertical: true
+        showTags: instrumentationLayerRoot.showTags
+    }
+
+    PidValve {
         id: vK165002
         z: 3
         x: 1148
-        y: 432
+        y: 336
         tag: "K 165 002"
         valveType: "butterfly"
         isVertical: true
@@ -135,6 +148,18 @@ Item {
         x: 1009
         y: 193
         tag: "K 165 003"
+        valveType: "butterfly"
+        showTags: instrumentationLayerRoot.showTags
+    }
+
+    // 45 Degree Diagonal Elbow Drain / Discharge Butterfly Valve
+    PidValve {
+        id: vK165004
+        z: 3
+        x: 1172
+        y: 513
+        rotation: 45
+        tag: "K 165 004"
         valveType: "butterfly"
         showTags: instrumentationLayerRoot.showTags
     }

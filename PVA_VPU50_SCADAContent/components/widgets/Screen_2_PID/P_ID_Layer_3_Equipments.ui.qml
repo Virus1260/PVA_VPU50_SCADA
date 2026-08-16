@@ -13,11 +13,21 @@ Item {
     property bool showTags: true
 
     // =========================================================================
-    // LAYER 2 & LAYER 1: UNDERLYING INSTRUMENTATION & PIPING (z: 1)
+    // 0. SOLID SCADA BACKGROUND CANVAS (z: 0)
+    // =========================================================================
+    Rectangle {
+        id: bgCanvas
+        anchors.fill: parent
+        color: "#0a2d52"
+        z: 0
+    }
+
+    // =========================================================================
+    // LAYER 2 & LAYER 1: INSTRUMENTATION & PIPING (z: 6 - Placed ON TOP of Vessel)
     // =========================================================================
     P_ID_Layer_2_Instrumentation {
         id: instrumentationLayer
-        z: 1
+        z: 6
         anchors.fill: parent
         showTags: equipmentLayerRoot.showTags
     }
@@ -42,8 +52,10 @@ Item {
     property alias vK168201: instrumentationLayer.vK168201
     property alias vK168202: instrumentationLayer.vK168202
     property alias vK168204: instrumentationLayer.vK168204
+    property alias vK165001: instrumentationLayer.vK165001
     property alias vK165002: instrumentationLayer.vK165002
     property alias vK165003: instrumentationLayer.vK165003
+    property alias vK165004: instrumentationLayer.vK165004
     property alias pressGauge1: instrumentationLayer.pressGauge1
     property alias sprayBall1: instrumentationLayer.sprayBall1
     property alias sprayBall2: instrumentationLayer.sprayBall2
@@ -51,12 +63,12 @@ Item {
     property alias levelGauge: instrumentationLayer.levelGauge
 
     // =========================================================================
-    // LAYER 3: MAJOR PLANT EQUIPMENT (z: 4 - Placed directly over Layer 1 & 2)
+    // LAYER 3: MAJOR PLANT EQUIPMENT (z: 1, 2, 3 - Below Instrumentation & Sprayballs)
     // =========================================================================
     // 1. Main Process Vessel & Thermal Jacket Glow
     PidVessel {
         id: mainVessel
-        z: 4
+        z: 1
         x: 654
         y: 113
         vesselName: "Unimix 50"
@@ -65,7 +77,7 @@ Item {
 
     PidHeatingEffect {
         id: heatingEffect
-        z: 4
+        z: 1
         anchors.fill: mainVessel
         anchors.leftMargin: 0
         anchors.rightMargin: 0
@@ -99,7 +111,7 @@ Item {
         id: inlineHeater
         z: 4
         x: 177
-        y: 481
+        y: 478
         tag: "W 168 001"
         showTags: equipmentLayerRoot.showTags
     }

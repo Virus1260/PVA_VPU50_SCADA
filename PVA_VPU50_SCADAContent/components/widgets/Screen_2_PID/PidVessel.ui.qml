@@ -5,6 +5,7 @@ It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 Item {
     id: vesselRoot
@@ -41,12 +42,23 @@ Item {
             fillMode: Image.PreserveAspectFit
         }
 
-        // Live Heating / Cooling Color Tint Overlay
-        Rectangle {
+        // Live Heating / Cooling Color Tint Overlay (Pixel-Perfect Matching Jacket Curved Profile)
+        Shape {
             anchors.fill: parent
-            color: vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "transparent")
-            opacity: 0.75
             visible: vesselRoot.isHeating || vesselRoot.isCooling
+            opacity: 0.82
+
+            ShapePath {
+                fillColor: vesselRoot.isHeating ? "#e06c28" : (vesselRoot.isCooling ? "#0284c7" : "transparent")
+                strokeColor: vesselRoot.isHeating ? "#fb923c" : (vesselRoot.isCooling ? "#38bdf8" : "transparent")
+                strokeWidth: 1.5
+                joinStyle: ShapePath.RoundJoin
+                capStyle: ShapePath.RoundCap
+
+                PathSvg {
+                    path: "M 0 0 L 0 178 C 0 220 80 244 116 244 L 172 244 C 208 244 288 220 288 178 L 288 0 L 274 0 L 274 178 C 274 204 204 220 169 220 L 119 220 C 84 220 14 204 14 178 L 14 0 Z"
+                }
+            }
         }
     }
 

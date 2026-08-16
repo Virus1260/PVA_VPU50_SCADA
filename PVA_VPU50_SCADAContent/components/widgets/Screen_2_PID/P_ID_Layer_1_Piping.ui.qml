@@ -5,11 +5,10 @@ It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
 
-Rectangle {
+Item {
     id: pipingLayerRoot
     width: 1440
     height: 840
-    color: "#0a2d52"
 
     // Dynamic Flow State Flags (Exposed for Live SCADA State Simulation)
     property bool isRecirculating: false
@@ -28,21 +27,6 @@ Rectangle {
         z: 2
 
         // Top Main CIP Feed Header
-        PidPipe {
-            id: pipeCipHeader
-            x: 733
-            y: 41
-            width: 428
-            height: 5
-            startX: 280
-            startY: 30
-            endX: 715
-            endY: 30
-            baseColor: "#00d2ff"
-            flowColor: "#4ade80"
-            isActive: pipingLayerRoot.isSprayingCIP
-            section: "CIP Main Header"
-        }
 
         // Spray Ball 1 Vertical Drop (Left)
         PidPipe {
@@ -92,6 +76,38 @@ Rectangle {
             baseColor: "#00d2ff"
         }
 
+        PidPipe {
+            id: pipeSpray2Drop2
+            x: 1160
+            y: 41
+            width: 5
+            height: 162
+            startY: 30
+            startX: 657
+            section: "Spray 2 Drop"
+            isActive: pipingLayerRoot.isSprayingCIP
+            flowColor: "#4ade80"
+            endY: 190
+            endX: 657
+            baseColor: "#00d2ff"
+        }
+
+        PidPipe {
+            id: pipeCipHeader1
+            x: 733
+            y: 41
+            width: 428
+            height: 5
+            startY: 30
+            startX: 280
+            section: "CIP Main Header"
+            isActive: pipingLayerRoot.isSprayingCIP
+            flowColor: "#4ade80"
+            endY: 30
+            endX: 715
+            baseColor: "#00d2ff"
+        }
+
         // Spray Ball 3 Vertical Drop & Angled Dogleg (Right)
     }
 
@@ -124,7 +140,7 @@ Rectangle {
             id: pipeBridgeLine
             x: 75
             y: 635
-            width: 124
+            width: 94
             height: 5
             startX: 140
             startY: 480
@@ -142,7 +158,7 @@ Rectangle {
             x: 194
             y: 318
             width: 5
-            height: 195
+            height: 160
             startX: 260
             startY: 480
             endX: 260
@@ -157,7 +173,7 @@ Rectangle {
             id: pipeJacketSupplyInlet
             x: 194
             y: 318
-            width: 573
+            width: 486
             height: 5
             startX: 260
             startY: 320
@@ -174,7 +190,7 @@ Rectangle {
             id: pipeJacketReturnOutlet
             x: 74
             y: 296
-            width: 693
+            width: 606
             height: 5
             startX: 488
             startY: 210
@@ -200,7 +216,7 @@ Rectangle {
             id: pipeSuctionSolids
             x: 658
             y: 544
-            width: 148
+            width: 154
             height: 5
             startX: 542
             startY: 500
@@ -217,7 +233,7 @@ Rectangle {
             id: pipeSuctionLiquids
             x: 658
             y: 580
-            width: 148
+            width: 154
             height: 5
             startX: 542
             startY: 536
@@ -231,9 +247,9 @@ Rectangle {
 
         PidPipe {
             id: pipeSuctionSolids1
-            x: 845
+            x: 857
             y: 564
-            width: 231
+            width: 219
             height: 5
             startY: 500
             startX: 542
@@ -247,9 +263,9 @@ Rectangle {
 
         PidPipe {
             id: pipeSuctionSolids2
-            x: 845
+            x: 857
             y: 578
-            width: 219
+            width: 207
             height: 5
             startY: 500
             startX: 542
@@ -326,9 +342,9 @@ Rectangle {
         PidPipe {
             id: pipeSealBlueV1
             x: 194
-            y: 513
+            y: 542
             width: 5
-            height: 126
+            height: 77
             startY: 568
             startX: 305
             section: "Seal Blue V"
@@ -436,10 +452,12 @@ Rectangle {
             height: 339
             startY: 520
             startX: 325
-            section: "Bottom Blue V"
+            section: "Jacket Vertical Return Header"
             endY: 710
             endX: 325
             baseColor: "#3b82f6"
+            flowColor: "#38bdf8"
+            isActive: pipingLayerRoot.isCooling || pipingLayerRoot.isHeating
         }
 
         PidPipe {
@@ -467,9 +485,9 @@ Rectangle {
         // Stator Discharge Outlet (through Butterfly Valve K 163 002)
         PidPipe {
             id: pipeRecircOutlet
-            x: 851
+            x: 857
             y: 501
-            width: 314
+            width: 308
             height: 5
             startX: 680
             startY: 507
@@ -486,9 +504,9 @@ Rectangle {
         PidPipe {
             id: pipeRecircRiser
             x: 1160
-            y: 199
+            y: 203
             width: 5
-            height: 303
+            height: 299
             startX: 920
             startY: 507
             endX: 920
@@ -518,21 +536,18 @@ Rectangle {
             section: "Recirculation Return"
         }
 
+        // 45 Degree Diagonal Elbow Drain Pipe
         PidPipe {
-            id: pipeRecircRiser1
-            x: 1160
-            y: 41
-            width: 5
-            height: 162
-            startY: 507
-            startX: 920
-            section: "Recirculation Riser"
-            isActive: pipingLayerRoot.isRecirculating
-            flowDirection: "reverse"
-            flowColor: "#38ef7d"
-            endY: 205
-            endX: 920
+            id: pipeRecircDrain45
+            x: 1164
+            y: 501
+            width: 70
+            height: 5
+            rotation: 45
+            transformOrigin: Item.TopLeft
             baseColor: "#00d2ff"
+            flowColor: "#38ef7d"
+            section: "Recirculation 45 Deg Drain"
         }
     }
 

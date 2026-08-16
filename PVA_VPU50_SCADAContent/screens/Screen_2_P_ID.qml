@@ -25,25 +25,22 @@ Rectangle {
     property real rawPanY: 0
     property bool showTags: true
 
-    // Padding Margins for Zoomed In Panning & Sliding
-    readonly property real marginPadX: 200
-    readonly property real marginPadY: 160
-
     readonly property real actualContentWidth: worldWidth * zoomScale
     readonly property real actualContentHeight: worldHeight * zoomScale
 
-    readonly property real minAllowedPanX: width - actualContentWidth - marginPadX
-    readonly property real maxAllowedPanX: marginPadX
-    readonly property real minAllowedPanY: height - actualContentHeight - marginPadY
-    readonly property real maxAllowedPanY: marginPadY
+    // Generous Padding Margins for Free Multi-Directional Panning to All Corners
+    readonly property real minAllowedPanX: -actualContentWidth + 120
+    readonly property real maxAllowedPanX: width - 120
+    readonly property real minAllowedPanY: -actualContentHeight + 120
+    readonly property real maxAllowedPanY: height - 120
 
-    readonly property real displayX: actualContentWidth <= width
-                                      ? (width - actualContentWidth) / 2
-                                      : Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
+    readonly property real displayX: Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
+    readonly property real displayY: Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
 
-    readonly property real displayY: actualContentHeight <= height
-                                      ? (height - actualContentHeight) / 2
-                                      : Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
+    Component.onCompleted: {
+        rawPanX = (width - actualContentWidth) / 2;
+        rawPanY = (height - actualContentHeight) / 2;
+    }
 
     signal componentTapped(string tagName)
 
@@ -204,11 +201,20 @@ Rectangle {
 
         // Valve Runtime State & Click Handlers
         vK163002.isOpen: scadaBridge.isHomogenizerRunning
+        vK165001.isOpen: scadaBridge.isCipActive
+        vK165002.isOpen: scadaBridge.isRecirculating || scadaBridge.isCipActive
+        vK165003.isOpen: scadaBridge.isRecirculating
+        vK168201.isOpen: false
+        vK168202.isOpen: false
+        vK168204.isOpen: scadaBridge.isHeating || scadaBridge.isCooling || scadaBridge.isCirculationRunning
+
         vK143002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 143 002")
         vK143001.mouseArea.onClicked: pidScreenRoot.componentTapped("K 143 001")
         vK163002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 163 002")
+        vK165001.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 001")
         vK165002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 002")
         vK165003.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 003")
+        vK165004.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 004")
         vK168201.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 201")
         vK168202.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 202")
         vK168204.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 204")

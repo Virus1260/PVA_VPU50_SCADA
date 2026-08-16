@@ -42,8 +42,10 @@ Rectangle {
     property alias vK168201: equipmentLayer.vK168201
     property alias vK168202: equipmentLayer.vK168202
     property alias vK168204: equipmentLayer.vK168204
+    property alias vK165001: equipmentLayer.vK165001
     property alias vK165002: equipmentLayer.vK165002
     property alias vK165003: equipmentLayer.vK165003
+    property alias vK165004: equipmentLayer.vK165004
     property alias pressGauge1: equipmentLayer.pressGauge1
     property alias sprayBall1: equipmentLayer.sprayBall1
     property alias sprayBall2: equipmentLayer.sprayBall2
