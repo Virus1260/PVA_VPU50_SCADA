@@ -92,6 +92,12 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "assets/pid_schema_tags.json"
         "assets/pid_vessel_body.svg"
         "assets/pid_vessel_jacket.svg"
+        "assets/icons/pid/valve_diaphragm_closed.svg"
+        "assets/icons/pid/valve_diaphragm_open.svg"
+        "assets/icons/pid/valve_butterfly_closed.svg"
+        "assets/icons/pid/valve_butterfly_open.svg"
+        "assets/icons/pid/spray_ball_standby.svg"
+        "assets/icons/pid/spray_ball_active.svg"
         "assets/agitator_sequence/agitator_frame_00.svg"
         "assets/agitator_sequence/agitator_frame_01.svg"
         "assets/agitator_sequence/agitator_frame_02.svg"
@@ -194,6 +200,12 @@ qt6_add_qml_module(PVA_VPU50_SCADAContent
         "assets/icons/nav/status_stack.svg"
         "assets/icons/nav/tools_maintenance.svg"
         "assets/icons/nav/trends_chart.svg"
+        "assets/icons/pid/valve_diaphragm_open.svg"
+        "assets/icons/pid/valve_diaphragm_closed.svg"
+        "assets/icons/pid/valve_butterfly_closed.svg"
+        "assets/icons/pid/valve_butterfly_open.svg"
+        "assets/icons/pid/spray_ball_active.svg"
+        "assets/icons/pid/spray_ball_standby.svg"
 )
 
 

@@ -110,6 +110,12 @@
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/status_stack.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/tools_maintenance.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/trends_chart.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/spray_ball_active.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/spray_ball_standby.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_butterfly_closed.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_butterfly_open.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_diaphragm_closed.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_diaphragm_open.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_schema.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_schema_tags.json</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_vessel_body.svg</file>

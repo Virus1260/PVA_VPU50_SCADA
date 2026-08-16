@@ -3,82 +3,40 @@ This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio on
 It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
-import QtQuick.Shapes
 
 Item {
     id: valveRoot
-    width: 26
-    height: 26
+    width: 28
+    height: 28
 
     property string tag: "V101"
     property string subLabel: ""
     property bool isOpen: false
     property bool isVertical: false
-    property bool isSolenoid: true
+    property string valveType: "diaphragm" // Options: "diaphragm" (solenoid) or "butterfly"
+    property bool isButterfly: (valveType === "butterfly")
     property bool showTags: true
 
     property alias mouseArea: valveMouseArea
 
     signal clicked()
 
-    // Declarative Valve Symbol (Two Opposing Triangles - 100% Visible in Qt Design Studio 2D Canvas)
-    Shape {
-        id: valveShape
-        anchors.fill: parent
-
-        // 1. Horizontal Valve (Left Triangle & Right Triangle)
-        ShapePath {
-            strokeWidth: 1.2
-            strokeColor: valveRoot.isOpen ? "#4ade80" : "#ffffff"
-            fillColor: valveRoot.isOpen ? "#22c55e" : "#0a284a"
-            capStyle: ShapePath.RoundCap
-            joinStyle: ShapePath.MiterJoin
-
-            startX: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 - 6.5)
-            startY: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 - 5.5)
-
-            // Triangle 1
-            PathLine {
-                x: valveRoot.isVertical ? (valveRoot.width / 2 + 5.5) : (valveRoot.width / 2 - 6.5)
-                y: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 + 5.5)
-            }
-            PathLine {
-                x: valveRoot.width / 2
-                y: valveRoot.height / 2
-            }
-            PathLine {
-                x: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 - 6.5)
-                y: valveRoot.isVertical ? (valveRoot.height / 2 - 6.5) : (valveRoot.height / 2 - 5.5)
-            }
-        }
-
-        // Triangle 2
-        ShapePath {
-            strokeWidth: 1.2
-            strokeColor: valveRoot.isOpen ? "#4ade80" : "#ffffff"
-            fillColor: valveRoot.isOpen ? "#22c55e" : "#0a284a"
-            capStyle: ShapePath.RoundCap
-            joinStyle: ShapePath.MiterJoin
-
-            startX: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 + 6.5)
-            startY: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 - 5.5)
-
-            PathLine {
-                x: valveRoot.isVertical ? (valveRoot.width / 2 + 5.5) : (valveRoot.width / 2 + 6.5)
-                y: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 + 5.5)
-            }
-            PathLine {
-                x: valveRoot.width / 2
-                y: valveRoot.height / 2
-            }
-            PathLine {
-                x: valveRoot.isVertical ? (valveRoot.width / 2 - 5.5) : (valveRoot.width / 2 + 6.5)
-                y: valveRoot.isVertical ? (valveRoot.height / 2 + 6.5) : (valveRoot.height / 2 - 5.5)
-            }
-        }
+    // 1. Pixel-Perfect Vector Valve Symbol (Diaphragm & Butterfly - Open=Green, Closed=Red)
+    Image {
+        id: valveIcon
+        anchors.centerIn: parent
+        width: 24
+        height: 22
+        source: valveRoot.isButterfly ? 
+                (valveRoot.isOpen ? "../../../assets/icons/pid/valve_butterfly_open.svg" : "../../../assets/icons/pid/valve_butterfly_closed.svg") :
+                (valveRoot.isOpen ? "../../../assets/icons/pid/valve_diaphragm_open.svg" : "../../../assets/icons/pid/valve_diaphragm_closed.svg")
+        sourceSize.width: 48
+        sourceSize.height: 44
+        fillMode: Image.PreserveAspectFit
+        rotation: valveRoot.isVertical ? 90 : 0
     }
 
-    // Tag Label
+    // 2. Tag Label
     Text {
         visible: valveRoot.showTags
         anchors.horizontalCenter: parent.horizontalCenter
@@ -90,7 +48,7 @@ Item {
         font.bold: valveRoot.isOpen
     }
 
-    // Sub-Label
+    // 3. Sub-Label
     Text {
         visible: valveRoot.showTags && valveRoot.subLabel.length > 0
         anchors.horizontalCenter: parent.horizontalCenter

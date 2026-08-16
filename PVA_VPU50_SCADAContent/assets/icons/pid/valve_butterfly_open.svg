@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 26" width="28" height="26">
+  <!-- Process Pipe Inlets -->
+  <line x1="0" y1="13" x2="6" y2="13" stroke="#4ade80" stroke-width="0.9"/>
+  <line x1="22" y1="13" x2="28" y2="13" stroke="#4ade80" stroke-width="0.9"/>
+
+  <!-- Left & Right Parallel Flange Plates -->
+  <line x1="6" y1="4" x2="6" y2="22" stroke="#4ade80" stroke-width="1.0" stroke-linecap="round"/>
+  <line x1="22" y1="4" x2="22" y2="22" stroke="#4ade80" stroke-width="1.0" stroke-linecap="round"/>
+
+  <!-- Valve Disc Chamber (Open = Solid Green #16a34a) -->
+  <rect x="6.5" y="6.5" width="15" height="13" rx="1.5" fill="#16a34a" stroke="#4ade80" stroke-width="0.9"/>
+  
+  <!-- Diagonal Open Vane (45 Degrees) -->
+  <line x1="9" y1="18" x2="19" y2="8" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+  
+  <!-- Center Pivot Dot -->
+  <circle cx="14" cy="13" r="2.0" fill="#ffffff"/>
+</svg>
