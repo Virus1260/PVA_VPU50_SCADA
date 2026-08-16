@@ -63,35 +63,27 @@ Rectangle {
     signal componentTapped(string tagName)
 
     // =========================================================================
-    // 1. TOP-LEFT OVERVIEW NAVIGATOR & LIVE INTERACTIVE MINIMAP
+    // 1. SYNCHRONIZE UI FORM MINIMAP WITH RUNTIME PAN, ZOOM, AND SIGNALS
     // =========================================================================
-    PidMinimap {
-        id: pidMinimap
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.margins: 14
-        z: 100
-        contentWidth: pidScreenRoot.worldWidth
-        contentHeight: pidScreenRoot.worldHeight
-        viewX: pidScreenRoot.displayX
-        viewY: pidScreenRoot.displayY
-        viewWidth: pidScreenRoot.width
-        viewHeight: pidScreenRoot.height
-        zoomScale: pidScreenRoot.zoomScale
-        fitZoom: pidScreenRoot.fitZoom
-        isLegendActive: pidScreenRoot.showTags
+    Binding { target: ui.pidMinimap; property: "viewX"; value: pidScreenRoot.displayX }
+    Binding { target: ui.pidMinimap; property: "viewY"; value: pidScreenRoot.displayY }
+    Binding { target: ui.pidMinimap; property: "viewWidth"; value: pidScreenRoot.width }
+    Binding { target: ui.pidMinimap; property: "viewHeight"; value: pidScreenRoot.height }
+    Binding { target: ui.pidMinimap; property: "zoomScale"; value: pidScreenRoot.zoomScale }
+    Binding { target: ui.pidMinimap; property: "fitZoom"; value: pidScreenRoot.fitZoom }
+    Binding { target: ui.pidMinimap; property: "isLegendActive"; value: pidScreenRoot.showTags }
 
-        onLegendToggled: {
+    Connections {
+        target: ui.pidMinimap
+        function onLegendToggled() {
             pidScreenRoot.showTags = !pidScreenRoot.showTags;
         }
-
-        onFitRequested: {
+        function onFitRequested() {
             pidScreenRoot.zoomScale = pidScreenRoot.fitZoom;
             pidScreenRoot.rawPanX = (pidScreenRoot.width - pidScreenRoot.actualContentWidth) / 2;
             pidScreenRoot.rawPanY = (pidScreenRoot.height - pidScreenRoot.actualContentHeight) / 2;
         }
-
-        onZoomInRequested: {
+        function onZoomInRequested() {
             var newZoom = Math.min(pidScreenRoot.maxZoom, pidScreenRoot.zoomScale * 1.2);
             var centerWorldX = (pidScreenRoot.width / 2 - pidScreenRoot.displayX) / pidScreenRoot.zoomScale;
             var centerWorldY = (pidScreenRoot.height / 2 - pidScreenRoot.displayY) / pidScreenRoot.zoomScale;
@@ -99,8 +91,7 @@ Rectangle {
             pidScreenRoot.rawPanX = pidScreenRoot.width / 2 - centerWorldX * newZoom;
             pidScreenRoot.rawPanY = pidScreenRoot.height / 2 - centerWorldY * newZoom;
         }
-
-        onZoomOutRequested: {
+        function onZoomOutRequested() {
             var newZoom = Math.max(pidScreenRoot.minZoom, pidScreenRoot.zoomScale / 1.2);
             var centerWorldX = (pidScreenRoot.width / 2 - pidScreenRoot.displayX) / pidScreenRoot.zoomScale;
             var centerWorldY = (pidScreenRoot.height / 2 - pidScreenRoot.displayY) / pidScreenRoot.zoomScale;
@@ -108,8 +99,7 @@ Rectangle {
             pidScreenRoot.rawPanX = pidScreenRoot.width / 2 - centerWorldX * newZoom;
             pidScreenRoot.rawPanY = pidScreenRoot.height / 2 - centerWorldY * newZoom;
         }
-
-        onPanRequested: function(tx, ty) {
+        function onPanRequested(tx, ty) {
             pidScreenRoot.rawPanX = Math.max(pidScreenRoot.minAllowedPanX, Math.min(pidScreenRoot.maxAllowedPanX, tx));
             pidScreenRoot.rawPanY = Math.max(pidScreenRoot.minAllowedPanY, Math.min(pidScreenRoot.maxAllowedPanY, ty));
         }
