@@ -21,59 +21,17 @@ Item {
 
     signal clicked
 
-    // 1. TOP DIAL TEMPERATURE GAUGE (AutoCAD TI 171 001)
-    Item {
+    // 1. TOP PROCESS GAUGE (Separate Reusable PidPressureGauge Component - Vertical)
+    PidPressureGauge {
         id: dialGauge
+        z: 4
         anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.rightMargin: 2
-        width: 22
-        height: 22
-
-        // Stem down to seal pot vessel
-        Rectangle {
-            y: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
-            anchors.horizontalCenterOffset: -10
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 2
-            height: 8
-            color: "#64748b"
-        }
-
-        // Circular Dial Housing
-        Rectangle {
-            anchors.fill: parent
-            anchors.leftMargin: -10
-            anchors.rightMargin: 10
-            anchors.topMargin: -8
-            anchors.bottomMargin: 8
-            radius: width / 2
-            color: "#08213b"
-            border.color: "#38bdf8"
-            border.width: 1.2
-
-            // Needle Pointer (Rotates with Temperature)
-            Rectangle {
-                anchors.centerIn: parent
-                width: 1.5
-                height: 7
-                color: "#f43f5e"
-                transformOrigin: Item.Bottom
-                rotation: -45 + Math.min(
-                              180, (sealPotRoot.currentTemp / 100.0) * 180)
-            }
-
-            // Center Pin
-            Rectangle {
-                anchors.centerIn: parent
-                width: 3
-                height: 3
-                radius: 1.5
-                color: "#ffffff"
-            }
-        }
+        anchors.horizontalCenter: potBody.horizontalCenter
+        tag: sealPotRoot.tempTag
+        pressureBar: sealPotRoot.currentTemp
+        maxPressureBar: 100.0
+        isVertical: true
+        showTags: sealPotRoot.showTags
     }
 
     // 2. MAIN SEAL POT VESSEL (Vertical Insulated Cylinder)
@@ -82,7 +40,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 4
         anchors.top: parent.top
-        anchors.topMargin: 16
+        anchors.topMargin: 46
         width: 34
         height: 75
         radius: 3

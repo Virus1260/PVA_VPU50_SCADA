@@ -147,8 +147,8 @@ Item {
             endX: 260
             endY: 480
             baseColor: "#3b82f6"
-            flowColor: "#ef4444"
-            isActive: pipingLayerRoot.isHeating
+            flowColor: "#38bdf8"
+            isActive: pipingLayerRoot.isHeating || pipingLayerRoot.isCooling
             section: "Bridge Valve Line"
         }
 
@@ -347,10 +347,13 @@ Item {
             height: 77
             startY: 568
             startX: 305
-            section: "Seal Blue V"
+            section: "Pump To Heater Vertical"
             endY: 520
             endX: 305
             baseColor: "#3b82f6"
+            flowColor: "#38bdf8"
+            flowDirection: "reverse"
+            isActive: pipingLayerRoot.isHeating || pipingLayerRoot.isCooling
         }
 
         PidPipe {

@@ -44,6 +44,9 @@ Item {
     property alias inlineHeater: inlineHeater
     property alias sealPot: sealPot
     property alias bottomHomog: bottomHomog
+    property alias boxSealPot: boxSealPot
+    property alias boxHeating: boxHeating
+    property alias boxVesselJacket: boxVesselJacket
 
     // Pass-through Direct Instrumentation Aliases (Layer 2)
     property alias vK143002: instrumentationLayer.vK143002
@@ -123,7 +126,7 @@ Item {
         id: sealPot
         z: 4
         x: 311
-        y: 661
+        y: 629
         tag: "B 171 001"
         tempTag: "TI 171 001"
         showTags: equipmentLayerRoot.showTags
@@ -165,5 +168,106 @@ Item {
                 font.pixelSize: 10
             }
         }
+    }
+
+    // 7. Dynamic Process & Diagnostic Telemetry Control Boxes
+    // 7a. Vessel & Jacket Telemetry Box (Near Left Jacket Profile)
+    PidControlBox {
+        id: boxVesselJacket
+        z: 5
+        x: 500
+        y: 166
+        title: "Vessel & Jacket"
+        tag: "B 161 001"
+        accentColor: "#22c55e"
+        showTags: equipmentLayerRoot.showTags
+        row1Label: "Product Temp:"
+        row1Value: "20.7"
+        row1Unit: "°C"
+        row1Color: "#ffffff"
+        row2Label: "Jacket Temp:"
+        row2Value: "21.2"
+        row2Unit: "°C"
+        row2Color: "#38bdf8"
+        row3Label: "Vacuum Press:"
+        row3Value: "-179.0"
+        row3Unit: "mbar"
+        row3Color: "#c084fc"
+        row4Label: "Batch Weight:"
+        row4Value: "154.4"
+        row4Unit: "kg"
+        row4Color: "#22c55e"
+        row5Label: "Vessel Level:"
+        row5Value: "65.0"
+        row5Unit: "%"
+        row5Color: "#38bdf8"
+        row6Label: "Jacket Press:"
+        row6Value: "1.2"
+        row6Unit: "bar"
+        row6Color: "#34d399"
+    }
+
+    // 7b. Heating Loop PID Control Box (Near In-Line Heater & Pump)
+    PidControlBox {
+        id: boxHeating
+        z: 5
+        x: 277
+        y: 467
+        title: "Heating Loop"
+        tag: "W 168 001"
+        accentColor: "#f97316"
+        showTags: equipmentLayerRoot.showTags
+        row1Label: "SP Temp:"
+        row1Value: "95.0"
+        row1Unit: "°C"
+        row1Color: "#22c55e"
+        row2Label: "PV Temp:"
+        row2Value: "21.2"
+        row2Unit: "°C"
+        row2Color: "#f97316"
+        row3Label: "In-line Press:"
+        row3Value: "2.4"
+        row3Unit: "bar"
+        row3Color: "#38bdf8"
+        row4Label: "Heater Power:"
+        row4Value: "45.0"
+        row4Unit: "%"
+        row4Color: "#fb923c"
+        row5Label: "Circ. Flow:"
+        row5Value: "14.2"
+        row5Unit: "L/min"
+        row5Color: "#4ade80"
+        row6Label: "Loop State:"
+        row6Value: "Active"
+        row6Unit: ""
+        row6Color: "#f8fafc"
+    }
+
+    // 7c. Mechanical Seal Buffer Pot Telemetry Box (Near Seal Pot)
+    PidControlBox {
+        id: boxSealPot
+        z: 5
+        x: 406
+        y: 661
+        title: "Seal Pot"
+        tag: "B 171 001"
+        accentColor: "#38bdf8"
+        showTags: equipmentLayerRoot.showTags
+        row1Label: "Seal Temp:"
+        row1Value: "24.2"
+        row1Unit: "°C"
+        row1Color: "#38bdf8"
+        row2Label: "Seal Press:"
+        row2Value: "1.8"
+        row2Unit: "bar"
+        row2Color: "#22c55e"
+        row3Label: "Buffer Level:"
+        row3Value: "85.0"
+        row3Unit: "%"
+        row3Color: "#cbd5e1"
+        row4Label: "Barrier Flow:"
+        row4Value: "Normal"
+        row4Unit: ""
+        row4Color: "#22c55e"
     }
 }

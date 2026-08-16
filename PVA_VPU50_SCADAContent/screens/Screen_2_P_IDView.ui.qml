@@ -51,6 +51,9 @@ Rectangle {
     property alias sprayBall2: equipmentLayer.sprayBall2
     property alias sprayBall3: equipmentLayer.sprayBall3
     property alias levelGauge: equipmentLayer.levelGauge
+    property alias boxVesselJacket: equipmentLayer.boxVesselJacket
+    property alias boxHeating: equipmentLayer.boxHeating
+    property alias boxSealPot: equipmentLayer.boxSealPot
 
     // =========================================================================
     // ZOOMABLE & PANNABLE WORLD CANVAS (Interactive in Qt Design Studio Canvas)

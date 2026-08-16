@@ -20,42 +20,7 @@ Item {
 
     signal clicked()
 
-    // 1. DIAL PRESSURE GAUGE (Top-Right Process Dial)
-    Rectangle {
-        id: dialHousing
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.topMargin: 0
-        anchors.rightMargin: 0
-        width: 16
-        height: 16
-        radius: 8
-        color: "#ffffff"
-        border.color: "#0369a1"
-        border.width: 1.2
-        z: 5
-
-        // Dial Pointer Needle (45 deg)
-        Rectangle {
-            anchors.centerIn: parent
-            width: 1.2
-            height: 6
-            color: "#dc2626"
-            transformOrigin: Item.Bottom
-            rotation: pumpRoot.isRunning ? 55 : -35
-        }
-
-        // Center Pivot Pin
-        Rectangle {
-            anchors.centerIn: parent
-            width: 3
-            height: 3
-            radius: 1.5
-            color: "#0f172a"
-        }
-    }
-
-    // 2. REALISTIC INDUSTRIAL CENTRIFUGAL VOLUTE PUMP (100% Qt Design Studio Visible)
+    // 1. REALISTIC INDUSTRIAL CENTRIFUGAL VOLUTE PUMP (100% Qt Design Studio Visible)
     Image {
         id: pumpVector
         anchors.left: parent.left
