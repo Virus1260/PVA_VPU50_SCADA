@@ -33,6 +33,11 @@ Rectangle {
     property alias circPump1: circPump1
     property alias inlineHeater: inlineHeater
     property alias sealPot: sealPot
+    property alias vK168201: vK168201
+    property alias vK168202: vK168202
+    property alias vK168204: vK168204
+    property alias vK165002: vK165002
+    property alias vK165003: vK165003
 
     // =========================================================================
     // ZOOMABLE & PANNABLE WORLD CANVAS (Interactive in Qt Design Studio Canvas)
@@ -111,13 +116,16 @@ Rectangle {
         // ---------------------------------------------------------------------
         // 4. LEFT-SIDE UTILITY MANIFOLD, CIRCULATION PUMP & INLINE HEATER (z: 5, z: 6, z: 7)
         // ---------------------------------------------------------------------
-        // Vertical Green Header & Blue CW Return Line
+        // Vertical Green Header & Blue CW Return Line with Diaphragm Isolation Valves
         PidPipe { z: 5; startX: 60; startY: 480; endX: 60; endY: 615; baseColor: "#22c55e" }
+        PidValve { id: vK168201; z: 6; x: 46; y: 535; tag: "K 168 201"; isVertical: true; valveType: "diaphragm"; showTags: pidViewRoot.showTags }
+
         PidPipe { z: 5; startX: 120; startY: 210; endX: 120; endY: 625; baseColor: "#3b82f6" }
+        PidValve { id: vK168202; z: 6; x: 106; y: 535; tag: "K 168 202"; isVertical: true; valveType: "diaphragm"; showTags: pidViewRoot.showTags }
 
         // Horizontal Bridge Valve
         PidPipe { z: 5; startX: 60; startY: 480; endX: 180; endY: 480; baseColor: "#22c55e" }
-        PidValve { id: vK168204; z: 6; x: 70; y: 468; tag: "K 168 204"; showTags: pidViewRoot.showTags }
+        PidValve { id: vK168204; z: 6; x: 70; y: 468; tag: "K 168 204"; valveType: "diaphragm"; showTags: pidViewRoot.showTags }
 
         // Dedicated Modular Inline Circulation Pump (P 168 001)
         PidCirculationPump {
@@ -221,9 +229,9 @@ Rectangle {
             baseColor: "#00d2ff"
         }
 
-        // Recirculation Valves
-        PidValve { id: vK165002; z: 7; x: 830; y: 495; tag: "K 165 002"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK165003; z: 7; x: 745; y: 191; tag: "K 165 003"; showTags: pidViewRoot.showTags }
+        // Recirculation Butterfly Valves
+        PidValve { id: vK165002; z: 7; x: 830; y: 495; tag: "K 165 002"; valveType: "butterfly"; isVertical: true; showTags: pidViewRoot.showTags }
+        PidValve { id: vK165003; z: 7; x: 745; y: 191; tag: "K 165 003"; valveType: "butterfly"; showTags: pidViewRoot.showTags }
 
         // ---------------------------------------------------------------------
         // 8. LID LIFTER MECHANICAL SUPPORT & MOTOR (z: 6, z: 8)

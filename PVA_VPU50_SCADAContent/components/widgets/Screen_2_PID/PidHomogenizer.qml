@@ -139,36 +139,10 @@ Item {
     }
 
     // Right Stator Direct Valve Symbol (Z 163 001)
-    Canvas {
-        id: statorValveCanvas
-        anchors.left: statorBand.right
-        anchors.verticalCenter: statorBand.verticalCenter
-        width: 22
-        height: 18
-
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.beginPath();
-            ctx.moveTo(0, 1);
-            ctx.lineTo(18, 9);
-            ctx.lineTo(0, 17);
-            ctx.closePath();
-
-            ctx.fillStyle = homogRoot.isRunning ? "#4ade80" : "#0e3054";
-            ctx.fill();
-            ctx.strokeStyle = homogRoot.isRunning ? "#22c55e" : "#1d609e";
-            ctx.lineWidth = 1.4;
-            ctx.stroke();
-        }
-    }
 
     Text {
         visible: homogRoot.showTags
-        anchors.left: statorValveCanvas.right
         anchors.leftMargin: 4
-        anchors.bottom: statorValveCanvas.top
         anchors.bottomMargin: -4
         text: "Z 163 001"
         color: "#8cb5dc"
@@ -176,11 +150,12 @@ Item {
         font.bold: true
     }
 
-    // 4. LEFT SUCTION PORTS (K 143 002 Solids & K 143 001 Liquids)
+    // 4. LEFT SUCTION PORTS (K 143 002 Solids & K 143 001 Liquids) - Butterfly Valves
     // Upper Solids Line
     PidPipe { startX: 140; startY: 56; endX: 208; endY: 56; baseColor: "#52a5ec" }
     PidValve {
         x: 142; y: 42; tag: "K 143 002"; subLabel: "Solids"
+        valveType: "butterfly"
         showTags: homogRoot.showTags
         onClicked: homogRoot.suctionSolidsClicked()
     }
@@ -189,24 +164,16 @@ Item {
     PidPipe { startX: 140; startY: 92; endX: 208; endY: 92; baseColor: "#52a5ec" }
     PidValve {
         x: 142; y: 78; tag: "K 143 001"; subLabel: "Liquids"
+        valveType: "butterfly"
         showTags: homogRoot.showTags
         onClicked: homogRoot.suctionLiquidsClicked()
     }
 
-    // Solid White Foot Switch Indicator
-    Rectangle {
-        x: 95; y: 132; width: 14; height: 14; radius: 7; color: "#ffffff"
-        Text {
-            visible: homogRoot.showTags
-            anchors.left: parent.right; anchors.leftMargin: 6; anchors.verticalCenter: parent.verticalCenter
-            text: "foot switch"; color: "#8cb5dc"; font.pixelSize: 8; font.bold: true
-        }
-    }
-
-    // 5. RIGHT RECIRCULATION LINE (K 163 002)
+    // 5. RIGHT RECIRCULATION LINE (K 163 002) - Butterfly Valve
     PidPipe { startX: 252; startY: 74; endX: 380; endY: 74; baseColor: "#52a5ec"; isActive: homogRoot.isRunning; flowColor: "#38ef7d" }
     PidValve {
         x: 290; y: 60; tag: "K 163 002"
+        valveType: "butterfly"
         showTags: homogRoot.showTags
         isOpen: homogRoot.isRunning
         onClicked: homogRoot.recircValveClicked()
