@@ -150,34 +150,12 @@ Item {
         font.bold: true
     }
 
-    // 4. LEFT SUCTION PORTS (K 143 002 Solids & K 143 001 Liquids) - Butterfly Valves
-    // Upper Solids Line
-    PidPipe { startX: 140; startY: 56; endX: 208; endY: 56; baseColor: "#52a5ec" }
-    PidValve {
-        x: 142; y: 42; tag: "K 143 002"; subLabel: "Solids"
-        valveType: "butterfly"
-        showTags: homogRoot.showTags
-        onClicked: homogRoot.suctionSolidsClicked()
-    }
+    // 4. LEFT SUCTION CONNECTION NOZZLES (Solids Upper & Liquids Lower)
+    Rectangle { x: 194; y: 47; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
+    Rectangle { x: 194; y: 83; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
 
-    // Lower Liquids Line
-    PidPipe { startX: 140; startY: 92; endX: 208; endY: 92; baseColor: "#52a5ec" }
-    PidValve {
-        x: 142; y: 78; tag: "K 143 001"; subLabel: "Liquids"
-        valveType: "butterfly"
-        showTags: homogRoot.showTags
-        onClicked: homogRoot.suctionLiquidsClicked()
-    }
-
-    // 5. RIGHT RECIRCULATION LINE (K 163 002) - Butterfly Valve
-    PidPipe { startX: 252; startY: 74; endX: 380; endY: 74; baseColor: "#52a5ec"; isActive: homogRoot.isRunning; flowColor: "#38ef7d" }
-    PidValve {
-        x: 290; y: 60; tag: "K 163 002"
-        valveType: "butterfly"
-        showTags: homogRoot.showTags
-        isOpen: homogRoot.isRunning
-        onClicked: homogRoot.recircValveClicked()
-    }
+    // 5. RIGHT DISCHARGE CONNECTION NOZZLE
+    Rectangle { x: 260; y: 65; width: 6; height: 6; color: "#52a5ec"; border.color: "#1d609e"; border.width: 1 }
 
     // 6. BOTTOM DRIVE MOTOR (M 163 001) - Centered Directly Below Homogenizer Column
     Item {

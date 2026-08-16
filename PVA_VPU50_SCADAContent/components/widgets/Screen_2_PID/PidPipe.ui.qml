@@ -3,88 +3,88 @@ This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio on
 It is supposed to be strictly declarative and only uses a subset of QML.
 */
 import QtQuick
-import QtQuick.Shapes
 
 Item {
     id: pipeRoot
 
-    // Geometry Properties
+    // =========================================================================
+    // 1. GEOMETRY & COORDINATES (Pixel-Perfect Orthogonal Routing)
+    // =========================================================================
     property real startX: 0
     property real startY: 0
     property real endX: 0
     property real endY: 0
-    property real pipeWidth: 2.5
-    property real zoomScale: 1.0
-
-    // Style & State Properties
+    property real pipeWidth: 2.0
     property string section: ""
+
+    // =========================================================================
+    // 2. FLOW DYNAMICS & VISUAL STATE
+    // =========================================================================
     property color baseColor: "#1b538c"
     property color flowColor: "#38ef7d"
     property bool isActive: false
-    property bool reverseFlow: false
+    property string flowDirection: "forward" // "forward", "reverse", "none"
+    property bool reverseFlow: (flowDirection === "reverse")
     property real flowSpeed: 800
 
-    // Bounding Box Calculation (Seamlessly supports both absolute startX/endX and Designer x/y/w/h)
-    readonly property bool hasAbsoluteCoordinates: (startX !== 0 || startY !== 0 || endX !== 0 || endY !== 0)
-    readonly property real pad: pipeWidth + 2
+    // Coordinate Normalization
+    readonly property bool isHorizontal: (Math.abs(endY - startY) <= 1.0)
+    readonly property real minX: Math.min(startX, endX)
+    readonly property real maxX: Math.max(startX, endX)
+    readonly property real minY: Math.min(startY, endY)
+    readonly property real maxY: Math.max(startY, endY)
 
-    x: hasAbsoluteCoordinates ? (Math.min(startX, endX) - pad) : 0
-    y: hasAbsoluteCoordinates ? (Math.min(startY, endY) - pad) : 0
-    width: hasAbsoluteCoordinates ? (Math.max(1, Math.abs(endX - startX)) + 2 * pad) : 100
-    height: hasAbsoluteCoordinates ? (Math.max(1, Math.abs(endY - startY)) + 2 * pad) : pad * 2
+    x: isHorizontal ? minX : (minX - pipeWidth / 2)
+    y: isHorizontal ? (minY - pipeWidth / 2) : minY
+    width: isHorizontal ? Math.max(2, maxX - minX) : pipeWidth
+    height: isHorizontal ? pipeWidth : Math.max(2, maxY - minY)
 
-    // Local Drawing Points (Guaranteed to stay strictly inside the visual bounding box)
-    readonly property real localX1: hasAbsoluteCoordinates ? (startX <= endX ? pad : width - pad) : 0
-    readonly property real localY1: hasAbsoluteCoordinates ? (startY <= endY ? pad : height - pad) : (height / 2)
-    readonly property real localX2: hasAbsoluteCoordinates ? (startX <= endX ? width - pad : pad) : width
-    readonly property real localY2: hasAbsoluteCoordinates ? (startY <= endY ? height - pad : pad) : (height / 2)
-
-    // Dynamic AutoCAD Constant-Screen-Pixel Width Compensation
-    readonly property real dynamicStrokeWidth: Math.max(0.8, (pipeRoot.isActive ? (pipeRoot.pipeWidth + 0.8) : pipeRoot.pipeWidth) / Math.max(0.3, Math.min(3.0, pipeRoot.zoomScale)))
-
-    // 1. BASE STATIC PIPE PATH (Native Declarative Shape - 100% Visible in Qt Design Studio 2D Canvas)
-    Shape {
-        id: basePipeShape
+    // =========================================================================
+    // 3. NATIVE SOLID PIPE BODY (100% Straight, Zero Shatter, Zero Subpixel Jitter)
+    // =========================================================================
+    Rectangle {
+        id: pipeBody
         anchors.fill: parent
-
-        ShapePath {
-            strokeWidth: pipeRoot.dynamicStrokeWidth
-            strokeColor: pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 2.0) : pipeRoot.baseColor
-            fillColor: "transparent"
-            capStyle: ShapePath.RoundCap
-            startX: pipeRoot.localX1
-            startY: pipeRoot.localY1
-            PathLine { x: pipeRoot.localX2; y: pipeRoot.localY2 }
-        }
+        color: pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 1.8) : pipeRoot.baseColor
+        radius: 0
     }
 
-    // 2. LIVE ACTIVE ANIMATED FLOW STREAM (Dashed Particle Overlay)
-    Shape {
-        id: activeFlowShape
+    // =========================================================================
+    // 4. ANIMATED FLOW STREAM OVERLAY (Active Medium Transportation)
+    // =========================================================================
+    Item {
+        id: flowOverlay
         anchors.fill: parent
-        visible: pipeRoot.isActive
+        visible: pipeRoot.isActive && pipeRoot.flowDirection !== "none"
+        clip: true
 
-        property real flowOffset: 0.0
+        // Pulsing Flow Particles / Chevrons
+        Rectangle {
+            id: flowPulse
+            color: pipeRoot.flowColor
+            opacity: 0.85
 
-        NumberAnimation on flowOffset {
-            from: 0.0
-            to: pipeRoot.reverseFlow ? -24.0 : 24.0
-            duration: pipeRoot.flowSpeed
-            loops: Animation.Infinite
-            running: pipeRoot.isActive
-        }
+            // Horizontal Flow Pulse
+            x: pipeRoot.isHorizontal ? (pipeRoot.reverseFlow ? (parent.width - width) : 0) : 0
+            y: pipeRoot.isHorizontal ? 0 : (pipeRoot.reverseFlow ? (parent.height - height) : 0)
+            width: pipeRoot.isHorizontal ? Math.min(parent.width, 32) : parent.width
+            height: pipeRoot.isHorizontal ? parent.height : Math.min(parent.height, 32)
 
-        ShapePath {
-            strokeWidth: Math.max(0.7, pipeRoot.pipeWidth / Math.max(0.3, Math.min(3.0, pipeRoot.zoomScale)))
-            strokeColor: pipeRoot.flowColor
-            fillColor: "transparent"
-            capStyle: ShapePath.RoundCap
-            strokeStyle: ShapePath.DashLine
-            dashPattern: [4, 3]
-            dashOffset: activeFlowShape.flowOffset
-            startX: pipeRoot.localX1
-            startY: pipeRoot.localY1
-            PathLine { x: pipeRoot.localX2; y: pipeRoot.localY2 }
+            NumberAnimation on x {
+                running: pipeRoot.isActive && pipeRoot.isHorizontal
+                from: pipeRoot.reverseFlow ? (pipeRoot.width) : -32
+                to: pipeRoot.reverseFlow ? -32 : (pipeRoot.width)
+                duration: pipeRoot.flowSpeed
+                loops: Animation.Infinite
+            }
+
+            NumberAnimation on y {
+                running: pipeRoot.isActive && !pipeRoot.isHorizontal
+                from: pipeRoot.reverseFlow ? (pipeRoot.height) : -32
+                to: pipeRoot.reverseFlow ? -32 : (pipeRoot.height)
+                duration: pipeRoot.flowSpeed
+                loops: Animation.Infinite
+            }
         }
     }
 }

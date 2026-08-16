@@ -184,12 +184,16 @@ Rectangle {
         sprayBall2.isSpraying: scadaBridge.isCipActive
         sprayBall3.isSpraying: scadaBridge.isCipActive
 
+        // Unified Dedicated Piping Layer Flow Dynamics
+        pipingLayer.isRecirculating: scadaBridge.isRecirculating
+        pipingLayer.isHeating: scadaBridge.isHeating
+        pipingLayer.isCooling: scadaBridge.isCooling
+        pipingLayer.isSprayingCIP: scadaBridge.isCipActive
+        pipingLayer.isHomogRunning: scadaBridge.isHomogenizerRunning
+
         // Bottom Homogenizer
         bottomHomog.speedRpm: scadaBridge.homogenizerSpeed
         bottomHomog.isRunning: scadaBridge.isHomogenizerRunning
-        bottomHomog.onSuctionSolidsClicked: pidScreenRoot.componentTapped("K 143 002")
-        bottomHomog.onSuctionLiquidsClicked: pidScreenRoot.componentTapped("K 143 001")
-        bottomHomog.onRecircValveClicked: pidScreenRoot.componentTapped("K 163 002")
         bottomHomog.onMotorClicked: pidScreenRoot.componentTapped("M 163 001")
 
         // Inline Heater, Circulation Pump & Seal Pot
@@ -197,5 +201,16 @@ Rectangle {
         circPump1.isRunning: scadaBridge.isHeating || scadaBridge.isCooling
         sealPot.isHeating: scadaBridge.isHeating
         sealPot.currentTemp: scadaBridge.jacketTemp
+
+        // Valve Runtime State & Click Handlers
+        vK163002.isOpen: scadaBridge.isHomogenizerRunning
+        vK143002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 143 002")
+        vK143001.mouseArea.onClicked: pidScreenRoot.componentTapped("K 143 001")
+        vK163002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 163 002")
+        vK165002.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 002")
+        vK165003.mouseArea.onClicked: pidScreenRoot.componentTapped("K 165 003")
+        vK168201.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 201")
+        vK168202.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 202")
+        vK168204.mouseArea.onClicked: pidScreenRoot.componentTapped("K 168 204")
     }
 }
