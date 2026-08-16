@@ -80,7 +80,7 @@ Item {
         id: pressGauge1
         z: 4
         x: 194
-        y: 554
+        y: 572
         tag: "PI 168 001"
         pressureBar: 2.4
         isVertical: false
