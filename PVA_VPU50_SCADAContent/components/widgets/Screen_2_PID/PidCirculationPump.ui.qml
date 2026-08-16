@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -11,6 +15,8 @@ Item {
     property real pressureBar: 2.8
     property bool isRunning: false
     property bool showTags: true
+
+    property alias mouseArea: pumpMouseArea
 
     signal clicked()
 
@@ -55,7 +61,6 @@ Item {
         // Internal Directional Triangle Wedge
         Shape {
             anchors.fill: parent
-            preferredRendererType: Shape.CurveRenderer
 
             ShapePath {
                 strokeWidth: 1
@@ -104,9 +109,9 @@ Item {
     }
 
     MouseArea {
+        id: pumpMouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: pumpRoot.clicked()
     }
 }

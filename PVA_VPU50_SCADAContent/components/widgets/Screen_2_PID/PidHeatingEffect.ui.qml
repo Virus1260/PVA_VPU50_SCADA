@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -11,7 +15,7 @@ Item {
     property bool isCooling: false
     property real levelPercent: 50.0
 
-    // 1. Thermal Pulsing Animation for Jacket Glow
+    // 1. Thermal Pulsing Animation for Active Jacket Glow
     property real heatPulse: 0.6
 
     SequentialAnimation on heatPulse {
@@ -21,44 +25,36 @@ Item {
         NumberAnimation { to: 0.45; duration: 900; easing.type: Easing.InOutQuad }
     }
 
-    // 2. Outer Thermal Jacket Radiant Glow Perimeter (Declarative Shape - 100% Qt Design Studio Visibility)
+    // 2. Outer Thermal Jacket Radiant Glow Perimeter (Pixel-Perfect Matching Vessel Contour)
     Shape {
         id: jacketGlowShape
         anchors.fill: parent
-        visible: heatEffectRoot.isHeating || heatEffectRoot.isCooling
-        opacity: heatEffectRoot.heatPulse
-        preferredRendererType: Shape.CurveRenderer
+        opacity: (heatEffectRoot.isHeating || heatEffectRoot.isCooling) ? heatEffectRoot.heatPulse : 0.35
 
         // Outer glow
         ShapePath {
-            strokeWidth: 14.0
-            strokeColor: heatEffectRoot.isHeating ? "#73f97316" : "#7306b6d4"
+            strokeWidth: 12.0
+            strokeColor: heatEffectRoot.isHeating ? "#73f97316" : (heatEffectRoot.isCooling ? "#7306b6d4" : "#2038bdf8")
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
 
-            startX: 14; startY: 138
-            PathLine { x: 14; y: 348 }
-            PathCubic { control1X: 14; control1Y: 400; control2X: 70; control2Y: 432; x: 158; y: 432 }
-            PathLine { x: 202; y: 432 }
-            PathCubic { control1X: 290; control1Y: 432; control2X: 346; control2Y: 400; x: 346; y: 348 }
-            PathLine { x: 346; y: 138 }
+            PathSvg {
+                path: "M 32 135 L 32 310 C 32 354 112 376 150 376 L 210 376 C 248 376 328 354 328 310 L 328 135"
+            }
         }
 
-        // Inner core line
+        // Inner core contour
         ShapePath {
-            strokeWidth: 5.0
-            strokeColor: heatEffectRoot.isHeating ? "#fb923c" : "#38bdf8"
+            strokeWidth: 4.0
+            strokeColor: heatEffectRoot.isHeating ? "#fb923c" : (heatEffectRoot.isCooling ? "#38bdf8" : "#38bdf8")
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
 
-            startX: 14; startY: 138
-            PathLine { x: 14; y: 348 }
-            PathCubic { control1X: 14; control1Y: 400; control2X: 70; control2Y: 432; x: 158; y: 432 }
-            PathLine { x: 202; y: 432 }
-            PathCubic { control1X: 290; control1Y: 432; control2X: 346; control2Y: 400; x: 346; y: 348 }
-            PathLine { x: 346; y: 138 }
+            PathSvg {
+                path: "M 32 135 L 32 310 C 32 354 112 376 150 376 L 210 376 C 248 376 328 354 328 310 L 328 135"
+            }
         }
     }
 

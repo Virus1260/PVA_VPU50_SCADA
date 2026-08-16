@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 246" width="288" height="246">
+  <!-- Concentric Outer Thermal Jacket Wrapping Lower Shell and Bottom Dish -->
+  <path d="M 0 0 L 0 178 C 0 220 80 244 116 244 L 172 244 C 208 244 288 220 288 178 L 288 0 L 274 0 L 274 178 C 274 204 204 220 169 220 L 119 220 C 84 220 14 204 14 178 L 14 0 Z" 
+        fill="#5b95c9" stroke="#1b4c7c" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" />
+</svg>

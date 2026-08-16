@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -42,7 +46,6 @@ Item {
     Shape {
         id: basePipeShape
         anchors.fill: parent
-        preferredRendererType: Shape.CurveRenderer
 
         ShapePath {
             strokeWidth: pipeRoot.dynamicStrokeWidth
@@ -60,7 +63,6 @@ Item {
         id: activeFlowShape
         anchors.fill: parent
         visible: pipeRoot.isActive
-        preferredRendererType: Shape.CurveRenderer
 
         property real flowOffset: 0.0
 

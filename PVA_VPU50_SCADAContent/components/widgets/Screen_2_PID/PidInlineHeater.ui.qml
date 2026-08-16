@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -9,6 +13,8 @@ Item {
     property string tag: "W 168 001"
     property bool isHeating: false
     property bool showTags: true
+
+    property alias mouseArea: heaterMouseArea
 
     signal clicked()
 
@@ -28,7 +34,6 @@ Item {
         // Internal Red Electric Heating M / Chevron Symbol
         Shape {
             anchors.fill: parent
-            preferredRendererType: Shape.CurveRenderer
 
             ShapePath {
                 strokeWidth: 1.8
@@ -67,9 +72,9 @@ Item {
     }
 
     MouseArea {
+        id: heaterMouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: heaterRoot.clicked()
     }
 }

@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Layouts
 
@@ -50,47 +54,22 @@ Item {
         border.width: 1.5
         clip: true
 
-        // Inner Shadow / Glow Rim
+        // Center dashed vertical guideline
         Rectangle {
-            anchors.fill: parent
-            radius: 12
-            color: "transparent"
-            border.color: "#0f3a68"
-            border.width: 1
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.topMargin: 6
+            anchors.bottomMargin: 6
+            width: 1
+            color: "#1d4ed8"
+            opacity: 0.7
         }
 
-        // Center Scale Ticks (Dotted / Dashed Line)
-        Canvas {
-            id: tickCanvas
-            anchors.fill: parent
-            anchors.margins: 4
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-                var cx = width / 2;
-
-                // Center dashed vertical guideline
-                ctx.beginPath();
-                ctx.setLineDash([2, 3]);
-                ctx.moveTo(cx, 4);
-                ctx.lineTo(cx, height - 4);
-                ctx.strokeStyle = "#1d4ed8";
-                ctx.lineWidth = 1;
-                ctx.stroke();
-
-                // Major horizontal tick marks (25%, 50%, 75%)
-                ctx.setLineDash([]);
-                for (var i = 1; i <= 3; ++i) {
-                    var y = height * (i / 4.0);
-                    ctx.beginPath();
-                    ctx.moveTo(cx - 3, y);
-                    ctx.lineTo(cx + 3, y);
-                    ctx.strokeStyle = "#38bdf8";
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
-            }
-        }
+        // Major horizontal tick marks (25%, 50%, 75%)
+        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.25; width: 8; height: 1; color: "#38bdf8" }
+        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.50; width: 8; height: 1; color: "#38bdf8" }
+        Rectangle { anchors.horizontalCenter: parent.horizontalCenter; y: parent.height * 0.75; width: 8; height: 1; color: "#38bdf8" }
 
         // Active Glowing Green Liquid Column
         Rectangle {

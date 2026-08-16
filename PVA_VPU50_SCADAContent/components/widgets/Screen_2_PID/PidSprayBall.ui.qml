@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -23,7 +27,6 @@ Item {
         Shape {
             id: sprayShape
             anchors.fill: parent
-            preferredRendererType: Shape.CurveRenderer
 
             // 1. Outer Bell & Castle Slotted Teeth (Professional Metallic Stainless Fill / CIP Glow)
             ShapePath {

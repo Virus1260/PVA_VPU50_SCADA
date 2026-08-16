@@ -10,8 +10,8 @@ Item {
     property color strokeColor: "#1b4c7c"
 
     Shape {
+        id: hopperShape
         anchors.fill: parent
-        preferredRendererType: Shape.CurveRenderer
 
         ShapePath {
             strokeWidth: 1.2

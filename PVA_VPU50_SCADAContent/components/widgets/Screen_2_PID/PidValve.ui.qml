@@ -1,3 +1,7 @@
+/*
+This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
+It is supposed to be strictly declarative and only uses a subset of QML.
+*/
 import QtQuick
 import QtQuick.Shapes
 
@@ -13,13 +17,14 @@ Item {
     property bool isSolenoid: true
     property bool showTags: true
 
+    property alias mouseArea: valveMouseArea
+
     signal clicked()
 
     // Declarative Valve Symbol (Two Opposing Triangles - 100% Visible in Qt Design Studio 2D Canvas)
     Shape {
         id: valveShape
         anchors.fill: parent
-        preferredRendererType: Shape.CurveRenderer
 
         // 1. Horizontal Valve (Left Triangle & Right Triangle)
         ShapePath {
@@ -97,9 +102,9 @@ Item {
     }
 
     MouseArea {
+        id: valveMouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: valveRoot.clicked()
     }
 }
