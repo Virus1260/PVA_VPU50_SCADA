@@ -89,11 +89,25 @@ Item {
         border.width: 1.6
     }
 
-    // Dual Copper Power Feeder Lines
-    Rectangle { x: (homogRoot.width / 2) - 50; y: 120; width: 36; height: 2.2; color: "#d97706" }
-    Rectangle { x: (homogRoot.width / 2) - 50; y: 120; width: 2.2; height: 35; color: "#d97706" }
-    Rectangle { x: (homogRoot.width / 2) - 58; y: 128; width: 44; height: 2.2; color: "#d97706" }
-    Rectangle { x: (homogRoot.width / 2) - 58; y: 128; width: 2.2; height: 27; color: "#d97706" }
+    // Mechanical Seal Cooling Nozzle Ports (Connecting to Red & Blue Seal Cooling Loop)
+    Rectangle {
+        x: (homogRoot.width / 2) - 18
+        y: 120
+        width: 6
+        height: 4
+        color: "#ef4444"
+        border.color: "#334155"
+        border.width: 1
+    }
+    Rectangle {
+        x: (homogRoot.width / 2) - 18
+        y: 128
+        width: 6
+        height: 4
+        color: "#3b82f6"
+        border.color: "#334155"
+        border.width: 1
+    }
 
     // 3. STATOR CHAMBER (Z 163 001) - Horizontal Band with Direct Right Valve
     Rectangle {

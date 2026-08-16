@@ -13,9 +13,9 @@ Rectangle {
     ScadaStateMiddleware { id: scadaBridge }
     property alias scadaBridge: scadaBridge
 
-    // Base Coordinate Canvas Dimensions
-    readonly property real worldWidth: 1060
-    readonly property real worldHeight: 630
+    // Base Coordinate Canvas Dimensions (Expanded Frame for Zero Overlaps)
+    readonly property real worldWidth: 1180
+    readonly property real worldHeight: 680
 
     // Zoom & Pan State
     property real zoomScale: 1.0
@@ -196,5 +196,10 @@ Rectangle {
         controlBox.setpointTemp: scadaBridge.targetTemp
         controlBox.gradientSp: 20.7
         controlBox.processVal: scadaBridge.vesselTemp
+
+        // Electric Heater Exchanger & Circulation Pump
+        electricHeater.isHeating: scadaBridge.isHeating
+        electricHeater.currentTemp: scadaBridge.jacketTemp
+        circPump1.isRunning: scadaBridge.isHeating || scadaBridge.isCooling
     }
 }

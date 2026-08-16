@@ -4,7 +4,7 @@ import QtQuick.Shapes
 Item {
     id: sprayRoot
     width: 36
-    height: 52
+    height: 48
 
     property string tag: "X 165 501"
     property bool isSpraying: false
@@ -14,61 +14,52 @@ Item {
     Item {
         id: rotatedHead
         x: (parent.width - width) / 2
-        y: 6
+        y: 0
         width: 24
         height: 32
         transformOrigin: Item.Top
         rotation: sprayRoot.sprayAngle
 
-        // 1. Pipe Stem
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: -6
-            width: 3
-            height: 10
-            color: "#52a5ec"
-        }
+        Shape {
+            id: sprayShape
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
 
-        // 2. Collar Coupling Ring
-        Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 4
-            width: 8
-            height: 4
-            color: "#1e293b"
-            border.color: "#38bdf8"
-            border.width: 1
-            radius: 1
-        }
+            // 1. Outer Bell & Castle Slotted Teeth (Professional Metallic Stainless Fill / CIP Glow)
+            ShapePath {
+                strokeWidth: 1.5
+                strokeColor: sprayRoot.isSpraying ? "#4ade80" : "#cbd5e1"
+                fillColor: sprayRoot.isSpraying ? "#4022c55e" : "#1e293b"
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
 
-        // 3. Bell-Shaped Slotted Spray Head
-        Rectangle {
-            id: headBody
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 8
-            width: 16
-            height: 16
-            radius: 8
-            color: sprayRoot.isSpraying ? "#4ade80" : "#ffffff"
-            border.color: "#1b4c7c"
-            border.width: 1.5
-
-            // Vertical discharge slit grooves
-            Row {
-                anchors.centerIn: parent
-                spacing: 3
-                Repeater {
-                    model: 3
-                    Rectangle {
-                        width: 1.2
-                        height: 9
-                        radius: 0.6
-                        color: sprayRoot.isSpraying ? "#15803d" : "#94a3b8"
-                    }
+                PathSvg {
+                    path: "M 2 11 A 10 10 0 0 1 22 11 L 22 23 L 19 23 L 19 16 L 16.5 16 L 16.5 23 L 13.5 23 L 13.5 16 L 10.5 16 L 10.5 23 L 7.5 23 L 7.5 16 L 5 16 L 5 23 L 2 23 L 2 11 Z"
                 }
+            }
+
+            // 2. Inner Concentric Horseshoe Arch Ring (Polished Steel Arc)
+            ShapePath {
+                strokeWidth: 1.2
+                strokeColor: sprayRoot.isSpraying ? "#86efac" : "#64748b"
+                fillColor: sprayRoot.isSpraying ? "#6622c55e" : "#0f172a"
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
+
+                PathSvg {
+                    path: "M 2 11 L 4.5 11 A 7.5 7.5 0 0 1 19.5 11 L 22 11"
+                }
+            }
+
+            // 3. Top Pipe Connection Flange & Stem
+            ShapePath {
+                strokeWidth: 1.6
+                strokeColor: sprayRoot.isSpraying ? "#4ade80" : "#52a5ec"
+                fillColor: "transparent"
+                capStyle: ShapePath.RoundCap
+
+                startX: 12; startY: 0
+                PathLine { x: 12; y: 1 }
             }
         }
     }
@@ -77,7 +68,7 @@ Item {
     Text {
         visible: sprayRoot.showTags
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 2
+        anchors.bottomMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
         text: sprayRoot.tag
         color: "#8cb5dc"

@@ -10,6 +10,7 @@ Item {
     property real endX: 100
     property real endY: 0
     property real pipeWidth: 2.5
+    property real zoomScale: 1.0
     property color baseColor: "#1b538c"
     property color flowColor: "#38ef7d"
     property bool isActive: false
@@ -26,6 +27,9 @@ Item {
     property real localX2: endX - x
     property real localY2: endY - y
 
+    // Dynamic AutoCAD Constant-Screen-Pixel Width Compensation
+    readonly property real dynamicStrokeWidth: Math.max(0.8, (pipeRoot.isActive ? (pipeRoot.pipeWidth + 0.8) : pipeRoot.pipeWidth) / Math.max(0.3, Math.min(3.0, pipeRoot.zoomScale)))
+
     // 1. BASE STATIC PIPE PATH (Native Declarative Shape - 100% Visible in Qt Design Studio 2D Canvas)
     Shape {
         id: basePipeShape
@@ -33,7 +37,7 @@ Item {
         preferredRendererType: Shape.CurveRenderer
 
         ShapePath {
-            strokeWidth: pipeRoot.isActive ? (pipeRoot.pipeWidth + 1.2) : pipeRoot.pipeWidth
+            strokeWidth: pipeRoot.dynamicStrokeWidth
             strokeColor: pipeRoot.isActive ? Qt.darker(pipeRoot.flowColor, 2.0) : pipeRoot.baseColor
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
@@ -61,7 +65,7 @@ Item {
         }
 
         ShapePath {
-            strokeWidth: pipeRoot.pipeWidth
+            strokeWidth: Math.max(0.7, pipeRoot.pipeWidth / Math.max(0.3, Math.min(3.0, pipeRoot.zoomScale)))
             strokeColor: pipeRoot.flowColor
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
