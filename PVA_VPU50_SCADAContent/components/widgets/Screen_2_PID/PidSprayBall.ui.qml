@@ -1,3 +1,4 @@
+
 /*
 This is a UI file (.ui.qml) that is intended to be edited in Qt Design Studio only.
 It is supposed to be strictly declarative and only uses a subset of QML.
@@ -35,14 +36,4 @@ Item {
     }
 
     // 2. Tag text below the head (e.g. X 165 501)
-    Text {
-        visible: sprayRoot.showTags
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: sprayRoot.tag
-        color: "#8cb5dc"
-        font.pixelSize: 7
-        font.bold: true
-    }
 }

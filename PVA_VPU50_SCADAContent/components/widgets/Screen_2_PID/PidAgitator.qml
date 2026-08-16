@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick3D
+import "../../../assets/3d" as Assets3D
 
 Item {
     id: agitatorRoot
@@ -13,8 +15,7 @@ Item {
     property bool showTags: true
     property string rotationMode: "agitator_cw" // "agitator_cw", "agitator_ccw", "agitator_reversing"
 
-    property int currentFrame: 0
-    readonly property int totalFrames: 36
+    property real currentAngle: 0.0
     property bool isIntervalForward: true
 
     function isForwardDirection() {
@@ -40,22 +41,20 @@ Item {
 
     onIsRunningChanged: {
         if (!isRunning) {
-            currentFrame = 0;
             isIntervalForward = true;
         }
     }
 
-    // Smooth Continuous Frame Stepper (Speed Proportional to RPM, Zero Jitter / Startup Reset)
-    Timer {
-        id: stepTimer
-        interval: Math.max(16, Math.round(60000.0 / Math.max(1.0, agitatorRoot.speedRpm * agitatorRoot.totalFrames)))
+    // Smooth Continuous 60fps Rotation Engine
+    FrameAnimation {
         running: agitatorRoot.isRunning && agitatorRoot.speedRpm > 0
-        repeat: true
         onTriggered: {
+            var degPerSec = (agitatorRoot.speedRpm * 360.0) / 60.0;
+            var deltaDeg = (degPerSec * frameTime);
             if (agitatorRoot.isForwardDirection()) {
-                agitatorRoot.currentFrame = (agitatorRoot.currentFrame + 1) % agitatorRoot.totalFrames;
+                agitatorRoot.currentAngle = (agitatorRoot.currentAngle + deltaDeg) % 360.0;
             } else {
-                agitatorRoot.currentFrame = (agitatorRoot.currentFrame - 1 + agitatorRoot.totalFrames) % agitatorRoot.totalFrames;
+                agitatorRoot.currentAngle = (agitatorRoot.currentAngle - deltaDeg + 360.0) % 360.0;
             }
         }
     }
@@ -75,84 +74,116 @@ Item {
     }
 
     // 2. PROXIMITY SENSOR GZ 161501 ON DOME WITH VERTICAL LABEL
-    Item {
-        z: 3
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: 24
-        anchors.top: parent.top
-        anchors.topMargin: 46
-        width: 16
-        height: 40
-        visible: agitatorRoot.showTags
 
-        Text {
-            anchors.bottom: sensorDot.top
-            anchors.bottomMargin: 2
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "GZ 161501"
-            color: "#8cb5dc"
-            font.pixelSize: 7
-            font.bold: true
-            rotation: -90
-            transformOrigin: Item.BottomRight
-        }
-
-        Rectangle {
-            id: sensorDot
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 8
-            height: 8
-            radius: 4
-            color: agitatorRoot.isRunning ? "#4ade80" : "#475569"
-            border.color: agitatorRoot.isRunning ? "#22c55e" : "#64748b"
-            border.width: 1
-        }
-    }
-
-    // 3. DRIVE SHAFT (Connecting Motor to Top Dome Flange)
+    // 3. DRIVE SHAFT (Seamless Stainless Steel Specular Highlight Match)
     Rectangle {
         id: driveShaft
         z: 1
         x: (parent.width - width) / 2
         y: 66
         width: 14
-        height: 58
-        radius: 2
+        height: 56
+        radius: 1
         gradient: Gradient {
             orientation: Gradient.Horizontal
             GradientStop { position: 0.0; color: "#64748b" }
-            GradientStop { position: 0.35; color: "#94a3b8" }
-            GradientStop { position: 0.65; color: "#cbd5e1" }
+            GradientStop { position: 0.25; color: "#94a3b8" }
+            GradientStop { position: 0.55; color: "#f8fafc" }
+            GradientStop { position: 0.80; color: "#cbd5e1" }
             GradientStop { position: 1.0; color: "#475569" }
         }
-        border.color: "#334155"
+        border.color: "#475569"
         border.width: 1
     }
 
-    // 4. 3D ROTATING AGITATOR IMPELLER & SHAFT (Pre-warmed GPU Vector Cache - Zero Lag on Start)
-    Item {
-        id: impellerContainer
+    // 4. 3D HARDWARE-ACCELERATED AGITATOR IMPELLER
+    View3D {
+        id: impeller3DView
+        z: 1
         anchors.top: parent.top
-        anchors.topMargin: 120
+        anchors.topMargin: 116
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 240
-        height: 285
+        width: 254
+        height: 295
 
-        // Pre-warm and cache all 36 vector SVG frames into GPU memory at startup
-        Repeater {
-            model: agitatorRoot.totalFrames
-            Image {
-                anchors.fill: parent
-                source: Qt.resolvedUrl("../../../assets/agitator_sequence/agitator_frame_" + (index < 10 ? "0" + index : "" + index) + ".svg")
-                sourceSize: Qt.size(215, 285)
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-                mipmap: true
-                asynchronous: false
-                cache: true
-                visible: true
-                opacity: agitatorRoot.currentFrame === index ? 1.0 : 0.0
+        environment: SceneEnvironment {
+            backgroundMode: SceneEnvironment.Transparent
+            antialiasingMode: SceneEnvironment.MSAA
+            antialiasingQuality: SceneEnvironment.High
+        }
+
+        // Orthographic Camera (CAD 1:1 Parallel Perspective)
+        OrthographicCamera {
+            id: camera
+            position: Qt.vector3d(0, 500, 2000)
+            horizontalMagnification: 0.192
+            verticalMagnification: 0.192
+            clipNear: 10
+            clipFar: 5000
+        }
+
+        // 1. Frontal Headlight: Subtle fill without washing out
+        DirectionalLight {
+            eulerRotation.x: 0
+            eulerRotation.y: 0
+            brightness: 1.5
+            color: "#ffffff"
+        }
+
+        // 2. Key Light: Top-Right Metallic Glint
+        DirectionalLight {
+            eulerRotation.x: -25
+            eulerRotation.y: 35
+            brightness: 1.8
+            color: "#ffffff"
+        }
+
+        // 3. Fill Light: Soft Front-Left Cool Accent
+        DirectionalLight {
+            eulerRotation.x: 18
+            eulerRotation.y: -42
+            brightness: 1.3
+            color: "#e2e8f0"
+        }
+
+        // 4. Rim Light Right: Crisp Metallic Blade Contours
+        DirectionalLight {
+            eulerRotation.x: 25
+            eulerRotation.y: 135
+            brightness: 1.6
+            color: "#ffffff"
+        }
+
+        // 5. Rim Light Left: Rear Blade Outer Highlights
+        DirectionalLight {
+            eulerRotation.x: -25
+            eulerRotation.y: -135
+            brightness: 1.4
+            color: "#cbd5e1"
+        }
+
+        // 6. Top-Down Light: Upper Hub & Flange Reflections
+        DirectionalLight {
+            eulerRotation.x: -80
+            eulerRotation.y: 0
+            brightness: 1.3
+            color: "#ffffff"
+        }
+
+        // 7. Bottom Uplight: Lower Scraper & Dish Wiper Highlights
+        DirectionalLight {
+            eulerRotation.x: 60
+            eulerRotation.y: 0
+            brightness: 1.1
+            color: "#e2e8f0"
+        }
+
+        Node {
+            id: agitatorNode
+            eulerRotation.y: agitatorRoot.currentAngle
+
+            Assets3D.Agitator {
+                id: agitator3D
             }
         }
     }

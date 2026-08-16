@@ -8,43 +8,10 @@
         <file>PVA_VPU50_SCADA/EventListSimulator.qml</file>
         <file>PVA_VPU50_SCADA/qmldir</file>
         <file>PVA_VPU50_SCADAContent/App.qml</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_00.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_01.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_02.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_03.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_04.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_05.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_06.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_07.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_08.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_09.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_10.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_11.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_12.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_13.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_14.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_15.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_16.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_17.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_18.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_19.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_20.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_21.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_22.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_23.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_24.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_25.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_26.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_27.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_28.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_29.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_30.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_31.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_32.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_33.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_34.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_frame_35.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator_sequence/agitator_sequence.json</file>
+        <file>PVA_VPU50_SCADAContent/assets/3d/Agitator.qml</file>
+        <file>PVA_VPU50_SCADAContent/assets/3d/meshes/body12948_mesh.mesh</file>
+        <file>PVA_VPU50_SCADAContent/assets/3d/meshes/body2086_mesh.mesh</file>
+        <file>PVA_VPU50_SCADAContent/assets/3d/Metadata/thumbnail.png</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_check.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_warning.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/controls/backspace.svg</file>
@@ -120,7 +87,6 @@
         <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_butterfly_open.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_diaphragm_closed.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/pid/valve_diaphragm_open.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/agitator.glb</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_schema.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_schema_tags.json</file>
         <file>PVA_VPU50_SCADAContent/assets/pid_vessel_body.svg</file>

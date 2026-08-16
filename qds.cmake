@@ -19,6 +19,7 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
         "scratch/03_extract_screen_recording_frames/output_frames/agitator_sequence.json"
         "scratch/04_extract_no_reflection_agitator_frames/agitator_sequence.json"
         "scratch/05_manual_removebg_imported_frames/agitator_sequence.json"
+        "scratch/06_archived_agitator_assets/agitator_sequence/agitator_sequence.json"
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

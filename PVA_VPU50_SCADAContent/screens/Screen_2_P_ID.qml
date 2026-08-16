@@ -13,9 +13,9 @@ Rectangle {
     ScadaStateMiddleware { id: scadaBridge }
     property alias scadaBridge: scadaBridge
 
-    // Base Coordinate Canvas Dimensions (Expanded Frame for Zero Overlaps)
-    readonly property real worldWidth: 1180
-    readonly property real worldHeight: 680
+    // Base Coordinate Canvas Dimensions (Full P&ID System Canvas)
+    readonly property real worldWidth: 1440
+    readonly property real worldHeight: 840
 
     // Zoom & Pan State
     property real zoomScale: 1.0
@@ -28,14 +28,19 @@ Rectangle {
     readonly property real actualContentWidth: worldWidth * zoomScale
     readonly property real actualContentHeight: worldHeight * zoomScale
 
-    // Generous Padding Margins for Free Multi-Directional Panning to All Corners
-    readonly property real minAllowedPanX: -actualContentWidth + 120
-    readonly property real maxAllowedPanX: width - 120
-    readonly property real minAllowedPanY: -actualContentHeight + 120
-    readonly property real maxAllowedPanY: height - 120
+    // Padding Margins for Panning (Allows reaching all outer pipes & valves comfortably)
+    readonly property real edgeMarginX: 80
+    readonly property real edgeMarginY: 60
 
-    readonly property real displayX: Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
-    readonly property real displayY: Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
+    // Intelligent Centering & Strict Viewport Boundary Clamping
+    readonly property real minAllowedPanX: actualContentWidth <= width ? (width - actualContentWidth) / 2 : (width - actualContentWidth - edgeMarginX)
+    readonly property real maxAllowedPanX: actualContentWidth <= width ? (width - actualContentWidth) / 2 : edgeMarginX
+
+    readonly property real minAllowedPanY: actualContentHeight <= height ? (height - actualContentHeight) / 2 : (height - actualContentHeight - edgeMarginY)
+    readonly property real maxAllowedPanY: actualContentHeight <= height ? (height - actualContentHeight) / 2 : edgeMarginY
+
+    readonly property real displayX: actualContentWidth <= width ? (width - actualContentWidth) / 2 : Math.max(minAllowedPanX, Math.min(maxAllowedPanX, rawPanX))
+    readonly property real displayY: actualContentHeight <= height ? (height - actualContentHeight) / 2 : Math.max(minAllowedPanY, Math.min(maxAllowedPanY, rawPanY))
 
     Component.onCompleted: {
         rawPanX = (width - actualContentWidth) / 2;

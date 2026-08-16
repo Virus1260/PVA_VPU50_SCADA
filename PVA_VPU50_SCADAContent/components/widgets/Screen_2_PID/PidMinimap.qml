@@ -3,15 +3,15 @@ import QtQuick.Layouts
 
 Item {
     id: minimapRoot
-    width: 280
-    height: 120
+    width: 290
+    height: 110
 
-    property real contentWidth: 1060
-    property real contentHeight: 630
+    property real contentWidth: 1440
+    property real contentHeight: 840
     property real viewX: 0
     property real viewY: 0
-    property real viewWidth: 1060
-    property real viewHeight: 630
+    property real viewWidth: 1440
+    property real viewHeight: 840
     property real zoomScale: 1.0
     property bool isLegendActive: true
     property Item targetSourceItem: null
@@ -27,7 +27,7 @@ Item {
         // 1. LIVE MIRROR MINIMAP PREVIEW BOX (Hardware Accelerated Live Feed)
         Rectangle {
             id: mapBox
-            Layout.preferredWidth: 165
+            Layout.preferredWidth: 176
             Layout.fillHeight: true
             color: "#07203b"
             border.color: "#1d4ed8"
@@ -70,23 +70,15 @@ Item {
                     ctx.stroke();
 
                     // Vessel
-                    var cx = 530 * sx;
-                    var vy = 110 * sy;
-                    var vw = 360 * sx;
-                    var vh = 348 * sy;
+                    var cx = 720 * sx;
+                    var vy = 160 * sy;
+                    var vw = 400 * sx;
+                    var vh = 420 * sy;
                     ctx.fillStyle = "#79b2e2";
                     ctx.strokeStyle = "#1b4c7c";
                     ctx.beginPath();
                     ctx.rect(cx - vw / 2, vy, vw, vh);
                     ctx.fill();
-                    ctx.stroke();
-
-                    // Agitator
-                    ctx.strokeStyle = "#ffffff";
-                    ctx.lineWidth = 1.5;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, vy - 10 * sy);
-                    ctx.lineTo(cx, vy + vh - 20 * sy);
                     ctx.stroke();
                 }
             }
@@ -94,10 +86,13 @@ Item {
             // Interactive Golden Viewport Frame (Accurately Tracks Zoom & Pan)
             Rectangle {
                 id: selectionFrame
-                x: Math.max(0, Math.min(mapBox.width - width, ((-minimapRoot.viewX) / (minimapRoot.contentWidth * minimapRoot.zoomScale)) * mapBox.width))
-                y: Math.max(0, Math.min(mapBox.height - height, ((-minimapRoot.viewY) / (minimapRoot.contentHeight * minimapRoot.zoomScale)) * mapBox.height))
-                width: Math.max(16, Math.min(mapBox.width, (minimapRoot.viewWidth / (minimapRoot.contentWidth * minimapRoot.zoomScale)) * mapBox.width))
-                height: Math.max(16, Math.min(mapBox.height, (minimapRoot.viewHeight / (minimapRoot.contentHeight * minimapRoot.zoomScale)) * mapBox.height))
+                readonly property real mapScaleX: mapBox.width / (minimapRoot.contentWidth * minimapRoot.zoomScale)
+                readonly property real mapScaleY: mapBox.height / (minimapRoot.contentHeight * minimapRoot.zoomScale)
+
+                x: Math.max(0, Math.min(mapBox.width - width, (-minimapRoot.viewX) * mapScaleX))
+                y: Math.max(0, Math.min(mapBox.height - height, (-minimapRoot.viewY) * mapScaleY))
+                width: Math.max(10, Math.min(mapBox.width, minimapRoot.viewWidth * mapScaleX))
+                height: Math.max(10, Math.min(mapBox.height, minimapRoot.viewHeight * mapScaleY))
                 color: "#30f59e0b"
                 border.color: "#f59e0b"
                 border.width: 1.8
