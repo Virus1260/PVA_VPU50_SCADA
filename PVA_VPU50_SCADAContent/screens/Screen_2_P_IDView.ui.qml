@@ -111,12 +111,9 @@ Rectangle {
         // ---------------------------------------------------------------------
         // 4. LEFT-SIDE UTILITY MANIFOLD, CIRCULATION PUMP & INLINE HEATER (z: 5, z: 6, z: 7)
         // ---------------------------------------------------------------------
-        // Vertical Green Header & Left Isolation Valves
-        PidPipe { z: 5; startX: 60; startY: 340; endX: 60; endY: 615; baseColor: "#22c55e" }
-        PidPipe { z: 5; startX: 120; startY: 340; endX: 120; endY: 625; baseColor: "#3b82f6" }
-
-        PidValve { id: vK168201; z: 6; x: 47; y: 350; tag: "K 168 201"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK168202; z: 6; x: 107; y: 350; tag: "K 168 202"; showTags: pidViewRoot.showTags }
+        // Vertical Green Header & Blue CW Return Line
+        PidPipe { z: 5; startX: 60; startY: 480; endX: 60; endY: 615; baseColor: "#22c55e" }
+        PidPipe { z: 5; startX: 120; startY: 210; endX: 120; endY: 625; baseColor: "#3b82f6" }
 
         // Horizontal Bridge Valve
         PidPipe { z: 5; startX: 60; startY: 480; endX: 180; endY: 480; baseColor: "#22c55e" }
@@ -150,7 +147,6 @@ Rectangle {
         // Cold Water Blue Return Pipe (from upper jacket nozzle at y=210 left to blue header)
         Rectangle { z: 6; x: 402; y: 206; width: 6; height: 8; color: "#1e293b"; border.color: "#3b82f6"; border.width: 1 }
         PidPipe { id: pipeJacketReturn1; z: 5; startX: 408; startY: 210; endX: 120; endY: 210; baseColor: "#3b82f6" }
-        PidPipe { id: pipeJacketReturn2; z: 5; startX: 120; startY: 210; endX: 120; endY: 340; baseColor: "#3b82f6" }
 
         // ---------------------------------------------------------------------
         // 5. MECHANICAL SEAL COOLING CIRCUIT & SEAL POT BUFFER TANK (z: 6, z: 7)
@@ -183,7 +179,7 @@ Rectangle {
         PidPipe { z: 5; startX: 20; startY: 625; endX: 715; endY: 625; baseColor: "#3b82f6" }
 
         // ---------------------------------------------------------------------
-        // 6. BOTTOM HOMOGENIZER & SUCTION VALVES (z: 6, z: 7)
+        // 6. BOTTOM HOMOGENIZER (z: 6, z: 7)
         // ---------------------------------------------------------------------
         PidHomogenizer {
             id: bottomHomog
@@ -192,13 +188,6 @@ Rectangle {
             z: 6
             showTags: pidViewRoot.showTags
         }
-
-        // Left Suction Valves (K 143 002 Solids & K 143 001 Liquids)
-        PidValve { id: vK143002; z: 7; x: 420; y: 475; tag: "K 143 002"; showTags: pidViewRoot.showTags }
-        PidValve { id: vK143001; z: 7; x: 420; y: 520; tag: "K 143 001"; showTags: pidViewRoot.showTags }
-
-        // Right Stator Discharge Valve (K 163 002)
-        PidValve { id: vK163002; z: 7; x: 580; y: 495; tag: "K 163 002"; showTags: pidViewRoot.showTags }
 
         // ---------------------------------------------------------------------
         // 7. RECIRCULATION LOOP & RISER (z: 6, z: 7, z: 8 - Cyan)
