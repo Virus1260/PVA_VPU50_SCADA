@@ -13,10 +13,14 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
         "vercel.json"
         ".vercel/project.json"
         ".vscode/settings.json"
+        "scada/config/alarm_catalog.json"
+        "scada/config/opcua.production.example.json"
+        "scada/config/role_catalog.json"
+        "scada/config/tag_catalog.json"
+        "scada/simulation/plant_profile.json"
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-    Qt6::Quick3D
     PVA_VPU50_SCADAplugin
     PVA_VPU50_SCADAContentplugin
     QtQuickDesignerComponents)

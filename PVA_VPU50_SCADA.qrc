@@ -149,12 +149,23 @@
         <file>PVA_VPU50_SCADAContent/screens/Screen_2_P_ID.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_2_P_IDView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_3_Trends.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_3_TrendsView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_4_Alarms.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_4_AlarmsView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_5_Recipes.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_5_RecipesView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_6_Audit.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_6_AuditView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_7_Playback.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_7_PlaybackView.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/screens/Screen_8_Diagnostics.qml</file>
+        <file>PVA_VPU50_SCADAContent/screens/Screen_8_DiagnosticsView.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>scada/config/alarm_catalog.json</file>
+        <file>scada/config/opcua.production.example.json</file>
+        <file>scada/config/role_catalog.json</file>
+        <file>scada/config/tag_catalog.json</file>
+        <file>scada/simulation/plant_profile.json</file>
         <file>vercel.json</file>
     </qresource>
 </RCC>

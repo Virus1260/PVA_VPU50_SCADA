@@ -1,0 +1,65 @@
+{
+  "catalog_version": "1.0.0",
+  "alarms": [
+    {
+      "id": "ALM-TEMP-HIGH",
+      "tag_id": "vpu.main.temperature",
+      "condition": "high",
+      "threshold_key": "alarm_high",
+      "severity": "CRITICAL",
+      "title": "Main Vessel High Temperature",
+      "operator_response": "Stop heating immediately, check thermal jacket circulation, and notify supervisor.",
+      "requires_comment_on_acknowledge": true
+    },
+    {
+      "id": "ALM-VAC-LOW",
+      "tag_id": "vpu.main.vacuum_pressure",
+      "condition": "high",
+      "threshold_key": "alarm_high",
+      "severity": "HIGH",
+      "title": "Vacuum Chamber Differential Pressure Loss",
+      "operator_response": "Verify lid seal integrity, vacuum pump line valves, and cover lock switch.",
+      "requires_comment_on_acknowledge": true
+    },
+    {
+      "id": "ALM-HOMO-HIGH",
+      "tag_id": "vpu.main.homogenizer_speed",
+      "condition": "high",
+      "threshold_key": "alarm_high",
+      "severity": "HIGH",
+      "title": "Homogenizer High Shear Overspeed Warning",
+      "operator_response": "Reduce homogenizer setpoint, verify product viscosity, and inspect VFD drive feedback.",
+      "requires_comment_on_acknowledge": true
+    },
+    {
+      "id": "ALM-SEAL-PRESS",
+      "tag_id": "vpu.seal.pressure",
+      "condition": "low",
+      "threshold_key": "alarm_low",
+      "severity": "HIGH",
+      "title": "Mechanical Seal Barrier Low Pressure Warning",
+      "operator_response": "Inspect buffer fluid level and recharge nitrogen pressure.",
+      "requires_comment_on_acknowledge": true
+    },
+    {
+      "id": "ALM-INTERLOCK-COVER",
+      "tag_id": "system.cover_locked",
+      "condition": "boolean_false",
+      "threshold_key": null,
+      "severity": "CRITICAL",
+      "title": "Vessel Cover Safety Interlock Disengaged",
+      "operator_response": "Lock vessel dome clamps before initiating agitation, heating, or vacuum sequence.",
+      "requires_comment_on_acknowledge": true
+    },
+    {
+      "id": "ALM-COMM-PLC",
+      "tag_id": "system.connection",
+      "condition": "quality_bad",
+      "threshold_key": null,
+      "severity": "HIGH",
+      "title": "Delta PLC Communication Timeout / Link Degraded",
+      "operator_response": "Verify Ethernet/IP Modbus/OPC UA physical connection to Delta AS332T-A PLC.",
+      "requires_comment_on_acknowledge": true
+    }
+  ]
+}
