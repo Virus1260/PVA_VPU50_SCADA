@@ -516,28 +516,31 @@ Item {
         // -------------------------------------------------------------
         // 7. HEADER & ALARMS SYNCHRONIZATION ENGINE
         // -------------------------------------------------------------
+        var isUpdatingAlarms = false;
         function updateAlarmAnnunciator() {
+            if (isUpdatingAlarms) return;
+            isUpdatingAlarms = true;
+
             var alarmsScr = ui.alarmsScreen;
-            if (!alarmsScr) return;
-
-            var unack = alarmsScr.syncUnackCount();
-            if (ui.sidebar) {
-                ui.sidebar.unackAlarmsCount = unack;
-            }
-            if (ui.alarmsScreen) {
-                ui.alarmsScreen.unackCount = unack;
-            }
-
-            if (unack > 0) {
-                var latest = alarmsScr.getLatestUnacknowledgedAlarm();
-                if (latest) {
-                    ui.header.isAlarmActive = true;
-                    ui.header.alarmMessage = "[" + latest.severity + "] " + latest.tag + ": " + latest.title + " (" + latest.value + ") - ACTION: " + latest.resp;
+            if (alarmsScr) {
+                var unack = alarmsScr.syncUnackCount();
+                if (ui.sidebar) {
+                    ui.sidebar.unackAlarmsCount = unack;
                 }
-            } else {
-                ui.header.isAlarmActive = false;
-                ui.header.alarmMessage = "SYSTEM NORMAL - ALL PROCESS ALARMS ACKNOWLEDGED";
+
+                if (unack > 0) {
+                    var latest = alarmsScr.getLatestUnacknowledgedAlarm();
+                    if (latest) {
+                        ui.header.isAlarmActive = true;
+                        ui.header.alarmMessage = "[" + latest.severity + "] " + latest.tag + ": " + latest.title + " (" + latest.value + ") - ACTION: " + latest.resp;
+                    }
+                } else {
+                    ui.header.isAlarmActive = false;
+                    ui.header.alarmMessage = "SYSTEM NORMAL - ALL PROCESS ALARMS ACKNOWLEDGED";
+                }
             }
+
+            isUpdatingAlarms = false;
         }
 
         if (ui.alarmsScreen) {

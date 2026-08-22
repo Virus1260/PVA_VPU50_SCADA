@@ -111,7 +111,6 @@ Item {
             if (!model.get(i).ack) unack++;
         }
         ui.unackCount = unack;
-        alarmsSynchronized(unack);
         return unack;
     }
 
