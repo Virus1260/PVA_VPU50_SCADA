@@ -28,26 +28,37 @@ Item {
         activeTimePreset: "5min"
     }
 
-    // Helper: Build Telemetry Row Formatted for the Table
+    // Helper: Build Multi-Column Telemetry Table Rows
     function refreshTableView() {
         var visibleData = getVisibleDataSlice();
         var sensorModel = ui.sensorListViewItem.model;
-        var tableRows = [];
+        if (!sensorModel) return;
 
+        // 1. Gather active sensors list
+        var activeSensors = [];
+        for (var s = 0; s < sensorModel.count; s++) {
+            var ch = sensorModel.get(s);
+            if (ch.active) {
+                activeSensors.push(ch);
+            }
+        }
+
+        // 2. Build rows with individual column values
+        var tableRows = [];
         for (var i = visibleData.length - 1; i >= 0; i--) {
             var pt = visibleData[i];
-            var parts = [];
-            if (sensorModel) {
-                for (var s = 0; s < sensorModel.count; s++) {
-                    var ch = sensorModel.get(s);
-                    if (ch.active && pt[ch.field] !== undefined) {
-                        parts.push(ch.tag + ": " + pt[ch.field].toFixed(1) + " " + ch.unit);
-                    }
-                }
+            var cols = [];
+            for (var a = 0; a < activeSensors.length; a++) {
+                var sItem = activeSensors[a];
+                var valNum = pt[sItem.field] !== undefined ? pt[sItem.field] : 0.0;
+                cols.push({
+                    val: (valNum % 1 === 0 ? valNum.toFixed(0) : valNum.toFixed(1)) + " " + sItem.unit,
+                    color: sItem.color
+                });
             }
             tableRows.push({
                 time: pt.time,
-                channelsText: parts.length > 0 ? parts.join("  |  ") : "No sensors active"
+                sensorCols: cols
             });
         }
         ui.telemetryList.model = tableRows;
@@ -72,12 +83,15 @@ Item {
         return slice;
     }
 
-    // Dynamic Unit Title Calculation
+    // Dynamic Unit Title & Table Header Column Calculation
     function updateYAxisTitle() {
         var activeCount = 0;
         var activeUnits = [];
         var sensorModel = ui.sensorListViewItem.model;
         if (!sensorModel) return;
+
+        // Synchronize Multi-Column Table Header Model
+        ui.tableHeaderModelItem.clear();
 
         for (var i = 0; i < sensorModel.count; i++) {
             var item = sensorModel.get(i);
@@ -86,6 +100,13 @@ Item {
                 if (activeUnits.indexOf(item.unit) === -1) {
                     activeUnits.push(item.unit);
                 }
+                ui.tableHeaderModelItem.append({
+                    tag: item.tag,
+                    desc: item.desc,
+                    unit: item.unit,
+                    color: item.color,
+                    field: item.field
+                });
             }
         }
 
@@ -104,6 +125,7 @@ Item {
         } else {
             ui.yAxisTitle = "Multi-Variable Process View (% Engineering Scale)";
         }
+
         ui.trendCanvasItem.requestPaint();
         refreshTableView();
     }
@@ -321,7 +343,7 @@ Item {
                 curr_homo: sp_homo * 0.002 + 1.2
             };
 
-            // Maintain up to 1200 historical samples (~100 minutes at 500ms)
+            // Maintain up to 1200 historical samples
             trendsContainer.persistentHistory.push(sample);
             if (trendsContainer.persistentHistory.length > 1200) {
                 trendsContainer.persistentHistory.shift();
@@ -333,7 +355,7 @@ Item {
                 for (var s = 0; s < model.count; s++) {
                     var f = model.get(s).field;
                     if (sample[f] !== undefined) {
-                        var valStr = sample[f].toFixed(1) + " " + model.get(s).unit;
+                        var valStr = (sample[f] % 1 === 0 ? sample[f].toFixed(0) : sample[f].toFixed(1)) + " " + model.get(s).unit;
                         model.setProperty(s, "val", valStr);
                     }
                 }
@@ -530,7 +552,7 @@ Item {
                                     var valNum = pt[ch.field] !== undefined ? pt[ch.field] : 0.0;
                                     inspectItems.push({
                                         tag: ch.tag,
-                                        val: valNum.toFixed(1) + " " + ch.unit,
+                                        val: (valNum % 1 === 0 ? valNum.toFixed(0) : valNum.toFixed(1)) + " " + ch.unit,
                                         color: ch.color
                                     });
                                 }

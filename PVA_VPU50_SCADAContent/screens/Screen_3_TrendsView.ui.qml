@@ -1,11 +1,13 @@
 /*
 This is a UI file (.ui.qml) for Screen 3: Process Trends & Historical Analytics.
 Strictly declarative for Qt Design Studio.
+Assembled from modular sub-widgets in components/widgets/Screen_3_Trends/
 */
 
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../components/widgets/Screen_3_Trends"
 
 Rectangle {
     id: trendsViewRoot
@@ -13,39 +15,41 @@ Rectangle {
     height: 626
     color: "#08213b"
 
-    // Property Aliases for Logic Integration
-    property alias batchCombo: batchSelectorCombo
-    property alias selectAllBtnItem: selectAllActionButton
-    property alias clearAllBtnItem: clearAllActionButton
-    property alias chartModeBtn: chartViewButton
-    property alias tableModeBtn: tableViewButton
-    property alias resetZoomBtn: resetZoomButton
-    property alias liveStreamBtn: liveStreamToggleBtn
-    property alias mainStack: trendStack
-    property alias sensorListViewItem: sensorChannelListView
-    property alias trendCanvasItem: graphCanvas
-    property alias inspectCardItem: inspectionCard
-    property alias inspectRepeaterItem: inspectRepeater
-    property alias telemetryList: tableListView
-    property alias dragBoxOverlay: dragSelectionRect
-    property alias yAxisTitleLabel: yAxisUnitText
-    property alias xAxisTitleLabel: xAxisUnitText
+    // Property Aliases for Logic Controller Integration
+    property alias topBar: topControlBar
+    property alias batchCombo: topControlBar.batchCombo
+    property alias t1MinBtn: topControlBar.t1MinBtn
+    property alias t5MinBtn: topControlBar.t5MinBtn
+    property alias t15MinBtn: topControlBar.t15MinBtn
+    property alias t1HourBtn: topControlBar.t1HourBtn
+    property alias t8HourBtn: topControlBar.t8HourBtn
+    property alias t24HourBtn: topControlBar.t24HourBtn
+    property alias liveStreamBtn: topControlBar.liveStreamBtn
+    property alias resetZoomBtn: topControlBar.resetZoomBtn
+    property alias chartModeBtn: topControlBar.chartModeBtn
+    property alias tableModeBtn: topControlBar.tableModeBtn
+
+    property alias sensorPanel: sensorSidebar
+    property alias selectAllBtnItem: sensorSidebar.selectAllBtnItem
+    property alias clearAllBtnItem: sensorSidebar.clearAllBtnItem
+    property alias sensorListViewItem: sensorSidebar.sensorListViewItem
+
+    property alias graphWidget: trendsGraph
+    property alias trendCanvasItem: trendsGraph.trendCanvasItem
+    property alias dragBoxOverlay: trendsGraph.dragBoxOverlay
+    property alias inspectCardItem: trendsGraph.inspectCardItem
+    property alias inspectRepeaterItem: trendsGraph.inspectRepeaterItem
+    property alias panStartBtn: trendsGraph.panStartBtn
+    property alias panLeftBtn: trendsGraph.panLeftBtn
+    property alias panRightBtn: trendsGraph.panRightBtn
+    property alias panLiveBtn: trendsGraph.panLiveBtn
+    property alias timeSliderItem: trendsGraph.timeSliderItem
+
+    property alias tableWidget: trendsTable
+    property alias tableHeaderModelItem: trendsTable.tableHeaderModelItem
+    property alias telemetryList: trendsTable.telemetryList
+
     property alias panelSplitterHandle: panelResizeHandle
-
-    // Time Presets Buttons
-    property alias t1MinBtn: time1MinBtn
-    property alias t5MinBtn: time5MinBtn
-    property alias t15MinBtn: time15MinBtn
-    property alias t1HourBtn: time1HourBtn
-    property alias t8HourBtn: time8HourBtn
-    property alias t24HourBtn: time24HourBtn
-
-    // Timeline Paging Stepper Buttons
-    property alias panStartBtn: timelineStartBtn
-    property alias panLeftBtn: timelineLeftBtn
-    property alias panRightBtn: timelineRightBtn
-    property alias panLiveBtn: timelineLiveBtn
-    property alias timeSliderItem: historyTimeSlider
 
     // Declarative State Properties
     property string activeMode: "chart" // "chart" or "table"
@@ -64,321 +68,29 @@ Rectangle {
         spacing: 8
 
         // =====================================================================
-        // 1. TOP PROCESS BAR (Batch No, Time Window Presets, Live Status)
+        // 1. TOP PROCESS BAR (Modular TrendsTopBar Widget)
         // =====================================================================
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 46
-            radius: 5
-            color: "#0d2b4a"
-            border.color: "#184d7e"
-            border.width: 1.2
-
-            RowLayout {
-                anchors.fill: parent
-                anchors.margins: 6
-                spacing: 8
-
-                // Batch Selector
-                Text { text: "Batch:"; color: "#94a3b8"; font.bold: true; font.pixelSize: 12 }
-                ComboBox {
-                    id: batchSelectorCombo
-                    Layout.preferredWidth: 210
-                    Layout.preferredHeight: 34
-                    model: ["● Real-Time Live Process", "B-20260815-A1: Body Lotion (50kg)", "B-20260814-S2: Shampoo (50kg)", "B-20260812-C1: Carbopol Gel (50kg)"]
-                    currentIndex: 0
-                }
-
-                // Operator Badge
-                Rectangle {
-                    Layout.preferredHeight: 34
-                    Layout.preferredWidth: 170
-                    radius: 4
-                    color: "#071c33"
-                    border.color: "#0284c7"
-                    border.width: 1.0
-
-                    RowLayout {
-                        anchors.centerIn: parent
-                        spacing: 4
-                        Text { text: "👤"; font.pixelSize: 11 }
-                        Text { text: trendsViewRoot.operatorName; color: "#38bdf8"; font.bold: true; font.pixelSize: 10 }
-                    }
-                }
-
-                // Time Window Preset Buttons (1m, 5m, 15m, 1h, 8h, 24h)
-                Rectangle {
-                    Layout.preferredWidth: 260
-                    Layout.preferredHeight: 34
-                    radius: 4
-                    color: "#071c33"
-                    border.color: "#184d7e"
-
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 2
-                        anchors.margins: 2
-
-                        Rectangle {
-                            id: time1MinBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "1min" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "1m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                        Rectangle {
-                            id: time5MinBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "5min" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "5m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                        Rectangle {
-                            id: time15MinBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "15min" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "15m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                        Rectangle {
-                            id: time1HourBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "1h" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "1h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                        Rectangle {
-                            id: time8HourBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "8h" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "8h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                        Rectangle {
-                            id: time24HourBtn
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeTimePreset === "24h" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "24h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                        }
-                    }
-                }
-
-                // Live Streaming Toggle / Status
-                Rectangle {
-                    id: liveStreamToggleBtn
-                    Layout.preferredWidth: 125
-                    Layout.preferredHeight: 34
-                    radius: 4
-                    color: trendsViewRoot.isLiveStreaming ? "#052e16" : "#451a03"
-                    border.color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
-
-                    RowLayout {
-                        anchors.centerIn: parent
-                        spacing: 6
-                        Rectangle { width: 8; height: 8; radius: 4; color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#f59e0b" }
-                        Text {
-                            text: trendsViewRoot.isLiveStreaming ? "● LIVE SCROLL" : "⏸ PAUSED (PULL)"
-                            color: trendsViewRoot.isLiveStreaming ? "#4ade80" : "#fde68a"
-                            font.bold: true
-                            font.pixelSize: 10
-                        }
-                    }
-                }
-
-                Item { Layout.fillWidth: true }
-
-                // Reset Zoom
-                Rectangle {
-                    id: resetZoomButton
-                    Layout.preferredWidth: 95
-                    Layout.preferredHeight: 34
-                    radius: 4
-                    visible: trendsViewRoot.isZoomed
-                    color: "#1e3a8a"
-                    border.color: "#60a5fa"
-                    Text { anchors.centerIn: parent; text: "⟲ Reset Zoom"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                }
-
-                // Mode Switcher: Graph / Table
-                Rectangle {
-                    Layout.preferredWidth: 150
-                    Layout.preferredHeight: 34
-                    radius: 4
-                    color: "#071c33"
-                    border.color: "#0284c7"
-                    border.width: 1.0
-
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 0
-
-                        Rectangle {
-                            id: chartViewButton
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeMode === "chart" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "📈 Graph"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
-                        }
-
-                        Rectangle {
-                            id: tableViewButton
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            radius: 3
-                            color: trendsViewRoot.activeMode === "table" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "📋 Table"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
-                        }
-                    }
-                }
-            }
+        TrendsTopBar {
+            id: topControlBar
+            operatorName: trendsViewRoot.operatorName
+            activeTimePreset: trendsViewRoot.activeTimePreset
+            isLiveStreaming: trendsViewRoot.isLiveStreaming
+            isZoomed: trendsViewRoot.isZoomed
+            activeMode: trendsViewRoot.activeMode
         }
 
         // =====================================================================
-        // 2. MAIN BODY: RESIZABLE SENSOR LIST + PROCESS GRAPH/TABLE
+        // 2. MAIN BODY: SENSOR LIST + PROCESS GRAPH/TABLE
         // =====================================================================
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 0
 
-            // 2A. LEFT SIDEBAR: EXPANDED RESIZABLE SENSOR CHANNELS LIST
-            Rectangle {
-                Layout.preferredWidth: trendsViewRoot.sensorPanelWidth
-                Layout.fillHeight: true
-                radius: 5
-                color: "#071c33"
-                border.color: "#184d7e"
-                border.width: 1.2
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 6
-
-                    // Header with Full Sized "Select All" / "Clear All" Buttons
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 36
-                        radius: 4
-                        color: "#0d2b4a"
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 4
-                            spacing: 6
-
-                            Text { text: "📡"; font.pixelSize: 12 }
-                            Text { text: "SENSORS"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
-
-                            Rectangle {
-                                id: selectAllActionButton
-                                Layout.preferredWidth: 80
-                                Layout.preferredHeight: 28
-                                radius: 3
-                                color: "#1e3a8a"
-                                border.color: "#38bdf8"
-                                Text { anchors.centerIn: parent; text: "✓ Select All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
-                            }
-                            Rectangle {
-                                id: clearAllActionButton
-                                Layout.preferredWidth: 75
-                                Layout.preferredHeight: 28
-                                radius: 3
-                                color: "#334155"
-                                border.color: "#64748b"
-                                Text { anchors.centerIn: parent; text: "✗ Clear All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
-                            }
-                        }
-                    }
-
-                    // Individually Scrollable Sensor Channels List
-                    ListView {
-                        id: sensorChannelListView
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        clip: true
-                        spacing: 4
-                        ScrollBar.vertical: ScrollBar {
-                            active: true
-                            policy: ScrollBar.AlwaysOn
-                            width: 6
-                        }
-
-                        model: ListModel {
-                            id: sensorModelCatalogItems
-                            ListElement { section: "TEMPERATURE"; tag: "RTD 1TI1301"; desc: "Main Vessel Temp"; unit: "°C"; color: "#38bdf8"; active: true; val: "40.1 °C"; rangeMin: 0; rangeMax: 120; field: "temp_vessel" }
-                            ListElement { section: "TEMPERATURE"; tag: "RTD 2TI1001"; desc: "Jacket Thermal Temp"; unit: "°C"; color: "#f97316"; active: true; val: "52.6 °C"; rangeMin: 0; rangeMax: 140; field: "temp_jacket" }
-                            ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 1"; desc: "Heater Element 01"; unit: "°C"; color: "#f43f5e"; active: false; val: "48.2 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater1" }
-                            ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 2"; desc: "Heater Element 02"; unit: "°C"; color: "#ec4899"; active: false; val: "47.9 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater2" }
-                            ListElement { section: "TEMPERATURE"; tag: "RTD 3TI1003"; desc: "Lid Surface Temp"; unit: "°C"; color: "#fb7185"; active: false; val: "36.4 °C"; rangeMin: 0; rangeMax: 100; field: "temp_lid" }
-                            ListElement { section: "PRESSURE"; tag: "PR TRANSMITTER"; desc: "Chamber Vacuum"; unit: "mbar"; color: "#c084fc"; active: true; val: "-209.8 mbar"; rangeMin: -1000; rangeMax: 0; field: "vacuum_pressure" }
-                            ListElement { section: "PRESSURE"; tag: "PIT 1002"; desc: "Jacket Steam Press"; unit: "bar"; color: "#a855f7"; active: false; val: "1.8 bar"; rangeMin: 0; rangeMax: 6; field: "press_steam" }
-                            ListElement { section: "PRESSURE"; tag: "PIT 1003"; desc: "Purge Air Pressure"; unit: "bar"; color: "#818cf8"; active: false; val: "5.5 bar"; rangeMin: 0; rangeMax: 10; field: "press_air" }
-                            ListElement { section: "DRIVES"; tag: "1M1501 Speed"; desc: "Agitator Drive"; unit: "rpm"; color: "#22c55e"; active: true; val: "25.0 rpm"; rangeMin: 0; rangeMax: 60; field: "speed_agitator" }
-                            ListElement { section: "DRIVES"; tag: "2M1501 Speed"; desc: "Scraper Motor"; unit: "rpm"; color: "#10b981"; active: false; val: "0.0 rpm"; rangeMin: 0; rangeMax: 40; field: "speed_scraper" }
-                            ListElement { section: "DRIVES"; tag: "1M2003 Speed"; desc: "Homogenizer Rotor"; unit: "rpm"; color: "#eab308"; active: true; val: "600 rpm"; rangeMin: 0; rangeMax: 6000; field: "speed_homo" }
-                            ListElement { section: "DRIVES"; tag: "3M1001 Speed"; desc: "Discharge Pump"; unit: "rpm"; color: "#f59e0b"; active: false; val: "0.0 rpm"; rangeMin: 0; rangeMax: 1500; field: "speed_pump" }
-                            ListElement { section: "POWER"; tag: "KW TRANSMITTER"; desc: "Total Skid Power"; unit: "kW"; color: "#06b6d4"; active: false; val: "14.8 kW"; rangeMin: 0; rangeMax: 45; field: "power_kw" }
-                            ListElement { section: "POWER"; tag: "CURR 1M1501"; desc: "Agitator Current"; unit: "A"; color: "#14b8a6"; active: false; val: "3.4 A"; rangeMin: 0; rangeMax: 20; field: "curr_agitator" }
-                            ListElement { section: "POWER"; tag: "CURR 1M2003"; desc: "Homo Current"; unit: "A"; color: "#0ea5e9"; active: false; val: "8.9 A"; rangeMin: 0; rangeMax: 35; field: "curr_homo" }
-                        }
-
-                        delegate: Rectangle {
-                            width: sensorChannelListView ? sensorChannelListView.width - 8 : 0
-                            height: 48
-                            radius: 4
-                            color: model.active ? "#0d365b" : "#092440"
-                            border.color: model.active ? model.color : "#1e3a8a"
-                            border.width: model.active ? 1.6 : 1.0
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 6
-                                spacing: 8
-
-                                Rectangle {
-                                    width: 12
-                                    height: 12
-                                    radius: 6
-                                    color: model.active ? model.color : "#475569"
-                                    border.color: model.active ? "#ffffff" : "transparent"
-                                    border.width: 1
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 1
-                                    Text {
-                                        text: model.tag
-                                        color: model.active ? "#ffffff" : "#94a3b8"
-                                        font.bold: true
-                                        font.pixelSize: 11
-                                    }
-                                    Text {
-                                        text: model.desc
-                                        color: "#64748b"
-                                        font.pixelSize: 9
-                                    }
-                                }
-
-                                Text {
-                                    text: model.val
-                                    color: model.active ? model.color : "#64748b"
-                                    font.bold: true
-                                    font.pixelSize: 11
-                                }
-                            }
-                        }
-                    }
-                }
+            // 2A. LEFT SIDEBAR: MODULAR SENSOR CHANNELS LIST
+            TrendsSensorPanel {
+                id: sensorSidebar
+                panelWidth: trendsViewRoot.sensorPanelWidth
             }
 
             // 2B. INTERACTIVE PANEL RESIZE HANDLE / SPLITTER
@@ -397,293 +109,26 @@ Rectangle {
                 }
             }
 
-            // 2C. RIGHT AREA: INTERACTIVE GRAPH OR TABULAR LOG
+            // 2C. RIGHT WORKSPACE: MODULAR GRAPH OR TABLE STACK
             StackLayout {
                 id: trendStack
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: trendsViewRoot.activeMode === "chart" ? 0 : 1
 
-                // GRAPH VIEW
-                Rectangle {
-                    color: "#06182c"
-                    border.color: "#184d7e"
-                    border.width: 1.2
-                    radius: 5
-                    clip: true
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 8
-                        spacing: 4
-
-                        // Graph Title Bar with Dynamic Units
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 24
-                            spacing: 8
-
-                            Text {
-                                id: yAxisUnitText
-                                text: "📈 Y-AXIS: " + trendsViewRoot.yAxisTitle
-                                color: "#38bdf8"
-                                font.bold: true
-                                font.pixelSize: 11
-                            }
-                            Item { Layout.fillWidth: true }
-                            Text {
-                                id: xAxisUnitText
-                                text: "🕒 X-AXIS: " + trendsViewRoot.xAxisTitle
-                                color: "#94a3b8"
-                                font.bold: true
-                                font.pixelSize: 10
-                            }
-                            Text {
-                                text: "| Free Drag Box to Zoom | Pan Bottom Bar when Paused"
-                                color: "#64748b"
-                                font.pixelSize: 10
-                            }
-                        }
-
-                        // Canvas Graph Area with Visual Dragging Box Overlay
-                        Item {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-
-                            Canvas {
-                                id: graphCanvas
-                                anchors.fill: parent
-                            }
-
-                            // Dynamic Visual Drag-to-Zoom Free-Size Selection Box
-                            Rectangle {
-                                id: dragSelectionRect
-                                visible: false
-                                color: "#380284c7"
-                                border.color: "#38bdf8"
-                                border.width: 1.5
-                                z: 5
-
-                                Rectangle {
-                                    anchors.top: parent.top
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.topMargin: 4
-                                    height: 18
-                                    width: 80
-                                    radius: 3
-                                    color: "#0284c7"
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: "🔍 Zoom Box"
-                                        color: "#ffffff"
-                                        font.bold: true
-                                        font.pixelSize: 9
-                                    }
-                                }
-                            }
-
-                            // Dynamic Floating Inspection Tooltip with Live Channel Values
-                            Rectangle {
-                                id: inspectionCard
-                                visible: false
-                                width: 250
-                                height: 160
-                                radius: 5
-                                color: "#081d33"
-                                border.color: "#38bdf8"
-                                border.width: 1.4
-                                opacity: 0.96
-                                z: 10
-
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 8
-                                    spacing: 4
-
-                                    RowLayout {
-                                        Layout.fillWidth: true
-                                        Text { text: "🕒 " + trendsViewRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
-                                        Item { Layout.fillWidth: true }
-                                        Text { text: "ACTIVE VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
-                                    }
-
-                                    Rectangle { Layout.fillWidth: true; height: 1; color: "#1e3a8a" }
-
-                                    // Dynamic List of Active Sensor Values at Hovered Timestamp
-                                    ListView {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        clip: true
-                                        spacing: 2
-                                        interactive: false
-
-                                        model: ListModel { id: inspectRepeater }
-
-                                        delegate: RowLayout {
-                                            width: parent ? parent.width : 0
-                                            spacing: 6
-
-                                            Rectangle {
-                                                width: 8
-                                                height: 8
-                                                radius: 4
-                                                color: model.color ? model.color : "#38bdf8"
-                                            }
-
-                                            Text {
-                                                text: model.tag
-                                                color: "#e2e8f0"
-                                                font.bold: true
-                                                font.pixelSize: 10
-                                                Layout.fillWidth: true
-                                                elide: Text.ElideRight
-                                            }
-
-                                            Text {
-                                                text: model.val
-                                                color: model.color ? model.color : "#ffffff"
-                                                font.bold: true
-                                                font.pixelSize: 10
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // Bottom Timeline History Panning Bar
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 32
-                            radius: 4
-                            color: "#0d2b4a"
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 4
-                                spacing: 6
-
-                                Rectangle {
-                                    id: timelineStartBtn
-                                    Layout.preferredWidth: 65
-                                    Layout.preferredHeight: 24
-                                    radius: 3
-                                    color: "#1e3a8a"
-                                    Text { anchors.centerIn: parent; text: "⏮ Start"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                                }
-                                Rectangle {
-                                    id: timelineLeftBtn
-                                    Layout.preferredWidth: 55
-                                    Layout.preferredHeight: 24
-                                    radius: 3
-                                    color: "#0f3a63"
-                                    Text { anchors.centerIn: parent; text: "◀ 10s"; color: "#ffffff"; font.pixelSize: 10 }
-                                }
-
-                                Slider {
-                                    id: historyTimeSlider
-                                    Layout.fillWidth: true
-                                    from: 0
-                                    to: 100
-                                    value: 100
-                                }
-
-                                Rectangle {
-                                    id: timelineRightBtn
-                                    Layout.preferredWidth: 55
-                                    Layout.preferredHeight: 24
-                                    radius: 3
-                                    color: "#0f3a63"
-                                    Text { anchors.centerIn: parent; text: "10s ▶"; color: "#ffffff"; font.pixelSize: 10 }
-                                }
-                                Rectangle {
-                                    id: timelineLiveBtn
-                                    Layout.preferredWidth: 65
-                                    Layout.preferredHeight: 24
-                                    radius: 3
-                                    color: trendsViewRoot.isLiveStreaming ? "#15803d" : "#0284c7"
-                                    Text { anchors.centerIn: parent; text: "⏭ Live"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                                }
-                            }
-                        }
-                    }
+                // GRAPH VIEW WIDGET
+                TrendsGraphWidget {
+                    id: trendsGraph
+                    yAxisTitle: trendsViewRoot.yAxisTitle
+                    xAxisTitle: trendsViewRoot.xAxisTitle
+                    inspectionTime: trendsViewRoot.inspectionTime
+                    isLiveStreaming: trendsViewRoot.isLiveStreaming
                 }
 
-                // TABLE VIEW (Dynamic Multi-Sensor Historical View)
-                Rectangle {
-                    color: "#06182c"
-                    border.color: "#184d7e"
-                    border.width: 1.2
-                    radius: 5
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: 8
-                        spacing: 4
-
-                        // Table Header with Dynamic Channel Tags
-                        Rectangle {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 34
-                            color: "#0d2b4a"
-                            radius: 3
-
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 12
-                                anchors.rightMargin: 12
-                                spacing: 10
-
-                                Text { text: "TIMESTAMP (UTC)"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 120 }
-                                Text { text: "ACTIVE TELEMETRY CHANNELS & VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
-                                Text { text: "TIME SCALE: " + trendsViewRoot.activeTimePreset.toUpperCase(); color: "#f59e0b"; font.bold: true; font.pixelSize: 10; Layout.alignment: Qt.AlignRight }
-                            }
-                        }
-
-                        // Table Rows
-                        ListView {
-                            id: tableListView
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            clip: true
-                            spacing: 3
-                            ScrollBar.vertical: ScrollBar {
-                                active: true
-                                policy: ScrollBar.AsNeeded
-                            }
-
-                            delegate: Rectangle {
-                                width: tableListView ? tableListView.width : 0
-                                height: 34
-                                radius: 3
-                                color: index % 2 === 0 ? "#071c33" : "#092440"
-
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 12
-                                    anchors.rightMargin: 12
-                                    spacing: 12
-
-                                    Text {
-                                        text: modelData.time ? modelData.time : ""
-                                        color: "#ffffff"
-                                        font.bold: true
-                                        font.pixelSize: 11
-                                        Layout.preferredWidth: 120
-                                    }
-
-                                    // Display chips of active channel values
-                                    Text {
-                                        text: modelData.channelsText ? modelData.channelsText : ""
-                                        color: "#cbd5e1"
-                                        font.pixelSize: 11
-                                        Layout.fillWidth: true
-                                        elide: Text.ElideRight
-                                    }
-                                }
-                            }
-                        }
-                    }
+                // TABLE VIEW WIDGET
+                TrendsTableWidget {
+                    id: trendsTable
+                    activeTimePreset: trendsViewRoot.activeTimePreset
                 }
             }
         }

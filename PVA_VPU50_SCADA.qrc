@@ -101,6 +101,7 @@
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_1_Control/HeatingModeModal.qml</file>
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_1_Control/HomogenizerModeModal.qml</file>
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_1_Control/VacuumModeModal.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/modals/Screen_3_Trends/TrendExportReportModal.qml</file>
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_5_Recipes/DeleteConfirmModal.qml</file>
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_5_Recipes/NewRecipeModal.qml</file>
         <file>PVA_VPU50_SCADAContent/components/modals/Screen_5_Recipes/StepConfirmDialog.qml</file>
@@ -135,6 +136,10 @@
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidSprayBall.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidValve.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_2_PID/PidVessel.ui.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_3_Trends/TrendsGraphWidget.ui.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_3_Trends/TrendsSensorPanel.ui.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_3_Trends/TrendsTableWidget.ui.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/Screen_3_Trends/TrendsTopBar.ui.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/FormulationView.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/RecipeIngredientsTable.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_5_Recipes/RecipeMatrixView.qml</file>
