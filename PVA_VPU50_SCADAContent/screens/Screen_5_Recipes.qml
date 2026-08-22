@@ -1,15 +1,21 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../config"
 
 Item {
     id: recipesContainer
     Layout.fillWidth: true
     Layout.fillHeight: true
 
+    ScadaConfig { id: scadaConfig }
+    ScadaStateMiddleware { id: stateMiddleware }
+
     Screen_5_RecipesView {
         id: ui
         anchors.fill: parent
+        activeRecipeName: stateMiddleware.activeRecipeName
+        activeProductName: stateMiddleware.activeProductName
     }
 
     Timer {
@@ -20,9 +26,9 @@ Item {
             if (ui.stepTimeRemaining > 0) {
                 ui.stepTimeRemaining -= 1;
             } else {
-                if (ui.currentStepIndex < 5) {
+                if (ui.currentStepIndex < 4) {
                     ui.currentStepIndex += 1;
-                    if (ui.currentStepIndex === 2 || ui.currentStepIndex === 5) {
+                    if (ui.currentStepIndex === 2 || ui.currentStepIndex === 4) {
                         ui.manualOverlay.visible = true;
                     } else {
                         ui.stepTimeRemaining = 180;
@@ -37,18 +43,21 @@ Item {
     MouseArea {
         parent: ui.execTabBtn
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         onClicked: ui.activeTab = "execution"
     }
 
     MouseArea {
         parent: ui.formTabBtn
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         onClicked: ui.activeTab = "formulation"
     }
 
     MouseArea {
         parent: ui.toggleAutoBtn
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         onClicked: {
             ui.isExecuting = !ui.isExecuting;
             if (ui.isExecuting && ui.stepTimeRemaining <= 0) {
@@ -60,9 +69,10 @@ Item {
     MouseArea {
         parent: ui.manualConfirmBtn
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         onClicked: {
             ui.manualOverlay.visible = false;
-            if (ui.currentStepIndex < 5) {
+            if (ui.currentStepIndex < 4) {
                 ui.currentStepIndex += 1;
                 ui.stepTimeRemaining = 180;
             }
