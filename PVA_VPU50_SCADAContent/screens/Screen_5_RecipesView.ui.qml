@@ -201,6 +201,26 @@ Rectangle {
                         }
                     }
 
+                    // Step Sequence Column Header
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 32
+                        color: "#0d2b4a"
+                        radius: 3
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 12
+
+                            Text { text: "STEP"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 40; horizontalAlignment: Text.AlignHCenter }
+                            Text { text: "RECIPE PHASE NAME"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 260 }
+                            Text { text: "TARGET OPERATIONS & PARAMETERS"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
+                            Text { text: "MODE / DURATION"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 140; horizontalAlignment: Text.AlignRight }
+                        }
+                    }
+
                     // Steps Sequence List
                     ListView {
                         id: recipeStepsListView
@@ -228,12 +248,14 @@ Rectangle {
 
                             RowLayout {
                                 anchors.fill: parent
-                                anchors.margins: 10
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 12
                                 spacing: 12
 
                                 Rectangle {
-                                    width: 28
-                                    height: 28
+                                    Layout.preferredWidth: 28
+                                    Layout.preferredHeight: 28
+                                    Layout.alignment: Qt.AlignVCenter
                                     radius: 14
                                     color: index < recipesViewRoot.currentStepIndex ? "#22c55e" : (index === recipesViewRoot.currentStepIndex ? "#38bdf8" : "#334155")
                                     Text {
@@ -246,17 +268,34 @@ Rectangle {
                                 }
 
                                 ColumnLayout {
-                                    Layout.fillWidth: true
+                                    Layout.preferredWidth: 260
                                     spacing: 2
                                     Text { text: model.name; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                                     Text { text: model.desc; color: "#94a3b8"; font.pixelSize: 11 }
                                 }
 
                                 Text {
-                                    text: model.duration
-                                    color: model.isManual ? "#f59e0b" : "#38bdf8"
-                                    font.bold: true
+                                    text: model.ops
+                                    color: "#38bdf8"
                                     font.pixelSize: 11
+                                    Layout.fillWidth: true
+                                }
+
+                                Rectangle {
+                                    Layout.preferredWidth: 120
+                                    Layout.preferredHeight: 28
+                                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                    radius: 4
+                                    color: model.isManual ? "#78350f" : "#0c4a6e"
+                                    border.color: model.isManual ? "#f59e0b" : "#0284c7"
+
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: model.duration
+                                        color: model.isManual ? "#fde68a" : "#bae6fd"
+                                        font.bold: true
+                                        font.pixelSize: 11
+                                    }
                                 }
                             }
                         }

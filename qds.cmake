@@ -17,7 +17,15 @@ qt6_add_resources(${CMAKE_PROJECT_NAME} MainResource
         "scada/config/opcua.production.example.json"
         "scada/config/role_catalog.json"
         "scada/config/tag_catalog.json"
+        "scada/config/sensor_catalog.json"
         "scada/simulation/plant_profile.json"
+        "scratch/01_extract_agitator_gif_frames_to_svg/output_frames/agitator_sequence.json"
+        "scratch/01_extract_agitator_gif_frames_to_svg/output_frames/rotation_comparison_report.json"
+        "scratch/02_extract_mp4_agitator_frames/output_frames/agitator_sequence.json"
+        "scratch/03_extract_screen_recording_frames/output_frames/agitator_sequence.json"
+        "scratch/04_extract_no_reflection_agitator_frames/agitator_sequence.json"
+        "scratch/05_manual_removebg_imported_frames/agitator_sequence.json"
+        "scratch/06_archived_agitator_assets/agitator_sequence/agitator_sequence.json"
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

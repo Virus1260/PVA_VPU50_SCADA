@@ -48,9 +48,10 @@ class AlarmManager:
             threshold = limits.get(thresh_key, 0.0) if thresh_key else 0.0
 
             is_triggered = False
-            if ad["condition"] == "high" and val >= threshold:
+            cond = ad.get("condition", "high")
+            if cond == "high" and val >= threshold:
                 is_triggered = True
-            elif ad["condition"] == "low" and val <= threshold:
+            elif cond == "low" and val <= threshold:
                 is_triggered = True
 
             if is_triggered and alm_id not in self._active_alarms:
