@@ -237,12 +237,12 @@ Item {
     }
 
     // Time Preset Selectors (1m, 5m, 15m, 1h, 8h, 24h)
-    MouseArea { parent: ui.t1MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1min"; trendsContainer.windowDurationSec = 60; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t5MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "5min"; trendsContainer.windowDurationSec = 300; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t15MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "15min"; trendsContainer.windowDurationSec = 900; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t1HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1h"; trendsContainer.windowDurationSec = 3600; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t8HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "8h"; trendsContainer.windowDurationSec = 28800; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t24HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "24h"; trendsContainer.windowDurationSec = 86400; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t1MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1min"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("1min"); updateYAxisTitle(); } }
+    MouseArea { parent: ui.t5MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "5min"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("5min"); updateYAxisTitle(); } }
+    MouseArea { parent: ui.t15MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "15min"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("15min"); updateYAxisTitle(); } }
+    MouseArea { parent: ui.t1HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1h"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("1h"); updateYAxisTitle(); } }
+    MouseArea { parent: ui.t8HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "8h"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("8h"); updateYAxisTitle(); } }
+    MouseArea { parent: ui.t24HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "24h"; trendsContainer.windowDurationSec = stateMiddleware.config.getPresetDuration("24h"); updateYAxisTitle(); } }
 
     // Timeline History Steppers & Slider (Free X-Axis Panning When Paused)
     MouseArea {

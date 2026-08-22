@@ -18,7 +18,229 @@ QtObject {
     readonly property string defaultUserId: "operator"
 
     // =========================================================================
-    // 2. HARDWARE VALVE DEFINITIONS (Solenoids & Manual Butterfly)
+    // 2. UI DESIGN TOKENS & APPLICATION DEFAULTS
+    // =========================================================================
+    readonly property int headerHeight: 64
+    readonly property int sidebarWidth: 110
+    readonly property int defaultSensorPanelWidth: 350
+    readonly property int minSensorPanelWidth: 280
+    readonly property int maxSensorPanelWidth: 480
+
+    // Colors
+    readonly property color colorBackgroundDark: "#04101e"
+    readonly property color colorSurfacePanel: "#071c33"
+    readonly property color colorSurfaceCard: "#092440"
+    readonly property color colorSurfaceActive: "#0e3c66"
+    readonly property color colorBorderNormal: "#184d7e"
+    readonly property color colorBorderHighlight: "#0284c7"
+    readonly property color colorTextPrimary: "#ffffff"
+    readonly property color colorTextSecondary: "#94a3b8"
+    readonly property color colorTextMuted: "#64748b"
+    readonly property color colorCyanAccent: "#38bdf8"
+    readonly property color colorGreenLive: "#22c55e"
+    readonly property color colorAmberAlert: "#f59e0b"
+    readonly property color colorRedCritical: "#ef4444"
+
+    // Severity Colors
+    readonly property var severityColors: {
+        "CRITICAL": "#ef4444",
+        "WARNING": "#f59e0b",
+        "INFO": "#38bdf8",
+        "NORMAL": "#22c55e"
+    }
+
+    // =========================================================================
+    // 3. TRENDS & HISTORICAL TELEMETRY CONFIGURATION (Single Source of Truth)
+    // =========================================================================
+    readonly property string defaultTrendsPreset: "5min"
+    readonly property int defaultTrendsDurationSec: 300 // 5 minutes = 300 seconds
+    readonly property string defaultTrendsMode: "chart" // "chart" or "table"
+    readonly property bool defaultLiveStreaming: true
+
+    readonly property var presetDurations: {
+        "1min": 60,
+        "5min": 300,
+        "15min": 900,
+        "1h": 3600,
+        "8h": 28800,
+        "24h": 86400
+    }
+
+    function getPresetDuration(presetKey) {
+        return presetDurations[presetKey] || 300;
+    }
+
+    // =========================================================================
+    // 4. CANONICAL SENSOR CATALOG (24 Complete Industrial Process Channels)
+    // =========================================================================
+    readonly property var sensorCatalog: [
+        // --- TEMPERATURE SUBSYSTEM ---
+        { section: "TEMPERATURE", tag: "RTD 1TI1301", desc: "Main Vessel Temp", unit: "°C", color: "#38bdf8", activeDefault: true, defaultVal: "34.4 °C", rangeMin: 0, rangeMax: 120, field: "temp_vessel" },
+        { section: "TEMPERATURE", tag: "RTD 2TI1001", desc: "Jacket Thermal Temp", unit: "°C", color: "#f97316", activeDefault: true, defaultVal: "46.9 °C", rangeMin: 0, rangeMax: 140, field: "temp_jacket" },
+        { section: "TEMPERATURE", tag: "RTD HEATER 1", desc: "Heater Element 01", unit: "°C", color: "#f43f5e", activeDefault: false, defaultVal: "43.4 °C", rangeMin: 0, rangeMax: 160, field: "temp_heater1" },
+        { section: "TEMPERATURE", tag: "RTD HEATER 2", desc: "Heater Element 02", unit: "°C", color: "#ec4899", activeDefault: false, defaultVal: "42.9 °C", rangeMin: 0, rangeMax: 160, field: "temp_heater2" },
+        { section: "TEMPERATURE", tag: "RTD 3TI1003", desc: "Lid Surface Temp", unit: "°C", color: "#fb7185", activeDefault: false, defaultVal: "28.4 °C", rangeMin: 0, rangeMax: 100, field: "temp_lid" },
+        { section: "TEMPERATURE", tag: "RTD 4TI1004", desc: "Cooling Return Temp", unit: "°C", color: "#34d399", activeDefault: false, defaultVal: "21.5 °C", rangeMin: 0, rangeMax: 100, field: "temp_coolwater" },
+        { section: "TEMPERATURE", tag: "RTD 5TI1005", desc: "Steam Condensate Temp", unit: "°C", color: "#fb923c", activeDefault: false, defaultVal: "88.2 °C", rangeMin: 0, rangeMax: 150, field: "temp_condensate" },
+
+        // --- PRESSURE SUBSYSTEM ---
+        { section: "PRESSURE", tag: "PR TRANSMITTER", desc: "Chamber Vacuum", unit: "mbar", color: "#c084fc", activeDefault: true, defaultVal: "-450.0 mbar", rangeMin: -1000, rangeMax: 0, field: "vacuum_pressure" },
+        { section: "PRESSURE", tag: "PIT 1002", desc: "Jacket Steam Pressure", unit: "bar", color: "#a855f7", activeDefault: false, defaultVal: "1.8 bar", rangeMin: 0, rangeMax: 6, field: "press_steam" },
+        { section: "PRESSURE", tag: "PIT 1003", desc: "Purge Air Pressure", unit: "bar", color: "#818cf8", activeDefault: false, defaultVal: "5.5 bar", rangeMin: 0, rangeMax: 10, field: "press_air" },
+        { section: "PRESSURE", tag: "PIT 1004", desc: "Nitrogen Blanket Press", unit: "bar", color: "#60a5fa", activeDefault: false, defaultVal: "1.2 bar", rangeMin: 0, rangeMax: 4, field: "press_nitrogen" },
+        { section: "PRESSURE", tag: "PIT 1005", desc: "Hydraulic Lift Pressure", unit: "bar", color: "#93c5fd", activeDefault: false, defaultVal: "120.0 bar", rangeMin: 0, rangeMax: 200, field: "press_hydraulic" },
+
+        // --- DRIVE SUBSYSTEM ---
+        { section: "DRIVES", tag: "1M1501 Speed", desc: "Main Agitator Drive", unit: "rpm", color: "#22c55e", activeDefault: true, defaultVal: "35.0 rpm", rangeMin: 0, rangeMax: 60, field: "speed_agitator" },
+        { section: "DRIVES", tag: "2M1501 Speed", desc: "Wall Scraper Motor", unit: "rpm", color: "#10b981", activeDefault: false, defaultVal: "17.5 rpm", rangeMin: 0, rangeMax: 40, field: "speed_scraper" },
+        { section: "DRIVES", tag: "1M2003 Speed", desc: "Homogenizer Rotor", unit: "rpm", color: "#eab308", activeDefault: true, defaultVal: "0 rpm", rangeMin: 0, rangeMax: 3500, field: "speed_homo" },
+        { section: "DRIVES", tag: "3M1001 Speed", desc: "Discharge Pump", unit: "rpm", color: "#f59e0b", activeDefault: false, defaultVal: "0 rpm", rangeMin: 0, rangeMax: 600, field: "speed_pump" },
+        { section: "DRIVES", tag: "4M1002 Speed", desc: "CIP Recirc Pump", unit: "rpm", color: "#4ade80", activeDefault: false, defaultVal: "0 rpm", rangeMin: 0, rangeMax: 1500, field: "speed_cip" },
+
+        // --- PHYSICAL & ANALYTICAL SUBSYSTEM ---
+        { section: "ANALYTICAL", tag: "LIT 1001", desc: "Vessel Product Weight", unit: "kg", color: "#a3e635", activeDefault: false, defaultVal: "42.5 kg", rangeMin: 0, rangeMax: 60, field: "weight_product" },
+        { section: "ANALYTICAL", tag: "PH SENSOR 01", desc: "In-Line Emulsion pH", unit: "pH", color: "#2dd4bf", activeDefault: false, defaultVal: "6.8 pH", rangeMin: 0, rangeMax: 14, field: "ph_value" },
+        { section: "ANALYTICAL", tag: "VISC SENSOR 01", desc: "Dynamic Viscosity", unit: "cP", color: "#06b6d4", activeDefault: false, defaultVal: "12400 cP", rangeMin: 0, rangeMax: 50000, field: "viscosity_cp" },
+
+        // --- POWER & ELECTRICAL SUBSYSTEM ---
+        { section: "POWER", tag: "KW TRANSMITTER", desc: "Total Skid Power", unit: "kW", color: "#38bdf8", activeDefault: false, defaultVal: "6.3 kW", rangeMin: 0, rangeMax: 45, field: "power_kw" },
+        { section: "POWER", tag: "CURR 1M1501", desc: "Agitator Drive Current", unit: "A", color: "#14b8a6", activeDefault: false, defaultVal: "1.2 A", rangeMin: 0, rangeMax: 20, field: "curr_agitator" },
+        { section: "POWER", tag: "CURR 1M2003", desc: "Homogenizer Current", unit: "A", color: "#0ea5e9", activeDefault: false, defaultVal: "0.5 A", rangeMin: 0, rangeMax: 35, field: "curr_homo" },
+        { section: "POWER", tag: "CURR 5M1001", desc: "Hydraulic Pump Current", unit: "A", color: "#6366f1", activeDefault: false, defaultVal: "0.0 A", rangeMin: 0, rangeMax: 15, field: "curr_hydraulic" }
+    ]
+
+    function getSensorByField(field) {
+        for (var i = 0; i < sensorCatalog.length; i++) {
+            if (sensorCatalog[i].field === field) return sensorCatalog[i];
+        }
+        return null;
+    }
+
+    // =========================================================================
+    // 5. CANONICAL ALARMS CATALOG (Single Source of Truth)
+    // =========================================================================
+    readonly property var alarmCatalog: [
+        {
+            id: "ALM-101",
+            tag: "1TI1301",
+            title: "VESSEL HIGH TEMP LIMIT EXCEEDED",
+            severity: "CRITICAL",
+            description: "Product temperature exceeded safe setpoint threshold (75.0°C).",
+            source: "Reactor Core",
+            actionReq: "Verify jacket cooling flow and throttle thermal power.",
+            threshold: "Max 75.0 °C"
+        },
+        {
+            id: "ALM-102",
+            tag: "PR-3001",
+            title: "VACUUM INTEGRITY DEVIATION",
+            severity: "CRITICAL",
+            description: "Main chamber pressure rose above allowable vacuum limit during active deaeration.",
+            source: "Vacuum Skid",
+            actionReq: "Check lid gasket seal and vacuum suction valve V303.",
+            threshold: "Min -400 mbar"
+        },
+        {
+            id: "ALM-103",
+            tag: "1M1501",
+            title: "AGITATOR MOTOR OVERLOAD WARNING",
+            severity: "WARNING",
+            description: "VFD motor driver current exceeded continuous running specification limit.",
+            source: "Agitator VFD",
+            actionReq: "Inspect product viscosity and lower agitator target RPM.",
+            threshold: "Max 18.0 A"
+        },
+        {
+            id: "ALM-104",
+            tag: "FIT-2001",
+            title: "JACKET COOLING FLOW RESTRICTION",
+            severity: "WARNING",
+            description: "Thermal jacket cooling water flow rate dropped below minimum threshold.",
+            source: "Utility Line",
+            actionReq: "Check inlet chiller valve and supply line pressure.",
+            threshold: "Min 15 L/min"
+        },
+        {
+            id: "ALM-105",
+            tag: "1M2003",
+            title: "HOMOGENIZER BEARING TEMPERATURE",
+            severity: "WARNING",
+            description: "Rotor seal housing temperature elevated above standard operating band.",
+            source: "Homogenizer",
+            actionReq: "Verify mechanical seal barrier fluid circulation.",
+            threshold: "Max 65.0 °C"
+        },
+        {
+            id: "ALM-106",
+            tag: "LIT-1001",
+            title: "VESSEL MAXIMUM FILL LEVEL REACHED",
+            severity: "INFO",
+            description: "Batch liquid mass reached target volume threshold (50.0 kg).",
+            source: "Load Cells",
+            actionReq: "Close raw material charge ports.",
+            threshold: "Target 50.0 kg"
+        },
+        {
+            id: "ALM-107",
+            tag: "SYS-CIP",
+            title: "SCHEDULED CIP VALIDATION REQUIRED",
+            severity: "INFO",
+            description: "Batch cycle complete. 21 CFR automated sanitization sequence recommended.",
+            source: "CIP System",
+            actionReq: "Execute validated CIP sanitization recipe.",
+            threshold: "GAMP 5 Periodic"
+        }
+    ]
+
+    // =========================================================================
+    // 6. RECIPES & ISA-88 BATCH STAGES (Single Source of Truth)
+    // =========================================================================
+    readonly property var recipeCatalog: [
+        {
+            id: "REC-01",
+            name: "UNIMIX_BATCH_01",
+            product: "Carbopol 980 Pharma Gel",
+            batchSize: "500 L",
+            targetTemp: "70.0 °C",
+            targetVacuum: "-450 mbar",
+            agitatorRpm: "35 rpm",
+            homoRpm: "2800 rpm",
+            durationMins: 45
+        },
+        {
+            id: "REC-02",
+            name: "COSMETIC_CREAM_02",
+            product: "Hydrating Day Emulsion",
+            batchSize: "400 L",
+            targetTemp: "75.0 °C",
+            targetVacuum: "-500 mbar",
+            agitatorRpm: "40 rpm",
+            homoRpm: "3200 rpm",
+            durationMins: 60
+        },
+        {
+            id: "REC-03",
+            name: "CIP_SANITIZATION_03",
+            product: "Purified Water / CIP Rinse",
+            batchSize: "200 L",
+            targetTemp: "85.0 °C",
+            targetVacuum: "0 mbar",
+            agitatorRpm: "20 rpm",
+            homoRpm: "1500 rpm",
+            durationMins: 30
+        }
+    ]
+
+    readonly property var standardRecipeStages: [
+        { step: 1, name: "RAW MATERIAL CHARGING", desc: "Manual & vacuum loading of liquid base and active phase ingredients.", targetTemp: "25.0 °C", targetVac: "-200 mbar", agitatorRpm: "15 rpm", homoRpm: "0 rpm", durationSec: 300, autoNext: false },
+        { step: 2, name: "THERMAL RAMP & PRE-MIXING", desc: "Jacket heating to 70°C with continuous counter-rotating agitation.", targetTemp: "70.0 °C", targetVac: "-300 mbar", agitatorRpm: "35 rpm", homoRpm: "0 rpm", durationSec: 600, autoNext: true },
+        { step: 3, name: "VACUUM DEAERATION", desc: "High vacuum degassing to eliminate micro-bubbles from formulation.", targetTemp: "70.0 °C", targetVac: "-450 mbar", agitatorRpm: "25 rpm", homoRpm: "0 rpm", durationSec: 450, autoNext: true },
+        { step: 4, name: "HIGH-SHEAR HOMOGENIZATION", desc: "Bottom-mounted rotor-stator high shear particle size reduction.", targetTemp: "68.0 °C", targetVac: "-450 mbar", agitatorRpm: "35 rpm", homoRpm: "2800 rpm", durationSec: 600, autoNext: true },
+        { step: 5, name: "CONTROLLED COOLING & DISCHARGE", desc: "Cooling water circulation to 35°C and transfer via discharge valve.", targetTemp: "35.0 °C", targetVac: "0 mbar", agitatorRpm: "15 rpm", homoRpm: "0 rpm", durationSec: 450, autoNext: false }
+    ]
+
+    // =========================================================================
+    // 7. HARDWARE VALVE DEFINITIONS & PRESET MATRICES
     // =========================================================================
     readonly property var valveList: [
         { tag: "V101", name: "Main Vessel Discharge Valve", isSolenoid: true, type: "solenoid" },
@@ -32,9 +254,6 @@ QtObject {
         { tag: "V303", name: "Bottom Suction Butterfly Valve", isSolenoid: false, type: "manual_butterfly" }
     ]
 
-    // =========================================================================
-    // 3. OPERATION PRESETS & INTERLOCK MATRICES (Recirculation & Suction)
-    // =========================================================================
     readonly property var operationPresets: {
         "discharge_product": {
             name: "Discharge Product",
@@ -83,7 +302,6 @@ QtObject {
         }
     }
 
-    // Preset Normalizer Function
     function getPreset(key) {
         var normKey = String(key || "").toLowerCase();
         if (normKey.indexOf("ext_") === 0) normKey = normKey.substring(4);
@@ -112,7 +330,7 @@ QtObject {
     }
 
     // =========================================================================
-    // 4. USER AUTHENTICATION & RBAC HIERARCHY (21 CFR Part 11)
+    // 8. USER AUTHENTICATION & RBAC HIERARCHY (21 CFR Part 11)
     // =========================================================================
     readonly property var userList: [
         {
@@ -161,7 +379,7 @@ QtObject {
         for (var i = 0; i < userList.length; i++) {
             if (userList[i].id === userId) return userList[i];
         }
-        return userList[0]; // Fallback to operator
+        return userList[0];
     }
 
     function verifyCredentials(userId, pin) {
@@ -170,7 +388,7 @@ QtObject {
     }
 
     // =========================================================================
-    // 5. MOTOR & EQUIPMENT SPECIFICATIONS
+    // 9. MOTOR & EQUIPMENT SPECIFICATIONS
     // =========================================================================
     readonly property var motorSpecs: {
         "stirrer": {
@@ -200,7 +418,7 @@ QtObject {
     }
 
     // =========================================================================
-    // 6. PROCESS ROW VISIBILITY MATRIX
+    // 10. PROCESS ROW VISIBILITY MATRIX
     // =========================================================================
     readonly property var rowVisibility: {
         "row1_agitator": true,

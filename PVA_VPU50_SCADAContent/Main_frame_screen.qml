@@ -608,14 +608,15 @@ Item {
             });
 
             ui.loginModal.userLoggedOut.connect(function() {
-                rootWindow.activeUserId = "operator";
-                rootWindow.activeUserName = "Line Operator";
-                rootWindow.activeUserRole = "Operator (Level 1)";
-                rootWindow.activeUserLevel = 1;
+                var defUser = scadaMiddleware.config.getUser("operator");
+                rootWindow.activeUserId = defUser.id;
+                rootWindow.activeUserName = defUser.name;
+                rootWindow.activeUserRole = defUser.role;
+                rootWindow.activeUserLevel = defUser.level;
                 if (ui.header) {
-                    ui.header.operatorName = "Line Operator";
-                    ui.header.operatorRole = "Operator (Level 1)";
-                    ui.header.alarmMessage = "USER LOGGED OUT - REVERTED TO LINE OPERATOR (LEVEL 1)";
+                    ui.header.operatorName = defUser.name;
+                    ui.header.operatorRole = defUser.role;
+                    ui.header.alarmMessage = "USER LOGGED OUT - REVERTED TO " + defUser.name.toUpperCase() + " (" + defUser.role.toUpperCase() + ")";
                 }
             });
 

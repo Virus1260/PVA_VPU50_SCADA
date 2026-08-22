@@ -3,6 +3,8 @@ import QtQuick
 QtObject {
     id: middlewareRoot
 
+    property ScadaConfig config: ScadaConfig {}
+
     // =========================================================================
     // 1. ACTIVE BATCH & RECIPE CONTEXT
     // =========================================================================
