@@ -566,8 +566,13 @@ Item {
             });
         }
 
-        // Initialize header alarm state immediately
+        // Initialize header alarm state and bind alarmsScreen operator context
         updateAlarmAnnunciator();
+        if (ui.alarmsScreen) {
+            ui.alarmsScreen.operatorName = Qt.binding(function() { return rootWindow.activeUserName; });
+            ui.alarmsScreen.operatorRole = Qt.binding(function() { return rootWindow.activeUserRole; });
+            ui.alarmsScreen.operatorId = Qt.binding(function() { return rootWindow.activeUserId; });
+        }
 
         if (ui.header) {
             ui.header.plantModeRequested.connect(function() {
@@ -641,9 +646,10 @@ Item {
                     }
                 } else if (idx === 5 && rootWindow.activeUserLevel < 3) {
                     // Screen 5: 21 CFR Part 11 Electronic Batch Record Review
-                    if (ui.header) ui.header.alarmMessage = "VIEWING 21 CFR BATCH RECORD (Sign-off requires QA Officer Level 3+)";
-                } else if (idx >= 0 && idx < rootWindow.screenTitles.length) {
-                    ui.header.alarmMessage = rootWindow.screenTitles[idx];
+                    if (ui.header && !ui.header.isAlarmActive) ui.header.alarmMessage = "VIEWING 21 CFR BATCH RECORD (Sign-off requires QA Officer Level 3+)";
+                } else {
+                    // Maintain true alarm annunciator state (active process alarm or soothing normal)
+                    updateAlarmAnnunciator();
                 }
             });
         }

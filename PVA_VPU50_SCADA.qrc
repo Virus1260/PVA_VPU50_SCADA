@@ -100,6 +100,9 @@
         <file>PVA_VPU50_SCADAContent/components/widgets/PvaLogo.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/ScadaButton.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/ScadaHeader.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/ScadaHeader/HeaderAnnunciator.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/ScadaHeader/HeaderMachineCluster.qml</file>
+        <file>PVA_VPU50_SCADAContent/components/widgets/ScadaHeader/HeaderUserCluster.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/ScadaIcon.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/ScadaSidebar.qml</file>
         <file>PVA_VPU50_SCADAContent/components/widgets/Screen_1_Control/ScadaCard.qml</file>
@@ -167,6 +170,13 @@
         <file>scada/config/sensor_catalog.json</file>
         <file>scada/config/tag_catalog.json</file>
         <file>scada/simulation/plant_profile.json</file>
+        <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/agitator_sequence.json</file>
+        <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/rotation_comparison_report.json</file>
+        <file>scratch/02_extract_mp4_agitator_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/03_extract_screen_recording_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/04_extract_no_reflection_agitator_frames/agitator_sequence.json</file>
+        <file>scratch/05_manual_removebg_imported_frames/agitator_sequence.json</file>
+        <file>scratch/06_archived_agitator_assets/agitator_sequence/agitator_sequence.json</file>
         <file>vercel.json</file>
     </qresource>
 </RCC>

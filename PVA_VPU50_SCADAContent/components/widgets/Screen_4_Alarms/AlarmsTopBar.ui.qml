@@ -18,6 +18,8 @@ Rectangle {
 
     property string activeTab: "active" // "active" or "history"
     property int unackCount: 1
+    property bool isHornSilenced: false
+
     property alias activeTabBtn: activeSwitchBtn
     property alias historyTabBtn: historySwitchBtn
     property alias silenceHornBtn: silenceHornButton
@@ -57,13 +59,19 @@ Rectangle {
             Layout.preferredWidth: 120
             Layout.preferredHeight: 32
             radius: 4
-            color: "#1e3a8a"
-            border.color: "#38bdf8"
+            color: topBarRoot.isHornSilenced ? "#0f172a" : "#1e3a8a"
+            border.color: topBarRoot.isHornSilenced ? "#64748b" : "#38bdf8"
 
             Row {
                 anchors.centerIn: parent
                 spacing: 6
-                Text { text: "Silence Horn"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; anchors.verticalCenter: parent.verticalCenter }
+                Text {
+                    text: topBarRoot.isHornSilenced ? "Horn Silenced" : "Silence Horn"
+                    color: topBarRoot.isHornSilenced ? "#94a3b8" : "#ffffff"
+                    font.bold: true
+                    font.pixelSize: 11
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
 

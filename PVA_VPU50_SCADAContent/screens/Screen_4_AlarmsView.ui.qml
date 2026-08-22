@@ -22,6 +22,7 @@ Rectangle {
     property alias activeTabBtn: alarmsHeaderBar.activeTabBtn
     property alias historyTabBtn: alarmsHeaderBar.historyTabBtn
     property alias silenceHornBtn: alarmsHeaderBar.silenceHornBtn
+    property alias isHornSilenced: alarmsHeaderBar.isHornSilenced
 
     property alias activeAlarmsTable: activeTableWidget
     property alias alarmList: activeTableWidget.alarmList
