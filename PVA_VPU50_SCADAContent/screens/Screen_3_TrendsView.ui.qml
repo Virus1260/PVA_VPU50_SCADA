@@ -25,6 +25,7 @@ Rectangle {
     property alias sensorListViewItem: sensorChannelListView
     property alias trendCanvasItem: graphCanvas
     property alias inspectCardItem: inspectionCard
+    property alias inspectRepeaterItem: inspectRepeater
     property alias telemetryList: tableListView
     property alias dragBoxOverlay: dragSelectionRect
     property alias yAxisTitleLabel: yAxisUnitText
@@ -39,6 +40,13 @@ Rectangle {
     property alias t8HourBtn: time8HourBtn
     property alias t24HourBtn: time24HourBtn
 
+    // Timeline Paging Stepper Buttons
+    property alias panStartBtn: timelineStartBtn
+    property alias panLeftBtn: timelineLeftBtn
+    property alias panRightBtn: timelineRightBtn
+    property alias panLiveBtn: timelineLiveBtn
+    property alias timeSliderItem: historyTimeSlider
+
     // Declarative State Properties
     property string activeMode: "chart" // "chart" or "table"
     property string operatorName: "Line Operator (Level 1)"
@@ -48,6 +56,7 @@ Rectangle {
     property int sensorPanelWidth: 290
     property string yAxisTitle: "Temperature (°C)"
     property string xAxisTitle: "Time (UTC)"
+    property string inspectionTime: "08:34:11 UTC"
 
     ColumnLayout {
         anchors.fill: parent
@@ -164,19 +173,19 @@ Rectangle {
                 // Live Streaming Toggle / Status
                 Rectangle {
                     id: liveStreamToggleBtn
-                    Layout.preferredWidth: 120
+                    Layout.preferredWidth: 125
                     Layout.preferredHeight: 34
                     radius: 4
-                    color: trendsViewRoot.isLiveStreaming ? "#052e16" : "#1e293b"
-                    border.color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#64748b"
+                    color: trendsViewRoot.isLiveStreaming ? "#052e16" : "#451a03"
+                    border.color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
 
                     RowLayout {
                         anchors.centerIn: parent
                         spacing: 6
-                        Rectangle { width: 8; height: 8; radius: 4; color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#e2e8f0" }
+                        Rectangle { width: 8; height: 8; radius: 4; color: trendsViewRoot.isLiveStreaming ? "#22c55e" : "#f59e0b" }
                         Text {
-                            text: trendsViewRoot.isLiveStreaming ? "LIVE SCROLL" : "⏸ PAUSED"
-                            color: trendsViewRoot.isLiveStreaming ? "#4ade80" : "#cbd5e1"
+                            text: trendsViewRoot.isLiveStreaming ? "● LIVE SCROLL" : "⏸ PAUSED (PULL)"
+                            color: trendsViewRoot.isLiveStreaming ? "#4ade80" : "#fde68a"
                             font.bold: true
                             font.pixelSize: 10
                         }
@@ -430,7 +439,7 @@ Rectangle {
                                 font.pixelSize: 10
                             }
                             Text {
-                                text: "| Drag box to zoom"
+                                text: "| Free Drag Box to Zoom | Pan Bottom Bar when Paused"
                                 color: "#64748b"
                                 font.pixelSize: 10
                             }
@@ -446,7 +455,7 @@ Rectangle {
                                 anchors.fill: parent
                             }
 
-                            // Dynamic Visual Drag-to-Zoom Selection Box
+                            // Dynamic Visual Drag-to-Zoom Free-Size Selection Box
                             Rectangle {
                                 id: dragSelectionRect
                                 visible: false
@@ -473,12 +482,12 @@ Rectangle {
                                 }
                             }
 
-                            // Floating Inspection Tooltip
+                            // Dynamic Floating Inspection Tooltip with Live Channel Values
                             Rectangle {
                                 id: inspectionCard
                                 visible: false
-                                width: 230
-                                height: 140
+                                width: 250
+                                height: 160
                                 radius: 5
                                 color: "#081d33"
                                 border.color: "#38bdf8"
@@ -489,23 +498,118 @@ Rectangle {
                                 ColumnLayout {
                                     anchors.fill: parent
                                     anchors.margins: 8
-                                    spacing: 3
+                                    spacing: 4
 
-                                    Text {
-                                        text: "🕒 Telemetry Inspection"
-                                        color: "#ffffff"
-                                        font.bold: true
-                                        font.pixelSize: 11
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        Text { text: "🕒 " + trendsViewRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                                        Item { Layout.fillWidth: true }
+                                        Text { text: "ACTIVE VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
                                     }
+
                                     Rectangle { Layout.fillWidth: true; height: 1; color: "#1e3a8a" }
-                                    Text { text: "Live Values at Timestamp"; color: "#94a3b8"; font.pixelSize: 10 }
+
+                                    // Dynamic List of Active Sensor Values at Hovered Timestamp
+                                    ListView {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        clip: true
+                                        spacing: 2
+                                        interactive: false
+
+                                        model: ListModel { id: inspectRepeater }
+
+                                        delegate: RowLayout {
+                                            width: parent ? parent.width : 0
+                                            spacing: 6
+
+                                            Rectangle {
+                                                width: 8
+                                                height: 8
+                                                radius: 4
+                                                color: model.color ? model.color : "#38bdf8"
+                                            }
+
+                                            Text {
+                                                text: model.tag
+                                                color: "#e2e8f0"
+                                                font.bold: true
+                                                font.pixelSize: 10
+                                                Layout.fillWidth: true
+                                                elide: Text.ElideRight
+                                            }
+
+                                            Text {
+                                                text: model.val
+                                                color: model.color ? model.color : "#ffffff"
+                                                font.bold: true
+                                                font.pixelSize: 10
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Bottom Timeline History Panning Bar
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 32
+                            radius: 4
+                            color: "#0d2b4a"
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: 4
+                                spacing: 6
+
+                                Rectangle {
+                                    id: timelineStartBtn
+                                    Layout.preferredWidth: 65
+                                    Layout.preferredHeight: 24
+                                    radius: 3
+                                    color: "#1e3a8a"
+                                    Text { anchors.centerIn: parent; text: "⏮ Start"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                                }
+                                Rectangle {
+                                    id: timelineLeftBtn
+                                    Layout.preferredWidth: 55
+                                    Layout.preferredHeight: 24
+                                    radius: 3
+                                    color: "#0f3a63"
+                                    Text { anchors.centerIn: parent; text: "◀ 10s"; color: "#ffffff"; font.pixelSize: 10 }
+                                }
+
+                                Slider {
+                                    id: historyTimeSlider
+                                    Layout.fillWidth: true
+                                    from: 0
+                                    to: 100
+                                    value: 100
+                                }
+
+                                Rectangle {
+                                    id: timelineRightBtn
+                                    Layout.preferredWidth: 55
+                                    Layout.preferredHeight: 24
+                                    radius: 3
+                                    color: "#0f3a63"
+                                    Text { anchors.centerIn: parent; text: "10s ▶"; color: "#ffffff"; font.pixelSize: 10 }
+                                }
+                                Rectangle {
+                                    id: timelineLiveBtn
+                                    Layout.preferredWidth: 65
+                                    Layout.preferredHeight: 24
+                                    radius: 3
+                                    color: trendsViewRoot.isLiveStreaming ? "#15803d" : "#0284c7"
+                                    Text { anchors.centerIn: parent; text: "⏭ Live"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
                                 }
                             }
                         }
                     }
                 }
 
-                // TABLE VIEW (Right-Aligned Industrial Engineering Layout)
+                // TABLE VIEW (Dynamic Multi-Sensor Historical View)
                 Rectangle {
                     color: "#06182c"
                     border.color: "#184d7e"
@@ -517,7 +621,7 @@ Rectangle {
                         anchors.margins: 8
                         spacing: 4
 
-                        // Table Header with Strict Right-Aligned Column Widths
+                        // Table Header with Dynamic Channel Tags
                         Rectangle {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 34
@@ -530,13 +634,9 @@ Rectangle {
                                 anchors.rightMargin: 12
                                 spacing: 10
 
-                                Text { text: "TIMESTAMP"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 100 }
-                                Text { text: "VESSEL TEMP"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                Text { text: "JACKET TEMP"; color: "#f97316"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                Text { text: "VACUUM"; color: "#c084fc"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight }
-                                Text { text: "AGITATOR"; color: "#4ade80"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                Text { text: "HOMOGENIZER"; color: "#facc15"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight }
-                                Item { Layout.fillWidth: true }
+                                Text { text: "TIMESTAMP (UTC)"; color: "#94a3b8"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 120 }
+                                Text { text: "ACTIVE TELEMETRY CHANNELS & VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
+                                Text { text: "TIME SCALE: " + trendsViewRoot.activeTimePreset.toUpperCase(); color: "#f59e0b"; font.bold: true; font.pixelSize: 10; Layout.alignment: Qt.AlignRight }
                             }
                         }
 
@@ -546,7 +646,7 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             clip: true
-                            spacing: 2
+                            spacing: 3
                             ScrollBar.vertical: ScrollBar {
                                 active: true
                                 policy: ScrollBar.AsNeeded
@@ -554,22 +654,32 @@ Rectangle {
 
                             delegate: Rectangle {
                                 width: tableListView ? tableListView.width : 0
-                                height: 30
+                                height: 34
+                                radius: 3
                                 color: index % 2 === 0 ? "#071c33" : "#092440"
 
                                 RowLayout {
                                     anchors.fill: parent
                                     anchors.leftMargin: 12
                                     anchors.rightMargin: 12
-                                    spacing: 10
+                                    spacing: 12
 
-                                    Text { text: modelData.time; color: "#ffffff"; font.pixelSize: 11; Layout.preferredWidth: 100 }
-                                    Text { text: modelData.temp.toFixed(1) + " °C"; color: "#38bdf8"; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                    Text { text: modelData.jacket.toFixed(1) + " °C"; color: "#f97316"; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                    Text { text: modelData.vacuum.toFixed(1) + " mbar"; color: "#c084fc"; font.pixelSize: 11; Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight }
-                                    Text { text: modelData.agitator.toFixed(1) + " rpm"; color: "#4ade80"; font.pixelSize: 11; Layout.preferredWidth: 120; horizontalAlignment: Text.AlignRight }
-                                    Text { text: modelData.homo.toFixed(0) + " rpm"; color: "#facc15"; font.pixelSize: 11; Layout.preferredWidth: 130; horizontalAlignment: Text.AlignRight }
-                                    Item { Layout.fillWidth: true }
+                                    Text {
+                                        text: modelData.time ? modelData.time : ""
+                                        color: "#ffffff"
+                                        font.bold: true
+                                        font.pixelSize: 11
+                                        Layout.preferredWidth: 120
+                                    }
+
+                                    // Display chips of active channel values
+                                    Text {
+                                        text: modelData.channelsText ? modelData.channelsText : ""
+                                        color: "#cbd5e1"
+                                        font.pixelSize: 11
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                    }
                                 }
                             }
                         }
