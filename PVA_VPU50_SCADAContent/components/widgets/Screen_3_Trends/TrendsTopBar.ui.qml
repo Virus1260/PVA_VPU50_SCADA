@@ -27,7 +27,7 @@ Rectangle {
     property alias chartModeBtn: chartViewButton
     property alias tableModeBtn: tableViewButton
 
-    property string activeTimePreset: "15min"
+    property string activeTimePreset: "5min"
     property bool isLiveStreaming: true
     property bool isZoomed: false
     property string activeMode: "chart"

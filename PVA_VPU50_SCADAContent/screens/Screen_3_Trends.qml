@@ -16,7 +16,7 @@ Item {
     property real zoomStartRatio: 0.0
     property real zoomEndRatio: 1.0
     property bool isZoomed: false
-    property int windowDurationSec: 900 // Default: 15 minutes = 900 seconds
+    property int windowDurationSec: 300 // Default: 5 minutes = 300 seconds
     property real scrubRatio: 1.0 // 1.0 = live edge
 
     Screen_3_TrendsView {
@@ -25,7 +25,7 @@ Item {
         activeMode: "chart"
         isZoomed: trendsContainer.isZoomed
         isLiveStreaming: true
-        activeTimePreset: "15min"
+        activeTimePreset: "5min"
     }
 
     function formatTimeOnly(epochMs) {

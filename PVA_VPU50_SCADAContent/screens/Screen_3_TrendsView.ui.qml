@@ -54,7 +54,7 @@ Rectangle {
     property string activeMode: "chart" // "chart" or "table"
     property bool isZoomed: false
     property bool isLiveStreaming: true
-    property string activeTimePreset: "15min"
+    property string activeTimePreset: "5min"
     property int sensorPanelWidth: 350
     property string yAxisTitle: "Temperature (°C)"
     property string xAxisTitle: "Time (UTC)"
