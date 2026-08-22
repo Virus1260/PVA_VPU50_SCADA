@@ -10,7 +10,6 @@ Item {
 
     property int pendingAckIndex: -1
     property alias unackCount: ui.unackCount
-    property alias alarmListModel: ui.alarmList.model
 
     signal alarmAcknowledged(string tag, string title)
     signal alarmsSynchronized(int unackCount)
