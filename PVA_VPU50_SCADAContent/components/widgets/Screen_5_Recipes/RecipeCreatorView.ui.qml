@@ -52,7 +52,7 @@ Rectangle {
                     color: "#0c345a"
                     border.color: "#38bdf8"
                     Image {
-                        source: "../../../assets/icons/nav/recipes.svg"
+                        source: "../../../assets/icons/nav/recipes_checklist.svg"
                         width: 26
                         height: 26
                         anchors.centerIn: parent

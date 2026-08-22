@@ -42,7 +42,7 @@ Rectangle {
                 anchors.centerIn: parent
                 spacing: 6
                 Image {
-                    source: "../../../assets/icons/nav/control.svg"
+                    source: "../../../assets/icons/nav/status_stack.svg"
                     width: 14
                     height: 14
                     sourceSize: Qt.size(14, 14)
@@ -66,7 +66,7 @@ Rectangle {
                 anchors.centerIn: parent
                 spacing: 6
                 Image {
-                    source: "../../../assets/icons/nav/recipes.svg"
+                    source: "../../../assets/icons/nav/recipes_checklist.svg"
                     width: 14
                     height: 14
                     sourceSize: Qt.size(14, 14)
