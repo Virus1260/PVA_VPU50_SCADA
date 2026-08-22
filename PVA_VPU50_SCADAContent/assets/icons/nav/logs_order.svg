@@ -1,7 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="20" y="12" width="88" height="104" rx="10"/>
-  <circle cx="80" cy="80" r="18" fill="#184e85"/>
-  <polygon points="74 68 92 80 74 92" fill="#ffffff"/>
-  <line x1="36" y1="36" x2="92" y2="36"/>
-  <line x1="36" y1="56" x2="68" y2="56"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
+  <defs>
+    <linearGradient id="logBookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2b48"/>
+      <stop offset="100%" stop-color="#071c33"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Audit Log Ledger Book -->
+  <rect x="22" y="14" width="84" height="100" rx="8" fill="url(#logBookGrad)" stroke="#38bdf8" stroke-width="4"/>
+  
+  <!-- Spiral / Ledger Spine Binding Pins -->
+  <circle cx="30" cy="28" r="3" fill="#38bdf8"/>
+  <circle cx="30" cy="48" r="3" fill="#38bdf8"/>
+  <circle cx="30" cy="68" r="3" fill="#38bdf8"/>
+  <circle cx="30" cy="88" r="3" fill="#38bdf8"/>
+  <line x1="38" y1="14" x2="38" y2="114" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- Timestamped Audit Trail Records (Lines) -->
+  <line x1="46" y1="30" x2="94" y2="30" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+  <line x1="46" y1="46" x2="88" y2="46" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+  <line x1="46" y1="62" x2="92" y2="62" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+  <line x1="46" y1="78" x2="72" y2="78" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- 21 CFR Part 11 Integrity Seal / Shield Badge in Corner -->
+  <circle cx="88" cy="90" r="20" fill="#08213b" stroke="#38bdf8" stroke-width="2"/>
+  <path d="M78 84 L88 78 L98 84 V94 C98 100, 88 104, 88 104 C88 104, 78 100, 78 94 Z" fill="url(#shieldGrad)" stroke="#38bdf8" stroke-width="2.5"/>
+  <path d="M83 90 L87 94 L93 86" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
+  <defs>
+    <linearGradient id="headerGreenBellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+  </defs>
+  <!-- Bell Body -->
+  <path d="M64 18 C44 18, 34 32, 34 60 C34 76, 22 84, 22 92 H106 C106 84, 94 76, 94 60 C94 32, 84 18, 64 18 Z" fill="url(#headerGreenBellGrad)" stroke="#86efac" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="64" cy="14" r="6" fill="#86efac"/>
+  <!-- Clapper -->
+  <path d="M52 94 C52 102, 58 108, 64 108 C70 108, 76 102, 76 94" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+  <!-- Peaceful Status Aura Rings -->
+  <path d="M16 54 C12 62, 12 70, 16 78" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+  <path d="M112 54 C116 62, 116 70, 112 78" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+</svg>

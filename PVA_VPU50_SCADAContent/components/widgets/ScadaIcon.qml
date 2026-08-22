@@ -81,6 +81,8 @@ Item {
             "alarms": "../../assets/icons/nav/alarms_bell.svg",
             "nav_alarms": "../../assets/icons/nav/alarms_bell.svg",
             "alarms_bell": "../../assets/icons/nav/alarms_bell.svg",
+            "alarms_bell_green": "../../assets/icons/nav/alarms_bell_green.svg",
+            "alarm_bell_green": "../../assets/icons/header/alarm_bell_green.svg",
             "alm": "../../assets/icons/nav/alarms_bell.svg",
 
             "recipes": "../../assets/icons/nav/recipes_checklist.svg",

@@ -62,13 +62,13 @@ Rectangle {
         alarmMessage: "SYSTEM READY - RECIPE [VPU_BATCH_01] STANDBY"
     }
 
-    // 2. RIGHT-SIDE SCADA NAVIGATION DOCK (88px Width, Full Spellings)
+    // 2. RIGHT-SIDE SCADA NAVIGATION DOCK (110px Width, Large Touch Ergonomics)
     ScadaSidebar {
         id: rightSidebar
         anchors.top: scadaHeader.bottom
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: 88
+        width: 110
         z: 10
     }
 

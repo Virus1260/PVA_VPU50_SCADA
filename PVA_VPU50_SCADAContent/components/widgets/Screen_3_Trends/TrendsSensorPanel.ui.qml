@@ -39,7 +39,7 @@ Rectangle {
                 spacing: 6
 
                 Image {
-                    source: "../../../assets/icons/nav/nav_tools.svg"
+                    source: "../../../assets/icons/nav/tools_maintenance.svg"
                     width: 14
                     height: 14
                     sourceSize: Qt.size(14, 14)

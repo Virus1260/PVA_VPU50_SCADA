@@ -113,9 +113,12 @@ Rectangle {
             spacing: 4
 
             model: ListModel {
+                ListElement { alarmCode: "ALM-ESTOP-01"; severity: "CRITICAL"; tag: "system.estop"; title: "Emergency Stop Pushbutton Engaged"; value: "LATCHED"; sp: "RELEASED"; time: "09:44:10"; ack: false; ackBy: ""; resp: "Verify physical plant perimeter safety and release E-Stop button." }
                 ListElement { alarmCode: "ALM-001"; severity: "CRITICAL"; tag: "PIC161001"; title: "Vacuum Seal Differential Pressure Loss"; value: "-209.8 mbar"; sp: "-450.0 mbar"; time: "09:42:15"; ack: false; ackBy: ""; resp: "Check lid gasket seal integrity and vacuum valve V101." }
-                ListElement { alarmCode: "ALM-002"; severity: "HIGH"; tag: "TIC162001"; title: "Jacket Thermal Overheat Warning"; value: "88.9 °C"; sp: "80.0 °C"; time: "09:40:02"; ack: true; ackBy: "operator"; resp: "Engage thermal jacket cooling circuit." }
+                ListElement { alarmCode: "ALM-002"; severity: "HIGH"; tag: "TIC162001"; title: "Jacket Thermal Overheat Warning"; value: "88.9 °C"; sp: "80.0 °C"; time: "09:40:02"; ack: false; ackBy: ""; resp: "Engage thermal jacket cooling circuit." }
+                ListElement { alarmCode: "ALM-SEAL-01"; severity: "MEDIUM"; tag: "1P163001"; title: "Mechanical Seal Barrier Pot Low Pressure"; value: "0.8 bar"; sp: "2.5 bar"; time: "09:38:40"; ack: false; ackBy: ""; resp: "Inspect thermosiphon pot liquid level and nitrogen regulator." }
                 ListElement { alarmCode: "ALM-003"; severity: "MEDIUM"; tag: "SCR182001"; title: "Agitator Drive Ready Status Feedback"; value: "25.0 rpm"; sp: "25.0 rpm"; time: "09:35:18"; ack: true; ackBy: "supervisor"; resp: "Verify motor current and VFD parameters." }
+                ListElement { alarmCode: "ALM-COMM-01"; severity: "MEDIUM"; tag: "system.comm"; title: "Delta AS332T-A PLC Link Latency Alert"; value: "85 ms"; sp: "< 20 ms"; time: "09:32:10"; ack: true; ackBy: "operator"; resp: "Verify Ethernet switch power and RJ45 industrial cable to Delta PLC." }
                 ListElement { alarmCode: "ALM-004"; severity: "INFO"; tag: "1M2003"; title: "Homogenizer Seal Cooling Fluid Flow Normal"; value: "4.2 L/min"; sp: "3.5 L/min"; time: "09:30:00"; ack: true; ackBy: "operator"; resp: "Routine telemetry verification." }
             }
 
@@ -224,17 +227,33 @@ Rectangle {
                         Rectangle {
                             anchors.centerIn: parent
                             width: 136
-                            height: 32
+                            height: 36
                             radius: 4
                             color: model.ack ? "#064e3b" : "#dc2626"
                             border.color: model.ack ? "#10b981" : "#ef4444"
+                            border.width: 1.2
 
-                            Text {
+                            Row {
                                 anchors.centerIn: parent
-                                text: model.ack ? ("ACK (" + model.ackBy + ")") : "ACKNOWLEDGE"
-                                color: "#ffffff"
-                                font.bold: true
-                                font.pixelSize: 11
+                                spacing: 6
+
+                                Image {
+                                    visible: model.ack
+                                    source: "../../../assets/icons/common/icon_check.svg"
+                                    width: 12
+                                    height: 12
+                                    sourceSize: Qt.size(12, 12)
+                                    fillMode: Image.PreserveAspectFit
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: model.ack ? ("ACK (" + model.ackBy + ")") : "ACKNOWLEDGE"
+                                    color: "#ffffff"
+                                    font.bold: true
+                                    font.pixelSize: 11
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
                             }
                         }
                     }

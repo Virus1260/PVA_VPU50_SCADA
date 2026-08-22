@@ -31,9 +31,9 @@ Rectangle {
             width: 34
             height: 34
             radius: 4
-            color: "#dc2626"
+            color: topBarRoot.unackCount > 0 ? "#dc2626" : "#16a34a"
             Image {
-                source: "../../../assets/icons/header/alarm_bell.svg"
+                source: topBarRoot.unackCount > 0 ? "../../../assets/icons/header/alarm_bell.svg" : "../../../assets/icons/nav/alarms_bell_green.svg"
                 width: 18
                 height: 18
                 sourceSize: Qt.size(18, 18)
@@ -113,13 +113,13 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     radius: 3
-                    color: topBarRoot.activeTab === "active" ? "#dc2626" : "transparent"
+                    color: topBarRoot.activeTab === "active" ? (topBarRoot.unackCount > 0 ? "#dc2626" : "#16a34a") : "transparent"
 
                     Row {
                         anchors.centerIn: parent
                         spacing: 4
                         Image {
-                            source: "../../../assets/icons/nav/alarms_bell.svg"
+                            source: topBarRoot.unackCount > 0 ? "../../../assets/icons/nav/alarms_bell.svg" : "../../../assets/icons/nav/alarms_bell_green.svg"
                             width: 13
                             height: 13
                             sourceSize: Qt.size(13, 13)
@@ -147,7 +147,7 @@ Rectangle {
                         anchors.centerIn: parent
                         spacing: 4
                         Image {
-                            source: "../../../assets/icons/nav/nav_log.svg"
+                            source: "../../../assets/icons/nav/logs_order.svg"
                             width: 13
                             height: 13
                             sourceSize: Qt.size(13, 13)

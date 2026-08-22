@@ -514,15 +514,57 @@ Item {
         }
 
         // -------------------------------------------------------------
-        // 7. HEADER ACKNOWLEDGE & PLANTMODE OPEN BUTTONS
+        // 7. HEADER & ALARMS SYNCHRONIZATION ENGINE
         // -------------------------------------------------------------
-        if (ui.ackButton) {
-            ui.ackButton.clicked.connect(function() {
-                rootWindow.alarmIndex = (rootWindow.alarmIndex + 1) % rootWindow.alarmList.length;
-                ui.header.alarmMessage = rootWindow.alarmList[rootWindow.alarmIndex];
+        function updateAlarmAnnunciator() {
+            var alarmsScr = ui.alarmsScreen;
+            if (!alarmsScr) return;
+
+            var unack = alarmsScr.syncUnackCount();
+            if (ui.sidebar) {
+                ui.sidebar.unackAlarmsCount = unack;
+            }
+            if (ui.alarmsScreen) {
+                ui.alarmsScreen.unackCount = unack;
+            }
+
+            if (unack > 0) {
+                var latest = alarmsScr.getLatestUnacknowledgedAlarm();
+                if (latest) {
+                    ui.header.isAlarmActive = true;
+                    ui.header.alarmMessage = "[" + latest.severity + "] " + latest.tag + ": " + latest.title + " (" + latest.value + ") - ACTION: " + latest.resp;
+                }
+            } else {
                 ui.header.isAlarmActive = false;
+                ui.header.alarmMessage = "SYSTEM NORMAL - ALL PROCESS ALARMS ACKNOWLEDGED";
+            }
+        }
+
+        if (ui.alarmsScreen) {
+            ui.alarmsScreen.alarmsSynchronized.connect(function(count) {
+                updateAlarmAnnunciator();
+            });
+            ui.alarmsScreen.alarmAcknowledged.connect(function(tag, title) {
+                updateAlarmAnnunciator();
             });
         }
+
+        if (ui.ackButton) {
+            ui.ackButton.clicked.connect(function() {
+                if (ui.alarmsScreen) {
+                    var acked = ui.alarmsScreen.acknowledgeLatestAlarm(rootWindow.activeUserName);
+                    if (acked) {
+                        updateAlarmAnnunciator();
+                    } else {
+                        ui.header.isAlarmActive = false;
+                        ui.header.alarmMessage = "SYSTEM NORMAL - ALL PROCESS ALARMS ACKNOWLEDGED";
+                    }
+                }
+            });
+        }
+
+        // Initialize header alarm state immediately
+        updateAlarmAnnunciator();
 
         if (ui.header) {
             ui.header.plantModeRequested.connect(function() {

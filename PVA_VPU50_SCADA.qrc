@@ -15,9 +15,6 @@
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_check.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/common/icon_warning.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/controls/backspace.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/controls/btn_pause.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/controls/btn_start.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/controls/btn_stop.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/controls/clock.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/controls/close_x.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/controls/pause.svg</file>
@@ -32,6 +29,7 @@
         <file>PVA_VPU50_SCADAContent/assets/icons/equipment/suction_funnel.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/equipment/vacuum_gauge.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/header/alarm_bell.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/header/alarm_bell_green.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/header/ekato_logo.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/header/favicon.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/header/lightbulb.svg</file>
@@ -62,16 +60,9 @@
         <file>PVA_VPU50_SCADAContent/assets/icons/modes/suction/suction_liquids_tile.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/modes/suction/suction_solids_tile.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/alarms_bell.svg</file>
+        <file>PVA_VPU50_SCADAContent/assets/icons/nav/alarms_bell_green.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/docs_report.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/logs_order.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_alarm.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_doc.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_log.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_recipe.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_stack.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_tools.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_trend.svg</file>
-        <file>PVA_VPU50_SCADAContent/assets/icons/nav/nav_vessel.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/pid_vessel.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/recipes_checklist.svg</file>
         <file>PVA_VPU50_SCADAContent/assets/icons/nav/status_stack.svg</file>
@@ -176,6 +167,13 @@
         <file>scada/config/sensor_catalog.json</file>
         <file>scada/config/tag_catalog.json</file>
         <file>scada/simulation/plant_profile.json</file>
+        <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/agitator_sequence.json</file>
+        <file>scratch/01_extract_agitator_gif_frames_to_svg/output_frames/rotation_comparison_report.json</file>
+        <file>scratch/02_extract_mp4_agitator_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/03_extract_screen_recording_frames/output_frames/agitator_sequence.json</file>
+        <file>scratch/04_extract_no_reflection_agitator_frames/agitator_sequence.json</file>
+        <file>scratch/05_manual_removebg_imported_frames/agitator_sequence.json</file>
+        <file>scratch/06_archived_agitator_assets/agitator_sequence/agitator_sequence.json</file>
         <file>vercel.json</file>
     </qresource>
 </RCC>

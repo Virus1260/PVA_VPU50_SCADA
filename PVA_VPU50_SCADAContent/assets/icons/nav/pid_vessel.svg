@@ -1,12 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Reactor Vessel Body -->
-  <path d="M28 20h72v60a36 36 0 0 1-72 0V20z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
+  <defs>
+    <linearGradient id="vesselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f3459"/>
+      <stop offset="100%" stop-color="#071d33"/>
+    </linearGradient>
+  </defs>
+
+  <!-- External Heating/Cooling Thermal Jacket Shell -->
+  <path d="M20 34 V72 C20 98, 42 110, 64 110 C86 110, 108 98, 108 72 V34" stroke="#0284c7" stroke-width="4" stroke-linecap="round" fill="none" stroke-dasharray="6 4"/>
+
+  <!-- Main Vessel Shell Body -->
+  <path d="M28 26 H100 V72 C100 92, 84 102, 64 102 C44 102, 28 92, 28 72 Z" fill="url(#vesselGrad)" stroke="#38bdf8" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Top Dish Flange -->
+  <path d="M22 26 C22 18, 40 14, 64 14 C88 14, 106 18, 106 26" stroke="#38bdf8" stroke-width="4" fill="none"/>
   
-  <!-- Agitator Central Shaft & Impeller -->
-  <line x1="64" y1="8" x2="64" y2="68"/>
-  <path d="M44 68h40"/>
-  
-  <!-- Bottom Outlet Valve -->
-  <line x1="64" y1="80" x2="64" y2="116"/>
-  <circle cx="64" cy="116" r="8" fill="#ffffff"/>
+  <!-- Agitator Motor Drive -->
+  <rect x="52" y="6" width="24" height="12" rx="3" fill="#0284c7" stroke="#38bdf8" stroke-width="2.5"/>
+
+  <!-- Agitator Center Shaft -->
+  <line x1="64" y1="18" x2="64" y2="82" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Counter-Rotating Anchor Blade -->
+  <path d="M42 52 C52 48, 76 48, 86 52" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+  <!-- Bottom Homogenizer Rotor -->
+  <path d="M36 78 C48 72, 80 72, 92 78" stroke="#4ade80" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Bottom Discharge Diaphragm Valve -->
+  <line x1="64" y1="102" x2="64" y2="114" stroke="#38bdf8" stroke-width="4"/>
+  <polygon points="52 124 76 114 76 124 52 114" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
 </svg>

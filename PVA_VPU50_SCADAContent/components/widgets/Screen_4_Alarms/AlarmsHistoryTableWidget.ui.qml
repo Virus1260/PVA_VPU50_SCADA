@@ -55,10 +55,13 @@ Rectangle {
             spacing: 4
 
             model: ListModel {
+                ListElement { time: "09:44:10 UTC"; type: "ALARM_TRIP"; tag: "system.estop"; desc: "Emergency Stop Pushbutton Engaged - Plant Safety Loop Opened"; user: "HARDWARE (E-Stop)"; status: "ACTIVE" }
                 ListElement { time: "09:42:15 UTC"; type: "ALARM_TRIP"; tag: "PIC161001"; desc: "Vacuum Seal Differential Pressure Loss triggered (Value: -209.8 mbar, SP: -450.0 mbar)"; user: "SYSTEM (PLC)"; status: "ACTIVE" }
-                ListElement { time: "09:40:02 UTC"; type: "ALARM_ACK"; tag: "TIC162001"; desc: "Jacket Thermal Overheat acknowledged: Cooling circuit engaged"; user: "operator (Level 1)"; status: "ACKED" }
+                ListElement { time: "09:40:02 UTC"; type: "ALARM_TRIP"; tag: "TIC162001"; desc: "Jacket Thermal Overheat Warning triggered (Value: 88.9 °C, SP: 80.0 °C)"; user: "SYSTEM (PLC)"; status: "ACTIVE" }
+                ListElement { time: "09:38:40 UTC"; type: "ALARM_TRIP"; tag: "1P163001"; desc: "Mechanical Seal Barrier Pot Low Pressure (Value: 0.8 bar, SP: 2.5 bar)"; user: "SYSTEM (PLC)"; status: "ACTIVE" }
                 ListElement { time: "09:35:18 UTC"; type: "ALARM_ACK"; tag: "SCR182001"; desc: "Agitator Drive Ready Status Feedback acknowledged: Motor VFD verified"; user: "supervisor (Level 2)"; status: "ACKED" }
-                ListElement { time: "09:30:00 UTC"; type: "INFO_LOG"; tag: "1M2003"; desc: "Homogenizer Seal Cooling Fluid Flow Normal verified"; user: "operator (Level 1)"; status: "CLEARED" }
+                ListElement { time: "09:32:10 UTC"; type: "ALARM_ACK"; tag: "system.comm"; desc: "Delta AS332T-A PLC Link Latency acknowledged: Switch checked"; user: "operator (Level 1)"; status: "ACKED" }
+                ListElement { time: "09:30:00 UTC"; type: "INFO_LOG"; tag: "1M2003"; desc: "Homogenizer Seal Cooling Fluid Flow Normal telemetry verified"; user: "operator (Level 1)"; status: "CLEARED" }
             }
 
             delegate: Rectangle {

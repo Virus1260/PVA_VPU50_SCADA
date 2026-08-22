@@ -277,11 +277,18 @@ Rectangle {
         anchors.rightMargin: 16
         anchors.verticalCenter: parent.verticalCenter
         height: 52
-        color: headerRoot.isAlarmActive ? "#4a1212" : "#092a4a"
-        border.color: headerRoot.isAlarmActive ? "#ff4444" : "#1b5b94"
+        color: headerRoot.isAlarmActive ? "#4a1212" : "#07261d"
+        border.color: headerRoot.isAlarmActive ? "#ff4444" : "#16a34a"
         border.width: 1.5
         radius: 8
         clip: true
+
+        SequentialAnimation on opacity {
+            running: headerRoot.isAlarmActive
+            loops: Animation.Infinite
+            NumberAnimation { to: 0.65; duration: 550; easing.type: Easing.InOutQuad }
+            NumberAnimation { to: 1.0; duration: 550; easing.type: Easing.InOutQuad }
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -294,7 +301,7 @@ Rectangle {
                 height: 26
                 Image {
                     anchors.fill: parent
-                    source: "../../assets/icons/header/alarm_bell.svg"
+                    source: headerRoot.isAlarmActive ? "../../assets/icons/header/alarm_bell.svg" : "../../assets/icons/header/alarm_bell_green.svg"
                     fillMode: Image.PreserveAspectFit
                     mipmap: true
                     smooth: true
@@ -311,20 +318,20 @@ Rectangle {
                 clip: true
             }
 
-            // Ack Button (Lime Green, 70px width, 38px height)
+            // Ack Button (Touch friendly, 76px width, 38px height)
             Rectangle {
                 id: ackBtn
-                width: 70
+                width: 76
                 height: 38
                 radius: 6
-                color: headerRoot.isAlarmActive ? "#ff4444" : "#78dc20"
+                color: headerRoot.isAlarmActive ? "#ef4444" : "#16a34a"
 
                 signal clicked()
 
                 Text {
                     anchors.centerIn: parent
                     text: "Ack"
-                    color: headerRoot.isAlarmActive ? "#ffffff" : "#000000"
+                    color: "#ffffff"
                     font.bold: true
                     font.pixelSize: 13
                 }

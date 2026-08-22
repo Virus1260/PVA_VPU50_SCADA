@@ -9,6 +9,11 @@ Item {
     Layout.fillHeight: true
 
     property int pendingAckIndex: -1
+    property alias unackCount: ui.unackCount
+    property alias alarmListModel: ui.alarmList.model
+
+    signal alarmAcknowledged(string tag, string title)
+    signal alarmsSynchronized(int unackCount)
 
     Screen_4_AlarmsView {
         id: ui
@@ -70,6 +75,9 @@ Item {
             if (alarmsContainer.pendingAckIndex >= 0) {
                 var model = ui.alarmList.model;
                 if (model && alarmsContainer.pendingAckIndex < model.count) {
+                    var ackedTag = model.get(alarmsContainer.pendingAckIndex).tag;
+                    var ackedTitle = model.get(alarmsContainer.pendingAckIndex).title;
+
                     model.setProperty(alarmsContainer.pendingAckIndex, "ack", true);
                     model.setProperty(alarmsContainer.pendingAckIndex, "ackBy", "operator");
 
@@ -79,6 +87,8 @@ Item {
                         if (!model.get(i).ack) unack++;
                     }
                     ui.unackCount = unack;
+                    alarmsContainer.alarmAcknowledged(ackedTag, ackedTitle);
+                    alarmsContainer.alarmsSynchronized(unack);
                 }
             }
             ackModal.visible = false;
@@ -92,5 +102,59 @@ Item {
         onClicked: {
             ackModal.visible = false;
         }
+    }
+
+    function syncUnackCount() {
+        var model = ui.alarmList.model;
+        if (!model) return 0;
+        var unack = 0;
+        for (var i = 0; i < model.count; i++) {
+            if (!model.get(i).ack) unack++;
+        }
+        ui.unackCount = unack;
+        alarmsSynchronized(unack);
+        return unack;
+    }
+
+    function getLatestUnacknowledgedAlarm() {
+        var model = ui.alarmList.model;
+        if (!model) return null;
+        for (var i = 0; i < model.count; i++) {
+            var item = model.get(i);
+            if (!item.ack) {
+                return {
+                    alarmCode: item.alarmCode,
+                    severity: item.severity,
+                    tag: item.tag,
+                    title: item.title,
+                    value: item.value,
+                    sp: item.sp,
+                    time: item.time,
+                    resp: item.resp
+                };
+            }
+        }
+        return null;
+    }
+
+    function acknowledgeLatestAlarm(ackedBy) {
+        var model = ui.alarmList.model;
+        if (!model) return false;
+        for (var i = 0; i < model.count; i++) {
+            if (!model.get(i).ack) {
+                var ackedTag = model.get(i).tag;
+                var ackedTitle = model.get(i).title;
+                model.setProperty(i, "ack", true);
+                model.setProperty(i, "ackBy", ackedBy ? ackedBy : "operator");
+                syncUnackCount();
+                alarmAcknowledged(ackedTag, ackedTitle);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Component.onCompleted: {
+        syncUnackCount();
     }
 }
