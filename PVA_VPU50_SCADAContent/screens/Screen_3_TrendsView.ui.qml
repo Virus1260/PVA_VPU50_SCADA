@@ -55,7 +55,7 @@ Rectangle {
     property bool isZoomed: false
     property bool isLiveStreaming: true
     property string activeTimePreset: "15min"
-    property int sensorPanelWidth: 290
+    property int sensorPanelWidth: 350
     property string yAxisTitle: "Temperature (°C)"
     property string xAxisTitle: "Time (UTC)"
     property string inspectionTime: "08:34:11 UTC"

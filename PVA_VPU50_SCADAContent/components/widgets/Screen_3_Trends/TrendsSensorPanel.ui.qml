@@ -11,12 +11,12 @@ Rectangle {
     id: sensorPanelRoot
     Layout.preferredWidth: panelWidth
     Layout.fillHeight: true
-    radius: 5
+    radius: 6
     color: "#071c33"
     border.color: "#184d7e"
     border.width: 1.2
 
-    property int panelWidth: 290
+    property int panelWidth: 350
     property alias selectAllBtnItem: selectAllActionButton
     property alias clearAllBtnItem: clearAllActionButton
     property alias sensorListViewItem: sensorChannelListView
@@ -26,57 +26,71 @@ Rectangle {
         anchors.margins: 8
         spacing: 6
 
-        // Header with Full Sized "Select All" / "Clear All" Buttons
+        // 1. Header with Ergonomic High-Visibility "Select All" / "Clear All" Touch Buttons
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 36
-            radius: 4
+            Layout.preferredHeight: 46
+            radius: 5
             color: "#0d2b4a"
+            border.color: "#184d7e"
+            border.width: 1.0
 
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 4
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                anchors.topMargin: 4
+                anchors.bottomMargin: 4
                 spacing: 6
 
                 Image {
                     source: "../../../assets/icons/nav/tools_maintenance.svg"
-                    width: 14
-                    height: 14
-                    sourceSize: Qt.size(14, 14)
-                    Layout.preferredWidth: 14
-                    Layout.preferredHeight: 14
+                    width: 16
+                    height: 16
+                    sourceSize: Qt.size(16, 16)
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
                     fillMode: Image.PreserveAspectFit
                 }
-                Text { text: "SENSORS"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
+                Text {
+                    text: "SENSORS"
+                    color: "#38bdf8"
+                    font.bold: true
+                    font.pixelSize: 12
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                }
 
                 Rectangle {
                     id: selectAllActionButton
-                    Layout.preferredWidth: 80
-                    Layout.preferredHeight: 28
-                    radius: 3
+                    Layout.preferredWidth: 88
+                    Layout.preferredHeight: 32
+                    radius: 4
                     color: "#1e3a8a"
                     border.color: "#38bdf8"
-                    Text { anchors.centerIn: parent; text: "Select All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
+                    border.width: 1.2
+                    Text { anchors.centerIn: parent; text: "Select All"; color: "#ffffff"; font.pixelSize: 11; font.bold: true }
                 }
                 Rectangle {
                     id: clearAllActionButton
-                    Layout.preferredWidth: 75
-                    Layout.preferredHeight: 28
-                    radius: 3
+                    Layout.preferredWidth: 82
+                    Layout.preferredHeight: 32
+                    radius: 4
                     color: "#334155"
                     border.color: "#64748b"
-                    Text { anchors.centerIn: parent; text: "Clear All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
+                    border.width: 1.2
+                    Text { anchors.centerIn: parent; text: "Clear All"; color: "#ffffff"; font.pixelSize: 11; font.bold: true }
                 }
             }
         }
 
-        // Individually Scrollable Sensor Channels List
+        // 2. Comprehensive Industrial Process Sensor Catalog
         ListView {
             id: sensorChannelListView
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            spacing: 4
+            spacing: 5
             ScrollBar.vertical: ScrollBar {
                 active: true
                 policy: ScrollBar.AlwaysOn
@@ -85,66 +99,113 @@ Rectangle {
 
             model: ListModel {
                 id: sensorModelCatalogItems
-                ListElement { section: "TEMPERATURE"; tag: "RTD 1TI1301"; desc: "Main Vessel Temp"; unit: "°C"; color: "#38bdf8"; active: true; val: "40.1 °C"; rangeMin: 0; rangeMax: 120; field: "temp_vessel" }
-                ListElement { section: "TEMPERATURE"; tag: "RTD 2TI1001"; desc: "Jacket Thermal Temp"; unit: "°C"; color: "#f97316"; active: true; val: "52.6 °C"; rangeMin: 0; rangeMax: 140; field: "temp_jacket" }
-                ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 1"; desc: "Heater Element 01"; unit: "°C"; color: "#f43f5e"; active: false; val: "48.2 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater1" }
-                ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 2"; desc: "Heater Element 02"; unit: "°C"; color: "#ec4899"; active: false; val: "47.9 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater2" }
-                ListElement { section: "TEMPERATURE"; tag: "RTD 3TI1003"; desc: "Lid Surface Temp"; unit: "°C"; color: "#fb7185"; active: false; val: "36.4 °C"; rangeMin: 0; rangeMax: 100; field: "temp_lid" }
-                ListElement { section: "PRESSURE"; tag: "PR TRANSMITTER"; desc: "Chamber Vacuum"; unit: "mbar"; color: "#c084fc"; active: true; val: "-209.8 mbar"; rangeMin: -1000; rangeMax: 0; field: "vacuum_pressure" }
-                ListElement { section: "PRESSURE"; tag: "PIT 1002"; desc: "Jacket Steam Press"; unit: "bar"; color: "#a855f7"; active: false; val: "1.8 bar"; rangeMin: 0; rangeMax: 6; field: "press_steam" }
+                
+                // --- TEMPERATURE SUBSYSTEM ---
+                ListElement { section: "TEMPERATURE"; tag: "RTD 1TI1301"; desc: "Main Vessel Temp"; unit: "°C"; color: "#38bdf8"; active: true; val: "34.4 °C"; rangeMin: 0; rangeMax: 120; field: "temp_vessel" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD 2TI1001"; desc: "Jacket Thermal Temp"; unit: "°C"; color: "#f97316"; active: true; val: "46.9 °C"; rangeMin: 0; rangeMax: 140; field: "temp_jacket" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 1"; desc: "Heater Element 01"; unit: "°C"; color: "#f43f5e"; active: false; val: "43.4 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater1" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD HEATER 2"; desc: "Heater Element 02"; unit: "°C"; color: "#ec4899"; active: false; val: "42.9 °C"; rangeMin: 0; rangeMax: 160; field: "temp_heater2" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD 3TI1003"; desc: "Lid Surface Temp"; unit: "°C"; color: "#fb7185"; active: false; val: "28.4 °C"; rangeMin: 0; rangeMax: 100; field: "temp_lid" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD 4TI1004"; desc: "Cooling Return Temp"; unit: "°C"; color: "#34d399"; active: false; val: "21.5 °C"; rangeMin: 0; rangeMax: 100; field: "temp_coolwater" }
+                ListElement { section: "TEMPERATURE"; tag: "RTD 5TI1005"; desc: "Steam Condensate Temp"; unit: "°C"; color: "#fb923c"; active: false; val: "88.2 °C"; rangeMin: 0; rangeMax: 150; field: "temp_condensate" }
+
+                // --- PRESSURE SUBSYSTEM ---
+                ListElement { section: "PRESSURE"; tag: "PR TRANSMITTER"; desc: "Chamber Vacuum"; unit: "mbar"; color: "#c084fc"; active: true; val: "-450.0 mbar"; rangeMin: -1000; rangeMax: 0; field: "vacuum_pressure" }
+                ListElement { section: "PRESSURE"; tag: "PIT 1002"; desc: "Jacket Steam Pressure"; unit: "bar"; color: "#a855f7"; active: false; val: "1.8 bar"; rangeMin: 0; rangeMax: 6; field: "press_steam" }
                 ListElement { section: "PRESSURE"; tag: "PIT 1003"; desc: "Purge Air Pressure"; unit: "bar"; color: "#818cf8"; active: false; val: "5.5 bar"; rangeMin: 0; rangeMax: 10; field: "press_air" }
-                ListElement { section: "DRIVES"; tag: "1M1501 Speed"; desc: "Agitator Drive"; unit: "rpm"; color: "#22c55e"; active: true; val: "25.0 rpm"; rangeMin: 0; rangeMax: 60; field: "speed_agitator" }
-                ListElement { section: "DRIVES"; tag: "2M1501 Speed"; desc: "Scraper Motor"; unit: "rpm"; color: "#10b981"; active: false; val: "0.0 rpm"; rangeMin: 0; rangeMax: 40; field: "speed_scraper" }
-                ListElement { section: "DRIVES"; tag: "1M2003 Speed"; desc: "Homogenizer Rotor"; unit: "rpm"; color: "#eab308"; active: true; val: "600 rpm"; rangeMin: 0; rangeMax: 6000; field: "speed_homo" }
-                ListElement { section: "DRIVES"; tag: "3M1001 Speed"; desc: "Discharge Pump"; unit: "rpm"; color: "#f59e0b"; active: false; val: "0.0 rpm"; rangeMin: 0; rangeMax: 1500; field: "speed_pump" }
-                ListElement { section: "POWER"; tag: "KW TRANSMITTER"; desc: "Total Skid Power"; unit: "kW"; color: "#06b6d4"; active: false; val: "14.8 kW"; rangeMin: 0; rangeMax: 45; field: "power_kw" }
-                ListElement { section: "POWER"; tag: "CURR 1M1501"; desc: "Agitator Current"; unit: "A"; color: "#14b8a6"; active: false; val: "3.4 A"; rangeMin: 0; rangeMax: 20; field: "curr_agitator" }
-                ListElement { section: "POWER"; tag: "CURR 1M2003"; desc: "Homo Current"; unit: "A"; color: "#0ea5e9"; active: false; val: "8.9 A"; rangeMin: 0; rangeMax: 35; field: "curr_homo" }
+                ListElement { section: "PRESSURE"; tag: "PIT 1004"; desc: "Nitrogen Blanket Press"; unit: "bar"; color: "#60a5fa"; active: false; val: "1.2 bar"; rangeMin: 0; rangeMax: 4; field: "press_nitrogen" }
+                ListElement { section: "PRESSURE"; tag: "PIT 1005"; desc: "Hydraulic Lift Pressure"; unit: "bar"; color: "#93c5fd"; active: false; val: "120.0 bar"; rangeMin: 0; rangeMax: 200; field: "press_hydraulic" }
+
+                // --- DRIVE SUBSYSTEM ---
+                ListElement { section: "DRIVES"; tag: "1M1501 Speed"; desc: "Main Agitator Drive"; unit: "rpm"; color: "#22c55e"; active: true; val: "35.0 rpm"; rangeMin: 0; rangeMax: 60; field: "speed_agitator" }
+                ListElement { section: "DRIVES"; tag: "2M1501 Speed"; desc: "Wall Scraper Motor"; unit: "rpm"; color: "#10b981"; active: false; val: "17.5 rpm"; rangeMin: 0; rangeMax: 40; field: "speed_scraper" }
+                ListElement { section: "DRIVES"; tag: "1M2003 Speed"; desc: "Homogenizer Rotor"; unit: "rpm"; color: "#eab308"; active: true; val: "0 rpm"; rangeMin: 0; rangeMax: 3500; field: "speed_homo" }
+                ListElement { section: "DRIVES"; tag: "3M1001 Speed"; desc: "Discharge Pump"; unit: "rpm"; color: "#f59e0b"; active: false; val: "0 rpm"; rangeMin: 0; rangeMax: 600; field: "speed_pump" }
+                ListElement { section: "DRIVES"; tag: "4M1002 Speed"; desc: "CIP Recirc Pump"; unit: "rpm"; color: "#4ade80"; active: false; val: "0 rpm"; rangeMin: 0; rangeMax: 1500; field: "speed_cip" }
+
+                // --- PHYSICAL & ANALYTICAL SUBSYSTEM ---
+                ListElement { section: "ANALYTICAL"; tag: "LIT 1001"; desc: "Vessel Product Weight"; unit: "kg"; color: "#a3e635"; active: false; val: "42.5 kg"; rangeMin: 0; rangeMax: 60; field: "weight_product" }
+                ListElement { section: "ANALYTICAL"; tag: "PH SENSOR 01"; desc: "In-Line Emulsion pH"; unit: "pH"; color: "#2dd4bf"; active: false; val: "6.8 pH"; rangeMin: 0; rangeMax: 14; field: "ph_value" }
+                ListElement { section: "ANALYTICAL"; tag: "VISC SENSOR 01"; desc: "Dynamic Viscosity"; unit: "cP"; color: "#06b6d4"; active: false; val: "12400 cP"; rangeMin: 0; rangeMax: 50000; field: "viscosity_cp" }
+
+                // --- POWER & ELECTRICAL SUBSYSTEM ---
+                ListElement { section: "POWER"; tag: "KW TRANSMITTER"; desc: "Total Skid Power"; unit: "kW"; color: "#38bdf8"; active: false; val: "6.3 kW"; rangeMin: 0; rangeMax: 45; field: "power_kw" }
+                ListElement { section: "POWER"; tag: "CURR 1M1501"; desc: "Agitator Drive Current"; unit: "A"; color: "#14b8a6"; active: false; val: "1.2 A"; rangeMin: 0; rangeMax: 20; field: "curr_agitator" }
+                ListElement { section: "POWER"; tag: "CURR 1M2003"; desc: "Homogenizer Current"; unit: "A"; color: "#0ea5e9"; active: false; val: "0.5 A"; rangeMin: 0; rangeMax: 35; field: "curr_homo" }
+                ListElement { section: "POWER"; tag: "CURR 5M1001"; desc: "Hydraulic Pump Current"; unit: "A"; color: "#6366f1"; active: false; val: "0.0 A"; rangeMin: 0; rangeMax: 15; field: "curr_hydraulic" }
             }
 
             delegate: Rectangle {
-                width: sensorChannelListView ? sensorChannelListView.width - 8 : 0
-                height: 48
-                radius: 4
-                color: model.active ? "#0d365b" : "#092440"
-                border.color: model.active ? model.color : "#1e3a8a"
-                border.width: model.active ? 1.6 : 1.0
+                id: sensorCardItem
+                width: ListView.view ? ListView.view.width - 10 : 340
+                height: 52
+                radius: 5
+                color: model.active ? "#0e3c66" : "#081d33"
+                border.color: model.active ? model.color : "#184d7e"
+                border.width: model.active ? 1.8 : 1.0
 
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: 6
-                    spacing: 8
+                // 1. Leftmost Status Circle Indicator
+                Rectangle {
+                    id: statusDot
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 14
+                    height: 14
+                    radius: 7
+                    color: model.active ? model.color : "#334155"
+                    border.color: model.active ? "#ffffff" : "#475569"
+                    border.width: model.active ? 1.5 : 1.0
+                }
 
-                    Rectangle {
-                        width: 12
-                        height: 12
-                        radius: 6
-                        color: model.active ? model.color : "#475569"
-                        border.color: model.active ? "#ffffff" : "transparent"
-                        border.width: 1
+                // 2. Right-Anchored Value Readout Pill (Strictly anchored to right edge!)
+                Rectangle {
+                    id: valuePill
+                    anchors.right: parent.right
+                    anchors.rightMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 32
+                    width: Math.max(90, valueText.implicitWidth + 18)
+                    radius: 4
+                    color: "#051627"
+                    border.color: model.active ? model.color : "#1e3a8a"
+                    border.width: 1.0
+
+                    Text {
+                        id: valueText
+                        anchors.centerIn: parent
+                        text: model.val
+                        color: model.active ? model.color : "#94a3b8"
+                        font.bold: true
+                        font.pixelSize: 11
                     }
+                }
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 1
-                        Text {
-                            text: model.tag
-                            color: model.active ? "#ffffff" : "#94a3b8"
-                            font.bold: true
-                            font.pixelSize: 11
-                        }
-                        Text {
-                            text: model.desc
-                            color: "#64748b"
-                            font.pixelSize: 9
-                        }
+                // 3. Middle Dynamic Title & Description (Elides with ... if panel is squeezed)
+                Column {
+                    anchors.left: statusDot.right
+                    anchors.leftMargin: 10
+                    anchors.right: valuePill.left
+                    anchors.rightMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 2
+                    clip: true
+
+                    Text {
+                        width: parent.width
+                        text: model.tag
+                        color: model.active ? "#ffffff" : "#cbd5e1"
+                        font.bold: true
+                        font.pixelSize: 12
+                        elide: Text.ElideRight
                     }
 
                     Text {
-                        text: model.val
-                        color: model.active ? model.color : "#64748b"
-                        font.bold: true
-                        font.pixelSize: 11
+                        width: parent.width
+                        text: model.desc
+                        color: "#94a3b8"
+                        font.pixelSize: 10
+                        elide: Text.ElideRight
                     }
                 }
             }

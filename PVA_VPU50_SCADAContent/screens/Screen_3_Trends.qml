@@ -194,7 +194,7 @@ Item {
 
         onPositionChanged: function(mouse) {
             if (pressed) {
-                var newW = Math.max(220, Math.min(420, startWidth + (mouse.x - startX)));
+                var newW = Math.max(280, Math.min(480, startWidth + (mouse.x - startX)));
                 ui.sensorPanelWidth = newW;
             }
         }
@@ -352,16 +352,25 @@ Item {
                 temp_heater1: t_jacket - 3.5 + (Math.random() * 0.2),
                 temp_heater2: t_jacket - 4.0 + (Math.random() * 0.2),
                 temp_lid: t_vessel - 6.0 + (Math.random() * 0.2),
+                temp_coolwater: 21.5 + (Math.random() * 0.2),
+                temp_condensate: 88.2 + (Math.random() * 0.4),
                 vacuum_pressure: vac,
                 press_steam: 1.8 + (Math.random() * 0.03 - 0.015),
                 press_air: 5.5 + (Math.random() * 0.05 - 0.025),
+                press_nitrogen: 1.2 + (Math.random() * 0.02 - 0.01),
+                press_hydraulic: 120.0 + (Math.random() * 0.5 - 0.25),
                 speed_agitator: sp_agitator,
                 speed_scraper: sp_agitator > 0 ? (sp_agitator * 0.5) : 0.0,
                 speed_homo: sp_homo,
                 speed_pump: sp_homo > 0 ? 350.0 : 0.0,
-                power_kw: (sp_agitator * 0.1) + (sp_homo * 0.003) + 2.5,
-                curr_agitator: sp_agitator * 0.08 + 0.5,
-                curr_homo: sp_homo * 0.002 + 1.2
+                speed_cip: 0.0,
+                weight_product: 42.5 + (Math.random() * 0.05 - 0.025),
+                ph_value: 6.8 + (Math.random() * 0.02 - 0.01),
+                viscosity_cp: 12400.0 + (Math.random() * 50.0 - 25.0),
+                power_kw: (sp_agitator * 0.08) + (sp_homo * 0.003) + 3.5,
+                curr_agitator: sp_agitator * 0.03 + 0.5,
+                curr_homo: sp_homo * 0.002 + 0.5,
+                curr_hydraulic: 0.0
             };
 
             // Maintain up to 3000 historical samples
@@ -419,9 +428,11 @@ Item {
                 epoch: pointEpoch,
                 time: timeStr,
                 temp_vessel: tv, temp_jacket: tj, temp_heater1: tj - 3.5, temp_heater2: tj - 4.0, temp_lid: tv - 6.0,
-                vacuum_pressure: vp, press_steam: 1.8, press_air: 5.5,
-                speed_agitator: sa, speed_scraper: sa * 0.5, speed_homo: sh, speed_pump: 0.0,
-                power_kw: 3.5 + (sa * 0.08), curr_agitator: 1.2, curr_homo: 0.5
+                temp_coolwater: 21.5, temp_condensate: 88.2,
+                vacuum_pressure: vp, press_steam: 1.8, press_air: 5.5, press_nitrogen: 1.2, press_hydraulic: 120.0,
+                speed_agitator: sa, speed_scraper: sa * 0.5, speed_homo: sh, speed_pump: 0.0, speed_cip: 0.0,
+                weight_product: 42.5, ph_value: 6.8, viscosity_cp: 12400.0,
+                power_kw: 3.5 + (sa * 0.08), curr_agitator: 1.2, curr_homo: 0.5, curr_hydraulic: 0.0
             });
         }
         persistentHistory = initial;
