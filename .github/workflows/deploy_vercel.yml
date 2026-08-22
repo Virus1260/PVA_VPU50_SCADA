@@ -61,7 +61,22 @@ jobs:
           echo "Contents of dist for Vercel deployment:"
           ls -lh dist/
 
-      - name: Deploy to Vercel
+      - name: Validate Build Output (Atomic Rollback Protection)
+        run: |
+          echo "Validating WebAssembly build artifacts..."
+          if [ ! -f "dist/index.html" ]; then
+            echo "::error ::CRITICAL: dist/index.html was not generated! Aborting deployment to preserve last working production version on Vercel."
+            exit 1
+          fi
+          WASM_COUNT=$(find dist -name "*.wasm" | wc -l)
+          if [ "$WASM_COUNT" -eq 0 ]; then
+            echo "::error ::CRITICAL: No .wasm binaries found in dist! Aborting deployment to preserve last working production version on Vercel."
+            exit 1
+          fi
+          echo "Validation PASSED ($WASM_COUNT WASM files found). Ready for zero-downtime deployment."
+
+      - name: Deploy to Vercel (Production Zero-Downtime)
+        if: success()
         run: |
           mkdir -p .vercel
           echo '{"projectId":"${{ secrets.VERCEL_PROJECT_ID }}","orgId":"${{ secrets.VERCEL_ORG_ID }}"}' > .vercel/project.json
