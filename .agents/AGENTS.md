@@ -1,14 +1,18 @@
 # PVA Systems VPU-50 Industrial SCADA – Agent Directives & Rules
 
-## 1. Core Engineering & Safety Rules
+## 1. Core Engineering, Build Integrity & Safety Rules
 1. **Strict Git Rule**: NEVER run `git commit` or `git push` automatically without explicit user permission.
-2. **Process Running Safety Interlock**:
+2. **Continuous CMake (`qds.cmake`) & QRC (`PVA_VPU50_SCADA.qrc`) Synchronization**:
+   - On **EVERY** prompt/task, before completing code modifications, always verify that `qds.cmake` and `PVA_VPU50_SCADA.qrc` are synchronized with real, tracked files.
+   - **NEVER** reference `scratch/`, `tmp/`, or ephemeral directories in `qds.cmake`, `PVA_VPU50_SCADA.qrc`, or `CMakeLists.txt`.
+   - Every resource declared in CMake and QRC MUST exist on disk and be tracked in Git to guarantee 100% successful WebAssembly builds in GitHub Actions (`deploy_vercel.yml`).
+3. **Process Running Safety Interlock**:
    - While any equipment row is actively running (`isPlaying == true`), its speed setpoint, steppers (`+`/`−`), and mode selector modal MUST be locked.
    - Attempting parameter edits while running must trigger an annunciator alert: `"SAFETY INTERLOCK: Stop [Equipment] before modifying mode or setpoint parameters."`
-3. **Mandatory Valve Confirmation Interlock**:
+4. **Mandatory Valve Confirmation Interlock**:
    - External Line Recirculation, CIP modes, and Suction charging modes MUST trigger `ConfirmationModal` with the 5-column Valve Status Matrix.
    - The `CONFIRM POSITIONING` button unlocks ONLY after all required manual butterfly valves (`V301`, `V302`, `V303`) are checked by the operator.
-4. **Slint & QML Design Standards**:
+5. **Slint & QML Design Standards**:
    - Header Bar: Standardized at `86px` height. Machine capsule on the left, Centered Alarm/Annunciator Box with `Ack` button, Right-aligned User Profile, Digital Clock, and PVA Systems vector logo.
    - Numeric Keypad: 4×4 Grid layout (`7,8,9,Del` | `4,5,6,Esc` | `1,2,3,Clear` | `0,.,−,OK`).
 
