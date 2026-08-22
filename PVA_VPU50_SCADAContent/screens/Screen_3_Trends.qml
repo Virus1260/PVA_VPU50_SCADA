@@ -16,8 +16,8 @@ Item {
     property real zoomStartRatio: 0.0
     property real zoomEndRatio: 1.0
     property bool isZoomed: false
-    property int timeWindowSamples: 60 // 60 samples = 5m at 5s intervals
-    property int historyScrollOffset: 0 // 0 = live edge, >0 = offset back into history
+    property int windowDurationSec: 900 // Default: 15 minutes = 900 seconds
+    property real scrubRatio: 1.0 // 1.0 = live edge
 
     Screen_3_TrendsView {
         id: ui
@@ -25,7 +25,34 @@ Item {
         activeMode: "chart"
         isZoomed: trendsContainer.isZoomed
         isLiveStreaming: true
-        activeTimePreset: "5min"
+        activeTimePreset: "15min"
+    }
+
+    function formatTimeOnly(epochMs) {
+        var d = new Date(epochMs);
+        var hrs = String(d.getHours()).padStart(2, '0');
+        var mins = String(d.getMinutes()).padStart(2, '0');
+        var secs = String(d.getSeconds()).padStart(2, '0');
+        return hrs + ":" + mins + ":" + secs;
+    }
+
+    function formatDateOnly(epochMs) {
+        var d = new Date(epochMs);
+        var day = String(d.getDate()).padStart(2, '0');
+        var month = String(d.getMonth() + 1).padStart(2, '0');
+        var year = d.getFullYear();
+        return day + "/" + month + "/" + year;
+    }
+
+    function formatFullDateTime(epochMs) {
+        var d = new Date(epochMs);
+        var day = String(d.getDate()).padStart(2, '0');
+        var month = String(d.getMonth() + 1).padStart(2, '0');
+        var year = d.getFullYear();
+        var hrs = String(d.getHours()).padStart(2, '0');
+        var mins = String(d.getMinutes()).padStart(2, '0');
+        var secs = String(d.getSeconds()).padStart(2, '0');
+        return day + "/" + month + "/" + year + " " + hrs + ":" + mins + ":" + secs + " UTC";
     }
 
     // Helper: Build Multi-Column Telemetry Table Rows
@@ -64,17 +91,39 @@ Item {
         ui.telemetryList.model = tableRows;
     }
 
-    // Helper: Get Current Visible Slice from History
+    // Helper: Get Current Visible Slice from History (Starts strictly at oldest available real data)
     function getVisibleDataSlice() {
         var total = trendsContainer.persistentHistory.length;
         if (total === 0) return [];
 
-        var winSize = Math.min(total, trendsContainer.timeWindowSamples);
-        var endIdx = total - trendsContainer.historyScrollOffset;
-        endIdx = Math.max(winSize, Math.min(total, endIdx));
-        var startIdx = Math.max(0, endIdx - winSize);
+        var oldestEpoch = trendsContainer.persistentHistory[0].epoch;
+        var liveEpoch = trendsContainer.persistentHistory[total - 1].epoch;
+        var reqDurationMs = trendsContainer.windowDurationSec * 1000;
 
-        var slice = trendsContainer.persistentHistory.slice(startIdx, endIdx);
+        var endEpoch = liveEpoch;
+        if (!ui.isLiveStreaming) {
+            var minEnd = oldestEpoch + Math.min(reqDurationMs, liveEpoch - oldestEpoch);
+            endEpoch = Math.max(minEnd, oldestEpoch + (liveEpoch - oldestEpoch) * trendsContainer.scrubRatio);
+        }
+        
+        // Start strictly at the oldest real data if requested window exceeds available logging history
+        var startEpoch = Math.max(oldestEpoch, endEpoch - reqDurationMs);
+
+        ui.startTimeLabel = formatTimeOnly(startEpoch);
+        ui.endTimeLabel = formatTimeOnly(endEpoch);
+
+        var slice = [];
+        for (var i = 0; i < total; i++) {
+            var p = trendsContainer.persistentHistory[i];
+            if (p.epoch >= startEpoch && p.epoch <= endEpoch) {
+                slice.push(p);
+            }
+        }
+
+        if (slice.length < 2 && total >= 2) {
+            slice = trendsContainer.persistentHistory.slice(Math.max(0, total - 60));
+        }
+
         if (trendsContainer.isZoomed && slice.length > 2) {
             var zStart = Math.floor(slice.length * trendsContainer.zoomStartRatio);
             var zEnd = Math.min(slice.length, Math.ceil(slice.length * trendsContainer.zoomEndRatio));
@@ -151,7 +200,7 @@ Item {
         }
     }
 
-    // Mode Toggle
+    // Mode Toggle (Graph vs Table)
     MouseArea { parent: ui.chartModeBtn; anchors.fill: parent; onClicked: { ui.activeMode = "chart"; refreshTableView(); } }
     MouseArea { parent: ui.tableModeBtn; anchors.fill: parent; onClicked: { ui.activeMode = "table"; refreshTableView(); } }
 
@@ -162,7 +211,7 @@ Item {
         onClicked: {
             ui.isLiveStreaming = !ui.isLiveStreaming;
             if (ui.isLiveStreaming) {
-                trendsContainer.historyScrollOffset = 0;
+                trendsContainer.scrubRatio = 1.0;
                 trendsContainer.zoomStartRatio = 0.0;
                 trendsContainer.zoomEndRatio = 1.0;
                 trendsContainer.isZoomed = false;
@@ -188,12 +237,12 @@ Item {
     }
 
     // Time Preset Selectors (1m, 5m, 15m, 1h, 8h, 24h)
-    MouseArea { parent: ui.t1MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1min"; trendsContainer.timeWindowSamples = 20; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t5MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "5min"; trendsContainer.timeWindowSamples = 60; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t15MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "15min"; trendsContainer.timeWindowSamples = 120; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t1HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1h"; trendsContainer.timeWindowSamples = 240; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t8HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "8h"; trendsContainer.timeWindowSamples = 480; updateYAxisTitle(); } }
-    MouseArea { parent: ui.t24HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "24h"; trendsContainer.timeWindowSamples = 800; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t1MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1min"; trendsContainer.windowDurationSec = 60; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t5MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "5min"; trendsContainer.windowDurationSec = 300; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t15MinBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "15min"; trendsContainer.windowDurationSec = 900; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t1HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "1h"; trendsContainer.windowDurationSec = 3600; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t8HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "8h"; trendsContainer.windowDurationSec = 28800; updateYAxisTitle(); } }
+    MouseArea { parent: ui.t24HourBtn; anchors.fill: parent; onClicked: { ui.activeTimePreset = "24h"; trendsContainer.windowDurationSec = 86400; updateYAxisTitle(); } }
 
     // Timeline History Steppers & Slider (Free X-Axis Panning When Paused)
     MouseArea {
@@ -201,37 +250,8 @@ Item {
         anchors.fill: parent
         onClicked: {
             ui.isLiveStreaming = false;
-            var maxOffset = Math.max(0, trendsContainer.persistentHistory.length - trendsContainer.timeWindowSamples);
-            trendsContainer.historyScrollOffset = maxOffset;
+            trendsContainer.scrubRatio = 0.0;
             ui.timeSliderItem.value = 0;
-            ui.trendCanvasItem.requestPaint();
-            refreshTableView();
-        }
-    }
-
-    MouseArea {
-        parent: ui.panLeftBtn
-        anchors.fill: parent
-        onClicked: {
-            ui.isLiveStreaming = false;
-            var maxOffset = Math.max(0, trendsContainer.persistentHistory.length - trendsContainer.timeWindowSamples);
-            trendsContainer.historyScrollOffset = Math.min(maxOffset, trendsContainer.historyScrollOffset + 10);
-            var ratio = 1.0 - (trendsContainer.historyScrollOffset / Math.max(1, maxOffset));
-            ui.timeSliderItem.value = ratio * 100;
-            ui.trendCanvasItem.requestPaint();
-            refreshTableView();
-        }
-    }
-
-    MouseArea {
-        parent: ui.panRightBtn
-        anchors.fill: parent
-        onClicked: {
-            trendsContainer.historyScrollOffset = Math.max(0, trendsContainer.historyScrollOffset - 10);
-            if (trendsContainer.historyScrollOffset === 0) ui.isLiveStreaming = true;
-            var maxOffset = Math.max(0, trendsContainer.persistentHistory.length - trendsContainer.timeWindowSamples);
-            var ratio = 1.0 - (trendsContainer.historyScrollOffset / Math.max(1, maxOffset));
-            ui.timeSliderItem.value = ratio * 100;
             ui.trendCanvasItem.requestPaint();
             refreshTableView();
         }
@@ -242,7 +262,7 @@ Item {
         anchors.fill: parent
         onClicked: {
             ui.isLiveStreaming = true;
-            trendsContainer.historyScrollOffset = 0;
+            trendsContainer.scrubRatio = 1.0;
             trendsContainer.zoomStartRatio = 0.0;
             trendsContainer.zoomEndRatio = 1.0;
             trendsContainer.isZoomed = false;
@@ -257,9 +277,8 @@ Item {
         target: ui.timeSliderItem
         function onMoved() {
             var val = ui.timeSliderItem.value; // 0 to 100
-            var maxOffset = Math.max(0, trendsContainer.persistentHistory.length - trendsContainer.timeWindowSamples);
-            trendsContainer.historyScrollOffset = Math.floor((1.0 - (val / 100.0)) * maxOffset);
-            if (trendsContainer.historyScrollOffset > 0) {
+            trendsContainer.scrubRatio = val / 100.0;
+            if (val < 98) {
                 ui.isLiveStreaming = false;
             } else {
                 ui.isLiveStreaming = true;
@@ -309,31 +328,33 @@ Item {
         }
     }
 
-    // Real-Time Sampler (Appends continuously to persistent buffer, freezes viewport if paused)
+    // Real-Time Sampler (Appends continuously to persistent buffer)
     Timer {
-        interval: 500
+        interval: 1000
         running: true
         repeat: true
         onTriggered: {
             var now = new Date();
-            var timeStr = now.toTimeString().split(' ')[0];
+            var nowEpoch = now.getTime();
+            var timeStr = trendsContainer.formatTimeOnly(nowEpoch);
 
-            var t_vessel = stateMiddleware.vesselTemp + (Math.random() * 0.4 - 0.2);
-            var t_jacket = t_vessel + 12.5 + (Math.random() * 0.6 - 0.3);
-            var vac = stateMiddleware.vacuumPressure + (Math.random() * 2.0 - 1.0);
-            var sp_agitator = stateMiddleware.agitatorSpeed + (Math.random() * 0.4 - 0.2);
-            var sp_homo = stateMiddleware.homogenizerSpeed + (Math.random() * 10.0 - 5.0);
+            var t_vessel = stateMiddleware.vesselTemp + (Math.random() * 0.3 - 0.15);
+            var t_jacket = t_vessel + 12.0 + (Math.random() * 0.4 - 0.2);
+            var vac = stateMiddleware.vacuumPressure + (Math.random() * 1.5 - 0.75);
+            var sp_agitator = stateMiddleware.agitatorSpeed + (Math.random() * 0.3 - 0.15);
+            var sp_homo = stateMiddleware.homogenizerSpeed + (Math.random() * 8.0 - 4.0);
 
             var sample = {
+                epoch: nowEpoch,
                 time: timeStr,
                 temp_vessel: t_vessel,
                 temp_jacket: t_jacket,
-                temp_heater1: t_jacket - 4.0 + (Math.random() * 0.3),
-                temp_heater2: t_jacket - 4.5 + (Math.random() * 0.3),
-                temp_lid: t_vessel - 8.0 + (Math.random() * 0.2),
+                temp_heater1: t_jacket - 3.5 + (Math.random() * 0.2),
+                temp_heater2: t_jacket - 4.0 + (Math.random() * 0.2),
+                temp_lid: t_vessel - 6.0 + (Math.random() * 0.2),
                 vacuum_pressure: vac,
-                press_steam: 1.8 + (Math.random() * 0.05 - 0.02),
-                press_air: 5.5 + (Math.random() * 0.1 - 0.05),
+                press_steam: 1.8 + (Math.random() * 0.03 - 0.015),
+                press_air: 5.5 + (Math.random() * 0.05 - 0.025),
                 speed_agitator: sp_agitator,
                 speed_scraper: sp_agitator > 0 ? (sp_agitator * 0.5) : 0.0,
                 speed_homo: sp_homo,
@@ -343,9 +364,9 @@ Item {
                 curr_homo: sp_homo * 0.002 + 1.2
             };
 
-            // Maintain up to 1200 historical samples
+            // Maintain up to 3000 historical samples
             trendsContainer.persistentHistory.push(sample);
-            if (trendsContainer.persistentHistory.length > 1200) {
+            if (trendsContainer.persistentHistory.length > 3000) {
                 trendsContainer.persistentHistory.shift();
             }
 
@@ -363,7 +384,6 @@ Item {
 
             // If in LIVE mode, automatically stay glued to the live edge
             if (ui.isLiveStreaming) {
-                trendsContainer.historyScrollOffset = 0;
                 ui.timeSliderItem.value = 100;
                 ui.trendCanvasItem.requestPaint();
                 if (ui.activeMode === "table") {
@@ -375,25 +395,33 @@ Item {
 
     Component.onCompleted: {
         var initial = [];
-        var baseTime = new Date();
-        baseTime.setMinutes(baseTime.getMinutes() - 10);
+        var nowEpoch = Date.now();
+        
+        // Realistic continuous active batch run (15 minutes of real data starting at batch start):
+        var totalSteps = 90;
+        var batchHistorySec = 900; // 15 minutes of authentic active batch run
 
-        for (var i = 0; i < 80; i++) {
-            var sampleTime = new Date(baseTime.getTime() + i * 5000);
-            var timeStr = sampleTime.toTimeString().split(' ')[0];
+        for (var i = 0; i <= totalSteps; i++) {
+            var stepOffsetSec = (1.0 - (i / totalSteps)) * batchHistorySec;
+            var pointEpoch = nowEpoch - (stepOffsetSec * 1000);
+            var timeStr = trendsContainer.formatTimeOnly(pointEpoch);
 
-            var tv = 24.5 + (i / 80.0) * 55.0;
-            var tj = 28.0 + (i / 80.0) * 58.0;
-            var vp = -5.0 - (i / 80.0) * 445.0;
-            var sa = i > 10 ? 35.0 : 0.0;
-            var sh = i > 30 ? 3200.0 : 0.0;
+            var progress = i / totalSteps;
+            
+            // Authentic batch progression up to current live state:
+            var tv = 25.0 + progress * 9.4; // 25.0°C to 34.4°C
+            var tj = tv + 12.5; // Jacket tracks above vessel
+            var vp = -20.0 - progress * 430.0; // 0 to -450 mbar
+            var sa = progress > 0.1 ? 35.0 : (progress * 350.0); // Agitator ramps to 35 rpm
+            var sh = 0.0;
 
             initial.push({
+                epoch: pointEpoch,
                 time: timeStr,
-                temp_vessel: tv, temp_jacket: tj, temp_heater1: tj - 4.0, temp_heater2: tj - 4.5, temp_lid: tv - 8.0,
+                temp_vessel: tv, temp_jacket: tj, temp_heater1: tj - 3.5, temp_heater2: tj - 4.0, temp_lid: tv - 6.0,
                 vacuum_pressure: vp, press_steam: 1.8, press_air: 5.5,
-                speed_agitator: sa, speed_scraper: sa * 0.5, speed_homo: sh, speed_pump: sh > 0 ? 350.0 : 0.0,
-                power_kw: 14.8, curr_agitator: 3.4, curr_homo: 8.9
+                speed_agitator: sa, speed_scraper: sa * 0.5, speed_homo: sh, speed_pump: 0.0,
+                power_kw: 3.5 + (sa * 0.08), curr_agitator: 1.2, curr_homo: 0.5
             });
         }
         persistentHistory = initial;
@@ -405,7 +433,7 @@ Item {
             ctx.clearRect(0, 0, ui.trendCanvasItem.width, ui.trendCanvasItem.height);
 
             var w = ui.trendCanvasItem.width - 90;
-            var h = ui.trendCanvasItem.height - 50;
+            var h = ui.trendCanvasItem.height - 58;
             var ox = 70;
             var oy = 15;
 
@@ -453,17 +481,33 @@ Item {
             if (visibleData.length < 2) return;
             var count = visibleData.length;
 
-            // Draw X-axis timestamps
-            ctx.fillStyle = "#64748b";
-            ctx.font = "bold 10px sans-serif";
-            var stepX = Math.max(1, Math.floor(count / 5));
-            for (var k = 0; k < count; k += stepX) {
-                var ptX = visibleData[k];
-                if (ptX) {
-                    var pxTime = ox + (w / (count - 1)) * k;
-                    ctx.fillText(ptX.time, pxTime - 18, oy + h + 20);
-                }
+            var firstEpoch = visibleData[0].epoch;
+            var lastEpoch = visibleData[count - 1].epoch;
+            var spanEpoch = Math.max(1000, lastEpoch - firstEpoch);
+
+            // Draw 5 Equidistant X-axis timestamps (Line 1: Time, Line 2: Date directly below)
+            for (var k = 0; k <= 4; k++) {
+                var labelEpoch = firstEpoch + (spanEpoch * (k / 4.0));
+                var timeStr = trendsContainer.formatTimeOnly(labelEpoch);
+                var dateStr = trendsContainer.formatDateOnly(labelEpoch);
+                var pxTime = ox + (w * (k / 4.0));
+
+                // Row 1: Time in bold
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "bold 10px sans-serif";
+                ctx.fillText(timeStr, pxTime - 20, oy + h + 16);
+
+                // Row 2: Date directly below
+                ctx.fillStyle = "#475569";
+                ctx.font = "9px sans-serif";
+                ctx.fillText(dateStr, pxTime - 22, oy + h + 28);
             }
+
+            // Save and Clip Canvas to Plot Area
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(ox, oy, w, h);
+            ctx.clip();
 
             // Generic Curve Drawing Function
             function drawDynamicCurve(field, color, minV, maxV) {
@@ -475,7 +519,8 @@ Item {
                     var val = pt[field];
                     if (val === undefined) val = minV;
                     var normY = 1.0 - Math.max(0.0, Math.min(1.0, (val - minV) / (maxV - minV)));
-                    var px = ox + (w / (count - 1)) * j;
+                    var ratioX = Math.max(0.0, Math.min(1.0, (pt.epoch - firstEpoch) / spanEpoch));
+                    var px = ox + ratioX * w;
                     var py = oy + normY * h;
                     if (j === 0) ctx.moveTo(px, py);
                     else ctx.lineTo(px, py);
@@ -492,6 +537,8 @@ Item {
                     }
                 }
             }
+
+            ctx.restore();
 
             // Inspection Crosshair
             if (trendsContainer.inspectX >= ox && trendsContainer.inspectX <= ox + w) {
@@ -522,7 +569,7 @@ Item {
             var w = parent.width - 90;
             var ox = 70;
             var oy = 15;
-            var h = parent.height - 50;
+            var h = parent.height - 58;
 
             if (isDragging) {
                 // Free-size 2D selection rectangle anywhere on canvas
@@ -541,7 +588,7 @@ Item {
                     var pt = visibleData[idx];
 
                     if (pt) {
-                        ui.inspectionTime = pt.time + " UTC";
+                        ui.inspectionTime = trendsContainer.formatFullDateTime(pt.epoch);
                         var sensorModel = ui.sensorListViewItem.model;
                         var inspectItems = [];
 
@@ -578,8 +625,8 @@ Item {
         }
 
         onExited: {
-            ui.inspectCardItem.visible = false;
             trendsContainer.inspectX = -1;
+            ui.inspectCardItem.visible = false;
             ui.trendCanvasItem.requestPaint();
         }
 
@@ -587,23 +634,29 @@ Item {
             dragStartX = mouse.x;
             dragStartY = mouse.y;
             isDragging = true;
-            ui.isLiveStreaming = false; // Pause live scroll on manual drag
         }
 
         onReleased: function(mouse) {
-            ui.dragBoxOverlay.visible = false;
-            if (isDragging && Math.abs(mouse.x - dragStartX) > 20) {
-                var ox = 70;
+            if (isDragging) {
+                isDragging = false;
+                var minX = Math.min(dragStartX, mouse.x);
+                var maxX = Math.max(dragStartX, mouse.x);
+                var dragDist = maxX - minX;
+
                 var w = parent.width - 90;
-                var r1 = Math.max(0.0, Math.min(1.0, (Math.min(dragStartX, mouse.x) - ox) / w));
-                var r2 = Math.max(0.0, Math.min(1.0, (Math.max(dragStartX, mouse.x) - ox) / w));
-                trendsContainer.zoomStartRatio = r1;
-                trendsContainer.zoomEndRatio = r2;
-                trendsContainer.isZoomed = true;
+                var ox = 70;
+
+                if (dragDist > 15 && maxX >= ox && minX <= ox + w) {
+                    var rStart = Math.max(0.0, Math.min(1.0, (minX - ox) / w));
+                    var rEnd = Math.max(0.0, Math.min(1.0, (maxX - ox) / w));
+                    trendsContainer.zoomStartRatio = rStart;
+                    trendsContainer.zoomEndRatio = rEnd;
+                    trendsContainer.isZoomed = true;
+                }
+                ui.dragBoxOverlay.visible = false;
+                ui.trendCanvasItem.requestPaint();
                 refreshTableView();
             }
-            isDragging = false;
-            ui.trendCanvasItem.requestPaint();
         }
     }
 }

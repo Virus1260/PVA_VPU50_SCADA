@@ -17,7 +17,6 @@ Rectangle {
 
     // Property Aliases for Logic Controller Integration
     property alias topBar: topControlBar
-    property alias batchCombo: topControlBar.batchCombo
     property alias t1MinBtn: topControlBar.t1MinBtn
     property alias t5MinBtn: topControlBar.t5MinBtn
     property alias t15MinBtn: topControlBar.t15MinBtn
@@ -40,10 +39,10 @@ Rectangle {
     property alias inspectCardItem: trendsGraph.inspectCardItem
     property alias inspectRepeaterItem: trendsGraph.inspectRepeaterItem
     property alias panStartBtn: trendsGraph.panStartBtn
-    property alias panLeftBtn: trendsGraph.panLeftBtn
-    property alias panRightBtn: trendsGraph.panRightBtn
     property alias panLiveBtn: trendsGraph.panLiveBtn
     property alias timeSliderItem: trendsGraph.timeSliderItem
+    property alias startTimeLabel: trendsGraph.startTimeLabel
+    property alias endTimeLabel: trendsGraph.endTimeLabel
 
     property alias tableWidget: trendsTable
     property alias tableHeaderModelItem: trendsTable.tableHeaderModelItem
@@ -53,10 +52,9 @@ Rectangle {
 
     // Declarative State Properties
     property string activeMode: "chart" // "chart" or "table"
-    property string operatorName: "Line Operator (Level 1)"
     property bool isZoomed: false
     property bool isLiveStreaming: true
-    property string activeTimePreset: "5min"
+    property string activeTimePreset: "15min"
     property int sensorPanelWidth: 290
     property string yAxisTitle: "Temperature (°C)"
     property string xAxisTitle: "Time (UTC)"
@@ -72,7 +70,6 @@ Rectangle {
         // =====================================================================
         TrendsTopBar {
             id: topControlBar
-            operatorName: trendsViewRoot.operatorName
             activeTimePreset: trendsViewRoot.activeTimePreset
             isLiveStreaming: trendsViewRoot.isLiveStreaming
             isZoomed: trendsViewRoot.isZoomed

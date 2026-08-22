@@ -14,7 +14,7 @@ Rectangle {
     color: "#06182c"
     border.color: "#184d7e"
     border.width: 1.2
-    radius: 5
+    radius: 6
     clip: true
 
     property alias trendCanvasItem: graphCanvas
@@ -22,39 +22,39 @@ Rectangle {
     property alias inspectCardItem: inspectionCard
     property alias inspectRepeaterItem: inspectRepeater
     property alias panStartBtn: timelineStartBtn
-    property alias panLeftBtn: timelineLeftBtn
-    property alias panRightBtn: timelineRightBtn
     property alias panLiveBtn: timelineLiveBtn
     property alias timeSliderItem: historyTimeSlider
 
     property string yAxisTitle: "Temperature (°C)"
     property string xAxisTitle: "Time (UTC)"
     property string inspectionTime: "08:34:11 UTC"
+    property string startTimeLabel: "19:00:00 UTC"
+    property string endTimeLabel: "19:15:00 UTC"
     property bool isLiveStreaming: true
 
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 8
-        spacing: 4
+        spacing: 6
 
-        // Graph Title Bar with Dynamic Units
+        // 1. Graph Title Bar with Dynamic Units
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: 24
+            Layout.preferredHeight: 26
             spacing: 8
 
             Text {
                 text: "Y-AXIS: " + graphWidgetRoot.yAxisTitle
                 color: "#38bdf8"
                 font.bold: true
-                font.pixelSize: 11
+                font.pixelSize: 12
             }
             Item { Layout.fillWidth: true }
             Text {
                 text: "X-AXIS: " + graphWidgetRoot.xAxisTitle
                 color: "#94a3b8"
                 font.bold: true
-                font.pixelSize: 10
+                font.pixelSize: 11
             }
             Text {
                 text: "| Free Drag Box to Zoom | Pan Bottom Bar when Paused"
@@ -63,7 +63,7 @@ Rectangle {
             }
         }
 
-        // Canvas Graph Area with Visual Dragging Box Overlay
+        // 2. Canvas Graph Area with Visual Dragging Box Overlay
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -86,8 +86,8 @@ Rectangle {
                     anchors.top: parent.top
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 4
-                    height: 18
-                    width: 90
+                    height: 20
+                    width: 96
                     radius: 3
                     color: "#0284c7"
                     Text {
@@ -95,7 +95,7 @@ Rectangle {
                         text: "Zoom Window"
                         color: "#ffffff"
                         font.bold: true
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                     }
                 }
             }
@@ -104,25 +104,25 @@ Rectangle {
             Rectangle {
                 id: inspectionCard
                 visible: false
-                width: 250
+                width: 260
                 height: 160
-                radius: 5
+                radius: 6
                 color: "#081d33"
                 border.color: "#38bdf8"
-                border.width: 1.4
+                border.width: 1.5
                 opacity: 0.96
                 z: 10
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 8
-                    spacing: 4
+                    anchors.margins: 10
+                    spacing: 5
 
                     RowLayout {
                         Layout.fillWidth: true
-                        Text { text: graphWidgetRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                        Text { text: graphWidgetRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                         Item { Layout.fillWidth: true }
-                        Text { text: "ACTIVE VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
+                        Text { text: "LIVE TELEMETRY"; color: "#38bdf8"; font.bold: true; font.pixelSize: 10 }
                     }
 
                     Rectangle { Layout.fillWidth: true; height: 1; color: "#1e3a8a" }
@@ -132,14 +132,14 @@ Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-                        spacing: 2
+                        spacing: 3
                         interactive: false
 
                         model: ListModel { id: inspectRepeater }
 
                         delegate: RowLayout {
                             width: parent ? parent.width : 0
-                            spacing: 6
+                            spacing: 8
 
                             Rectangle {
                                 width: 8
@@ -152,7 +152,7 @@ Rectangle {
                                 text: model.tag
                                 color: "#e2e8f0"
                                 font.bold: true
-                                font.pixelSize: 10
+                                font.pixelSize: 11
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
                             }
@@ -161,7 +161,7 @@ Rectangle {
                                 text: model.val
                                 color: model.color ? model.color : "#ffffff"
                                 font.bold: true
-                                font.pixelSize: 10
+                                font.pixelSize: 11
                             }
                         }
                     }
@@ -169,35 +169,60 @@ Rectangle {
             }
         }
 
-        // Bottom Timeline History Panning Bar
+        // 3. Bottom Sleek Interactive Timeline History Panning & Range Bar
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: 32
-            radius: 4
-            color: "#0d2b4a"
+            Layout.preferredHeight: 44
+            radius: 6
+            color: "#0a223a"
+            border.color: "#184d7e"
+            border.width: 1.0
 
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 4
-                spacing: 6
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+                anchors.topMargin: 4
+                anchors.bottomMargin: 4
+                spacing: 12
 
+                // Jump to Oldest Button
                 Rectangle {
                     id: timelineStartBtn
-                    Layout.preferredWidth: 65
-                    Layout.preferredHeight: 24
-                    radius: 3
+                    Layout.preferredWidth: 100
+                    Layout.preferredHeight: 34
+                    radius: 4
                     color: "#1e3a8a"
-                    Text { anchors.centerIn: parent; text: "Start"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
-                }
-                Rectangle {
-                    id: timelineLeftBtn
-                    Layout.preferredWidth: 55
-                    Layout.preferredHeight: 24
-                    radius: 3
-                    color: "#0f3a63"
-                    Text { anchors.centerIn: parent; text: "< 10s"; color: "#ffffff"; font.pixelSize: 10 }
+                    border.color: "#3b82f6"
+                    border.width: 1.0
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 6
+                        Text { text: "⏪"; color: "#93c5fd"; font.pixelSize: 11; anchors.verticalCenter: parent.verticalCenter }
+                        Text { text: "Oldest"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; anchors.verticalCenter: parent.verticalCenter }
+                    }
                 }
 
+                // Range Start Time Badge (Time Only)
+                Rectangle {
+                    Layout.preferredHeight: 28
+                    Layout.preferredWidth: 85
+                    radius: 4
+                    color: "#06182c"
+                    border.color: "#1e3a8a"
+                    border.width: 1.0
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: graphWidgetRoot.startTimeLabel
+                        color: "#94a3b8"
+                        font.bold: true
+                        font.pixelSize: 11
+                    }
+                }
+
+                // Interactive Timeline Slider with High-Visibility Touch Bar
                 Slider {
                     id: historyTimeSlider
                     Layout.fillWidth: true
@@ -206,21 +231,52 @@ Rectangle {
                     value: 100
                 }
 
+                // Range Live Time Badge (Time Only)
                 Rectangle {
-                    id: timelineRightBtn
-                    Layout.preferredWidth: 55
-                    Layout.preferredHeight: 24
-                    radius: 3
-                    color: "#0f3a63"
-                    Text { anchors.centerIn: parent; text: "10s >"; color: "#ffffff"; font.pixelSize: 10 }
+                    Layout.preferredHeight: 28
+                    Layout.preferredWidth: 85
+                    radius: 4
+                    color: "#06182c"
+                    border.color: graphWidgetRoot.isLiveStreaming ? "#15803d" : "#1e3a8a"
+                    border.width: 1.0
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: graphWidgetRoot.endTimeLabel
+                        color: graphWidgetRoot.isLiveStreaming ? "#4ade80" : "#94a3b8"
+                        font.bold: true
+                        font.pixelSize: 11
+                    }
                 }
+
+                // Jump to Live Button
                 Rectangle {
                     id: timelineLiveBtn
-                    Layout.preferredWidth: 65
-                    Layout.preferredHeight: 24
-                    radius: 3
+                    Layout.preferredWidth: 100
+                    Layout.preferredHeight: 34
+                    radius: 4
                     color: graphWidgetRoot.isLiveStreaming ? "#15803d" : "#0284c7"
-                    Text { anchors.centerIn: parent; text: "Live"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: graphWidgetRoot.isLiveStreaming ? "#22c55e" : "#38bdf8"
+                    border.width: 1.2
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 6
+                        Rectangle {
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: graphWidgetRoot.isLiveStreaming ? "#4ade80" : "#ffffff"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Text {
+                            text: graphWidgetRoot.isLiveStreaming ? "LIVE" : "Go Live"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
                 }
             }
         }

@@ -10,13 +10,12 @@ import QtQuick.Layouts
 Rectangle {
     id: topBarRoot
     Layout.fillWidth: true
-    Layout.preferredHeight: 46
-    radius: 5
-    color: "#0d2b4a"
+    Layout.preferredHeight: 50
+    radius: 6
+    color: "#0a223a"
     border.color: "#184d7e"
     border.width: 1.2
 
-    property alias batchCombo: batchSelectorCombo
     property alias t1MinBtn: time1MinBtn
     property alias t5MinBtn: time5MinBtn
     property alias t15MinBtn: time15MinBtn
@@ -28,64 +27,60 @@ Rectangle {
     property alias chartModeBtn: chartViewButton
     property alias tableModeBtn: tableViewButton
 
-    property string operatorName: "Line Operator (Level 1)"
-    property string activeTimePreset: "5min"
+    property string activeTimePreset: "15min"
     property bool isLiveStreaming: true
     property bool isZoomed: false
     property string activeMode: "chart"
 
     RowLayout {
         anchors.fill: parent
-        anchors.margins: 6
-        spacing: 8
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 5
+        anchors.bottomMargin: 5
+        spacing: 10
 
-        // Batch Selector
-        Text { text: "Batch:"; color: "#94a3b8"; font.bold: true; font.pixelSize: 12 }
-        ComboBox {
-            id: batchSelectorCombo
-            Layout.preferredWidth: 210
-            Layout.preferredHeight: 34
-            model: ["Real-Time Live Process", "B-20260815-A1: Body Lotion (50kg)", "B-20260814-S2: Shampoo (50kg)", "B-20260812-C1: Carbopol Gel (50kg)"]
-            currentIndex: 0
-        }
-
-        // Operator Badge with Vector SVG Icon
+        // 1. Process Batch & Recipe Telemetry Indicator Pill
         Rectangle {
-            Layout.preferredHeight: 34
-            Layout.preferredWidth: 170
-            radius: 4
-            color: "#071c33"
+            Layout.preferredWidth: 240
+            Layout.preferredHeight: 38
+            radius: 5
+            color: "#06182c"
             border.color: "#0284c7"
-            border.width: 1.0
+            border.width: 1.2
 
-            Row {
-                anchors.centerIn: parent
-                spacing: 6
-                Image {
-                    source: "../../../assets/icons/header/user.svg"
-                    width: 14
-                    height: 14
-                    sourceSize: Qt.size(14, 14)
-                    fillMode: Image.PreserveAspectFit
-                    anchors.verticalCenter: parent.verticalCenter
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+                spacing: 8
+
+                Rectangle {
+                    width: 8
+                    height: 8
+                    radius: 4
+                    color: "#22c55e"
                 }
+
                 Text {
-                    text: topBarRoot.operatorName
+                    text: "BATCH [B1] • 50L VESSEL LIVE"
                     color: "#38bdf8"
                     font.bold: true
-                    font.pixelSize: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 11
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
                 }
             }
         }
 
-        // Time Window Preset Buttons (1m, 5m, 15m, 1h, 8h, 24h)
+        // 2. High-Visibility Time Window Preset Selector (1m, 5m, 15m, 1h, 8h, 24h)
         Rectangle {
-            Layout.preferredWidth: 260
-            Layout.preferredHeight: 34
-            radius: 4
-            color: "#071c33"
+            Layout.preferredWidth: 330
+            Layout.preferredHeight: 38
+            radius: 5
+            color: "#06182c"
             border.color: "#184d7e"
+            border.width: 1.2
 
             RowLayout {
                 anchors.fill: parent
@@ -96,77 +91,90 @@ Rectangle {
                     id: time1MinBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "1min" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "1m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "1min" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "1min" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "1m"; color: topBarRoot.activeTimePreset === "1min" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
                 Rectangle {
                     id: time5MinBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "5min" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "5m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "5min" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "5min" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "5m"; color: topBarRoot.activeTimePreset === "5min" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
                 Rectangle {
                     id: time15MinBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "15min" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "15m"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "15min" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "15min" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "15m"; color: topBarRoot.activeTimePreset === "15min" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
                 Rectangle {
                     id: time1HourBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "1h" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "1h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "1h" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "1h" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "1h"; color: topBarRoot.activeTimePreset === "1h" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
                 Rectangle {
                     id: time8HourBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "8h" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "8h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "8h" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "8h" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "8h"; color: topBarRoot.activeTimePreset === "8h" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
                 Rectangle {
                     id: time24HourBtn
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeTimePreset === "24h" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "24h"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    border.color: topBarRoot.activeTimePreset === "24h" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeTimePreset === "24h" ? 1.5 : 0
+                    Text { anchors.centerIn: parent; text: "24h"; color: topBarRoot.activeTimePreset === "24h" ? "#ffffff" : "#94a3b8"; font.bold: true; font.pixelSize: 12 }
                 }
             }
         }
 
-        // Live Streaming Toggle / Status
+        // 3. Live Streaming Scroll Toggle Button
         Rectangle {
             id: liveStreamToggleBtn
-            Layout.preferredWidth: 125
-            Layout.preferredHeight: 34
-            radius: 4
+            Layout.preferredWidth: 140
+            Layout.preferredHeight: 38
+            radius: 5
             color: topBarRoot.isLiveStreaming ? "#052e16" : "#451a03"
             border.color: topBarRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
+            border.width: 1.5
 
             Row {
                 anchors.centerIn: parent
-                spacing: 6
+                spacing: 8
                 Rectangle {
-                    width: 8
-                    height: 8
-                    radius: 4
+                    width: 10
+                    height: 10
+                    radius: 5
                     color: topBarRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Text {
-                    text: topBarRoot.isLiveStreaming ? "LIVE SCROLL" : "PAUSED (PULL)"
+                    text: topBarRoot.isLiveStreaming ? "LIVE SCROLL" : "PAUSED (SEEK)"
                     color: topBarRoot.isLiveStreaming ? "#4ade80" : "#fde68a"
                     font.bold: true
-                    font.pixelSize: 10
+                    font.pixelSize: 11
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -174,54 +182,58 @@ Rectangle {
 
         Item { Layout.fillWidth: true }
 
-        // Reset Zoom
+        // 4. Reset Zoom Button (Visible when zoomed)
         Rectangle {
             id: resetZoomButton
-            Layout.preferredWidth: 95
-            Layout.preferredHeight: 34
-            radius: 4
+            Layout.preferredWidth: 110
+            Layout.preferredHeight: 38
+            radius: 5
             visible: topBarRoot.isZoomed
             color: "#1e3a8a"
             border.color: "#60a5fa"
-            Text { anchors.centerIn: parent; text: "Reset Zoom"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+            border.width: 1.5
+            Text { anchors.centerIn: parent; text: "🔍 Reset Zoom"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
         }
 
-        // Mode Switcher: Graph / Table with SVG Vector Icons
+        // 5. High-Contrast Prominent Graph / Table View Switcher
         Rectangle {
-            Layout.preferredWidth: 150
-            Layout.preferredHeight: 34
-            radius: 4
-            color: "#071c33"
+            Layout.preferredWidth: 190
+            Layout.preferredHeight: 38
+            radius: 5
+            color: "#06182c"
             border.color: "#0284c7"
-            border.width: 1.0
+            border.width: 1.5
 
             RowLayout {
                 anchors.fill: parent
-                spacing: 0
+                spacing: 2
+                anchors.margins: 2
 
                 Rectangle {
                     id: chartViewButton
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeMode === "chart" ? "#0284c7" : "transparent"
+                    border.color: topBarRoot.activeMode === "chart" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeMode === "chart" ? 1.5 : 0
 
                     Row {
                         anchors.centerIn: parent
-                        spacing: 4
+                        spacing: 6
                         Image {
                             source: "../../../assets/icons/nav/trends_chart.svg"
-                            width: 14
-                            height: 14
-                            sourceSize: Qt.size(14, 14)
+                            width: 16
+                            height: 16
+                            sourceSize: Qt.size(16, 16)
                             fillMode: Image.PreserveAspectFit
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         Text {
                             text: "Graph"
-                            color: "#ffffff"
+                            color: topBarRoot.activeMode === "chart" ? "#ffffff" : "#94a3b8"
                             font.bold: true
-                            font.pixelSize: 11
+                            font.pixelSize: 12
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
@@ -231,25 +243,27 @@ Rectangle {
                     id: tableViewButton
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 3
+                    radius: 4
                     color: topBarRoot.activeMode === "table" ? "#0284c7" : "transparent"
+                    border.color: topBarRoot.activeMode === "table" ? "#38bdf8" : "transparent"
+                    border.width: topBarRoot.activeMode === "table" ? 1.5 : 0
 
                     Row {
                         anchors.centerIn: parent
-                        spacing: 4
+                        spacing: 6
                         Image {
                             source: "../../../assets/icons/nav/docs_report.svg"
-                            width: 14
-                            height: 14
-                            sourceSize: Qt.size(14, 14)
+                            width: 16
+                            height: 16
+                            sourceSize: Qt.size(16, 16)
                             fillMode: Image.PreserveAspectFit
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         Text {
                             text: "Table"
-                            color: "#ffffff"
+                            color: topBarRoot.activeMode === "table" ? "#ffffff" : "#94a3b8"
                             font.bold: true
-                            font.pixelSize: 11
+                            font.pixelSize: 12
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
