@@ -1,6 +1,6 @@
 /*
 This is a UI file (.ui.qml) for Trends Top Control Bar.
-Strictly declarative for Qt Design Studio.
+Strictly declarative for Qt Design Studio. Uses SVG icons for web/WASM compatibility.
 */
 
 import QtQuick
@@ -45,11 +45,11 @@ Rectangle {
             id: batchSelectorCombo
             Layout.preferredWidth: 210
             Layout.preferredHeight: 34
-            model: ["● Real-Time Live Process", "B-20260815-A1: Body Lotion (50kg)", "B-20260814-S2: Shampoo (50kg)", "B-20260812-C1: Carbopol Gel (50kg)"]
+            model: ["Real-Time Live Process", "B-20260815-A1: Body Lotion (50kg)", "B-20260814-S2: Shampoo (50kg)", "B-20260812-C1: Carbopol Gel (50kg)"]
             currentIndex: 0
         }
 
-        // Operator Badge
+        // Operator Badge with Vector SVG Icon
         Rectangle {
             Layout.preferredHeight: 34
             Layout.preferredWidth: 170
@@ -58,11 +58,24 @@ Rectangle {
             border.color: "#0284c7"
             border.width: 1.0
 
-            RowLayout {
+            Row {
                 anchors.centerIn: parent
-                spacing: 4
-                Text { text: "👤"; font.pixelSize: 11 }
-                Text { text: topBarRoot.operatorName; color: "#38bdf8"; font.bold: true; font.pixelSize: 10 }
+                spacing: 6
+                Image {
+                    source: "../../../assets/icons/header/user.svg"
+                    width: 14
+                    height: 14
+                    sourceSize: Qt.size(14, 14)
+                    fillMode: Image.PreserveAspectFit
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Text {
+                    text: topBarRoot.operatorName
+                    color: "#38bdf8"
+                    font.bold: true
+                    font.pixelSize: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
 
@@ -139,15 +152,22 @@ Rectangle {
             color: topBarRoot.isLiveStreaming ? "#052e16" : "#451a03"
             border.color: topBarRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
 
-            RowLayout {
+            Row {
                 anchors.centerIn: parent
                 spacing: 6
-                Rectangle { width: 8; height: 8; radius: 4; color: topBarRoot.isLiveStreaming ? "#22c55e" : "#f59e0b" }
+                Rectangle {
+                    width: 8
+                    height: 8
+                    radius: 4
+                    color: topBarRoot.isLiveStreaming ? "#22c55e" : "#f59e0b"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
                 Text {
-                    text: topBarRoot.isLiveStreaming ? "● LIVE SCROLL" : "⏸ PAUSED (PULL)"
+                    text: topBarRoot.isLiveStreaming ? "LIVE SCROLL" : "PAUSED (PULL)"
                     color: topBarRoot.isLiveStreaming ? "#4ade80" : "#fde68a"
                     font.bold: true
                     font.pixelSize: 10
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
         }
@@ -163,10 +183,10 @@ Rectangle {
             visible: topBarRoot.isZoomed
             color: "#1e3a8a"
             border.color: "#60a5fa"
-            Text { anchors.centerIn: parent; text: "⟲ Reset Zoom"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+            Text { anchors.centerIn: parent; text: "Reset Zoom"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
         }
 
-        // Mode Switcher: Graph / Table
+        // Mode Switcher: Graph / Table with SVG Vector Icons
         Rectangle {
             Layout.preferredWidth: 150
             Layout.preferredHeight: 34
@@ -185,7 +205,26 @@ Rectangle {
                     Layout.fillHeight: true
                     radius: 3
                     color: topBarRoot.activeMode === "chart" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "📈 Graph"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 4
+                        Image {
+                            source: "../../../assets/icons/nav/trends_chart.svg"
+                            width: 14
+                            height: 14
+                            sourceSize: Qt.size(14, 14)
+                            fillMode: Image.PreserveAspectFit
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Text {
+                            text: "Graph"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
                 }
 
                 Rectangle {
@@ -194,7 +233,26 @@ Rectangle {
                     Layout.fillHeight: true
                     radius: 3
                     color: topBarRoot.activeMode === "table" ? "#0284c7" : "transparent"
-                    Text { anchors.centerIn: parent; text: "📋 Table"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+
+                    Row {
+                        anchors.centerIn: parent
+                        spacing: 4
+                        Image {
+                            source: "../../../assets/icons/nav/docs_report.svg"
+                            width: 14
+                            height: 14
+                            sourceSize: Qt.size(14, 14)
+                            fillMode: Image.PreserveAspectFit
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Text {
+                            text: "Table"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
                 }
             }
         }

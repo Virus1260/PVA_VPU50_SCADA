@@ -16,7 +16,7 @@ ColumnLayout {
     signal addOperationRequested(int stepIndex)
     signal removeOperationRequested(int stepIndex, int opIndex)
 
-    // Table Column Headers: #, Name, Description, Ops, ⚠️, Status, Actions
+    // Table Column Headers: #, Name, Description, Ops, Manual, Status, Actions
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: 34
@@ -35,7 +35,18 @@ ColumnLayout {
             Text { text: "Name"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; Layout.preferredWidth: 180 }
             Text { text: "Description"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
             Text { text: "Ops"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 46 }
-            Text { text: "⚠️"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 36 }
+            Item {
+                Layout.preferredWidth: 36
+                Layout.fillHeight: true
+                Image {
+                    source: "../../../assets/icons/common/icon_warning.svg"
+                    width: 13
+                    height: 13
+                    sourceSize: Qt.size(13, 13)
+                    fillMode: Image.PreserveAspectFit
+                    anchors.centerIn: parent
+                }
+            }
             Text { text: "Status"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 60 }
             Text { text: "Actions"; color: "#6b8fbb"; font.bold: true; font.pixelSize: 11; horizontalAlignment: Text.AlignHCenter; Layout.preferredWidth: 110 }
         }
@@ -125,12 +136,26 @@ ColumnLayout {
                     }
 
                     // Warning / Manual Flag
-                    Text {
-                        text: modelData.isManual ? "⚠️" : "○"
-                        color: modelData.isManual ? "#f59e0b" : "#475569"
-                        font.pixelSize: 13
-                        horizontalAlignment: Text.AlignHCenter
+                    Item {
                         Layout.preferredWidth: 36
+                        Layout.fillHeight: true
+                        Image {
+                            visible: modelData.isManual
+                            source: "../../../assets/icons/common/icon_warning.svg"
+                            width: 14
+                            height: 14
+                            sourceSize: Qt.size(14, 14)
+                            fillMode: Image.PreserveAspectFit
+                            anchors.centerIn: parent
+                        }
+                        Rectangle {
+                            visible: !modelData.isManual
+                            width: 6
+                            height: 6
+                            radius: 3
+                            color: "#475569"
+                            anchors.centerIn: parent
+                        }
                     }
 
                     // Status Indicator Dot

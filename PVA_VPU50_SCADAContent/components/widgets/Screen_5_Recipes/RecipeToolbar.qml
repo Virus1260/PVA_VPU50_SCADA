@@ -176,11 +176,10 @@ Rectangle {
 
         Item { Layout.fillWidth: true }
 
-        // 3. Action Buttons: + New, Delete, + Step, ▶ Execute
         RowLayout {
             spacing: 8
+            Layout.alignment: Qt.AlignVCenter
 
-            // + New Button
             Rectangle {
                 Layout.preferredWidth: 68
                 Layout.preferredHeight: 34
@@ -228,7 +227,7 @@ Rectangle {
                 }
             }
 
-            // ▶ Execute / ❚❚ Pause Button
+            // Execute / Pause Button
             Rectangle {
                 Layout.preferredWidth: 104
                 Layout.preferredHeight: 34
@@ -238,7 +237,7 @@ Rectangle {
                 radius: 4
                 Text {
                     anchors.centerIn: parent
-                    text: toolbarRoot.isExecuting ? "❚❚ Pause" : "▶ Execute"
+                    text: toolbarRoot.isExecuting ? "Pause" : "Execute"
                     color: "#ffffff"
                     font.bold: true
                     font.pixelSize: 13

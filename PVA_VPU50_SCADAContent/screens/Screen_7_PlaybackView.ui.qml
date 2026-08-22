@@ -49,7 +49,14 @@ Rectangle {
                     height: 34
                     radius: 4
                     color: "#8b5cf6"
-                    Text { text: "📑"; font.pixelSize: 18; anchors.centerIn: parent }
+                    Image {
+                        source: "../assets/icons/nav/docs_report.svg"
+                        width: 18
+                        height: 18
+                        sourceSize: Qt.size(18, 18)
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                    }
                 }
 
                 ColumnLayout {
@@ -79,7 +86,7 @@ Rectangle {
                             Layout.fillHeight: true
                             radius: 3
                             color: playbackViewRoot.activeView === "report" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "📄 EBR Report"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                            Text { anchors.centerIn: parent; text: "EBR Report"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                         }
 
                         Rectangle {
@@ -88,7 +95,7 @@ Rectangle {
                             Layout.fillHeight: true
                             radius: 3
                             color: playbackViewRoot.activeView === "playback" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "▶ Process Playback"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                            Text { anchors.centerIn: parent; text: "Process Playback"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                         }
                     }
                 }
@@ -103,7 +110,7 @@ Rectangle {
 
                     Text {
                         anchors.centerIn: parent
-                        text: "📥 Export PDF"
+                        text: "Export PDF"
                         color: "#4ade80"
                         font.bold: true
                         font.pixelSize: 12
@@ -299,11 +306,11 @@ Rectangle {
 
                         Button {
                             id: playPauseActionBtn
-                            text: playbackViewRoot.isPlaying ? "⏸ Pause Timeline" : "▶ Play Historical Stream"
+                            text: playbackViewRoot.isPlaying ? "Pause Timeline" : "Play Historical Stream"
                         }
                         Button {
                             id: resetActionBtn
-                            text: "⏮ Reset to Start"
+                            text: "Reset to Start"
                         }
                     }
 

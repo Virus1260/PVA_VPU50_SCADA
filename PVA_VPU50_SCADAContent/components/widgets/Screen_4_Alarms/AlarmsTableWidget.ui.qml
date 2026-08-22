@@ -231,7 +231,7 @@ Rectangle {
 
                             Text {
                                 anchors.centerIn: parent
-                                text: model.ack ? "✓ ACK (" + model.ackBy + ")" : "🔔 ACKNOWLEDGE"
+                                text: model.ack ? ("ACK (" + model.ackBy + ")") : "ACKNOWLEDGE"
                                 color: "#ffffff"
                                 font.bold: true
                                 font.pixelSize: 11

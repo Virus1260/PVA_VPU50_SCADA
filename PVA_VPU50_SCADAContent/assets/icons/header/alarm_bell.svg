@@ -1,4 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M96 48a32 32 0 0 0-64 0c0 38-16 46-16 46h96s-16-8-16-46"/>
-  <path d="M74 104a10 10 0 0 1-20 0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" fill="none">
+  <defs>
+    <linearGradient id="headerBellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  <!-- Bell Body -->
+  <path d="M64 18 C44 18, 34 32, 34 60 C34 76, 22 84, 22 92 H106 C106 84, 94 76, 94 60 C94 32, 84 18, 64 18 Z" fill="url(#headerBellGrad)" stroke="#fca5a5" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="64" cy="14" r="6" fill="#fca5a5"/>
+  <!-- Clapper -->
+  <path d="M52 94 C52 102, 58 108, 64 108 C70 108, 76 102, 76 94" fill="#fee2e2" stroke="#ef4444" stroke-width="4"/>
+  <!-- Sound Wave Accents -->
+  <path d="M14 48 C8 58, 8 70, 14 80" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
+  <path d="M114 48 C120 58, 120 70, 114 80" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
 </svg>

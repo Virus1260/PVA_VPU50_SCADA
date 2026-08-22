@@ -41,7 +41,14 @@ Rectangle {
                     height: 34
                     radius: 4
                     color: "#eab308"
-                    Text { text: "🛠️"; font.pixelSize: 18; anchors.centerIn: parent }
+                    Image {
+                        source: "../assets/icons/nav/tools_maintenance.svg"
+                        width: 18
+                        height: 18
+                        sourceSize: Qt.size(18, 18)
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                    }
                 }
 
                 ColumnLayout {
@@ -65,7 +72,7 @@ Rectangle {
                         anchors.centerIn: parent
                         spacing: 8
                         Rectangle { width: 8; height: 8; radius: 4; color: "#22c55e" }
-                        Text { text: "● PLC: ONLINE (12ms)"; color: "#4ade80"; font.bold: true; font.pixelSize: 11 }
+                        Text { text: "PLC: ONLINE (12ms)"; color: "#4ade80"; font.bold: true; font.pixelSize: 11 }
                     }
                 }
             }
@@ -146,7 +153,7 @@ Rectangle {
 
                         Text {
                             anchors.centerIn: parent
-                            text: model.force ? "⚡ FORCED" : "NORM AUTO"
+                            text: model.force ? "FORCED" : "NORM AUTO"
                             color: model.force ? "#ffffff" : "#94a3b8"
                             font.bold: true
                             font.pixelSize: 10

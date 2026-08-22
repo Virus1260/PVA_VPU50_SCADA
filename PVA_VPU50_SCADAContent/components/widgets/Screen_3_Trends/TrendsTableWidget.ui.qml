@@ -1,6 +1,6 @@
 /*
 This is a UI file (.ui.qml) for Trends Multi-Column Tabular Historian Grid.
-Strictly declarative for Qt Design Studio.
+Strictly declarative for Qt Design Studio. Uses SVG vector icon for web/WASM compatibility.
 */
 
 import QtQuick
@@ -26,12 +26,22 @@ Rectangle {
         anchors.margins: 8
         spacing: 4
 
-        // Table Top Summary Bar
+        // Table Top Summary Bar with SVG Icon
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 26
             spacing: 8
-            Text { text: "📋 PROCESS TELEMETRY HISTORIAN LOG"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+
+            Image {
+                source: "../../../assets/icons/nav/docs_report.svg"
+                width: 14
+                height: 14
+                sourceSize: Qt.size(14, 14)
+                Layout.preferredWidth: 14
+                Layout.preferredHeight: 14
+                fillMode: Image.PreserveAspectFit
+            }
+            Text { text: "PROCESS TELEMETRY HISTORIAN LOG"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
             Item { Layout.fillWidth: true }
             Text { text: "TIME SCALE: " + tableWidgetRoot.activeTimePreset.toUpperCase(); color: "#f59e0b"; font.bold: true; font.pixelSize: 11 }
         }

@@ -34,7 +34,16 @@ Rectangle {
             // Title
             RowLayout {
                 Layout.fillWidth: true
-                Text { text: "📑"; font.pixelSize: 18 }
+                spacing: 8
+                Image {
+                    source: "../../../assets/icons/nav/docs_report.svg"
+                    width: 20
+                    height: 20
+                    sourceSize: Qt.size(20, 20)
+                    Layout.preferredWidth: 20
+                    Layout.preferredHeight: 20
+                    fillMode: Image.PreserveAspectFit
+                }
                 Text { text: "21 CFR PART 11 BATCH TREND REPORT EXPORT"; color: "#ffffff"; font.bold: true; font.pixelSize: 13 }
                 Item { Layout.fillWidth: true }
             }
@@ -105,7 +114,7 @@ Rectangle {
                     radius: 4
                     color: "#059669"
                     border.color: "#34d399"
-                    Text { anchors.centerIn: parent; text: "✓ Export Signed PDF Report"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                    Text { anchors.centerIn: parent; text: "Export Signed PDF Report"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                 }
             }
         }

@@ -136,7 +136,7 @@ Rectangle {
                     color: "#16a34a"
                     border.color: "#4ade80"
                     border.width: 1
-                    Text { anchors.centerIn: parent; text: "✓ Create Recipe"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                    Text { anchors.centerIn: parent; text: "Create Recipe"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor

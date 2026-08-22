@@ -48,7 +48,15 @@ Rectangle {
 
             RowLayout {
                 spacing: 8
-                Text { text: "⚠️"; font.pixelSize: 22 }
+                Image {
+                    source: "../../../assets/icons/common/icon_warning.svg"
+                    width: 22
+                    height: 22
+                    sourceSize: Qt.size(22, 22)
+                    Layout.preferredWidth: 22
+                    Layout.preferredHeight: 22
+                    fillMode: Image.PreserveAspectFit
+                }
                 Text {
                     text: "Operator Confirmation Required: " + stepConfirmRoot.stepName
                     color: "#fbbf24"
@@ -112,7 +120,7 @@ Rectangle {
                     color: "#16a34a"
                     border.color: "#4ade80"
                     border.width: 1.5
-                    Text { anchors.centerIn: parent; text: "✓ Confirm & Proceed"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                    Text { anchors.centerIn: parent; text: "Confirm & Proceed"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor

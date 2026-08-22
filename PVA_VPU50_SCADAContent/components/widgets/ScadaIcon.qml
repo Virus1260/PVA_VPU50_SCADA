@@ -116,13 +116,17 @@ Item {
             "stop": "../../assets/icons/controls/stop.svg",
             "clock": "../../assets/icons/controls/clock.svg",
 
-            // Header Elements
+            // Header & Status Elements
             "user": "../../assets/icons/header/user.svg",
             "lightbulb": "../../assets/icons/header/lightbulb.svg",
             "alarm_bell": "../../assets/icons/header/alarm_bell.svg",
             "logo": "../../assets/icons/header/favicon.svg",
             "favicon": "../../assets/icons/header/favicon.svg",
-            "ekato": "../../assets/icons/header/favicon.svg"
+            "ekato": "../../assets/icons/header/favicon.svg",
+            "check": "../../assets/icons/common/icon_check.svg",
+            "icon_check": "../../assets/icons/common/icon_check.svg",
+            "warning": "../../assets/icons/common/icon_warning.svg",
+            "icon_warning": "../../assets/icons/common/icon_warning.svg"
         };
 
         if (map.hasOwnProperty(name)) {

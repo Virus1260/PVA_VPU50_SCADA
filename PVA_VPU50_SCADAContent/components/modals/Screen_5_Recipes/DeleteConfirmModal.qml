@@ -36,7 +36,15 @@ Rectangle {
 
             RowLayout {
                 spacing: 8
-                Text { text: "⚠️"; font.pixelSize: 20 }
+                Image {
+                    source: "../../../assets/icons/common/icon_warning.svg"
+                    width: 20
+                    height: 20
+                    sourceSize: Qt.size(20, 20)
+                    Layout.preferredWidth: 20
+                    Layout.preferredHeight: 20
+                    fillMode: Image.PreserveAspectFit
+                }
                 Text { text: "Confirm Recipe Deletion"; color: "#fca5a5"; font.bold: true; font.pixelSize: 14 }
             }
 

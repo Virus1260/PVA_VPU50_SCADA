@@ -35,7 +35,15 @@ Rectangle {
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 8
-                Text { text: "⚠️"; font.pixelSize: 20 }
+                Image {
+                    source: "../../../assets/icons/common/icon_warning.svg"
+                    width: 20
+                    height: 20
+                    sourceSize: Qt.size(20, 20)
+                    Layout.preferredWidth: 20
+                    Layout.preferredHeight: 20
+                    fillMode: Image.PreserveAspectFit
+                }
                 Text { text: "21 CFR PART 11 ALARM ACKNOWLEDGEMENT"; color: "#ef4444"; font.bold: true; font.pixelSize: 13; Layout.fillWidth: true }
             }
 
@@ -89,7 +97,7 @@ Rectangle {
             }
 
             Text {
-                text: "🔒 Electronic Signature: Action is logged with user credentials, role, timestamp, and HMAC SHA-256 seal."
+                text: "Electronic Signature: Action is logged with user credentials, role, timestamp, and HMAC SHA-256 seal."
                 color: "#94a3b8"
                 font.pixelSize: 10
                 wrapMode: Text.Wrap
@@ -118,7 +126,7 @@ Rectangle {
                     radius: 4
                     color: "#059669"
                     border.color: "#34d399"
-                    Text { anchors.centerIn: parent; text: "✓ Confirm & Log to Audit"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
+                    Text { anchors.centerIn: parent; text: "Confirm & Log to Audit"; color: "#ffffff"; font.bold: true; font.pixelSize: 12 }
                 }
             }
         }

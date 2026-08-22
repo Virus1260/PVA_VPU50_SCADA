@@ -94,11 +94,14 @@ Rectangle {
                     anchors.rightMargin: 14
                     spacing: 12
 
-                    Text {
-                        text: confirmRoot.allConfirmed ? "✓" : "⚠"
-                        color: confirmRoot.allConfirmed ? "#22c55e" : "#f59e0b"
-                        font.bold: true
-                        font.pixelSize: 22
+                    Image {
+                        source: confirmRoot.allConfirmed ? "../../assets/icons/common/icon_check.svg" : "../../assets/icons/common/icon_warning.svg"
+                        width: 22
+                        height: 22
+                        sourceSize: Qt.size(22, 22)
+                        Layout.preferredWidth: 22
+                        Layout.preferredHeight: 22
+                        fillMode: Image.PreserveAspectFit
                     }
 
                     Text {
@@ -242,12 +245,14 @@ Rectangle {
                                         color: modelData.confirmed ? "#16a34a" : "#0f172a"
                                         border.color: modelData.confirmed ? "#4ade80" : "#f59e0b"
 
-                                        Text {
+                                        Image {
                                             anchors.centerIn: parent
-                                            text: modelData.confirmed ? "✓" : ""
-                                            color: "#ffffff"
-                                            font.bold: true
-                                            font.pixelSize: 16
+                                            visible: modelData.confirmed
+                                            source: "../../assets/icons/common/icon_check.svg"
+                                            width: 14
+                                            height: 14
+                                            sourceSize: Qt.size(14, 14)
+                                            fillMode: Image.PreserveAspectFit
                                         }
 
                                         MouseArea {
@@ -322,11 +327,15 @@ Rectangle {
                         anchors.centerIn: parent
                         spacing: 8
 
-                        Text {
-                            text: confirmRoot.allConfirmed ? "✓" : "!"
-                            color: confirmRoot.allConfirmed ? "#000000" : "#fbbf24"
-                            font.bold: true
-                            font.pixelSize: 16
+                        Image {
+                            visible: confirmRoot.allConfirmed
+                            source: "../../assets/icons/common/icon_check.svg"
+                            width: 16
+                            height: 16
+                            sourceSize: Qt.size(16, 16)
+                            Layout.preferredWidth: 16
+                            Layout.preferredHeight: 16
+                            fillMode: Image.PreserveAspectFit
                         }
 
                         Text {

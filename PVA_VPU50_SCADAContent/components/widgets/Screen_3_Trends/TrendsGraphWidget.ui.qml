@@ -44,14 +44,14 @@ Rectangle {
             spacing: 8
 
             Text {
-                text: "📈 Y-AXIS: " + graphWidgetRoot.yAxisTitle
+                text: "Y-AXIS: " + graphWidgetRoot.yAxisTitle
                 color: "#38bdf8"
                 font.bold: true
                 font.pixelSize: 11
             }
             Item { Layout.fillWidth: true }
             Text {
-                text: "🕒 X-AXIS: " + graphWidgetRoot.xAxisTitle
+                text: "X-AXIS: " + graphWidgetRoot.xAxisTitle
                 color: "#94a3b8"
                 font.bold: true
                 font.pixelSize: 10
@@ -87,12 +87,12 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 4
                     height: 18
-                    width: 80
+                    width: 90
                     radius: 3
                     color: "#0284c7"
                     Text {
                         anchors.centerIn: parent
-                        text: "🔍 Zoom Box"
+                        text: "Zoom Window"
                         color: "#ffffff"
                         font.bold: true
                         font.pixelSize: 9
@@ -120,7 +120,7 @@ Rectangle {
 
                     RowLayout {
                         Layout.fillWidth: true
-                        Text { text: "🕒 " + graphWidgetRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                        Text { text: graphWidgetRoot.inspectionTime; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
                         Item { Layout.fillWidth: true }
                         Text { text: "ACTIVE VALUES"; color: "#38bdf8"; font.bold: true; font.pixelSize: 9 }
                     }
@@ -187,7 +187,7 @@ Rectangle {
                     Layout.preferredHeight: 24
                     radius: 3
                     color: "#1e3a8a"
-                    Text { anchors.centerIn: parent; text: "⏮ Start"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    Text { anchors.centerIn: parent; text: "Start"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
                 }
                 Rectangle {
                     id: timelineLeftBtn
@@ -195,7 +195,7 @@ Rectangle {
                     Layout.preferredHeight: 24
                     radius: 3
                     color: "#0f3a63"
-                    Text { anchors.centerIn: parent; text: "◀ 10s"; color: "#ffffff"; font.pixelSize: 10 }
+                    Text { anchors.centerIn: parent; text: "< 10s"; color: "#ffffff"; font.pixelSize: 10 }
                 }
 
                 Slider {
@@ -212,7 +212,7 @@ Rectangle {
                     Layout.preferredHeight: 24
                     radius: 3
                     color: "#0f3a63"
-                    Text { anchors.centerIn: parent; text: "10s ▶"; color: "#ffffff"; font.pixelSize: 10 }
+                    Text { anchors.centerIn: parent; text: "10s >"; color: "#ffffff"; font.pixelSize: 10 }
                 }
                 Rectangle {
                     id: timelineLiveBtn
@@ -220,7 +220,7 @@ Rectangle {
                     Layout.preferredHeight: 24
                     radius: 3
                     color: graphWidgetRoot.isLiveStreaming ? "#15803d" : "#0284c7"
-                    Text { anchors.centerIn: parent; text: "⏭ Live"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
+                    Text { anchors.centerIn: parent; text: "Live"; color: "#ffffff"; font.bold: true; font.pixelSize: 10 }
                 }
             }
         }

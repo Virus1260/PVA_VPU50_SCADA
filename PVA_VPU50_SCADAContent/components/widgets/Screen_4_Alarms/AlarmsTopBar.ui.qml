@@ -1,6 +1,6 @@
 /*
 This is a UI file (.ui.qml) for Alarms Top Header & Control Bar.
-Strictly declarative for Qt Design Studio.
+Strictly declarative for Qt Design Studio. Uses SVG vector icons for web/WASM compatibility.
 */
 
 import QtQuick
@@ -32,7 +32,14 @@ Rectangle {
             height: 34
             radius: 4
             color: "#dc2626"
-            Text { text: "🔔"; font.pixelSize: 18; anchors.centerIn: parent }
+            Image {
+                source: "../../../assets/icons/header/alarm_bell.svg"
+                width: 18
+                height: 18
+                sourceSize: Qt.size(18, 18)
+                fillMode: Image.PreserveAspectFit
+                anchors.centerIn: parent
+            }
         }
 
         Text {
@@ -53,11 +60,10 @@ Rectangle {
             color: "#1e3a8a"
             border.color: "#38bdf8"
 
-            RowLayout {
+            Row {
                 anchors.centerIn: parent
-                spacing: 4
-                Text { text: "🔕"; font.pixelSize: 11 }
-                Text { text: "Silence Horn"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                spacing: 6
+                Text { text: "Silence Horn"; color: "#ffffff"; font.bold: true; font.pixelSize: 11; anchors.verticalCenter: parent.verticalCenter }
             }
         }
 
@@ -69,7 +75,7 @@ Rectangle {
             color: topBarRoot.unackCount > 0 ? "#450a0a" : "#052e16"
             border.color: topBarRoot.unackCount > 0 ? "#ef4444" : "#22c55e"
 
-            RowLayout {
+            Row {
                 anchors.centerIn: parent
                 spacing: 6
                 Rectangle {
@@ -77,12 +83,14 @@ Rectangle {
                     height: 8
                     radius: 4
                     color: topBarRoot.unackCount > 0 ? "#ef4444" : "#22c55e"
+                    anchors.verticalCenter: parent.verticalCenter
                 }
                 Text {
                     text: topBarRoot.unackCount > 0 ? ("ACTIVE: " + topBarRoot.unackCount + " UNACK") : "ALL ALARMS ACKED"
                     color: topBarRoot.unackCount > 0 ? "#f87171" : "#4ade80"
                     font.bold: true
                     font.pixelSize: 11
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
         }
@@ -106,12 +114,25 @@ Rectangle {
                     Layout.fillHeight: true
                     radius: 3
                     color: topBarRoot.activeTab === "active" ? "#dc2626" : "transparent"
-                    Text {
+
+                    Row {
                         anchors.centerIn: parent
-                        text: "⚠️ Active Alarms"
-                        color: "#ffffff"
-                        font.bold: true
-                        font.pixelSize: 11
+                        spacing: 4
+                        Image {
+                            source: "../../../assets/icons/nav/alarms_bell.svg"
+                            width: 13
+                            height: 13
+                            sourceSize: Qt.size(13, 13)
+                            fillMode: Image.PreserveAspectFit
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Text {
+                            text: "Active Alarms"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
 
@@ -121,12 +142,25 @@ Rectangle {
                     Layout.fillHeight: true
                     radius: 3
                     color: topBarRoot.activeTab === "history" ? "#0284c7" : "transparent"
-                    Text {
+
+                    Row {
                         anchors.centerIn: parent
-                        text: "📜 Event Log"
-                        color: "#ffffff"
-                        font.bold: true
-                        font.pixelSize: 11
+                        spacing: 4
+                        Image {
+                            source: "../../../assets/icons/nav/nav_log.svg"
+                            width: 13
+                            height: 13
+                            sourceSize: Qt.size(13, 13)
+                            fillMode: Image.PreserveAspectFit
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Text {
+                            text: "Event Log"
+                            color: "#ffffff"
+                            font.bold: true
+                            font.pixelSize: 11
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
             }

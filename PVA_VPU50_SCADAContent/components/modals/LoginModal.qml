@@ -283,22 +283,22 @@ Rectangle {
                 rowSpacing: 8
 
                 Repeater {
-                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫ CLEAR", "0", "✓ LOGIN"]
+                    model: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "CLEAR", "0", "LOGIN"]
 
                     delegate: Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         radius: 6
-                        color: modelData === "✓ LOGIN" ? (kMouse.pressed ? "#15803d" : "#22c55e") :
-                               modelData === "⌫ CLEAR" ? (kMouse.pressed ? "#991b1b" : "#b91c1c") :
+                        color: modelData === "LOGIN" ? (kMouse.pressed ? "#15803d" : "#22c55e") :
+                               modelData === "CLEAR" ? (kMouse.pressed ? "#991b1b" : "#b91c1c") :
                                (kMouse.pressed ? "#07203a" : (kMouse.containsMouse ? "#185590" : "#0d365e"))
-                        border.color: modelData === "✓ LOGIN" ? "#4ade80" : (modelData === "⌫ CLEAR" ? "#f87171" : "#1d5b94")
+                        border.color: modelData === "LOGIN" ? "#4ade80" : (modelData === "CLEAR" ? "#f87171" : "#1d5b94")
                         border.width: 1
 
                         Text {
                             anchors.centerIn: parent
                             text: modelData
-                            color: modelData === "✓ LOGIN" ? "#08213b" : "#ffffff"
+                            color: modelData === "LOGIN" ? "#08213b" : "#ffffff"
                             font.bold: true
                             font.pixelSize: modelData.length > 1 ? 12 : 16
                         }
@@ -309,10 +309,10 @@ Rectangle {
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                if (modelData === "⌫ CLEAR") {
+                                if (modelData === "CLEAR") {
                                     loginModalRoot.enteredPin = "";
                                     loginModalRoot.errorMessage = "";
-                                } else if (modelData === "✓ LOGIN") {
+                                } else if (modelData === "LOGIN") {
                                     loginModalRoot.verifyLogin();
                                 } else {
                                     if (loginModalRoot.enteredPin.length < 8) {

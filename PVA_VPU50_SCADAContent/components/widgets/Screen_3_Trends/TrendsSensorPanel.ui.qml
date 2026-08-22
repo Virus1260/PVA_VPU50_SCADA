@@ -1,6 +1,6 @@
 /*
 This is a UI file (.ui.qml) for Trends Sensor Channel Panel.
-Strictly declarative for Qt Design Studio.
+Strictly declarative for Qt Design Studio. Uses SVG icons for web/WASM compatibility.
 */
 
 import QtQuick
@@ -38,7 +38,15 @@ Rectangle {
                 anchors.margins: 4
                 spacing: 6
 
-                Text { text: "📡"; font.pixelSize: 12 }
+                Image {
+                    source: "../../../assets/icons/nav/nav_tools.svg"
+                    width: 14
+                    height: 14
+                    sourceSize: Qt.size(14, 14)
+                    Layout.preferredWidth: 14
+                    Layout.preferredHeight: 14
+                    fillMode: Image.PreserveAspectFit
+                }
                 Text { text: "SENSORS"; color: "#38bdf8"; font.bold: true; font.pixelSize: 11; Layout.fillWidth: true }
 
                 Rectangle {
@@ -48,7 +56,7 @@ Rectangle {
                     radius: 3
                     color: "#1e3a8a"
                     border.color: "#38bdf8"
-                    Text { anchors.centerIn: parent; text: "✓ Select All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
+                    Text { anchors.centerIn: parent; text: "Select All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
                 }
                 Rectangle {
                     id: clearAllActionButton
@@ -57,7 +65,7 @@ Rectangle {
                     radius: 3
                     color: "#334155"
                     border.color: "#64748b"
-                    Text { anchors.centerIn: parent; text: "✗ Clear All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
+                    Text { anchors.centerIn: parent; text: "Clear All"; color: "#ffffff"; font.pixelSize: 10; font.bold: true }
                 }
             }
         }

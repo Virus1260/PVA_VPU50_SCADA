@@ -41,7 +41,14 @@ Rectangle {
                     height: 34
                     radius: 4
                     color: "#0284c7"
-                    Text { text: "🔒"; font.pixelSize: 18; anchors.centerIn: parent }
+                    Image {
+                        source: "../assets/icons/nav/docs_report.svg"
+                        width: 18
+                        height: 18
+                        sourceSize: Qt.size(18, 18)
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                    }
                 }
 
                 ColumnLayout {
@@ -65,7 +72,7 @@ Rectangle {
                         anchors.centerIn: parent
                         spacing: 8
                         Rectangle { width: 8; height: 8; radius: 4; color: "#22c55e" }
-                        Text { text: "● SHA-256 HMAC: VERIFIED"; color: "#4ade80"; font.bold: true; font.pixelSize: 11 }
+                        Text { text: "SHA-256 HMAC: VERIFIED"; color: "#4ade80"; font.bold: true; font.pixelSize: 11 }
                     }
                 }
 
@@ -80,7 +87,7 @@ Rectangle {
 
                     Text {
                         anchors.centerIn: parent
-                        text: "📥 Export Log"
+                        text: "Export Log"
                         color: "#38bdf8"
                         font.bold: true
                         font.pixelSize: 12

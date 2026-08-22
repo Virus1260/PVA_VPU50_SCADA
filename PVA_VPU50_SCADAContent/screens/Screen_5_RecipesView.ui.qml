@@ -50,7 +50,14 @@ Rectangle {
                     height: 36
                     radius: 4
                     color: "#16a34a"
-                    Text { text: "⚗️"; font.pixelSize: 20; anchors.centerIn: parent }
+                    Image {
+                        source: "../assets/icons/nav/recipes_checklist.svg"
+                        width: 20
+                        height: 20
+                        sourceSize: Qt.size(20, 20)
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                    }
                 }
 
                 ColumnLayout {
@@ -72,7 +79,15 @@ Rectangle {
                     RowLayout {
                         anchors.centerIn: parent
                         spacing: 6
-                        Text { text: recipesViewRoot.isExecuting ? "⏸" : "▶"; font.pixelSize: 14; color: "#ffffff" }
+                        Image {
+                            source: recipesViewRoot.isExecuting ? "../assets/icons/controls/pause.svg" : "../assets/icons/controls/start.svg"
+                            width: 14
+                            height: 14
+                            sourceSize: Qt.size(14, 14)
+                            Layout.preferredWidth: 14
+                            Layout.preferredHeight: 14
+                            fillMode: Image.PreserveAspectFit
+                        }
                         Text {
                             text: recipesViewRoot.isExecuting ? "PAUSE AUTO" : "START RECIPE"
                             color: "#ffffff"
@@ -101,7 +116,7 @@ Rectangle {
                             Layout.fillHeight: true
                             radius: 3
                             color: recipesViewRoot.activeTab === "execution" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "⚡ Step Sequence"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "Step Sequence"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
                         }
 
                         Rectangle {
@@ -110,7 +125,7 @@ Rectangle {
                             Layout.fillHeight: true
                             radius: 3
                             color: recipesViewRoot.activeTab === "formulation" ? "#0284c7" : "transparent"
-                            Text { anchors.centerIn: parent; text: "🧪 Formulation Matrix"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
+                            Text { anchors.centerIn: parent; text: "Formulation Matrix"; color: "#ffffff"; font.bold: true; font.pixelSize: 11 }
                         }
                     }
                 }
@@ -258,9 +273,19 @@ Rectangle {
                                     Layout.alignment: Qt.AlignVCenter
                                     radius: 14
                                     color: index < recipesViewRoot.currentStepIndex ? "#22c55e" : (index === recipesViewRoot.currentStepIndex ? "#38bdf8" : "#334155")
+                                    Image {
+                                        anchors.centerIn: parent
+                                        visible: index < recipesViewRoot.currentStepIndex
+                                        source: "../assets/icons/common/icon_check.svg"
+                                        width: 14
+                                        height: 14
+                                        sourceSize: Qt.size(14, 14)
+                                        fillMode: Image.PreserveAspectFit
+                                    }
                                     Text {
                                         anchors.centerIn: parent
-                                        text: index < recipesViewRoot.currentStepIndex ? "✓" : String(index + 1)
+                                        visible: index >= recipesViewRoot.currentStepIndex
+                                        text: String(index + 1)
                                         color: "#ffffff"
                                         font.bold: true
                                         font.pixelSize: 12
@@ -426,7 +451,7 @@ Rectangle {
 
                     Text {
                         anchors.centerIn: parent
-                        text: "✓ Confirm Phase Addition & Resume Recipe"
+                        text: "Confirm Phase Addition & Resume Recipe"
                         color: "#ffffff"
                         font.bold: true
                         font.pixelSize: 12

@@ -118,12 +118,13 @@ Rectangle {
                             radius: 10
                             color: "#00d2ff"
                             visible: fillModalRoot.selectedMode === "Suction Liquids"
-                            Text {
+                            Image {
                                 anchors.centerIn: parent
-                                text: "✓"
-                                color: "#08213b"
-                                font.bold: true
-                                font.pixelSize: 12
+                                source: "../../../assets/icons/common/icon_check.svg"
+                                width: 12
+                                height: 12
+                                sourceSize: Qt.size(12, 12)
+                                fillMode: Image.PreserveAspectFit
                             }
                         }
 
@@ -185,12 +186,13 @@ Rectangle {
                             radius: 10
                             color: "#00d2ff"
                             visible: fillModalRoot.selectedMode === "Suction Solids"
-                            Text {
+                            Image {
                                 anchors.centerIn: parent
-                                text: "✓"
-                                color: "#08213b"
-                                font.bold: true
-                                font.pixelSize: 12
+                                source: "../../../assets/icons/common/icon_check.svg"
+                                width: 12
+                                height: 12
+                                sourceSize: Qt.size(12, 12)
+                                fillMode: Image.PreserveAspectFit
                             }
                         }
 
@@ -252,12 +254,13 @@ Rectangle {
                             radius: 10
                             color: "#00d2ff"
                             visible: fillModalRoot.selectedMode === "Suction Bottom"
-                            Text {
+                            Image {
                                 anchors.centerIn: parent
-                                text: "✓"
-                                color: "#08213b"
-                                font.bold: true
-                                font.pixelSize: 12
+                                source: "../../../assets/icons/common/icon_check.svg"
+                                width: 12
+                                height: 12
+                                sourceSize: Qt.size(12, 12)
+                                fillMode: Image.PreserveAspectFit
                             }
                         }
 
