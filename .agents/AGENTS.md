@@ -2,10 +2,13 @@
 
 ## 1. Core Engineering, Build Integrity & Safety Rules
 1. **Strict Git Rule**: NEVER run `git commit` or `git push` automatically without explicit user permission.
-2. **Continuous CMake (`qds.cmake`) & QRC (`PVA_VPU50_SCADA.qrc`) Synchronization**:
-   - On **EVERY** prompt/task, before completing code modifications, always verify that `qds.cmake` and `PVA_VPU50_SCADA.qrc` are synchronized with real, tracked files.
-   - **NEVER** reference `scratch/`, `tmp/`, or ephemeral directories in `qds.cmake`, `PVA_VPU50_SCADA.qrc`, or `CMakeLists.txt`.
-   - Every resource declared in CMake and QRC MUST exist on disk and be tracked in Git to guarantee 100% successful WebAssembly builds in GitHub Actions (`deploy_vercel.yml`).
+2. **Continuous CMake, QRC & QML Build Integrity**:
+   - On **EVERY** prompt/task, before completing code modifications, always enforce the 5 Invariant Build Gates (see `.agents/rules/cmake_qrc_build_integrity.md`):
+     1. **Zero Duplicate Entries**: No duplicate files in `CMakeLists.txt`, `PVA_VPU50_SCADA.qrc`, or `qds.cmake` (prevents C++ `redefinition of 'unit'` error).
+     2. **Zero Scratch Paths**: No `scratch/`, `tmp/`, or ephemeral paths in `qds.cmake`, `PVA_VPU50_SCADA.qrc`, or `CMakeLists.txt`.
+     3. **Strict Qt Design Studio Declarative Rule**: No arbitrary functions or constructor calls (`String(...)`) in `.ui.qml` files (prevents error `M222`).
+     4. **Zero Alias Chaining**: Direct item aliases only in `.ui.qml` (prevents `Invalid alias target location`).
+     5. **Mandatory Automated Test Verification**: Always run `python -m unittest discover tests` on every single change.
 3. **Process Running Safety Interlock**:
    - While any equipment row is actively running (`isPlaying == true`), its speed setpoint, steppers (`+`/`−`), and mode selector modal MUST be locked.
    - Attempting parameter edits while running must trigger an annunciator alert: `"SAFETY INTERLOCK: Stop [Equipment] before modifying mode or setpoint parameters."`

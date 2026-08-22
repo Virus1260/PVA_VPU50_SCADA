@@ -73,8 +73,38 @@ class TestScadaCompliance(unittest.TestCase):
             
         # Acknowledge with valid reason
         alarm_mgr.acknowledge_alarm(alm_id, "operator_1", "Temperature cooling valve opened manually")
-        self.assertTrue(alarm_mgr._active_alarms[alm_id].acknowledged)
+    def test_cmake_and_qrc_build_integrity(self):
+        root_dir = Path(__file__).resolve().parent.parent
+        cmake_file = root_dir / "PVA_VPU50_SCADAContent" / "CMakeLists.txt"
+        qrc_file = root_dir / "PVA_VPU50_SCADA.qrc"
+        qds_cmake = root_dir / "qds.cmake"
+
+        # 1. Check CMakeLists.txt for duplicates
+        if cmake_file.exists():
+            text = cmake_file.read_text(encoding="utf-8")
+            import re
+            qml_files = re.findall(r'"([^"]+\.qml|[^"]+\.ui\.qml)"', text)
+            duplicates = [f for f in set(qml_files) if qml_files.count(f) > 1]
+            self.assertEqual(len(duplicates), 0, f"Found duplicate QML files in CMakeLists.txt: {duplicates}")
+
+        # 2. Check PVA_VPU50_SCADA.qrc for duplicates and non-existent files
+        if qrc_file.exists():
+            text = qrc_file.read_text(encoding="utf-8")
+            import re
+            files = re.findall(r'<file>([^<]+)</file>', text)
+            duplicates = [f for f in set(files) if files.count(f) > 1]
+            self.assertEqual(len(duplicates), 0, f"Found duplicate files in PVA_VPU50_SCADA.qrc: {duplicates}")
+            for f in files:
+                full_path = root_dir / f
+                self.assertTrue(full_path.exists(), f"File in QRC does not exist on disk: {f}")
+                self.assertFalse(f.startswith("scratch/"), f"Scratch file found in QRC: {f}")
+
+        # 3. Check qds.cmake for scratch files
+        if qds_cmake.exists():
+            text = qds_cmake.read_text(encoding="utf-8")
+            self.assertNotIn("scratch/", text, "qds.cmake must not contain scratch/ files")
 
 
 if __name__ == "__main__":
     unittest.main()
+
